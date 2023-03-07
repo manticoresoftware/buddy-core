@@ -17,4 +17,5 @@ enum Endpoint: string {
 	case Insert = 'insert';
 	case Sql = 'sql?mode=raw';
 	case Bulk = 'bulk';
+	case Elastic = 'elastic';
 }

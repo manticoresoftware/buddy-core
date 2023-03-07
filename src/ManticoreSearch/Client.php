@@ -17,6 +17,7 @@ use Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError;
 use RuntimeException;
 
 class Client {
+	const CONTENT_TYPE_HEADER = "Content-Type: application/x-www-form-urlencoded\n";
 	const URL_PREFIX = 'http://';
 	const HTTP_REQUEST_TIMEOUT = 1;
 	const DEFAULT_URL = 'http://127.0.0.1:9308';
@@ -29,27 +30,34 @@ class Client {
 	/** @var string $url */
 	protected string $url;
 
+	/** @var string $path */
+	protected string $path;
+
+	/** @var string $header */
+	protected string $header;
+
 	/** @var string $buddyVersion */
 	protected string $buddyVersion;
 
 	/**
 	 * @param ?Response $responseBuilder
 	 * @param ?string $url
-	 * @param Endpoint $endpoint
+	 * @param Endpoint $endpointBundle
 	 * @return void
 	 */
 	public function __construct(
 		protected ?Response $responseBuilder = null,
 		?string $url = null,
-		protected Endpoint $endpoint = Endpoint::CliJson
+		Endpoint $endpointBundle = Endpoint::Sql
 	) {
 		// If no url passed, set default one
 		if (!$url) {
 			$url = static::DEFAULT_URL;
 		}
-
+		$this->path = $endpointBundle->value;
 		$this->setServerUrl($url);
 		$this->buddyVersion = buddy_version();
+		$this->header = static::CONTENT_TYPE_HEADER;
 	}
 
 	/**
@@ -65,38 +73,39 @@ class Client {
 	 * @return void
 	 */
 	public function setServerUrl($url): void {
+		// $origUrl = $url;
 		if (!str_starts_with($url, self::URL_PREFIX)) {
 			$url = self::URL_PREFIX . $url;
 		}
-
+		// ! we do not have filter extension in production version
+		// if (!filter_var($url, FILTER_VALIDATE_URL)) {
+		// throw new ManticoreSearchClientError("Malformed request url '$origUrl' passed");
+		// }
 		$this->url = $url;
 	}
 
 	/**
 	 * @param string $request
-	 * @param ?Endpoint $endpoint
+	 * @param ?string $path
+	 * @param bool $disableAgentHeader
 	 * @return Response
 	 */
-	public function sendRequest(
-		string $request,
-		Endpoint $endpoint = null,
-		bool $disableAgentHeader = false
-	): Response {
+	public function sendRequest(string $request, string $path = null, bool $disableAgentHeader = false): Response {
 		$t = microtime(true);
 		if (!isset($this->responseBuilder)) {
 			throw new RuntimeException("'responseBuilder' property of ManticoreHTTPClient class is not instantiated");
 		}
-		if (!$request) {
+		if ($request === '') {
 			throw new ManticoreSearchClientError('Empty request passed');
 		}
-		$endpoint ??= $this->endpoint;
-		$prefix = $endpoint->name === 'Sql' ? 'query=' : '';
-		$fullReqUrl = "{$this->url}/{$endpoint->value}";
+		$path ??= $this->path;
+		$prefix = (str_starts_with($path, 'sql') ? 'query=' : '');
+		$fullReqUrl = "{$this->url}/$path";
 		$agentHeader = $disableAgentHeader ? '' : "User-Agent: Manticore Buddy/{$this->buddyVersion}\n";
 		$opts = [
 			'http' => [
 				'method'  => 'POST',
-				'header'  => "Content-Type: application/x-www-form-urlencoded\n"
+				'header'  => $this->header
 					. $agentHeader
 					. "Connection: close\n",
 				'content' => $prefix . $request,
@@ -106,6 +115,7 @@ class Client {
 		];
 		$context = stream_context_create($opts);
 		$result = file_get_contents($fullReqUrl, false, $context);
+
 		if ($result === false) {
 			throw new ManticoreSearchClientError("Cannot connect to server at $fullReqUrl");
 		} else {
@@ -122,13 +132,20 @@ class Client {
 	}
 
 	/**
-	 * @param Endpoint $endpoint
+	 * @param string $path
 	 * @return void
 	 */
-	public function setEndpoint(Endpoint $endpoint): void {
-		$this->endpoint = $endpoint;
+	public function setPath(string $path): void {
+		$this->path = $path ?: Endpoint::Sql->value;
 	}
 
+	/**
+	 * @param string $header
+	 * @return void
+	 */
+	public function setContentTypeHeader(string $header): void {
+		$this->header = $header ? "Content-Type: $header\n" : static::CONTENT_TYPE_HEADER;
+	}
 
 	// Bunch of methods to help us reduce copy pasting, maybe we will move it out to separate class
 	// but now it's totally fine to have 3-5 methods here for help
