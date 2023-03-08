@@ -1,19 +1,22 @@
 {
-    "name": "manticoresoftware/manticoresearch-buddy-core",
-    "description": "The Buddy Core to develop your own plugin for Manticore Search",
-    "type": "library",
-    "license": "GPL-2.0-or-later",
-    "autoload": {
-        "psr-4": {
-            "Manticoresearch\\Buddy\\Core\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Manticore Software Co. Ltd",
-            "email": "contact@manticoresearch.com"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {}
+	"name": "manticoresoftware/manticoresearch-buddy-core",
+	"description": "The Buddy Core to develop your own plugin for Manticore Search",
+	"type": "library",
+	"license": "GPL-2.0-or-later",
+	"autoload": {
+		"psr-4": {
+			"Manticoresearch\\Buddy\\Core\\": "src/"
+		}
+	},
+	"authors": [
+		{
+			"name": "Manticore Software Co. Ltd",
+			"email": "contact@manticoresearch.com"
+		}
+	],
+	"minimum-stability": "stable",
+	"require": {
+		"composer/composer": "^2.5",
+		"symfony/console": "^6.2"
+	}
 }

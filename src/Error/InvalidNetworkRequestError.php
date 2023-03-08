@@ -11,5 +11,5 @@
 
 namespace Manticoresearch\Buddy\Core\Error;
 
-final class ManticoreSearchResponseError  extends GenericError {
+final class InvalidNetworkRequestError extends GenericError {
 }

@@ -96,7 +96,7 @@ final class Settings {
 	public static function fromArray(array $settings, array $variables = []): static {
 		$self = new static;
 		foreach ([...$settings, ...$variables] as $key => $value) {
-			$property = \underscore_to_camelcase(str_replace('.', '_', $key));
+			$property = \camelcase_by_separator(str_replace('.', '_', $key), '_');
 			if (!property_exists(static::class, $property)) {
 				continue;
 			}

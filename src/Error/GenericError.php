@@ -18,6 +18,9 @@ class GenericError extends Exception {
 	/** @var string $responseError */
 	protected string $responseError = '';
 
+	/** @var bool */
+	protected bool $proxyOriginalError = false;
+
 	/**
 	 *
 	 * @param string $message
@@ -35,9 +38,10 @@ class GenericError extends Exception {
 	 * @param string $responseError
 	 * @return static
 	 */
-	public static function create(string $responseError): static {
+	public static function create(string $responseError, bool $proxyOriginalError = false): static {
 		$self = new static();
 		$self->setResponseError($responseError);
+		$self->setProxyOriginalError($proxyOriginalError);
 		return $self;
 	}
 
@@ -47,8 +51,8 @@ class GenericError extends Exception {
 	 * @param string $responseError
 	 * @return static
 	 */
-	public static function throw(string $responseError): static {
-		throw static::create($responseError);
+	public static function throw(string $responseError, bool $proxyOriginalError = false): static {
+		throw static::create($responseError, $proxyOriginalError);
 	}
 
 	/**
@@ -79,5 +83,25 @@ class GenericError extends Exception {
 	 */
 	public function hasResponseError(): bool {
 		return !!$this->responseError;
+	}
+
+	/**
+	 * Set if we should proxy original error or not
+	 *
+	 * @param bool $proxyOriginalError
+	 * @return static
+	 */
+	public function setProxyOriginalError(bool $proxyOriginalError): static {
+		$this->proxyOriginalError = $proxyOriginalError;
+
+		return $this;
+	}
+
+	/**
+	 *
+	 * @return bool
+	 */
+	public function getProxyOriginalError(): bool {
+		return $this->proxyOriginalError;
 	}
 }
