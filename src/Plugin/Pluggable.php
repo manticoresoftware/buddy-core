@@ -19,9 +19,23 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
 final class Pluggable {
+	const PLUGIN_PREFIX = 'manticoresearch-buddy-plugin-';
 
+	/** @var ?ClassLoader */
 	protected ?ClassLoader $autoloader = null;
+
+	/** @var string */
+	protected string $pluginDir;
+
+	/**
+	 * Initialize and set plugin dir
+	 * @param Settings $settings
+	 * @return void
+	 */
 	public function __construct(public Settings $settings) {
+		$this->setPluginDir(
+			$this->findPluginDir()
+		);
 	}
 
 	/**
@@ -45,13 +59,35 @@ final class Pluggable {
 		// debug($output);
 	}
 
-	public function show(): void {
-		$this->composer(
-			'require', [
-				'--direct' => true,
-				'--no-dev' => true,
-				'--format' => 'json',
-			]
+	/**
+	 * @return array<string>
+	 * @throws Exception
+	 */
+	public function getList(): array {
+		$pluginPrefixLen = strlen(static::PLUGIN_PREFIX);
+		$composerFile = $this->getPluginComposerFile();
+		$composerContent = file_get_contents($composerFile);
+		if ($composerContent === false) {
+			throw new Exception('Unable to read composer file');
+		}
+		/** @var array{require?:array<string,string>} $composerJson */
+		$composerJson = json_decode($composerContent, true);
+		if (!isset($composerJson['require'])) {
+			return [];
+		}
+
+		$reduceFn = static function ($carry, $v) use ($pluginPrefixLen) {
+			$pos = strpos($v, static::PLUGIN_PREFIX, strpos($v, '/') ?: 0);
+			if ($pos !== false) {
+				$carry[] = substr($v, $pos + $pluginPrefixLen);
+			}
+			return $carry;
+		};
+
+		return array_reduce(
+			array_keys($composerJson['require']),
+			$reduceFn,
+			[]
 		);
 	}
 
@@ -109,6 +145,7 @@ final class Pluggable {
 		if ($package) {
 			$args['packages'] = [$package];
 		}
+		// var_dump($args);exit;
 		$input = new ArrayInput($args);
 
 		// Run the install command
@@ -124,16 +161,35 @@ final class Pluggable {
 	}
 
 	/**
+	 * Set plugin dir, default we initialize from settings
+	 * @param string $dir
+	 * @return static
+	 */
+	public function setPluginDir(string $dir): static {
+		$this->pluginDir = $dir;
+		return $this;
+	}
+
+	/**
+	 * Get current plugin dir
+	 * @return string
+	 */
+	public function getPluginDir(): string {
+		return $this->pluginDir;
+	}
+
+	/**
 	 * Get path to the plugin dir where we install all of it
 	 * @return string
 	 * @throws Exception
 	 */
-	protected function getPluginDir(): string {
+	protected function findPluginDir(): string {
+		echo 0;
 		$pluginDir = $this->settings->commonPluginDir;
 		if (!$pluginDir) {
 			throw new Exception('Failed to detect plugin dir to use');
 		}
-
+		echo 1;
 		$pluginDir = rtrim($pluginDir, DIRECTORY_SEPARATOR)
 			. DIRECTORY_SEPARATOR
 			. 'buddy-plugins'
@@ -161,6 +217,11 @@ final class Pluggable {
 		return $composerFile;
 	}
 
+	/**
+	 *
+	 * @return string
+	 * @throws Exception
+	 */
 	protected function getAutoloadFile(): string {
 		$pluginDir = $this->getPluginDir();
 		return $pluginDir
