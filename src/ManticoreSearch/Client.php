@@ -14,6 +14,7 @@ namespace Manticoresearch\Buddy\Core\ManticoreSearch;
 use Exception;
 use Generator;
 use Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError;
+use Manticoresearch\Buddy\Core\Tool\Buddy;
 use RuntimeException;
 
 class Client {
@@ -56,7 +57,7 @@ class Client {
 		}
 		$this->path = $endpointBundle->value;
 		$this->setServerUrl($url);
-		$this->buddyVersion = buddy_version();
+		$this->buddyVersion = Buddy::getVersion();
 		$this->header = static::CONTENT_TYPE_HEADER;
 	}
 
@@ -127,7 +128,7 @@ class Client {
 
 		$result = $this->responseBuilder->fromBody($this->response);
 		$time = (int)((microtime(true) - $t) * 1000000);
-		debug("[{$time}µs] manticore request: $request");
+		Buddy::debug("[{$time}µs] manticore request: $request");
 		return $result;
 	}
 

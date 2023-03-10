@@ -11,6 +11,9 @@
 
 namespace Manticoresearch\Buddy\Core\ManticoreSearch;
 
+use Manticoresearch\Buddy\Core\Tool\Buddy;
+use Manticoresearch\Buddy\Core\Tool\Strings;
+
 final class Settings {
 	// Settings
 	public ?string $configurationFile = null;
@@ -96,7 +99,7 @@ final class Settings {
 	public static function fromArray(array $settings, array $variables = []): static {
 		$self = new static;
 		foreach ([...$settings, ...$variables] as $key => $value) {
-			$property = \camelcase_by_separator(str_replace('.', '_', $key), '_');
+			$property = Strings::camelcaseBySeparator(str_replace('.', '_', $key), '_');
 			if (!property_exists(static::class, $property)) {
 				continue;
 			}
@@ -107,7 +110,7 @@ final class Settings {
 		}
 
 		$settingsJson = json_encode($self);
-		debug("settings: $settingsJson");
+		Buddy::debug("settings: $settingsJson");
 		return $self;
 	}
 
