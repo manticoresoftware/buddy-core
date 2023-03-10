@@ -1,5 +1,5 @@
 {
-	"name": "manticoresoftware/manticoresearch-buddy-core",
+	"name": "manticoresoftware/buddy-core",
 	"description": "The Buddy Core to develop your own plugin for Manticore Search",
 	"type": "library",
 	"license": "GPL-2.0-or-later",
