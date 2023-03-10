@@ -14,7 +14,7 @@ namespace Manticoresearch\Buddy\Core\Plugin;
 /**
  * This is the parent class to format Manticore client responses as tables
  */
-abstract class FormattableClientQueryExecutor extends ClientQueryExecutor {
+abstract class BaseHandlerWithTableFormatter extends BaseHandlerWithClient {
 	/** @var TableFormatter $tableFormatter */
 	protected TableFormatter $tableFormatter;
 

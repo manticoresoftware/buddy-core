@@ -14,7 +14,7 @@ namespace Manticoresearch\Buddy\Core\Plugin;
 use Manticoresearch\Buddy\Core\Task\Task;
 use parallel\Runtime;
 
-abstract class Executor {
+abstract class BaseHandler {
 	/** @return Task */
 	abstract public function run(Runtime $runtime): Task;
 

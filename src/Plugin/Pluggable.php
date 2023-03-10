@@ -19,7 +19,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
 final class Pluggable {
-	const PLUGIN_PREFIX = 'manticoresearch-buddy-plugin-';
+	const PLUGIN_PREFIX = 'buddy-plugin-';
 
 	/** @var ?ClassLoader */
 	protected ?ClassLoader $autoloader = null;

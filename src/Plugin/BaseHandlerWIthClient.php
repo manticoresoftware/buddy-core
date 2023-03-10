@@ -19,7 +19,7 @@ use parallel\Runtime;
 /**
  * This is the parent class to handle erroneous queries via Manticore client requests
  */
-abstract class ClientQueryExecutor extends Executor {
+abstract class BaseHandlerWithClient extends BaseHandler {
 	/** @var HTTPClient $manticoreClient */
 	protected HTTPClient $manticoreClient;
 
