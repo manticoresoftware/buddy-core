@@ -209,7 +209,7 @@ final class Task {
 	 */
 	public function run(): static {
 		$future = $this->runtime->run(
-			function (Closure $fn, array $argv): array {
+			static function (Closure $fn, array $argv): array {
 				if (!defined('STDOUT')) {
 					define('STDOUT', fopen('php://stdout', 'wb+'));
 				}
@@ -219,7 +219,10 @@ final class Task {
 				}
 
 				try {
-					return [null, $fn(...$argv)];
+					// We serialize here just because in rare cases when we return object
+					// we have some kind of problem with parallel that it cannot find class
+					// Without serialize test HungRequestTest fails
+					return [null, serialize($fn(...$argv))];
 				} catch (\Throwable $t) {
 					return [[$t::class, $t->getMessage()], null];
 				}
@@ -272,9 +275,13 @@ final class Task {
 			$this->status = TaskStatus::Finished;
 
 			try {
-				/** @var array{0:?array{0:string,1:string}, 1:TaskResult} */
+				/** @var array{0:?array{0:string,1:string}, 1:string|null} */
 				$value = $this->future->value();
 				[$error, $result] = $value;
+				if ($result) {
+					$result = unserialize($result);
+				}
+				/** @var TaskResult $result */
 				if ($error) {
 					/** @var array{0:string,1:string} $error */
 					[$errorClass, $errorMessage] = $error;
