@@ -144,7 +144,6 @@ final class Pluggable {
 		if ($package) {
 			$args['packages'] = [$package];
 		}
-		// var_dump($args);exit;
 		$input = new ArrayInput($args);
 
 		// Run the install command
@@ -210,7 +209,7 @@ final class Pluggable {
 		$pluginDir = $this->getPluginDir();
 		$composerFile = $pluginDir. DIRECTORY_SEPARATOR. 'composer.json';
 		if (!file_exists($composerFile)) {
-			file_put_contents($composerFile, '{}');
+			file_put_contents($composerFile, '{"minimum-stability":"dev"}');
 		}
 
 		return $composerFile;
