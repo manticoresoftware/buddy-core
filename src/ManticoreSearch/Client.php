@@ -89,15 +89,24 @@ class Client {
 	 * @param string $request
 	 * @param ?string $path
 	 * @param bool $disableAgentHeader
+	 * @param bool $isRequestEncoded
 	 * @return Response
 	 */
-	public function sendRequest(string $request, string $path = null, bool $disableAgentHeader = false): Response {
+	public function sendRequest(
+		string $request,
+		string $path = null,
+		bool $disableAgentHeader = false,
+		bool $isRequestEncoded = true
+	): Response {
 		$t = microtime(true);
 		if (!isset($this->responseBuilder)) {
 			throw new RuntimeException("'responseBuilder' property of ManticoreHTTPClient class is not instantiated");
 		}
 		if ($request === '') {
 			throw new ManticoreSearchClientError('Empty request passed');
+		}
+		if ($isRequestEncoded === false) {
+			$request = urlencode($request);
 		}
 		$path ??= $this->path;
 		$prefix = (str_starts_with($path, 'sql') ? 'query=' : '');
