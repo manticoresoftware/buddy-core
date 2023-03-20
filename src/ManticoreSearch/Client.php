@@ -119,11 +119,11 @@ class Client {
 
 		if ($result === false) {
 			throw new ManticoreSearchClientError("Cannot connect to server at $fullReqUrl");
-		} else {
-			$this->response = (string)$result;
-			if ($this->response === '') {
-				throw new ManticoreSearchClientError('No response passed from server');
-			}
+		}
+
+		$this->response = (string)$result;
+		if ($this->response === '') {
+			throw new ManticoreSearchClientError('No response passed from server');
 		}
 
 		$result = $this->responseBuilder->fromBody($this->response);
