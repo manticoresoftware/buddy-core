@@ -391,8 +391,9 @@ final class Task {
 	}
 
 	/**
+	 * Set host that we received from the HTTP header – Host
 	 * @param string $host
-	 * return static
+	 * @return static
 	 */
 	public function setHost(string $host): static {
 		$this->host = $host;
@@ -400,6 +401,7 @@ final class Task {
 	}
 
 	/**
+	 * Get host property
 	 * @return string
 	 */
 	public function getHost(): string {
