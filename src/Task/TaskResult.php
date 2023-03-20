@@ -16,6 +16,7 @@ namespace Manticoresearch\Buddy\Core\Task;
  */
 final class TaskResult {
 	/**
+	 * Initialize the result and set the message that represents response from the task
 	 * @param array<mixed>|string $message
 	 * @return void
 	 */
@@ -23,6 +24,7 @@ final class TaskResult {
 	}
 
 	/**
+	 * Set current message
 	 * @param array<mixed>|string $message
 	 * @return void
 	 */
@@ -31,6 +33,7 @@ final class TaskResult {
 	}
 
 	/**
+	 * Get previously set message
 	 * @return array<mixed>|string
 	 */
 	public function getMessage(): array|string {

@@ -49,6 +49,7 @@ abstract class BasePayload {
 	}
 
 	/**
+	 * Create payload from the HTTP request from Manticore that we parsed at Buddy base level
 	 * @param Request $request
 	 * @return static
 	 */

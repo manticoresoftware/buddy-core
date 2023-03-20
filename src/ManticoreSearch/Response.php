@@ -56,6 +56,7 @@ class Response {
 	}
 
 	/**
+	 * Get parsed and json decoded reply from the Manticore daemon
 	 * @return array<mixed>
 	 */
 	public function getResult(): array {
@@ -63,6 +64,7 @@ class Response {
 	}
 
 	/**
+	 * Check if we had error on performing our request
 	 * @return bool
 	 */
 	public function hasError(): bool {
@@ -70,6 +72,7 @@ class Response {
 	}
 
 	/**
+	 * Run callable function on results and postprocess it with custom logic
 	 * @param callable $processor
 	 * @param array<mixed> $args
 	 * @return void
@@ -85,6 +88,7 @@ class Response {
 	}
 
 	/**
+	 * Parse the response into the struct
 	 * @return void
 	 * @throws ManticoreSearchResponseError
 	 */

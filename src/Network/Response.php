@@ -16,6 +16,7 @@ use Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat;
 
 final class Response {
   /**
+	 * Initialize response with string message to be returned (json encoded)
    * @param string $data
    * @return void
    */
@@ -23,6 +24,7 @@ final class Response {
 	}
 
   /**
+	 * Check if the data is empty
    * @return bool
    */
 	public function isEmpty(): bool {
@@ -30,6 +32,7 @@ final class Response {
 	}
 
   /**
+	 * Create response from the message when we have no error and success in respond
    * @see static::fromStringAndError()
    * @param mixed $message
    * @param RequestFormat $format
@@ -40,6 +43,7 @@ final class Response {
 	}
 
   /**
+	 * Create response from provided error, useful when we want to return error
    * @see static::fromStringAndError()
    * @param GenericError $error
    * @param RequestFormat $format
@@ -57,6 +61,7 @@ final class Response {
 	}
 
   /**
+	 * Helper to create empty response with nothing to response (shortcut to use)
    * @return static
    */
 	public static function none(): static {
@@ -64,6 +69,7 @@ final class Response {
 	}
 
   /**
+	 * Create response from the message and include error to it also
    * @param mixed $message
    * @param ?GenericError $error
    * @param RequestFormat $format

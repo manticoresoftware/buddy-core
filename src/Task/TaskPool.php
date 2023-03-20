@@ -21,6 +21,7 @@ final class TaskPool {
 	protected static array $pool = [];
 
 	/**
+	 * Add new task to the pool, so we can understand what is running now
 	 * @param Task $task
 	 * @return void
 	 */
@@ -33,6 +34,7 @@ final class TaskPool {
 	}
 
 	/**
+	 * Remove the specified task from the pool, so we will not count it when it's done
 	 * @param Task $task
 	 * @return void
 	 */

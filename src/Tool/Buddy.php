@@ -16,7 +16,7 @@ final class Buddy {
 	protected static string $versionFile;
 
 	/**
-	 *
+	 * Set version file, that we will use to read the Buddy version
 	 * @param string $file
 	 * @return void
 	 */
@@ -40,7 +40,8 @@ final class Buddy {
 	}
 
 	/**
-	 *
+	 * Get version that is read from the file we provided before
+	 * Normally it's done on initialization stage of the Buddy base
 	 * @return string
 	 */
 	public static function getVersion(): string {

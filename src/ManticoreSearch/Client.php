@@ -41,6 +41,7 @@ class Client {
 	protected string $buddyVersion;
 
 	/**
+	 * Initialize the Client that will use provided
 	 * @param ?Response $responseBuilder
 	 * @param ?string $url
 	 * @param Endpoint $endpointBundle
@@ -62,6 +63,7 @@ class Client {
 	}
 
 	/**
+	 * Set Response Builder
 	 * @param Response $responseBuilder
 	 * @return void
 	 */
@@ -70,6 +72,7 @@ class Client {
 	}
 
 	/**
+	 * Set server URL of Manticore searchd to send requests to
 	 * @param string $url it supports http:// prefixed and not
 	 * @return void
 	 */
@@ -86,6 +89,7 @@ class Client {
 	}
 
 	/**
+	 * Send the request where request represents the SQL query to be send
 	 * @param string $request
 	 * @param ?string $path
 	 * @param bool $disableAgentHeader
@@ -133,6 +137,7 @@ class Client {
 	}
 
 	/**
+	 * Set path that we will use to append to final url for sending requests
 	 * @param string $path
 	 * @return void
 	 */
@@ -141,6 +146,7 @@ class Client {
 	}
 
 	/**
+	 * Set Content-Type header for the request
 	 * @param string $header
 	 * @return void
 	 */

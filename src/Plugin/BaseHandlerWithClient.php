@@ -33,6 +33,7 @@ abstract class BaseHandlerWithClient extends BaseHandler {
 	abstract public function run(Runtime $runtime): Task;
 
 	/**
+	 * Get props for the handler that we will set on initializeation in QueryProcessor
 	 * @return array<string>
 	 */
 	public function getProps(): array {
