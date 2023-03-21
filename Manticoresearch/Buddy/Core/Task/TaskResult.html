@@ -99,6 +99,38 @@
             
         
     
+            <h2>Properties</h2>
+
+            <table class="table table-condensed">
+                    <tr>
+                <td class="type" id="property_columns">
+                                        protected                                        array
+                                                                                
+                                    </td>
+                <td>$columns</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_total">
+                                        protected                                        int
+                                                                                
+                                    </td>
+                <td>$total</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_raw">
+                                        protected                                        string|array
+                                                                                
+                                    </td>
+                <td>$raw</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
+            </table>
+
     
             <h2>Methods</h2>
 
@@ -108,29 +140,151 @@
                     void
                 </div>
                 <div class="col-md-8">
-                    <a href="#method___construct">__construct</a>(<abbr title="Manticoresearch\Buddy\Core\Task\array|string">array|string</abbr> $message = [])
+                    <a href="#method___construct">__construct</a>(array $data, string $error, string $warning)
         
-                                            <p><p>Initialize the result and set the message that represents response from the task</p></p>                </div>
+                                            <p><p>Initialize the empty result</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
-                    void
+                    static&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_setMessage">setMessage</a>(<abbr title="Manticoresearch\Buddy\Core\Task\array|string">array|string</abbr> $message)
+                    <a href="#method_raw">raw</a>(mixed $raw)
         
-                                            <p><p>Set current message</p></p>                </div>
+                                            <p><p>Entrypoint to create raw result, that we probably need in some cases
+For example, elastic like responses, cli tables and so on
+Prefer to not use raw when you return standard structure to the client response</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
-                    <abbr title="Manticoresearch\Buddy\Core\Task\array|string">array|string</abbr>
+                    static&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_getMessage">getMessage</a>()
+                    <a href="#method_none">none</a>()
         
-                                            <p><p>Get previously set message</p></p>                </div>
+                                            <p><p>Entrypoint to the object creation with none of data</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_withData">withData</a>(array $data)
+        
+                                            <p><p>Entrypoint to the object creation with data</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_withRow">withRow</a>(array $row)
+        
+                                            <p><p>Entrypoint to the object creation with a single row in the data</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_withTotal">withTotal</a>(int $total)
+        
+                                            <p><p>Entrypoint to the object creation with total only, may be useful with affected rows only</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_withError">withError</a>(string $error)
+        
+                                            <p><p>Entrypoint to the object creation with error ocurred</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_withWarning">withWarning</a>(string $warning)
+        
+                                            <p><p>Entrypoint to the object creation with error ocurred</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_error">error</a>(string $error)
+        
+                                            <p><p>Set error for the current result</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_warning">warning</a>(string $warning)
+        
+                                            <p><p>Set warning for the current result</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_data">data</a>(array $data)
+        
+                                            <p><p>Set data for the current result</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_row">row</a>(array $row)
+        
+                                            <p><p>Add single row to the final data structure</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_column">column</a>(string $name, <abbr title="Manticoresearch\Buddy\Core\Task\Column">Column</abbr> $type)
+        
+                                            <p><p>Add new column to the current result</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    string
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_toString">toString</a>()
+        
+                                            <p><p>Convert the initialized data into the final response encoded with JSON</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <abbr title="Manticoresearch\Buddy\Core\Task\string|array">string|array</abbr>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_getStruct">getStruct</a>()
+        
+                                            <p><p>Get resulting struct without JSON encoding</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
             </div>
@@ -141,9 +295,9 @@
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line 23</div>
+        <div class="location">at line 34</div>
         <code>                    void
-    <strong>__construct</strong>(<abbr title="Manticoresearch\Buddy\Core\Task\array|string">array|string</abbr> $message = [])
+    <strong>__construct</strong>(array $data, string $error, string $warning)
         </code>
     </h3>
     <div class="details">    
@@ -152,15 +306,25 @@
             
 
         <div class="method-description">
-                            <p><p>Initialize the result and set the message that represents response from the task</p></p>                        
+                            <p><p>Initialize the empty result</p></p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
 
                     <table class="table table-condensed">
                     <tr>
-                <td><abbr title="Manticoresearch\Buddy\Core\Task\array|string">array|string</abbr></td>
-                <td>$message</td>
+                <td>array</td>
+                <td>$data</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$error</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$warning</td>
                 <td></td>
             </tr>
             </table>
@@ -183,10 +347,10 @@
 
             </div>
                     <div class="method-item">
-                    <h3 id="method_setMessage">
-        <div class="location">at line 31</div>
-        <code>                    void
-    <strong>setMessage</strong>(<abbr title="Manticoresearch\Buddy\Core\Task\array|string">array|string</abbr> $message)
+                    <h3 id="method_raw">
+        <div class="location">at line 45</div>
+        <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+    <strong>raw</strong>(mixed $raw)
         </code>
     </h3>
     <div class="details">    
@@ -195,15 +359,17 @@
             
 
         <div class="method-description">
-                            <p><p>Set current message</p></p>                        
+                            <p><p>Entrypoint to create raw result, that we probably need in some cases
+For example, elastic like responses, cli tables and so on
+Prefer to not use raw when you return standard structure to the client response</p></p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
 
                     <table class="table table-condensed">
                     <tr>
-                <td><abbr title="Manticoresearch\Buddy\Core\Task\array|string">array|string</abbr></td>
-                <td>$message</td>
+                <td>mixed</td>
+                <td>$raw</td>
                 <td></td>
             </tr>
             </table>
@@ -213,7 +379,7 @@
 
                     <table class="table table-condensed">
         <tr>
-            <td>void</td>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></td>
             <td></td>
         </tr>
     </table>
@@ -226,10 +392,10 @@
 
             </div>
                     <div class="method-item">
-                    <h3 id="method_getMessage">
-        <div class="location">at line 39</div>
-        <code>                    <abbr title="Manticoresearch\Buddy\Core\Task\array|string">array|string</abbr>
-    <strong>getMessage</strong>()
+                    <h3 id="method_none">
+        <div class="location">at line 55</div>
+        <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+    <strong>none</strong>()
         </code>
     </h3>
     <div class="details">    
@@ -238,7 +404,7 @@
             
 
         <div class="method-description">
-                            <p><p>Get previously set message</p></p>                        
+                            <p><p>Entrypoint to the object creation with none of data</p></p>                        
         </div>
         <div class="tags">
             
@@ -246,7 +412,508 @@
 
                     <table class="table table-condensed">
         <tr>
-            <td><abbr title="Manticoresearch\Buddy\Core\Task\array|string">array|string</abbr></td>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_withData">
+        <div class="location">at line 64</div>
+        <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+    <strong>withData</strong>(array $data)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Entrypoint to the object creation with data</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$data</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_withRow">
+        <div class="location">at line 73</div>
+        <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+    <strong>withRow</strong>(array $row)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Entrypoint to the object creation with a single row in the data</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$row</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_withTotal">
+        <div class="location">at line 82</div>
+        <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+    <strong>withTotal</strong>(int $total)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Entrypoint to the object creation with total only, may be useful with affected rows only</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$total</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_withError">
+        <div class="location">at line 93</div>
+        <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+    <strong>withError</strong>(string $error)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Entrypoint to the object creation with error ocurred</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$error</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_withWarning">
+        <div class="location">at line 102</div>
+        <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+    <strong>withWarning</strong>(string $warning)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Entrypoint to the object creation with error ocurred</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$warning</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_error">
+        <div class="location">at line 112</div>
+        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+    <strong>error</strong>(string $error)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Set error for the current result</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$error</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_warning">
+        <div class="location">at line 122</div>
+        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+    <strong>warning</strong>(string $warning)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Set warning for the current result</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$warning</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_data">
+        <div class="location">at line 132</div>
+        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+    <strong>data</strong>(array $data)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Set data for the current result</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$data</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_row">
+        <div class="location">at line 143</div>
+        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+    <strong>row</strong>(array $row)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Add single row to the final data structure</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$row</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_column">
+        <div class="location">at line 155</div>
+        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+    <strong>column</strong>(string $name, <abbr title="Manticoresearch\Buddy\Core\Task\Column">Column</abbr> $type)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Add new column to the current result</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$name</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td><abbr title="Manticoresearch\Buddy\Core\Task\Column">Column</abbr></td>
+                <td>$type</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_toString">
+        <div class="location">at line 168</div>
+        <code>                    string
+    <strong>toString</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Convert the initialized data into the final response encoded with JSON</p></p>                        
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getStruct">
+        <div class="location">at line 176</div>
+        <code>                    <abbr title="Manticoresearch\Buddy\Core\Task\string|array">string|array</abbr>
+    <strong>getStruct</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Get resulting struct without JSON encoding</p></p>                        
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><abbr title="Manticoresearch\Buddy\Core\Task\string|array">string|array</abbr></td>
             <td></td>
         </tr>
     </table>
