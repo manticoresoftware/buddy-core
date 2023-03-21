@@ -39,10 +39,10 @@ final class TaskResult {
 	 * Entrypoint to create raw result, that we probably need in some cases
 	 * For example, elastic like responses, cli tables and so on
 	 * Prefer to not use raw when you return standard structure to the client response
-	 * @param mixed $raw
+	 * @param string|array<mixed> $raw
 	 * @return static
 	 */
-	public static function raw(mixed $raw): static {
+	public static function raw(string|array $raw): static {
 		$obj = new static([], '', '');
 		$obj->raw = $raw;
 		return $obj;
@@ -67,7 +67,7 @@ final class TaskResult {
 
 	/**
 	 * Entrypoint to the object creation with a single row in the data
-	 * @param array $row
+	 * @param array<mixed> $row
 	 * @return static
 	 */
 	public static function withRow(array $row): static {
@@ -126,7 +126,7 @@ final class TaskResult {
 
 	/**
 	 * Set data for the current result
-	 * @param array $data
+	 * @param array<mixed> $data
 	 * @return static
 	 */
 	public function data(array $data): static {
@@ -137,7 +137,7 @@ final class TaskResult {
 
 	/**
 	 * Add single row to the final data structure
-	 * @param array $row
+	 * @param array<mixed> $row
 	 * @return static
 	 */
 	public function row(array $row): static {
@@ -171,7 +171,7 @@ final class TaskResult {
 
 	/**
 	 * Get resulting struct without JSON encoding
-	 * @return string|array{columns:array<mixed>,data:array<mixed>,total:int,error:string,warning:string}
+	 * @return string|array<mixed>|array{0:array{columns?:array<mixed>,data?:array<mixed>,total:int,error:string,warning:string}}
 	 */
 	public function getStruct(): string|array {
 		if (isset($this->raw)) {
