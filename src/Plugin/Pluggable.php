@@ -79,7 +79,10 @@ final class Pluggable {
 		$reduceFn = static function ($carry, $v) use ($pluginPrefixLen) {
 			$pos = strpos($v, static::PLUGIN_PREFIX, strpos($v, '/') ?: 0);
 			if ($pos !== false) {
-				$carry[] = substr($v, $pos + $pluginPrefixLen);
+				$carry[] = [
+					'full' => $v,
+					'short' => substr($v, $pos + $pluginPrefixLen),
+				];
 			}
 			return $carry;
 		};
@@ -90,6 +93,43 @@ final class Pluggable {
 			[]
 		);
 	}
+
+	/**
+	 * This is helper function to get fully qualified class name for plugin
+	 * by using fully qualified composer name of it
+	 * @param string $name
+	 * @return string
+	 */
+	public function getClassNamespaceByFullName(string $name): string {
+		$composerFile = $this->pluginDir
+			. DIRECTORY_SEPARATOR
+			. 'vendor'
+			. DIRECTORY_SEPARATOR
+			. $name
+			. DIRECTORY_SEPARATOR
+			. 'composer.json';
+
+		if (!is_file($composerFile)) {
+			throw new Exception("Failed to find composer.json file for plugin: $name");
+		}
+		$composerContent = file_get_contents($composerFile);
+		if (!$composerContent) {
+			throw new Exception("Failed to get contents of composer.json for plugin: $name");
+		}
+
+		$composerJson = json_decode($composerContent, true);
+		if (!$composerJson) {
+			throw new Exception("Failed to decode contents of composer.json file for plugin: $name");
+		}
+
+		/** @var array{autoload:array{"psr-4"?:array<string,string>}} $composerJson */
+		$psr4 = $composerJson['autoload']['psr-4'] ?? false;
+		if (!$psr4) {
+			throw new Exception("Failed to detect psr4 autoload section in composer.json file for plugin: $name");
+		}
+		return array_key_first($psr4);
+	}
+
 
 	/**
 	 * Remove old composer autoloader just to register new one
