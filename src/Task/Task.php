@@ -39,6 +39,12 @@ final class Task {
 	 */
 	protected bool $isLooped = false;
 
+	/** @var array{success:array<callable>,failure:array<callable>} */
+	protected array $callbacks = [
+		'success' => [],
+		'failure' => [],
+	];
+
 	/**
 	 * Current task status
 	 *
@@ -295,6 +301,8 @@ final class Task {
 				$this->result = $result;
 			} catch (GenericError $error) {
 				$this->error = $error;
+			} finally {
+				$this->processCallbacks();
 			}
 		}
 		return $this;
@@ -337,6 +345,37 @@ final class Task {
 	 */
 	public function isDone(): bool {
 		return $this->future->done();
+	}
+
+	/**
+	 * Register something that we need to executed on success
+	 * Useful to run hooks or something like this
+   * @return static
+   */
+	public function onSuccess(callable $fn): static {
+		$this->callbacks['success'][] = $fn;
+		return $this;
+	}
+
+	/**
+	 * Register closure to be called when task failed to executed
+	 * @return static
+	 */
+	public function onFailure(callable $fn): static {
+		$this->callbacks['failure'][] = $fn;
+		return $this;
+	}
+
+	/**
+	 * Process all callbacks if we have any
+	 * @return static
+	 */
+	protected function processCallbacks(): static {
+		$ns = isset($this->error) ? 'failure' : 'success';
+		foreach ($this->callbacks[$ns] as $fn) {
+			$fn();
+		}
+		return $this;
 	}
 
 	/**
