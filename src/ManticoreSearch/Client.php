@@ -93,14 +93,12 @@ class Client {
 	 * @param string $request
 	 * @param ?string $path
 	 * @param bool $disableAgentHeader
-	 * @param bool $isRequestEncoded
 	 * @return Response
 	 */
 	public function sendRequest(
 		string $request,
 		string $path = null,
 		bool $disableAgentHeader = false,
-		bool $isRequestEncoded = true
 	): Response {
 		$t = microtime(true);
 		if (!isset($this->responseBuilder)) {
@@ -108,9 +106,6 @@ class Client {
 		}
 		if ($request === '') {
 			throw new ManticoreSearchClientError('Empty request passed');
-		}
-		if ($isRequestEncoded === false) {
-			$request = urlencode($request);
 		}
 		$path ??= $this->path;
 		$prefix = (str_starts_with($path, 'sql') ? 'query=' : '');
@@ -122,7 +117,7 @@ class Client {
 				'header'  => $this->header
 					. $agentHeader
 					. "Connection: close\n",
-				'content' => $prefix . $request,
+				'content' => $prefix . urlencode($request),
 				'timeout' => static::HTTP_REQUEST_TIMEOUT,
 				'ignore_errors' => true,
 			],
