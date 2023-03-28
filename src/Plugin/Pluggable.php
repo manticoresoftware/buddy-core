@@ -223,12 +223,10 @@ final class Pluggable {
 	 * @throws Exception
 	 */
 	protected function findPluginDir(): string {
-		echo 0;
 		$pluginDir = $this->settings->commonPluginDir;
 		if (!$pluginDir) {
 			throw new Exception('Failed to detect plugin dir to use');
 		}
-		echo 1;
 		$pluginDir = rtrim($pluginDir, DIRECTORY_SEPARATOR)
 			. DIRECTORY_SEPARATOR
 			. 'buddy-plugins'
