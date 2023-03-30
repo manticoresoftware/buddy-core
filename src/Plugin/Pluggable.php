@@ -57,9 +57,6 @@ final class Pluggable {
 				'--no-scripts' => true,
 			], $package
 		);
-
-		$this->unregisterAutoload();
-		$this->registerAutoload();
 	}
 
 	/**
@@ -134,6 +131,15 @@ final class Pluggable {
 		return array_key_first($psr4);
 	}
 
+	/**
+	 * Just little helper to update autoload we should call it outside of thread
+	 * @return void
+	 * @throws Exception
+	 */
+	public function reload(): void {
+		$this->unregisterAutoload();
+		$this->registerAutoload();
+	}
 
 	/**
 	 * Remove old composer autoloader just to register new one
