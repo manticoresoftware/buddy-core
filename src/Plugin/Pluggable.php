@@ -199,7 +199,10 @@ final class Pluggable {
 		if ($resultCode !== 0) {
 			// In case of error just print output in the debug mode
 			Buddy::debug($output->fetch());
-			throw new Exception("Failed to install '$package'. Got exit code: $resultCode. Please, use debug mode and check logs.");
+			throw new Exception(
+				"Failed to install '$package'. Got exit code: $resultCode. "
+				. 'Please, use debug mode and check logs.'
+			);
 		}
 
 		return $output;
