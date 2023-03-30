@@ -182,6 +182,16 @@ by using fully qualified composer name of it</p></p>                </div>
                     void
                 </div>
                 <div class="col-md-8">
+                    <a href="#method_reload">reload</a>()
+        
+                                            <p><p>Just little helper to update autoload we should call it outside of thread</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8">
                     <a href="#method_unregisterAutoload">unregisterAutoload</a>()
         
                                             <p><p>Remove old composer autoloader just to register new one</p></p>                </div>
@@ -361,7 +371,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_getList">
-        <div class="location">at line 70</div>
+        <div class="location">at line 67</div>
         <code>                    array
     <strong>getList</strong>()
         </code>
@@ -403,7 +413,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_getClassNamespaceByFullName">
-        <div class="location">at line 107</div>
+        <div class="location">at line 104</div>
         <code>                    string
     <strong>getClassNamespaceByFullName</strong>(string $name)
         </code>
@@ -446,8 +456,50 @@ by using fully qualified composer name of it</p></p>
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_reload">
+        <div class="location">at line 139</div>
+        <code>                    void
+    <strong>reload</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Just little helper to update autoload we should call it outside of thread</p></p>                        
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a target="_blank" rel="noopener" href="https://www.php.net/Exception">Exception</a></td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_unregisterAutoload">
-        <div class="location">at line 142</div>
+        <div class="location">at line 148</div>
         <code>                    void
     <strong>unregisterAutoload</strong>()
         </code>
@@ -480,7 +532,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_registerAutoload">
-        <div class="location">at line 155</div>
+        <div class="location">at line 161</div>
         <code>                    void
     <strong>registerAutoload</strong>()
         </code>
@@ -522,7 +574,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_composer">
-        <div class="location">at line 172</div>
+        <div class="location">at line 178</div>
         <code>            protected        <abbr title="Symfony\Component\Console\Output\BufferedOutput">BufferedOutput</abbr>
     <strong>composer</strong>(string $command, array $options, string|null $package = null)
         </code>
@@ -584,7 +636,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_setPluginDir">
-        <div class="location">at line 216</div>
+        <div class="location">at line 222</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a>
     <strong>setPluginDir</strong>(string $dir)
         </code>
@@ -627,7 +679,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getPluginDir">
-        <div class="location">at line 225</div>
+        <div class="location">at line 231</div>
         <code>                    string
     <strong>getPluginDir</strong>()
         </code>
@@ -660,7 +712,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_findPluginDir">
-        <div class="location">at line 234</div>
+        <div class="location">at line 240</div>
         <code>            protected        string
     <strong>findPluginDir</strong>()
         </code>
@@ -702,7 +754,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getPluginComposerFile">
-        <div class="location">at line 256</div>
+        <div class="location">at line 262</div>
         <code>            protected        string
     <strong>getPluginComposerFile</strong>()
         </code>
@@ -744,7 +796,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getAutoloadFile">
-        <div class="location">at line 272</div>
+        <div class="location">at line 278</div>
         <code>            protected        string
     <strong>getAutoloadFile</strong>()
         </code>
