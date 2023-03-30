@@ -108,7 +108,10 @@ class Client {
 			throw new ManticoreSearchClientError('Empty request passed');
 		}
 		$path ??= $this->path;
-		$prefix = (str_starts_with($path, 'sql') ? 'query=' : '');
+		// We urlencode all the requests to the /sql endpoint
+		if (str_starts_with($path, 'sql')) {
+			$request = 'query=' . urlencode($request);
+		}
 		$fullReqUrl = "{$this->url}/$path";
 		$agentHeader = $disableAgentHeader ? '' : "User-Agent: Manticore Buddy/{$this->buddyVersion}\n";
 		$opts = [
@@ -117,7 +120,7 @@ class Client {
 				'header'  => $this->header
 					. $agentHeader
 					. "Connection: close\n",
-				'content' => $prefix . urlencode($request),
+				'content' => $request,
 				'timeout' => static::HTTP_REQUEST_TIMEOUT,
 				'ignore_errors' => true,
 			],
