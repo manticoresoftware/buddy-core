@@ -15,6 +15,7 @@ use Composer\Autoload\ClassLoader;
 use Composer\Console\Application;
 use Exception;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Settings;
+use Manticoresearch\Buddy\Core\Tool\Buddy;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
@@ -47,10 +48,13 @@ final class Pluggable {
 	public function install(string $package): void {
 		$this->composer(
 			'require', [
+				'--prefer-source' => false,
 				'--prefer-dist' => true,
 				'--prefer-install' => true,
 				'--prefer-stable' => true,
 				'--optimize-autoloader' => true,
+				'--no-plugins' => true,
+				'--no-scripts' => true,
 			], $package
 		);
 
@@ -193,7 +197,9 @@ final class Pluggable {
 		chdir($cwdDir);
 
 		if ($resultCode !== 0) {
-			throw new Exception("Failed to install '$package'. Got exit code: $resultCode. Please, check log.");
+			// In case of error just print output in the debug mode
+			Buddy::debug($output->fetch());
+			throw new Exception("Failed to install '$package'. Got exit code: $resultCode. Please, use debug mode and check logs.");
 		}
 
 		return $output;
