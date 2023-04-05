@@ -60,8 +60,19 @@ final class Pluggable {
 	}
 
 	/**
+	 * Remove installed package
+	 * @param string $package
+	 * @return void
+	 */
+	public function remove(string $package): void {
+		$this->composer(
+			'remove', [], $package
+		);
+	}
+
+	/**
 	 * Get list of all packages that are installed in a plugin directory
-	 * @return array<string>
+	 * @return array<array{full:string,short:string,version:string}>
 	 * @throws Exception
 	 */
 	public function getList(): array {
@@ -77,12 +88,13 @@ final class Pluggable {
 			return [];
 		}
 
-		$reduceFn = static function ($carry, $v) use ($pluginPrefixLen) {
+		$reduceFn = static function ($carry, $v) use ($composerJson, $pluginPrefixLen) {
 			$pos = strpos($v, static::PLUGIN_PREFIX, strpos($v, '/') ?: 0);
 			if ($pos !== false) {
 				$carry[] = [
 					'full' => $v,
 					'short' => substr($v, $pos + $pluginPrefixLen),
+					'version' => $composerJson['require'][$v],
 				];
 			}
 			return $carry;
