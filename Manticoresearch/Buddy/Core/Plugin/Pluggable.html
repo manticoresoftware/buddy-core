@@ -158,6 +158,16 @@
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_remove">remove</a>(string $package)
+        
+                                            <p><p>Remove installed package</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
                     array
                 </div>
                 <div class="col-md-8">
@@ -370,8 +380,51 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
 
             </div>
                     <div class="method-item">
-                    <h3 id="method_getList">
+                    <h3 id="method_remove">
         <div class="location">at line 67</div>
+        <code>                    void
+    <strong>remove</strong>(string $package)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Remove installed package</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$package</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getList">
+        <div class="location">at line 78</div>
         <code>                    array
     <strong>getList</strong>()
         </code>
@@ -413,7 +466,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_getClassNamespaceByFullName">
-        <div class="location">at line 104</div>
+        <div class="location">at line 116</div>
         <code>                    string
     <strong>getClassNamespaceByFullName</strong>(string $name)
         </code>
@@ -457,7 +510,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_reload">
-        <div class="location">at line 139</div>
+        <div class="location">at line 151</div>
         <code>                    void
     <strong>reload</strong>()
         </code>
@@ -499,7 +552,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_unregisterAutoload">
-        <div class="location">at line 148</div>
+        <div class="location">at line 160</div>
         <code>                    void
     <strong>unregisterAutoload</strong>()
         </code>
@@ -532,7 +585,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_registerAutoload">
-        <div class="location">at line 161</div>
+        <div class="location">at line 173</div>
         <code>                    void
     <strong>registerAutoload</strong>()
         </code>
@@ -574,7 +627,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_composer">
-        <div class="location">at line 178</div>
+        <div class="location">at line 190</div>
         <code>            protected        <abbr title="Symfony\Component\Console\Output\BufferedOutput">BufferedOutput</abbr>
     <strong>composer</strong>(string $command, array $options, string|null $package = null)
         </code>
@@ -636,7 +689,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_setPluginDir">
-        <div class="location">at line 222</div>
+        <div class="location">at line 234</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a>
     <strong>setPluginDir</strong>(string $dir)
         </code>
@@ -679,7 +732,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getPluginDir">
-        <div class="location">at line 231</div>
+        <div class="location">at line 243</div>
         <code>                    string
     <strong>getPluginDir</strong>()
         </code>
@@ -712,7 +765,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_findPluginDir">
-        <div class="location">at line 240</div>
+        <div class="location">at line 252</div>
         <code>            protected        string
     <strong>findPluginDir</strong>()
         </code>
@@ -754,7 +807,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getPluginComposerFile">
-        <div class="location">at line 262</div>
+        <div class="location">at line 274</div>
         <code>            protected        string
     <strong>getPluginComposerFile</strong>()
         </code>
@@ -796,7 +849,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getAutoloadFile">
-        <div class="location">at line 278</div>
+        <div class="location">at line 290</div>
         <code>            protected        string
     <strong>getAutoloadFile</strong>()
         </code>
