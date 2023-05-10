@@ -160,7 +160,7 @@ final class Request {
 				'sql?mode=raw', 'sql', '' => ManticoreEndpoint::Sql,
 				'insert', 'replace' => ManticoreEndpoint::Insert,
 				'bulk', '_bulk' => ManticoreEndpoint::Bulk,
-				'_license' => ManticoreEndpoint::Elastic,
+				'_license', '_license?human=false' => ManticoreEndpoint::Elastic,
 				default => throw new InvalidNetworkRequestError(
 					"Do not know how to handle '{$payload['message']['path_query']}' path_query"
 				),
