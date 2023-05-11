@@ -18,6 +18,7 @@ final class TableFormatter {
 	const BORDER_VERTICAL = '|';
 	const BORDER_HORIZONTAL = '-';
 	const BORDER_CORNER = '+';
+	const ERROR_PREFIX = 'ERROR: ';
 
 	/** @var array<int,array<string,string>> $data */
 	protected $data;
@@ -57,7 +58,7 @@ final class TableFormatter {
 		string $error = ''
 	): string {
 		if ($error) {
-			return "ERROR: $error" . PHP_EOL . PHP_EOL;
+			return self::ERROR_PREFIX . $error . PHP_EOL . PHP_EOL;
 		}
 		$table = '';
 		if (isset($origData) && $origData) {
