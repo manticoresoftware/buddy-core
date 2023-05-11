@@ -105,9 +105,9 @@
                     void
                 </div>
                 <div class="col-md-8">
-                    <a href="#method___construct">__construct</a>(string $data = &#039;&#039;)
+                    <a href="#method___construct">__construct</a>(string $data = &#039;&#039;, bool $hasError = false)
         
-                                            <p><p>Initialize response with string message to be returned (json encoded)</p></p>                </div>
+                                            <p><p>Initialize response with string message to be returned (json encoded) and bool flag setting if response has error</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -118,6 +118,16 @@
                     <a href="#method_isEmpty">isEmpty</a>()
         
                                             <p><p>Check if the data is empty</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_hasError">hasError</a>()
+        
+                                            <p><p>Return hasError property</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -178,9 +188,9 @@
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line 23</div>
+        <div class="location">at line 25</div>
         <code>                    void
-    <strong>__construct</strong>(string $data = &#039;&#039;)
+    <strong>__construct</strong>(string $data = &#039;&#039;, bool $hasError = false)
         </code>
     </h3>
     <div class="details">    
@@ -188,7 +198,7 @@
             
 
         <div class="method-description">
-                            <p><p>Initialize response with string message to be returned (json encoded)</p></p>                        
+                            <p><p>Initialize response with string message to be returned (json encoded) and bool flag setting if response has error</p></p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -197,6 +207,11 @@
                     <tr>
                 <td>string</td>
                 <td>$data</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>bool</td>
+                <td>$hasError</td>
                 <td></td>
             </tr>
             </table>
@@ -220,7 +235,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_isEmpty">
-        <div class="location">at line 30</div>
+        <div class="location">at line 32</div>
         <code>                    bool
     <strong>isEmpty</strong>()
         </code>
@@ -251,8 +266,40 @@
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_hasError">
+        <div class="location">at line 40</div>
+        <code>                    bool
+    <strong>hasError</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+    
+            
+
+        <div class="method-description">
+                            <p><p>Return hasError property</p></p>                        
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_fromMessage">
-        <div class="location">at line 41</div>
+        <div class="location">at line 61</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a>
     <strong>fromMessage</strong>(mixed $message, <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat">RequestFormat</abbr> $format = RequestFormat::JSON)
         </code>
@@ -310,7 +357,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_fromError">
-        <div class="location">at line 52</div>
+        <div class="location">at line 72</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a>
     <strong>fromError</strong>(<a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> $error, <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat">RequestFormat</abbr> $format = RequestFormat::JSON)
         </code>
@@ -368,7 +415,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_none">
-        <div class="location">at line 67</div>
+        <div class="location">at line 87</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a>
     <strong>none</strong>()
         </code>
@@ -400,7 +447,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_fromMessageAndError">
-        <div class="location">at line 78</div>
+        <div class="location">at line 98</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a>
     <strong>fromMessageAndError</strong>(mixed $message = [], <abbr title="Manticoresearch\Buddy\Core\Network\Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>|null $error = null, <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat">RequestFormat</abbr> $format = RequestFormat::JSON)
         </code>
@@ -452,7 +499,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method___toString">
-        <div class="location">at line 100</div>
+        <div class="location">at line 121</div>
         <code>                    string
     <strong>__toString</strong>()
         </code>
