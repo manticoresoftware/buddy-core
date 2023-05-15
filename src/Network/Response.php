@@ -13,14 +13,16 @@ namespace Manticoresearch\Buddy\Core\Network;
 
 use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat;
+use Manticoresearch\Buddy\Core\Plugin\TableFormatter;
 
 final class Response {
   /**
-	 * Initialize response with string message to be returned (json encoded)
+	 * Initialize response with string message to be returned (json encoded) and bool flag setting if response has error
    * @param string $data
+   * @param bool $hasError
    * @return void
    */
-	public function __construct(protected string $data = '') {
+	public function __construct(protected string $data = '', protected bool $hasError = false) {
 	}
 
   /**
@@ -29,6 +31,24 @@ final class Response {
    */
 	public function isEmpty(): bool {
 		return $this->data === '';
+	}
+
+  /**
+	 * Return hasError property
+   * @return bool
+   */
+	public function hasError(): bool {
+		return $this->hasError;
+	}
+
+  /**
+	 * Detect if the data message contains information about error
+	 * @param mixed $message
+   * @return bool
+   */
+	private static function checkForError(mixed $message): bool {
+		return (is_array($message) && !(empty($message['error']) && empty($message[0]['error'])))
+		|| (is_string($message) && str_starts_with($message, TableFormatter::ERROR_PREFIX));
 	}
 
   /**
@@ -88,7 +108,8 @@ final class Response {
 		];
 
 		return new static(
-			json_encode($payload, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_IGNORE)
+			json_encode($payload, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_IGNORE),
+			self::checkForError($message)
 		);
 	}
 
