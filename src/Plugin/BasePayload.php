@@ -61,4 +61,14 @@ abstract class BasePayload {
 	 * @return bool
 	 */
 	abstract public static function hasMatch(Request $request): bool;
+
+	/**
+	 * Get handler class name that points to default one Handler in the same ns
+	 * @return string
+	 */
+	public function getHandlerClassName(): string {
+		$class = static::class;
+		$ns = substr($class, 0, strrpos($class, '\\') ?: 0);
+		return "$ns\\Handler";
+	}
 }
