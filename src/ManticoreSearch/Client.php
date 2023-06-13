@@ -125,6 +125,7 @@ class Client {
 				'ignore_errors' => true,
 			],
 		];
+
 		$context = stream_context_create($opts);
 		$result = file_get_contents($fullReqUrl, false, $context);
 
