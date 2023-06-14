@@ -17,7 +17,8 @@
 	"minimum-stability": "dev",
 	"require": {
 		"composer/composer": "^2.5",
-		"symfony/console": "^6.2"
+		"symfony/console": "^6.2",
+		"symfony/dependency-injection": "^6.1"
 	},
 	"require-dev": {
 		"phpstan/phpstan": "^1.8",
