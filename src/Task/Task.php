@@ -13,11 +13,19 @@ namespace Manticoresearch\Buddy\Core\Task;
 
 use Closure;
 use Manticoresearch\Buddy\Core\Error\GenericError;
+use Manticoresearch\Buddy\Core\ManticoreSearch\Settings;
+use Manticoresearch\Buddy\Core\Plugin\Pluggable;
+use Psr\Container\ContainerInterface;
 use RuntimeException;
 use parallel\Channel;
 use parallel\Future;
 use parallel\Runtime;
 
+/**
+ * The most important thing for this class you should call
+ * Task::init() first with runtime file and [init.php]
+ * Task::setSettings() with passed settings before you can use anything [main.php]
+ */
 final class Task {
 	// Higher is better for perf just because we monitor looped tasks during transmitting
 	const CHANNEL_CAPACITY = 100;
@@ -66,6 +74,9 @@ final class Task {
 	/** @var ?string $runtimeFile path to the file that will be loaded on Runtime bootstraping */
 	protected static ?string $runtimeFile = null;
 
+	/** @var ?Settings $settings */
+	protected static ?Settings $settings = null;
+
 	/**
 	 * @param mixed[] $argv
 	 * @return void
@@ -91,6 +102,15 @@ final class Task {
 	 */
 	public static function init(?string $runtimeFile = null): void {
 		static::$runtimeFile = $runtimeFile;
+	}
+
+	/**
+	 * Set settings for usage in function run
+	 * @param Settings $settings
+	 * @return void
+	 */
+	public static function setSettings(Settings $settings): void {
+		static::$settings = $settings;
 	}
 
 	/**
@@ -214,8 +234,14 @@ final class Task {
 	 * @return static
 	 */
 	public function run(): static {
+		$container = Pluggable::getContainer();
 		$future = $this->runtime->run(
-			static function (Closure $fn, array $argv): array {
+			static function (ContainerInterface $container, Closure $fn, array $argv) : array {
+				if (!defined('INITED')) {
+					Pluggable::setContainer($container);
+					define('INITED', true);
+				}
+
 				if (!defined('STDOUT')) {
 					define('STDOUT', fopen('php://stdout', 'wb+'));
 				}
@@ -232,7 +258,7 @@ final class Task {
 				} catch (\Throwable $t) {
 					return [[$t::class, $t->getMessage()], null];
 				}
-			}, $this->argv
+			}, [$container, ...$this->argv]
 		);
 
 		if (!isset($future)) {

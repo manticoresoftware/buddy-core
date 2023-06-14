@@ -15,8 +15,10 @@ use Composer\Console\Application;
 use Exception;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Settings;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 final class Pluggable {
 	const PLUGIN_PREFIX = 'buddy-plugin-';
@@ -27,15 +29,36 @@ final class Pluggable {
 	/** @var string */
 	protected string $pluginDir;
 
+	/** @var ?ContainerInterface $container */
+	protected static ?ContainerInterface $container = null;
+
 	/**
 	 * Initialize and set plugin dir
 	 * @param Settings $settings
+	 * @param array<array{0:string,1:string,2:callable}> $hooks
 	 * @return void
 	 */
-	public function __construct(public Settings $settings) {
+	public function __construct(public Settings $settings, public array $hooks = []) {
 		$this->setPluginDir(
 			$this->findPluginDir()
 		);
+	}
+
+	/**
+	 * Set current container interface for future usage
+	 * @param ContainerInterface $container
+	 * @return void
+	 */
+	public static function setContainer(ContainerInterface $container): void {
+		static::$container = $container;
+	}
+
+	/**
+	 * Get current container
+	 * @return ContainerInterface
+	 */
+	public static function getContainer(): ContainerInterface {
+		return static::$container ?? new ContainerBuilder();
 	}
 
 	/**
@@ -290,6 +313,66 @@ final class Pluggable {
 		}
 
 		return $output;
+	}
+
+
+	/**
+	 * Get list of core plugin names
+	 * @return array<string>
+	 * @throws Exception
+	 */
+	public function fetchCorePlugins(): array {
+		$projectRoot = realpath(
+			__DIR__ . DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR . '..'
+			. DIRECTORY_SEPARATOR
+		);
+		if (!is_string($projectRoot)) {
+			throw new Exception('Failed to find project root');
+		}
+		return $this->fetchPlugins($projectRoot);
+	}
+
+	/**
+	 * Get list of external plugin names
+	 * @return array<string>
+	 * @throws Exception
+	 */
+	public function fetchExtraPlugins(): array {
+		return $this->fetchPlugins();
+	}
+
+	/**
+	 * Helper function to get external or core plugins
+	 * @param string $path
+	 * @return array<string>
+	 * @throws Exception
+	 */
+	public function fetchPlugins(string $path = ''): array {
+		if ($path) {
+			$this->setPluginDir($path);
+			// Register all predefined hooks for core plugins only for now
+			$this->registerHooks();
+		}
+		$this->reload();
+		return array_column($this->getList(), 'short');
+	}
+
+
+	/**
+	 * Register all hooks to known core plugins
+	 * It's called on init phase once and keep updated on event emited from the plugin
+	 * @return void
+	 */
+	protected function registerHooks(): void {
+		foreach ($this->hooks as [$plugin, $hook, $fn]) {
+			$prefix = $this->getClassNamespaceByFullName($plugin);
+			$className = $prefix . 'Handler';
+			$className::registerHook($hook, $fn);
+		}
 	}
 
 	/**
