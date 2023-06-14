@@ -353,12 +353,16 @@ final class Pluggable {
 	 */
 	public function fetchPlugins(string $path = ''): array {
 		if ($path) {
-			$this->setPluginDir($path);
+			$pluggable = clone $this;
+			$pluggable->setPluginDir($path);
 			// Register all predefined hooks for core plugins only for now
-			$this->registerHooks();
+			$pluggable->registerHooks();
+		} else {
+			$pluggable = $this;
+			$pluggable->reload();
 		}
-		$this->reload();
-		return array_column($this->getList(), 'short');
+
+		return array_column($pluggable->getList(), 'short');
 	}
 
 

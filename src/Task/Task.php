@@ -14,8 +14,6 @@ namespace Manticoresearch\Buddy\Core\Task;
 use Closure;
 use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Settings;
-use Manticoresearch\Buddy\Core\Plugin\Pluggable;
-use Psr\Container\ContainerInterface;
 use RuntimeException;
 use parallel\Channel;
 use parallel\Future;
@@ -234,14 +232,8 @@ final class Task {
 	 * @return static
 	 */
 	public function run(): static {
-		$container = Pluggable::getContainer();
 		$future = $this->runtime->run(
-			static function (ContainerInterface $container, Closure $fn, array $argv) : array {
-				if (!defined('INITED')) {
-					Pluggable::setContainer($container);
-					define('INITED', true);
-				}
-
+			static function (Closure $fn, array $argv) : array {
 				if (!defined('STDOUT')) {
 					define('STDOUT', fopen('php://stdout', 'wb+'));
 				}
@@ -258,7 +250,7 @@ final class Task {
 				} catch (\Throwable $t) {
 					return [[$t::class, $t->getMessage()], null];
 				}
-			}, [$container, ...$this->argv]
+			}, $this->argv
 		);
 
 		if (!isset($future)) {
