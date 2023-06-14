@@ -149,6 +149,8 @@
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr>#characterSetClient</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html#property_characterSetConnection">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr>#characterSetConnection</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a></em></dt>
+                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#property_container">
+<abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>#container</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_composer">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::composer</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
                     <dd><p>Execute low level composer command through Application class</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html#method_countCJK">
@@ -229,7 +231,13 @@ It can be useful for tests</p></dd><dt><a href="Manticoresearch/Buddy/Core/Netwo
 <abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr>::fromMessageAndError</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a></em></dt>
                     <dd><p>Create response from the message and include error to it also</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/BasePayload.html#method_fromRequest">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\BasePayload">BasePayload</abbr>::fromRequest</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/BasePayload.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\BasePayload">BasePayload</abbr></a></em></dt>
-                    <dd><p>Create payload from the HTTP request from Manticore that we parsed at Buddy base level</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_findPluginDir">
+                    <dd><p>Create payload from the HTTP request from Manticore that we parsed at Buddy base level</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_fetchCorePlugins">
+<abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::fetchCorePlugins</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
+                    <dd><p>Get list of core plugin names</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_fetchExtraPlugins">
+<abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::fetchExtraPlugins</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
+                    <dd><p>Get list of external plugin names</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_fetchPlugins">
+<abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::fetchPlugins</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
+                    <dd><p>Helper function to get external or core plugins</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_findPluginDir">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::findPluginDir</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
                     <dd><p>Get path to the plugin dir where we install all of it</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_future">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#future</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
@@ -262,7 +270,9 @@ And filter only required types or any if not specified</p></dd><dt><a href="Mant
 <abbr title="Manticoresearch\Buddy\Core\Plugin\BasePayload">BasePayload</abbr>::getEndpointInfo</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/BasePayload.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\BasePayload">BasePayload</abbr></a></em></dt>
                     <dd><p>Redirect all /cli requests to /sql endpoint</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/BasePayload.html#method_getHandlerClassName">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\BasePayload">BasePayload</abbr>::getHandlerClassName</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/BasePayload.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\BasePayload">BasePayload</abbr></a></em></dt>
-                    <dd><p>Get handler class name that points to default one Handler in the same ns</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_getList">
+                    <dd><p>Get handler class name that points to default one Handler in the same ns</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_getContainer">
+<abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::getContainer</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
+                    <dd><p>Get current container</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_getList">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::getList</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
                     <dd><p>Get list of all packages that are installed in a plugin directory</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_getClassNamespaceByFullName">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::getClassNamespaceByFullName</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
@@ -433,7 +443,10 @@ Useful to run hooks or something like this</p></dd><dt><a href="Manticoresearch/
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::reload</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
                     <dd><p>Just little helper to update autoload we should call it outside of thread</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_registerAutoload">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::registerAutoload</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
-                    <dd><p>Register new autoloader from the composer generated autoload file</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html#method_row">
+                    <dd><p>Register new autoloader from the composer generated autoload file</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_registerHooks">
+<abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::registerHooks</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
+                    <dd><p>Register all hooks to known core plugins
+It's called on init phase once and keep updated on event emited from the plugin</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html#method_row">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr>::row</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html#method_rowLine">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr>::rowLine</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr></a></em></dt>
@@ -501,7 +514,9 @@ Prefer to not use raw when you return standard structure to the client response<
 <abbr title="Manticoresearch\Buddy\Core\Plugin\BaseHandlerWithTableFormatter">BaseHandlerWithTableFormatter</abbr>::setTableFormatter</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/BaseHandlerWithTableFormatter.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\BaseHandlerWithTableFormatter">BaseHandlerWithTableFormatter</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/BasePayload.html#method_setSettings">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\BasePayload">BasePayload</abbr>::setSettings</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/BasePayload.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\BasePayload">BasePayload</abbr></a></em></dt>
-                    <dd><p>Set current settings to use in request</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_setPluginDir">
+                    <dd><p>Set current settings to use in request</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_setContainer">
+<abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::setContainer</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
+                    <dd><p>Set current container interface for future usage</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_setPluginDir">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::setPluginDir</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
                     <dd><p>Set plugin dir, default we initialize from settings</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html#method_setData">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr>::setData</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr></a></em></dt>
@@ -509,7 +524,11 @@ Prefer to not use raw when you return standard structure to the client response<
 <abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr>::setWidth</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_status">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#status</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
-                    <dd><p>Current task status</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_setHost">
+                    <dd><p>Current task status</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_settings">
+<abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#settings</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_setSettings">
+<abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::setSettings</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
+                    <dd><p>Set settings for usage in function run</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_setHost">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::setHost</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd><p>Set host that we received from the HTTP header – Host</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_setBody">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::setBody</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
@@ -531,7 +550,9 @@ Prefer to not use raw when you return standard structure to the client response<
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html#property_table">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr>#table</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Task.html">Manticoresearch\Buddy\Core\Task</a></em></dt>
-                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_transmit">
+                    <dd><p>The most important thing for this class you should call
+Task::init() first with runtime file and [init.php]
+Task::setSettings() with passed settings before you can use anything [main.php]</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_transmit">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::transmit</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd><p>This method simply send the message to the running function for this task
 and also check and rerun the closure in case if its looped</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskPool.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskPool">TaskPool</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Task.html">Manticoresearch\Buddy\Core\Task</a></em></dt>

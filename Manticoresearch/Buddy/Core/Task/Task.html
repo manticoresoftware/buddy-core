@@ -93,6 +93,10 @@
     
         
 
+            <div class="description">
+            <p><p>The most important thing for this class you should call
+Task::init() first with runtime file and [init.php]
+Task::setSettings() with passed settings before you can use anything [main.php]</p></p>                    </div>
             
         
             <h2>Constants</h2>    <table class="table table-condensed">
@@ -238,6 +242,15 @@ we can return response to client asap</p></td>
                 <td class="last"></td>
                 <td></td>
             </tr>
+                    <tr>
+                <td class="type" id="property_settings">
+                    static                    protected                                        <abbr title="Manticoresearch\Buddy\Core\Task\?\Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr>
+                                                                                
+                                    </td>
+                <td>$settings</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
             </table>
 
     
@@ -273,6 +286,16 @@ we can return response to client asap</p></td>
                     <a href="#method_init">init</a>(string|null $runtimeFile = null)
         
                                             <p><p>We need to pass runtime file from dependedant package, so we have init stage for it</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;void
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_setSettings">setSettings</a>(<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a> $settings)
+        
+                                            <p><p>Set settings for usage in function run</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -550,7 +573,7 @@ and also check and rerun the closure in case if its looped</p></p>              
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line 73</div>
+        <div class="location">at line 84</div>
         <code>                    void
     <strong>__construct</strong>(array $argv = [])
         </code>
@@ -593,7 +616,7 @@ and also check and rerun the closure in case if its looped</p></p>              
             </div>
                     <div class="method-item">
                     <h3 id="method_destroy">
-        <div class="location">at line 82</div>
+        <div class="location">at line 93</div>
         <code>                    void
     <strong>destroy</strong>()
         </code>
@@ -625,7 +648,7 @@ and also check and rerun the closure in case if its looped</p></p>              
             </div>
                     <div class="method-item">
                     <h3 id="method_init">
-        <div class="location">at line 92</div>
+        <div class="location">at line 103</div>
         <code>        static            void
     <strong>init</strong>(string|null $runtimeFile = null)
         </code>
@@ -666,8 +689,50 @@ and also check and rerun the closure in case if its looped</p></p>              
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_setSettings">
+        <div class="location">at line 112</div>
+        <code>        static            void
+    <strong>setSettings</strong>(<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a> $settings)
+        </code>
+    </h3>
+    <div class="details">    
+    
+            
+
+        <div class="method-description">
+                            <p><p>Set settings for usage in function run</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a></td>
+                <td>$settings</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_isDeferred">
-        <div class="location">at line 100</div>
+        <div class="location">at line 120</div>
         <code>                    bool
     <strong>isDeferred</strong>()
         </code>
@@ -699,7 +764,7 @@ and also check and rerun the closure in case if its looped</p></p>              
             </div>
                     <div class="method-item">
                     <h3 id="method_isLooped">
-        <div class="location">at line 108</div>
+        <div class="location">at line 128</div>
         <code>                    bool
     <strong>isLooped</strong>()
         </code>
@@ -731,7 +796,7 @@ and also check and rerun the closure in case if its looped</p></p>              
             </div>
                     <div class="method-item">
                     <h3 id="method_getId">
-        <div class="location">at line 117</div>
+        <div class="location">at line 137</div>
         <code>                    int
     <strong>getId</strong>()
         </code>
@@ -763,7 +828,7 @@ and also check and rerun the closure in case if its looped</p></p>              
             </div>
                     <div class="method-item">
                     <h3 id="method_create">
-        <div class="location">at line 129</div>
+        <div class="location">at line 149</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a>
     <strong>create</strong>(<a target="_blank" rel="noopener" href="https://www.php.net/Closure">Closure</a> $fn, array $argv = [])
         </code>
@@ -821,7 +886,7 @@ and also check and rerun the closure in case if its looped</p></p>              
             </div>
                     <div class="method-item">
                     <h3 id="method_defer">
-        <div class="location">at line 141</div>
+        <div class="location">at line 161</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a>
     <strong>defer</strong>(<a target="_blank" rel="noopener" href="https://www.php.net/Closure">Closure</a> $fn, array $argv = [])
         </code>
@@ -880,7 +945,7 @@ It accepts same parameters as create method</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_createInRuntime">
-        <div class="location">at line 157</div>
+        <div class="location">at line 177</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a>
     <strong>createInRuntime</strong>(<abbr title="parallel\Runtime">Runtime</abbr> $runtime, <a target="_blank" rel="noopener" href="https://www.php.net/Closure">Closure</a> $fn, array $argv = [])
         </code>
@@ -932,7 +997,7 @@ It accepts same parameters as create method</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_deferInRuntime">
-        <div class="location">at line 173</div>
+        <div class="location">at line 193</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a>
     <strong>deferInRuntime</strong>(<abbr title="parallel\Runtime">Runtime</abbr> $runtime, <a target="_blank" rel="noopener" href="https://www.php.net/Closure">Closure</a> $fn, array $argv = [])
         </code>
@@ -984,7 +1049,7 @@ It accepts same parameters as create method</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_loopInRuntime">
-        <div class="location">at line 189</div>
+        <div class="location">at line 209</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a>
     <strong>loopInRuntime</strong>(<abbr title="parallel\Runtime">Runtime</abbr> $runtime, <a target="_blank" rel="noopener" href="https://www.php.net/Closure">Closure</a> $fn, array $argv = [])
         </code>
@@ -1036,7 +1101,7 @@ It accepts same parameters as create method</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_createRuntime">
-        <div class="location">at line 207</div>
+        <div class="location">at line 227</div>
         <code>        static            <abbr title="parallel\Runtime">Runtime</abbr>
     <strong>createRuntime</strong>()
         </code>
@@ -1068,7 +1133,7 @@ It accepts same parameters as create method</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_run">
-        <div class="location">at line 216</div>
+        <div class="location">at line 236</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a>
     <strong>run</strong>()
         </code>
@@ -1100,7 +1165,7 @@ It accepts same parameters as create method</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_wait">
-        <div class="location">at line 258</div>
+        <div class="location">at line 284</div>
         <code>                    <abbr title="Manticoresearch\Buddy\Core\Task\TaskStatus">TaskStatus</abbr>
     <strong>wait</strong>(bool $exceptionOnError = false)
         </code>
@@ -1151,7 +1216,7 @@ It accepts same parameters as create method</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_checkStatus">
-        <div class="location">at line 279</div>
+        <div class="location">at line 305</div>
         <code>            protected        <a href="../../../../Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a>
     <strong>checkStatus</strong>()
         </code>
@@ -1193,7 +1258,7 @@ and update status in state of the current task</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getStatus">
-        <div class="location">at line 316</div>
+        <div class="location">at line 342</div>
         <code>                    <abbr title="Manticoresearch\Buddy\Core\Task\TaskStatus">TaskStatus</abbr>
     <strong>getStatus</strong>()
         </code>
@@ -1225,7 +1290,7 @@ and update status in state of the current task</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_isRunning">
-        <div class="location">at line 331</div>
+        <div class="location">at line 357</div>
         <code>                    bool
     <strong>isRunning</strong>()
         </code>
@@ -1257,7 +1322,7 @@ and update status in state of the current task</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_isSucceed">
-        <div class="location">at line 338</div>
+        <div class="location">at line 364</div>
         <code>                    bool
     <strong>isSucceed</strong>()
         </code>
@@ -1290,7 +1355,7 @@ and update status in state of the current task</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_isDone">
-        <div class="location">at line 346</div>
+        <div class="location">at line 372</div>
         <code>                    bool
     <strong>isDone</strong>()
         </code>
@@ -1322,7 +1387,7 @@ and update status in state of the current task</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_onSuccess">
-        <div class="location">at line 355</div>
+        <div class="location">at line 381</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a>
     <strong>onSuccess</strong>(callable $fn)
         </code>
@@ -1365,7 +1430,7 @@ Useful to run hooks or something like this</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_onFailure">
-        <div class="location">at line 364</div>
+        <div class="location">at line 390</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a>
     <strong>onFailure</strong>(callable $fn)
         </code>
@@ -1407,7 +1472,7 @@ Useful to run hooks or something like this</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_processCallbacks">
-        <div class="location">at line 373</div>
+        <div class="location">at line 399</div>
         <code>            protected        <a href="../../../../Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a>
     <strong>processCallbacks</strong>()
         </code>
@@ -1439,7 +1504,7 @@ Useful to run hooks or something like this</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getError">
-        <div class="location">at line 387</div>
+        <div class="location">at line 413</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a>
     <strong>getError</strong>()
         </code>
@@ -1480,7 +1545,7 @@ Useful to run hooks or something like this</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getResult">
-        <div class="location">at line 400</div>
+        <div class="location">at line 426</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>getResult</strong>()
         </code>
@@ -1521,7 +1586,7 @@ Useful to run hooks or something like this</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_transmit">
-        <div class="location">at line 415</div>
+        <div class="location">at line 441</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a>
     <strong>transmit</strong>(array $data)
         </code>
@@ -1564,7 +1629,7 @@ and also check and rerun the closure in case if its looped</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_setHost">
-        <div class="location">at line 437</div>
+        <div class="location">at line 463</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a>
     <strong>setHost</strong>(string $host)
         </code>
@@ -1606,7 +1671,7 @@ and also check and rerun the closure in case if its looped</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getHost">
-        <div class="location">at line 446</div>
+        <div class="location">at line 472</div>
         <code>                    string
     <strong>getHost</strong>()
         </code>
@@ -1638,7 +1703,7 @@ and also check and rerun the closure in case if its looped</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_setBody">
-        <div class="location">at line 455</div>
+        <div class="location">at line 481</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a>
     <strong>setBody</strong>(string $body)
         </code>
@@ -1681,7 +1746,7 @@ and also check and rerun the closure in case if its looped</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getBody">
-        <div class="location">at line 463</div>
+        <div class="location">at line 489</div>
         <code>                    string
     <strong>getBody</strong>()
         </code>
