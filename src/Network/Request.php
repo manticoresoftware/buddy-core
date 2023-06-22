@@ -153,6 +153,9 @@ final class Request {
 			// We don't differentiate elastic-like insert and replace queries here
 			// since this is irrelevant for the following Buddy processing logic
 			$endpointBundle = ManticoreEndpoint::Insert;
+		} else if (preg_match('/_bulk\?.+/', $this->path)) {
+			// Checking for Elasticsearch-like bulk requests that can have query parameters
+			$endpointBundle = ManticoreEndpoint::Bulk;
 		} else {
 			$endpointBundle = match ($this->path) {
 				'cli' => ManticoreEndpoint::Cli,
