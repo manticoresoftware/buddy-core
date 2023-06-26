@@ -8,6 +8,11 @@
 			"Manticoresearch\\Buddy\\Core\\": "src/"
 		}
 	},
+	"autoload-dev": {
+		"psr-4": {
+			"Manticoresearch\\Buddy\\CoreTest\\": "test/src/"
+		}
+	},
 	"authors": [
 		{
 			"name": "Manticore Software Co. Ltd",
