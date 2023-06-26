@@ -5,11 +5,7 @@
 	"license": "GPL-2.0-or-later",
 	"autoload": {
 		"psr-4": {
-			"Manticoresearch\\Buddy\\Core\\": "src/"
-		}
-	},
-	"autoload-dev": {
-		"psr-4": {
+			"Manticoresearch\\Buddy\\Core\\": "src/",
 			"Manticoresearch\\Buddy\\CoreTest\\": "test/src/"
 		}
 	},
