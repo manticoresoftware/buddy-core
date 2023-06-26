@@ -22,7 +22,6 @@ class Client {
 	const URL_PREFIX = 'http://';
 	const HTTP_REQUEST_TIMEOUT = 1;
 	const DEFAULT_URL = 'http://127.0.0.1:9308';
-	const MOCK_VERSION = '1.0.0';
 
 	/**
 	 * @var string $response
@@ -59,8 +58,7 @@ class Client {
 		}
 		$this->path = $endpointBundle->value;
 		$this->setServerUrl($url);
-		// We may need MOCK_VERSION to properly execute unit tests from plugin projects which require the Client class
-		$this->buddyVersion = Buddy::getVersion() ?: static::MOCK_VERSION;
+		$this->buddyVersion = Buddy::getVersion();
 		$this->header = static::CONTENT_TYPE_HEADER;
 	}
 

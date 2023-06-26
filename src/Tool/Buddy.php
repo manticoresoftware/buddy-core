@@ -12,6 +12,8 @@
 namespace Manticoresearch\Buddy\Core\Tool;
 
 final class Buddy {
+	const MOCK_VERSION = '1.0.0';
+
 	/** @var string */
 	protected static string $versionFile;
 
@@ -47,7 +49,10 @@ final class Buddy {
 	public static function getVersion(): string {
 		static $version;
 		if (!isset($version)) {
-			$version = trim((string)file_get_contents(static::$versionFile));
+			// We may need MOCK_VERSION to properly execute unit tests from plugin projects
+			$version = isset(static::$versionFile)
+				? trim((string)file_get_contents(static::$versionFile))
+				: static::MOCK_VERSION;
 		}
 		return $version;
 	}
