@@ -71,7 +71,7 @@ trait TestHTTPServerTrait {
 		);
 		$argExpr = '"' . self::$mockServerUrl . '",' . self::$isMockServerInErrorMode;
 		$scriptCode = "$requireCode\n";
-		$scriptCode .= '$server = new Manticoresearch\BuddyTest\Lib\MockManticoreServer(' . $argExpr . ');' . "\n";
+		$scriptCode .= '$server = new Manticoresearch\Buddy\CoreTest\Lib\MockManticoreServer(' . $argExpr . ');' . "\n";
 		$scriptCode .= '$server->start();';
 
 		return $scriptCode;
