@@ -27,9 +27,9 @@ trait TestInEnvironmentTrait {
 
 	/**
 	 * We may need to set a task runtime file for plugin unit tests that use the Core\Task\Task class
-	 * 
+	 *
 	 * @param bool $isCoreEnvironment
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function setTaskRuntime(bool $isCoreEnvironment = false): void {
@@ -38,7 +38,7 @@ trait TestInEnvironmentTrait {
 		 * we use two runtime files respectively
 		 */
 		if ($isCoreEnvironment) {
-			Task::init(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'runtime_core.php');	
+			Task::init(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'runtime_core.php');
 		} else {
 			Task::init(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'runtime.php');
 		}

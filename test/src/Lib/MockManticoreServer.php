@@ -16,7 +16,6 @@ use Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError;
 use Manticoresearch\Buddy\Core\Error\ManticoreSearchResponseError;
 use Manticoresearch\Buddy\Core\Error\QueryParseError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Endpoint as ManticoreEndpoint;
-use Manticoresearch\Buddy\Plugin\Insert\Error\ParserLoadError;
 use RuntimeException;
 use Socket;
 
@@ -235,7 +234,6 @@ final class MockManticoreServer {
 	 * @return void
 	 * @throws ManticoreSearchClientError
 	 * @throws QueryParseError
-	 * @throws ParserLoadError
 	 * @throws ManticoreSearchResponseError
 	 * @throws InvalidNetworkRequestError
 	 */
