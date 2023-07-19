@@ -21,16 +21,23 @@ use Socket;
 
 final class MockManticoreServer {
 
-	const CREATE_RESPONSE_FAIL	= '{"error":"sphinxql: syntax error, unexpected IDENT, expecting '
-		. 'CLUSTER or FUNCTION or PLUGIN or TABLE near \'tablee test(col1 text)\'"}';
-	const CREATE_RESPONSE_OK = '[{"total":0,"error":"","warning":""}]';
-	const SQL_INSERT_RESPONSE_FAIL = '{"error":"table \'test\' absent, or does not support INSERT"}';
-	const JSON_INSERT_RESPONSE_FAIL = '{"error":{"type":"table \'test\' absent, or does not support INSERT"'
-		. ',"index":"test"},"status":500}';
-	const SQL_INSERT_RESPONSE_OK = '[{"total":1,"error":"","warning":""}]';
-	const JSON_INSERT_RESPONSE_OK = '{"_index": "test","_id": 1,"created": true,"result": "created","status": 201}';
-	const SHOW_QUERIES_RESPONSE_FAIL = '';
-	const SHOW_QUERIES_RESPONSE_OK = "[{\n"
+	const CREATE_RESPONSE = [
+		'fail' => '{"error":"sphinxql: syntax error, unexpected IDENT, expecting '
+		. 'CLUSTER or FUNCTION or PLUGIN or TABLE near \'tablee test(col1 text)\'"}',
+		'ok' => '[{"total":0,"error":"","warning":""}]',
+	];
+	const SQL_INSERT_RESPONSE = [
+		'fail' => '{"error":"table \'test\' absent, or does not support INSERT"}',
+		'ok' => '[{"total":1,"error":"","warning":""}]',
+	];
+	const JSON_INSERT_RESPONSE = [
+		'fail' => '{"error":{"type":"table \'test\' absent, or does not support INSERT"'
+		. ',"index":"test"},"status":500}',
+		'ok' => '{"_index": "test","_id": 1,"created": true,"result": "created","status": 201}',
+	];
+	const SHOW_QUERIES_RESPONSE = [
+		'fail' => '',
+		'ok' => "[{\n"
 		. '"columns":[{"id":{"type":"long long"}},{"proto":{"type":"string"}},{"state":{"type":"string"}},'
 		. '{"host":{"type":"string"}},{"connid":{"type":"long long"}},{"killed":{"type":"string"}},'
 		. '{"last cmd":{"type":"string"}}],'
@@ -43,7 +50,46 @@ final class MockManticoreServer {
 		. '"error":"",'
 		. "\n"
 		. '"warning":""'
-		. "\n}]";
+		. "\n}]",
+	];
+	const SHOW_VARIABLES_RESPONSE = [
+		'fail' => '',
+		'ok' => "[{\n"
+		. '"columns":[{"Variable_name":{"type":"string"}},{"Value":{"type":"string"}}],'
+		. "\n"
+		. '"data":['
+		. '{"Variable_name":"autocommit","Value":"1"},'
+		. "\n"
+		. '{"Variable_name":"auto_optimize","Value":"2"},'
+		. "\n"
+		. '{"Variable_name":"collation_connection","Value":"libc_ci"},'
+		. "\n"
+		. '{"Variable_name":"last_insert_id","Value":""},'
+		. "\n"
+		. '{"Variable_name":"pseudo_sharding","Value":"2"}'
+		. "\n],\n"
+		. '"total":5,'
+		. "\n"
+		. '"error":"",'
+		. "\n"
+		. '"warning":""'
+		. "\n}]",
+	];
+	const SHOW_TABLES_RESPONSE = [
+		'fail' => '',
+		'ok' => "[{\n"
+		. '"columns":[{"Index":{"type":"string"}},{"Type":{"type":"string"}}],'
+		. "\n"
+		. '"data":['
+		. '{"Index":"test","Type":"rt"}'
+		. "\n],\n"
+		. '"total":1,'
+		. "\n"
+		. '"error":"",'
+		. "\n"
+		. '"warning":""'
+		. "\n}]",
+	];
 
 	/**
 	 * @var Socket|false $socket
@@ -215,14 +261,19 @@ final class MockManticoreServer {
 		if (str_starts_with($request, 'query=')) {
 			$request = substr($request, 6);
 		}
+		$responseType = $this->hasErrorResponse ? 'fail' : 'ok';
 		if (stripos($request, 'CREATE') === 0) {
-			$resp = $this->hasErrorResponse ? self::CREATE_RESPONSE_FAIL : self::CREATE_RESPONSE_OK;
+			$resp = self::CREATE_RESPONSE[$responseType];
 		} elseif (stripos($request, 'INSERT') === 0) {
-			$resp = $this->hasErrorResponse ? self::SQL_INSERT_RESPONSE_FAIL : self::SQL_INSERT_RESPONSE_OK;
+			$resp = self::SQL_INSERT_RESPONSE[$responseType];
 		} elseif (ManticoreEndpoint::from($this->reqEndpoint) === ManticoreEndpoint::Insert) {
-			$resp = $this->hasErrorResponse ? self::JSON_INSERT_RESPONSE_FAIL : self::JSON_INSERT_RESPONSE_OK;
+			$resp = self::JSON_INSERT_RESPONSE[$responseType];
 		} elseif (stripos($request, 'SELECT') === 0) {
-			$resp = $this->hasErrorResponse ? self::SHOW_QUERIES_RESPONSE_FAIL : self::SHOW_QUERIES_RESPONSE_OK;
+			$resp = self::SHOW_QUERIES_RESPONSE[$responseType];
+		} elseif (stripos($request, 'SHOW+VARIABLES') === 0) {
+			$resp = self::SHOW_VARIABLES_RESPONSE[$responseType];
+		} elseif (stripos($request, 'SHOW+TABLES') === 0) {
+			$resp = self::SHOW_TABLES_RESPONSE[$responseType];
 		} else {
 			$resp = '';
 		}
