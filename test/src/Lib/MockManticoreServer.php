@@ -44,6 +44,40 @@ final class MockManticoreServer {
 		. "\n"
 		. '"warning":""'
 		. "\n}]";
+	const SHOW_VARIABLES_RESPONSE_FAIL = '';
+	const SHOW_VARIABLES_RESPONSE_OK = "[{\n"
+		. '"columns":[{"Variable_name":{"type":"string"}},{"Value":{"type":"string"}}],'
+		. "\n"
+		. '"data":['
+		. '{"Variable_name":"autocommit","Value":"1"},'
+		. "\n"
+		. '{"Variable_name":"auto_optimize","Value":"2"},'
+		. "\n"
+		. '{"Variable_name":"collation_connection","Value":"libc_ci"},'
+		. "\n"
+		. '{"Variable_name":"last_insert_id","Value":""},'
+		. "\n"
+		. '{"Variable_name":"pseudo_sharding","Value":"2"}'
+		. "\n],\n"
+		. '"total":5,'
+		. "\n"
+		. '"error":"",'
+		. "\n"
+		. '"warning":""'
+		. "\n}]";
+	const SHOW_TABLES_RESPONSE_FAIL = '';
+	const SHOW_TABLES_RESPONSE_OK = "[{\n"
+		. '"columns":[{"Index":{"type":"string"}},{"Type":{"type":"string"}}],'
+		. "\n"
+		. '"data":['
+		. '{"Index":"test","Type":"rt"}'
+		. "\n],\n"
+		. '"total":1,'
+		. "\n"
+		. '"error":"",'
+		. "\n"
+		. '"warning":""'
+		. "\n}]";
 
 	/**
 	 * @var Socket|false $socket
@@ -223,6 +257,10 @@ final class MockManticoreServer {
 			$resp = $this->hasErrorResponse ? self::JSON_INSERT_RESPONSE_FAIL : self::JSON_INSERT_RESPONSE_OK;
 		} elseif (stripos($request, 'SELECT') === 0) {
 			$resp = $this->hasErrorResponse ? self::SHOW_QUERIES_RESPONSE_FAIL : self::SHOW_QUERIES_RESPONSE_OK;
+		} elseif (stripos($request, 'SHOW+VARIABLES') === 0) {
+			$resp = $this->hasErrorResponse ? self::SHOW_VARIABLES_RESPONSE_FAIL : self::SHOW_VARIABLES_RESPONSE_OK;
+		} elseif (stripos($request, 'SHOW+TABLES') === 0) {
+			$resp = $this->hasErrorResponse ? self::SHOW_TABLES_RESPONSE_FAIL : self::SHOW_TABLES_RESPONSE_OK;
 		} else {
 			$resp = '';
 		}
