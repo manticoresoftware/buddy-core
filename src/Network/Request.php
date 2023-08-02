@@ -151,7 +151,7 @@ final class Request {
 		$urlInfo = parse_url($payload['message']['path_query']);
 		$this->path = ltrim($urlInfo['path'], '/');
 		if ($this->path === 'sql' && isset($urlInfo['query'])) {
-			// We need to keep the query parameters part in the sql queries 
+			// We need to keep the query parameters part in the sql queries
 			// as it's required for the following requests to Manticore
 			$this->path .= '?' . $urlInfo['query'];
 		}
