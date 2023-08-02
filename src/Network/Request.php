@@ -147,10 +147,14 @@ final class Request {
 		static::validateInputFields($payload, static::PAYLOAD_FIELDS);
 
 		// Checking if request format and endpoint are supported
-		/** @var array{path:string} $urlInfo */
+		/** @var array{path:string,query?:string} $urlInfo */
 		$urlInfo = parse_url($payload['message']['path_query']);
 		$this->path = ltrim($urlInfo['path'], '/');
-
+		if ($this->path === 'sql' && isset($urlInfo['query'])) {
+			// We need to keep the query parameters part in the sql queries 
+			// as it's required for the following requests to Manticore
+			$this->path .= '?' . $urlInfo['query'];
+		}
 		if (str_contains($this->path, '/_doc/') || str_contains($this->path, '/_create/')
 			|| str_ends_with($this->path, '/_doc') || str_ends_with($this->path, '/_create')) {
 			// We don't differentiate elastic-like insert and replace queries here
@@ -161,7 +165,7 @@ final class Request {
 				'bulk' => ManticoreEndpoint::Bulk,
 				'cli' => ManticoreEndpoint::Cli,
 				'cli_json' => ManticoreEndpoint::CliJson,
-				'sql', '' => ManticoreEndpoint::Sql,
+				'sql?mode=raw', 'sql', '' => ManticoreEndpoint::Sql,
 				'insert', 'replace' => ManticoreEndpoint::Insert,
 				'bulk', '_bulk' => ManticoreEndpoint::Bulk,
 				'_license' => ManticoreEndpoint::Elastic,
