@@ -23,6 +23,9 @@ class Client {
 	const HTTP_REQUEST_TIMEOUT = 1;
 	const DEFAULT_URL = 'http://127.0.0.1:9308';
 
+	/** @var Client  */
+	protected static Client $instance;
+
 	/**
 	 * @var string $response
 	 */
@@ -63,6 +66,22 @@ class Client {
 	}
 
 	/**
+	 * Get current instance of the client, only one per process
+	 * @return static
+	 */
+	public static function instance(): static {
+		if (!isset(static::$instance)) {
+			static::$instance = new static(new Response);
+			$listen = getenv('LISTEN', true);
+			if ($listen) {
+				static::$instance->setServerUrl($listen);
+			}
+		}
+		static::$instance->setResponseBuilder(new Response);
+		return static::$instance;
+	}
+
+	/**
 	 * Set Response Builder
 	 * @param Response $responseBuilder
 	 * @return void
@@ -81,10 +100,10 @@ class Client {
 		if (!str_starts_with($url, self::URL_PREFIX)) {
 			$url = self::URL_PREFIX . $url;
 		}
-		// ! we do not have filter extension in production version
-		// if (!filter_var($url, FILTER_VALIDATE_URL)) {
-		// throw new ManticoreSearchClientError("Malformed request url '$origUrl' passed");
-		// }
+
+		if (!filter_var($url, FILTER_VALIDATE_URL)) {
+			throw new ManticoreSearchClientError("Malformed request url '$url' passed");
+		}
 		$this->url = $url;
 	}
 

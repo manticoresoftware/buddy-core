@@ -15,10 +15,8 @@ use Composer\Console\Application;
 use Exception;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Settings;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 final class Pluggable {
 	const PLUGIN_PREFIX = 'buddy-plugin-';
@@ -28,9 +26,6 @@ final class Pluggable {
 
 	/** @var string */
 	protected string $pluginDir;
-
-	/** @var ?ContainerInterface $container */
-	protected static ?ContainerInterface $container = null;
 
 	/**
 	 * Initialize and set plugin dir
@@ -42,23 +37,6 @@ final class Pluggable {
 		$this->setPluginDir(
 			$this->findPluginDir()
 		);
-	}
-
-	/**
-	 * Set current container interface for future usage
-	 * @param ContainerInterface $container
-	 * @return void
-	 */
-	public static function setContainer(ContainerInterface $container): void {
-		static::$container = $container;
-	}
-
-	/**
-	 * Get current container
-	 * @return ContainerInterface
-	 */
-	public static function getContainer(): ContainerInterface {
-		return static::$container ?? new ContainerBuilder();
 	}
 
 	/**

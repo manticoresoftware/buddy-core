@@ -11,12 +11,17 @@
 
 namespace Manticoresearch\Buddy\Core\Plugin;
 
+use Closure;
 use Manticoresearch\Buddy\Core\Task\Task;
 use parallel\Runtime;
+use RuntimeException;
 
 abstract class BaseHandler {
 	/** @var array<string,array<callable>> $hooks */
 	protected static array $hooks = [];
+
+	/** @var Closure */
+	protected Closure $internalQueryProcessor;
 
 	/** @return Task */
 	abstract public function run(Runtime $runtime): Task;
@@ -49,5 +54,28 @@ abstract class BaseHandler {
 		foreach (static::$hooks[$name] as $fn) {
 			$fn(...$data);
 		}
+	}
+
+	/**
+	 * This method sets the interla query processor closure to allow us execute
+	 * queries that uses other plugins internally without creating http
+	 * and passing it all to the manticore daemon
+	 * @param callable $fn [description]
+	 * @return void
+	 */
+	public function setInternalQueryProcessor(callable $fn): void {
+		$this->internalQueryProcessor = $fn;
+	}
+
+	/**
+	 * The helper method to run query in internal mode
+	 * @return callable
+	 */
+	protected function getInternalQuery(): callable {
+		if (!isset($this->internalQueryProcessor)) {
+			throw new RuntimeException('Internal Query Processor is not set');
+		}
+
+		return $this->internalQueryProcessor;
 	}
 }

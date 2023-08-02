@@ -37,6 +37,7 @@ final class Request {
 	public string $error;
 	public string $payload;
 	public int $version;
+	public bool $isInternal = false;
 
 	/**
 	 * @return void
@@ -116,6 +117,20 @@ final class Request {
 		$self->id = $id;
 		$self->time = microtime(true);
 		return $self->parseOrFail($payload);
+	}
+
+	/**
+	 * This method is used to create internal request with SQL to execute
+	 * @param  string $query
+	 * @param  string $id
+	 * @return static
+	 */
+	public static function fromQuery(string $query, string $id = '0'): static {
+		$self = static::default($id);
+		$self->format = RequestFormat::SQL;
+		$self->payload = $query;
+		$self->isInternal = true;
+		return $self;
 	}
 
 	/**
