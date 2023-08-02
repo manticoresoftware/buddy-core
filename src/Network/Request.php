@@ -150,7 +150,7 @@ final class Request {
 		/** @var array{path:string} $urlInfo */
 		$urlInfo = parse_url($payload['message']['path_query']);
 		$this->path = ltrim($urlInfo['path'], '/');
-		
+
 		if (str_contains($this->path, '/_doc/') || str_contains($this->path, '/_create/')
 			|| str_ends_with($this->path, '/_doc') || str_ends_with($this->path, '/_create')) {
 			// We don't differentiate elastic-like insert and replace queries here
