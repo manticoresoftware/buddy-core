@@ -21,7 +21,7 @@ jobs:
           image: ghcr.io/manticoresoftware/manticoresearch:test-kit-latest
           options: -v ${{ github.workspace }}:/workdir -w /workdir --cap-add SYS_ADMIN --security-opt apparmor=unconfined
           run: |
-            composer require --dev code-lts/doctum
+            composer require --dev code-lts/doctum -W
             vendor/bin/doctum.php update config/doctum.php --ignore-parse-errors
       - name: Deploy documentation
         uses: peaceiris/actions-gh-pages@v3
