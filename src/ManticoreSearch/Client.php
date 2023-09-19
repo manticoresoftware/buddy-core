@@ -11,6 +11,8 @@
 
 namespace Manticoresearch\Buddy\Core\ManticoreSearch;
 
+use Ds\Map;
+use Ds\Vector;
 use Exception;
 use Generator;
 use Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError;
@@ -20,7 +22,7 @@ use RuntimeException;
 class Client {
 	const CONTENT_TYPE_HEADER = "Content-Type: application/x-www-form-urlencoded\n";
 	const URL_PREFIX = 'http://';
-	const HTTP_REQUEST_TIMEOUT = 1;
+	const HTTP_REQUEST_TIMEOUT = 300;
 	const DEFAULT_URL = 'http://127.0.0.1:9308';
 
 	/**
@@ -39,6 +41,9 @@ class Client {
 
 	/** @var string $buddyVersion */
 	protected string $buddyVersion;
+
+	/** @var Settings */
+	protected Settings $settings;
 
 	/**
 	 * Initialize the Client that will use provided
@@ -65,27 +70,25 @@ class Client {
 	/**
 	 * Set Response Builder
 	 * @param Response $responseBuilder
-	 * @return void
+	 * @return static
 	 */
-	public function setResponseBuilder(Response $responseBuilder): void {
+	public function setResponseBuilder(Response $responseBuilder): static {
 		$this->responseBuilder = $responseBuilder;
+		return $this;
 	}
 
 	/**
 	 * Set server URL of Manticore searchd to send requests to
 	 * @param string $url it supports http:// prefixed and not
-	 * @return void
+	 * @return static
 	 */
-	public function setServerUrl($url): void {
-		// $origUrl = $url;
+	public function setServerUrl($url): static {
 		if (!str_starts_with($url, self::URL_PREFIX)) {
 			$url = self::URL_PREFIX . $url;
 		}
-		// ! we do not have filter extension in production version
-		// if (!filter_var($url, FILTER_VALIDATE_URL)) {
-		// throw new ManticoreSearchClientError("Malformed request url '$origUrl' passed");
-		// }
+
 		$this->url = $url;
+		return $this;
 	}
 
 	/**
@@ -108,6 +111,7 @@ class Client {
 			throw new ManticoreSearchClientError('Empty request passed');
 		}
 		$path ??= $this->path;
+
 		// We urlencode all the requests to the /sql endpoint
 		if (str_starts_with($path, 'sql')) {
 			$request = 'query=' . urlencode($request);
@@ -121,14 +125,13 @@ class Client {
 					. $agentHeader
 					. "Connection: close\n",
 				'content' => $request,
-				'timeout' => static::HTTP_REQUEST_TIMEOUT,
+				// 'timeout' => static::HTTP_REQUEST_TIMEOUT,
 				'ignore_errors' => true,
 			],
 		];
 
 		$context = stream_context_create($opts);
 		$result = file_get_contents($fullReqUrl, false, $context);
-
 		if ($result === false) {
 			throw new ManticoreSearchClientError("Cannot connect to server at $fullReqUrl");
 		}
@@ -225,4 +228,72 @@ class Client {
 
 		return $tables;
 	}
+
+	/**
+	 * @param string $table
+	 * @return bool
+	 */
+	public function hasTable(string $table): bool {
+		/** @var array<array{total:int}>}> $res */
+		$res = $this->sendRequest("SHOW TABLES LIKE '$table'")->getResult();
+		return !!$res[0]['total'];
+	}
+
+	/**
+	 * Get cached settings or fetch if not
+	 * @return Settings
+	 */
+	public function getSettings(): Settings {
+		if (!isset($this->settings)) {
+			$this->settings = $this->fetchSettings();
+		}
+		return $this->settings;
+	}
+
+	/**
+	 * Extractd logic to fetch manticore settings and store it in class property
+	 * @return Settings
+	 */
+	protected function fetchSettings(): Settings {
+		$resp = $this->sendRequest('SHOW SETTINGS');
+	  /** @var array{0:array{columns:array<mixed>,data:array{Setting_name:string,Value:string}}} */
+		$data = (array)json_decode($resp->getBody(), true);
+		$settings = new Vector();
+		foreach ($data[0]['data'] as ['Setting_name' => $key, 'Value' => $value]) {
+			$settings->push(
+				new Map(
+					[
+					'key' => $key,
+					'value' => $value,
+					]
+				)
+			);
+
+			if ($key !== 'configuration_file') {
+				continue;
+			}
+
+			Buddy::debug("using config file = '$value'");
+			putenv("SEARCHD_CONFIG={$value}");
+		}
+
+		// Gather variables also
+		$resp = $this->sendRequest('SHOW VARIABLES');
+		/** @var array{0:array{columns:array<mixed>,data:array{Setting_name:string,Value:string}}} */
+		$data = (array)json_decode($resp->getBody(), true);
+		foreach ($data[0]['data'] as ['Variable_name' => $key, 'Value' => $value]) {
+			$settings->push(
+				new Map(
+					[
+					'key' => $key,
+					'value' => $value,
+					]
+				)
+			);
+		}
+
+		// Finally build the settings
+		return Settings::fromVector($settings);
+	}
+
 }

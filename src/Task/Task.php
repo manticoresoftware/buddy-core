@@ -45,11 +45,8 @@ final class Task {
 	 */
 	protected bool $isLooped = false;
 
-	/** @var array{success:array<callable>,failure:array<callable>} */
-	protected array $callbacks = [
-		'success' => [],
-		'failure' => [],
-	];
+	/** @var array<string, array<callable>> */
+	protected array $callbacks = [];
 
 	/**
 	 * Current task status
@@ -232,6 +229,8 @@ final class Task {
 	 * @return static
 	 */
 	public function run(): static {
+		// Run callbacks before
+		$this->processCallbacks('run');
 		$future = $this->runtime->run(
 			static function (Closure $fn, array $argv) : array {
 				if (!defined('STDOUT')) {
@@ -366,31 +365,29 @@ final class Task {
 	}
 
 	/**
-	 * Register something that we need to executed on success
+	 * Register callback that will be handled before execution
 	 * Useful to run hooks or something like this
+	 * @param string $ns One of success, failure or run
+	 * @param callable $fn
    * @return static
    */
-	public function onSuccess(callable $fn): static {
-		$this->callbacks['success'][] = $fn;
-		return $this;
-	}
-
-	/**
-	 * Register closure to be called when task failed to executed
-	 * @return static
-	 */
-	public function onFailure(callable $fn): static {
-		$this->callbacks['failure'][] = $fn;
+	public function on(string $ns, callable $fn): static {
+		$this->callbacks[$ns] ??= [];
+		$this->callbacks[$ns][] = $fn;
 		return $this;
 	}
 
 	/**
 	 * Process all callbacks if we have any
+	 * @param ?string $ns
 	 * @return static
 	 */
-	protected function processCallbacks(): static {
-		$ns = isset($this->error) ? 'failure' : 'success';
-		foreach ($this->callbacks[$ns] as $fn) {
+	protected function processCallbacks(?string $ns = null): static {
+		if (!isset($ns)) {
+			$ns = isset($this->error) ? 'failure' : 'success';
+		}
+		$callbacks = $this->callbacks[$ns] ?? [];
+		foreach ($callbacks as $fn) {
 			$fn();
 		}
 		return $this;

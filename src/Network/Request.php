@@ -11,6 +11,7 @@
 
 namespace Manticoresearch\Buddy\Core\Network;
 
+use Ds\Vector;
 use Manticoresearch\Buddy\Core\Error\InvalidNetworkRequestError;
 use Manticoresearch\Buddy\Core\Error\QueryParseError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Endpoint as ManticoreEndpoint;
@@ -55,7 +56,7 @@ final class Request {
 		$self->id = $id;
 		$self->time = microtime(true);
 		$self->endpointBundle = ManticoreEndpoint::Sql;
-		$self->settings = ManticoreSettings::fromArray([], []);
+		$self->settings = ManticoreSettings::fromVector(new Vector());
 		$self->path = ManticoreEndpoint::Sql->value;
 		$self->format = RequestFormat::JSON;
 		$self->error = '';

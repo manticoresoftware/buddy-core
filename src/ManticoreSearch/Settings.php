@@ -11,6 +11,7 @@
 
 namespace Manticoresearch\Buddy\Core\ManticoreSearch;
 
+use Ds\Vector;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
 use Manticoresearch\Buddy\Core\Tool\Strings;
 
@@ -19,7 +20,8 @@ final class Settings {
 	public ?string $configurationFile = null;
 	public ?int $workerPid = null;
 	public bool $searchdAutoSchema = true;
-	public ?string $searchdListen = null;
+	/** @var ?Vector<string> $searchdListen */
+	public ?Vector $searchdListen = null;
 	public ?string $searchdLog = null;
 	public ?string $searchdQueryLog = null;
 	public ?string $searchdPidFile = null;
@@ -59,50 +61,25 @@ final class Settings {
 	];
 
 	/**
-	 * @param array{
-   * 'configuration_file'?:string,
-   * 'worker_pid'?:int,
-   * 'searchd.auto_schema'?:string,
-   * 'searchd.listen'?:string,
-   * 'searchd.log'?:string,
-   * 'searchd.query_log'?:string,
-   * 'searchd.pid_file'?:string,
-   * 'searchd.data_dir'?:string,
-   * 'searchd.query_log_format'?:string,
-   * 'searchd.buddy_path'?:string,
-   * 'searchd.binlog_path'?:string,
-   * 'common.plugin_dir'?:string,
-   * 'common.lemmatizer_base'?:string,
-   * } $settings
-	 *
-	 * @param array{
-	 * autocommit:int,
-	 * auto_optimize:int,
-	 * optimize_cutoff:int,
-	 * collation_connection:string,
-	 * query_log_format:string,
-	 * session_read_only:int,
-	 * log_level:string,
-	 * max_allowed_packet:int,
-	 * character_set_client:string,
-	 * character_set_connection:string,
-	 * grouping_in_utc:int,
-	 * last_insert_id:string,
-	 * pseudo_sharding:int,
-	 * secondary_indexes:int,
-	 * accurate_aggregation:int,
-	 * threads_ex_effective:string,
-	 * threads_ex:string,
-	 * }|array{} $variables
+	 * Create Settings structr from the Vector of configurations and variable
+	 * @param Vector<array{key:string,value:mixed}> $settings each row has map with key and value
 	 * @return static
 	 */
-	public static function fromArray(array $settings, array $variables = []): static {
+	public static function fromVector(Vector $settings): static {
 		$self = new static;
-		foreach ([...$settings, ...$variables] as $key => $value) {
+		foreach ($settings as ['key' => $key, 'value' => $value]) {
 			$property = Strings::camelcaseBySeparator(str_replace('.', '_', $key), '_');
 			if (!property_exists(static::class, $property)) {
 				continue;
 			}
+
+			// Custom case for multiple listen
+			if ($key === 'searchd.listen') {
+				$self->$property ??= new Vector();
+				$self->$property->push($value);
+				continue;
+			}
+
 			if (isset(static::CAST[$property])) {
 				settype($value, static::CAST[$property]);
 			}
