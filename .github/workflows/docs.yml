@@ -18,11 +18,11 @@ jobs:
       - name: Run doctum inside docker container
         uses: manticoresoftware/addnab-docker-run-action@v3
         with:
-          image: manticoresearch/manticore-executor-kit:0.6.6
+          image: ghcr.io/manticoresoftware/manticoresearch:test-kit-latest
           options: -v ${{ github.workspace }}:/workdir -w /workdir --cap-add SYS_ADMIN --security-opt apparmor=unconfined
           run: |
             composer require --dev code-lts/doctum
-            vendor/bin/doctum.php update config/doctum.php
+            vendor/bin/doctum.php update config/doctum.php --ignore-parse-errors
       - name: Deploy documentation
         uses: peaceiris/actions-gh-pages@v3
         with:

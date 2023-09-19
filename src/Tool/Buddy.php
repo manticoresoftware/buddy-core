@@ -24,6 +24,18 @@ final class Buddy {
 		static::$versionFile = $file;
 	}
 
+
+	/**
+	 * Print INFO message, that is important to be in production also
+	 *
+	 * @param string $message
+	 * @param string $eol
+	 * @return void
+	 */
+	public static function info(string $message, string $eol = PHP_EOL): void {
+		echo "[!] {$message} {$eol}";
+	}
+
 	/**
 	 * This is helper to display debug info in debug mode
 	 *
@@ -36,7 +48,7 @@ final class Buddy {
 			return;
 		}
 
-		echo $message . $eol;
+		echo "{$message} {$eol}";
 	}
 
 	/**
