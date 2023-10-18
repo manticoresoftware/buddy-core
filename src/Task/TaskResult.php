@@ -166,7 +166,8 @@ final class TaskResult {
 	 * @return string
 	 */
 	public function toString(): string {
-		return json_encode($this->getStruct()) ?: '';
+		$struct = $this->getStruct();
+		return is_string($struct) ? $struct : (json_encode($struct) ?: '');
 	}
 
 	/**

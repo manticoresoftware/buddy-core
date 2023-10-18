@@ -11,7 +11,6 @@
 
 namespace Manticoresearch\Buddy\CoreTest\Trait;
 
-use Manticoresearch\Buddy\Core\Task\Task;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
 
 trait TestInEnvironmentTrait {
@@ -24,24 +23,4 @@ trait TestInEnvironmentTrait {
 	public static function setBuddyVersion(): void {
 		Buddy::setVersionFile(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'MOCK_APP_VERSION');
 	}
-
-	/**
-	 * We may need to set a task runtime file for plugin unit tests that use the Core\Task\Task class
-	 *
-	 * @param bool $isCoreEnvironment
-	 *
-	 * @return void
-	 */
-	public static function setTaskRuntime(bool $isCoreEnvironment = false): void {
-		/**
-		 * Since the relative location of test files differs for the core plufin and all the rest,
-		 * we use two runtime files respectively
-		 */
-		if ($isCoreEnvironment) {
-			Task::init(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'runtime_core.php');
-		} else {
-			Task::init(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'runtime.php');
-		}
-	}
-
 }

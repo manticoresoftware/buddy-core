@@ -12,9 +12,6 @@
 namespace Manticoresearch\Buddy\Core\Plugin;
 
 use Manticoresearch\Buddy\Core\ManticoreSearch\Client as HTTPClient;
-use Manticoresearch\Buddy\Core\Task\Task;
-use RuntimeException;
-use parallel\Runtime;
 
 /**
  * This is the parent class to handle erroneous queries via Manticore client requests
@@ -22,15 +19,6 @@ use parallel\Runtime;
 abstract class BaseHandlerWithClient extends BaseHandler {
 	/** @var HTTPClient $manticoreClient */
 	protected HTTPClient $manticoreClient;
-
-	/**
-	 * Process the request and return self for chaining
-	 *
-	 * @param Runtime $runtime
-	 * @return Task
-	 * @throws RuntimeException
-	 */
-	abstract public function run(Runtime $runtime): Task;
 
 	/**
 	 * Get props for the handler that we will set on initializeation in QueryProcessor

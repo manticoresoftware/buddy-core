@@ -146,7 +146,6 @@ class Client {
 		Buddy::debug("[{$time}µs] manticore request: $request");
 		return $result;
 	}
-
 	/**
 	 * Set path that we will use to append to final url for sending requests
 	 * @param string $path
@@ -256,7 +255,7 @@ class Client {
 	 */
 	protected function fetchSettings(): Settings {
 		$resp = $this->sendRequest('SHOW SETTINGS');
-	  /** @var array{0:array{columns:array<mixed>,data:array{Setting_name:string,Value:string}}} */
+		/** @var array{0:array{columns:array<mixed>,data:array{Setting_name:string,Value:string}}} */
 		$data = (array)json_decode($resp->getBody(), true);
 		$settings = new Vector();
 		foreach ($data[0]['data'] as ['Setting_name' => $key, 'Value' => $value]) {

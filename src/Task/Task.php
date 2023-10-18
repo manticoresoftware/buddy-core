@@ -15,9 +15,7 @@ use Closure;
 use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Settings;
 use RuntimeException;
-use parallel\Channel;
-use parallel\Future;
-use parallel\Runtime;
+use Throwable;
 
 /**
  * The most important thing for this class you should call
@@ -25,9 +23,7 @@ use parallel\Runtime;
  * Task::setSettings() with passed settings before you can use anything [main.php]
  */
 final class Task {
-	// Higher is better for perf just because we monitor looped tasks during transmitting
-	const CHANNEL_CAPACITY = 100;
-
+	/** @var int */
 	protected int $id;
 
 	/**
@@ -38,13 +34,6 @@ final class Task {
 	 */
 	protected bool $isDeferred = false;
 
-	/**
-	 * This is type of task that run in a loop and has auto restart logic
-	 *
-	 * @var bool $isLooped
-	 */
-	protected bool $isLooped = false;
-
 	/** @var array<string, array<callable>> */
 	protected array $callbacks = [];
 
@@ -54,20 +43,12 @@ final class Task {
 	 * @var TaskStatus $status
 	 */
 	protected TaskStatus $status;
-	protected Future $future;
-	protected Runtime $runtime;
-	protected Channel $channel;
 	protected GenericError $error;
 	protected TaskResult $result;
-
-	protected int $channelBufferCount = 0;
 
 	// Extended properties for make things simpler
 	protected string $host = '';
 	protected string $body = '';
-
-	/** @var ?string $runtimeFile path to the file that will be loaded on Runtime bootstraping */
-	protected static ?string $runtimeFile = null;
 
 	/** @var ?Settings $settings */
 	protected static ?Settings $settings = null;
@@ -79,24 +60,6 @@ final class Task {
 	public function __construct(protected array $argv = []) {
 		$this->id = (int)(microtime(true) * 10000);
 		$this->status = TaskStatus::Pending;
-	}
-
-	/**
-	 * Destroy it and make sure that runtime is killed and channel closed
-	 * @return void
-	 */
-	public function destroy(): void {
-		$this->channel->close();
-		$this->runtime->kill();
-	}
-
-	/**
-	 * We need to pass runtime file from dependedant package, so we have init stage for it
-	 * @param null|string $runtimeFile
-	 * @return void
-	 */
-	public static function init(?string $runtimeFile = null): void {
-		static::$runtimeFile = $runtimeFile;
 	}
 
 	/**
@@ -117,14 +80,6 @@ final class Task {
 	}
 
 	/**
-	 * Check if this task is looped task and long running
-	 * @return bool
-	 */
-	public function isLooped(): bool {
-		return $this->isLooped;
-	}
-
-	/**
 	 * Get current task ID
 	 *
 	 * @return int
@@ -134,93 +89,22 @@ final class Task {
 	}
 
 	/**
-	 * This method creates new runtime and initialize the task to run in i
-	 *
+	 * Main entry point to create a task
 	 * @param Closure $fn
 	 * @param mixed[] $argv
 	 * @return static
-	 * @see static::createInRuntime()
 	 */
 	public static function create(Closure $fn, array $argv = []): static {
-		return static::createInRuntime(static::createRuntime(), $fn, $argv);
+		return new static([$fn, $argv]);
 	}
 
 	/**
-	 * This method creates new runtime and initialize task to run in deffered mode
-	 * It accepts same parameters as create method
-	 * @param Closure $fn
-	 * @param mixed[] $argv
-	 * @return static
-	 * @see static::create()
-	 */
-	public static function defer(Closure $fn, array $argv = []): static {
-		$self = static::createInRuntime(static::createRuntime(), $fn, $argv);
-		$self->isDeferred = true;
-		return $self;
-	}
-
-	/**
-	 * This is main function to create runtime and initialize the task
-	 *
-	 * @param Runtime $runtime
-	 * @param Closure $fn
-	 *  The closure should be catch all exception and work properly withou failure
-	 *  Otherwise the all loop will be stopped
-	 * @param mixed[] $argv
+	 * Set task to be deferred
 	 * @return static
 	 */
-	public static function createInRuntime(Runtime $runtime, Closure $fn, array $argv = []): static {
-		$task = new static([$fn, $argv]);
-		$task->runtime = $runtime;
-		return $task;
-	}
-
-	/**
-	 * Defer in specified runtime
-	 *
-	 * @param Runtime $runtime
-	 * @param Closure $fn
-	 *  The closure should be catch all exception and work properly without failure
-	 *  Otherwise the all loop will be stopped
-	 * @param mixed[] $argv
-	 * @return static
-	 */
-	public static function deferInRuntime(Runtime $runtime, Closure $fn, array $argv = []): static {
-		$task = static::createInRuntime($runtime, $fn, $argv);
-		$task->isDeferred = true;
-		return $task;
-	}
-
-	/**
-	 * Create specific task that is long running and we need to maintain it on crash
-	 *
-	 * @param Runtime $runtime
-	 * @param Closure $fn
-	 *  The closure should be catch all exception and work properly without failure
-	 *  Otherwise the all loop will be stopped
-	 * @param mixed[] $argv
-	 * @return static
-	 */
-	public static function loopInRuntime(Runtime $runtime, Closure $fn, array $argv = []): static {
-		$task = static::createInRuntime($runtime, $fn, $argv);
-		$task->isLooped = true;
-		// Currently we use channels only for metric threads,
-		// Thats why we hardcoded capacity here, and it's totally ok for now
-		// Buffered channel does not block on send and blocks only when
-		// we reach passed capacity, we use 50 for now, but it's subject to change
-		$task->channel = new Channel(static::CHANNEL_CAPACITY);
-		// Add channel as first argument for argv in case it's lopped
-		array_unshift($task->argv[1], $task->channel); // @phpstan-ignore-line
-		return $task;
-	}
-
-	/**
-	 * Create application runtime with init and autoload injected
-	 *
-	 * @return Runtime
-	 */
-	public static function createRuntime(): Runtime {
-		return new Runtime(static::$runtimeFile);
+	public function defer(): static {
+		$this->isDeferred = true;
+		return $this;
 	}
 
 	/**
@@ -231,33 +115,28 @@ final class Task {
 	public function run(): static {
 		// Run callbacks before
 		$this->processCallbacks('run');
-		$future = $this->runtime->run(
-			static function (Closure $fn, array $argv) : array {
-				if (!defined('STDOUT')) {
-					define('STDOUT', fopen('php://stdout', 'wb+'));
-				}
-
-				if (!defined('STDERR')) {
-					define('STDERR', fopen('php://stderr', 'wb+'));
-				}
-
+		$this->status = TaskStatus::Running;
+		$future = go(
+			function (Closure $fn, array $argv): void {
 				try {
-					// We serialize here just because in rare cases when we return object
-					// we have some kind of problem with parallel that it cannot find class
-					// Without serialize test HungRequestTest fails
-					return [null, serialize($fn(...$argv))];
-				} catch (\Throwable $t) {
-					return [[$t::class, $t->getMessage()], null];
+					$this->result = $fn(...$argv);
+				} catch (Throwable $t) {
+					[$errorClass, $errorMessage] = [$t::class, $t->getMessage()];
+					$e = new GenericError("$errorClass: $errorMessage");
+					if ($errorMessage) {
+						$e->setResponseError($errorMessage);
+					}
+					$this->error = $e;
+				} finally {
+					$this->status = TaskStatus::Finished;
 				}
-			}, $this->argv
+			}, ...$this->argv
 		);
 
-		if (!isset($future)) {
+		if ($future === false) {
 			$this->status = TaskStatus::Failed;
-			throw new RuntimeException("Failed to run task: {$this->id}");
+			$this->error = new GenericError("Failed to run task: {$this->id}");
 		}
-		$this->future = $future;
-		$this->status = TaskStatus::Running;
 		return $this;
 	}
 
@@ -275,7 +154,6 @@ final class Task {
 	public function wait(bool $exceptionOnError = false): TaskStatus {
 		$i = 0;
 		while ($this->status === TaskStatus::Running) {
-			$this->checkStatus();
 			usleep(5 + (int)log(++$i));
 		}
 
@@ -287,56 +165,11 @@ final class Task {
 	}
 
 	/**
-	 * This is internal function to get current state of running future
-	 * and update status in state of the current task
-	 *
-	 * @return static
-	 * @throws RuntimeException
-	 */
-	protected function checkStatus(): static {
-		if ($this->isDone()) {
-			$this->status = TaskStatus::Finished;
-
-			try {
-				/** @var array{0:?array{0:string,1:string}, 1:string|null} */
-				$value = $this->future->value();
-				[$error, $result] = $value;
-				if ($result) {
-					$result = unserialize($result);
-				}
-				/** @var TaskResult $result */
-				if ($error) {
-					/** @var array{0:string,1:string} $error */
-					[$errorClass, $errorMessage] = $error;
-					$e = new GenericError("$errorClass: $errorMessage");
-					if ($errorMessage) {
-						$e->setResponseError($errorMessage);
-					}
-					throw $e;
-				}
-
-				$this->result = $result;
-			} catch (GenericError $error) {
-				$this->error = $error;
-			} finally {
-				$this->processCallbacks();
-			}
-		}
-		return $this;
-	}
-
-	/**
 	 * Get current status of launched task
 	 *
 	 * @return TaskStatus
 	 */
 	public function getStatus(): TaskStatus {
-		// First, we need to check status,
-		// in case we do not use wait for blocking resolving
-		if ($this->status !== TaskStatus::Pending) {
-			$this->checkStatus();
-		}
-
 		return $this->status;
 	}
 
@@ -354,14 +187,6 @@ final class Task {
 	 */
 	public function isSucceed(): bool {
 		return !$this->isRunning() && !isset($this->error);
-	}
-
-	/**
-	 * Return if task is done (even when crashed)
-	 * @return bool
-	 */
-	public function isDone(): bool {
-		return $this->future->done();
 	}
 
 	/**
@@ -418,30 +243,6 @@ final class Task {
 		}
 
 		return $this->result;
-	}
-
-	/**
-	 * This method simply send the message to the running function for this task
-	 * and also check and rerun the closure in case if its looped
-	 *
-	 * @param array<mixed> $data
-	 * @return static
-	 */
-	public function transmit(array $data): static {
-		$shouldCheck = false;
-		++$this->channelBufferCount;
-		if ($this->channelBufferCount === static::CHANNEL_CAPACITY) {
-			$this->channelBufferCount = 0;
-			$shouldCheck = true;
-		}
-		// This is a bit tricky but to fight with killed/crashed runtimes
-		// We check if it's still running here and in case not, restart it
-		if ($this->isLooped && $shouldCheck && $this->isDone()) {
-			$this->run();
-		}
-
-		$this->channel->send($data);
-		return $this;
 	}
 
 	/**

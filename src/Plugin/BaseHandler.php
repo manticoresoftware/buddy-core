@@ -12,14 +12,13 @@
 namespace Manticoresearch\Buddy\Core\Plugin;
 
 use Manticoresearch\Buddy\Core\Task\Task;
-use parallel\Runtime;
 
 abstract class BaseHandler {
 	/** @var array<string,array<callable>> $hooks */
 	protected static array $hooks = [];
 
 	/** @return Task */
-	abstract public function run(Runtime $runtime): Task;
+	abstract public function run(): Task;
 
 	/** @return array<string> */
 	abstract public function getProps(): array;

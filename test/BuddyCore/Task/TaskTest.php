@@ -25,13 +25,6 @@ class TaskTest extends TestCase {
 
 	use TestInEnvironmentTrait;
 
-	/**
-	 * @return void
-	 */
-	public static function setUpBeforeClass(): void {
-		self::setTaskRuntime(true);
-	}
-
 	public function testTaskParallelRunSucceed(): void {
 		echo "\nTesting the task parallel run succeed\n";
 		$task = Task::create(
@@ -115,12 +108,12 @@ class TaskTest extends TestCase {
 
 	public function testTaskDeferredHasFLag(): void {
 		echo "\nTesting the task parallel run has deferred flag\n";
-		$task = Task::defer(
+		$task = Task::create(
 			function (): TaskResult {
 				usleep(2000000);
 				return TaskResult::raw('ok');
 			}
-		);
+		)->defer();
 		$this->assertEquals(true, $task->isDeferred());
 		$this->assertEquals(TaskStatus::Pending, $task->getStatus());
 		$task->run();
