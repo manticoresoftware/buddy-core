@@ -15,6 +15,7 @@ use Closure;
 use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Settings;
 use RuntimeException;
+use Swoole\Coroutine;
 use Throwable;
 
 /**
@@ -36,6 +37,9 @@ final class Task {
 
 	/** @var array<string, array<callable>> */
 	protected array $callbacks = [];
+
+	/** @var int|false $future */
+	protected int|false $future;
 
 	/**
 	 * Current task status
@@ -116,7 +120,7 @@ final class Task {
 		// Run callbacks before
 		$this->processCallbacks('run');
 		$this->status = TaskStatus::Running;
-		$future = go(
+		$this->future = go(
 			function (Closure $fn, array $argv): void {
 				try {
 					$this->result = $fn(...$argv);
@@ -133,7 +137,7 @@ final class Task {
 			}, ...$this->argv
 		);
 
-		if ($future === false) {
+		if (!$this->future) {
 			$this->status = TaskStatus::Failed;
 			$this->error = new GenericError("Failed to run task: {$this->id}");
 		}
@@ -152,11 +156,7 @@ final class Task {
 	 * @throws GenericError
 	 */
 	public function wait(bool $exceptionOnError = false): TaskStatus {
-		$i = 0;
-		while ($this->status === TaskStatus::Running) {
-			usleep(5 + (int)log(++$i));
-		}
-
+		Coroutine::join([$this->future]);
 		if ($exceptionOnError && !$this->isSucceed()) {
 			throw $this->getError();
 		}
