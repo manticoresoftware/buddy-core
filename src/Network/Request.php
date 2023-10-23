@@ -163,12 +163,11 @@ final class Request {
 			$endpointBundle = ManticoreEndpoint::Insert;
 		} else {
 			$endpointBundle = match ($this->path) {
-				'bulk' => ManticoreEndpoint::Bulk,
+				'bulk', '_bulk' => ManticoreEndpoint::Bulk,
 				'cli' => ManticoreEndpoint::Cli,
 				'cli_json' => ManticoreEndpoint::CliJson,
 				'sql?mode=raw', 'sql', '' => ManticoreEndpoint::Sql,
 				'insert', 'replace' => ManticoreEndpoint::Insert,
-				'bulk', '_bulk' => ManticoreEndpoint::Bulk,
 				'_license' => ManticoreEndpoint::Elastic,
 				default => throw new InvalidNetworkRequestError(
 					"Do not know how to handle '{$payload['message']['path_query']}' path_query"

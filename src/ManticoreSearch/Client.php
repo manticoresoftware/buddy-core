@@ -95,12 +95,14 @@ class Client {
 	 * Send the request where request represents the SQL query to be send
 	 * @param string $request
 	 * @param ?string $path
+	 * @param ?string $header
 	 * @param bool $disableAgentHeader
 	 * @return Response
 	 */
 	public function sendRequest(
 		string $request,
-		string $path = null,
+		?string $path = null,
+		?string $header = null,
 		bool $disableAgentHeader = false,
 	): Response {
 		$t = microtime(true);
@@ -118,10 +120,11 @@ class Client {
 		}
 		$fullReqUrl = "{$this->url}/$path";
 		$agentHeader = $disableAgentHeader ? '' : "User-Agent: Manticore Buddy/{$this->buddyVersion}\n";
+		$header = ($header ?? "Content-Type: application/x-www-form-urlencoded\n");
 		$opts = [
 			'http' => [
 				'method'  => 'POST',
-				'header'  => $this->header
+				'header'  => $header
 					. $agentHeader
 					. "Connection: close\n",
 				'content' => $request,
@@ -145,23 +148,6 @@ class Client {
 		$time = (int)((microtime(true) - $t) * 1000000);
 		Buddy::debug("[{$time}µs] manticore request: $request");
 		return $result;
-	}
-	/**
-	 * Set path that we will use to append to final url for sending requests
-	 * @param string $path
-	 * @return void
-	 */
-	public function setPath(string $path): void {
-		$this->path = $path ?: Endpoint::Sql->value;
-	}
-
-	/**
-	 * Set Content-Type header for the request
-	 * @param string $header
-	 * @return void
-	 */
-	public function setContentTypeHeader(string $header): void {
-		$this->header = $header ? "Content-Type: $header\n" : static::CONTENT_TYPE_HEADER;
 	}
 
 	// Bunch of methods to help us reduce copy pasting, maybe we will move it out to separate class
