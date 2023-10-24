@@ -11,48 +11,74 @@
 
 namespace Manticoresearch\Buddy\Core\Task;
 
+use Closure;
 use RuntimeException;
+use Swoole\Table;
 
 /**
  * Simple container for running tasks
  */
 final class TaskPool {
-	/** @var array<int,Task> */
-	protected static array $pool = [];
+	/** @var Table */
+	protected static Table $pool;
+
+	/**
+	 * Get current pool
+	 * @return Table
+	 */
+	public static function pool(): Table {
+		if (!isset(static::$pool)) {
+			static::$pool = new Table(1024);
+			static::$pool->column('id', Table::TYPE_STRING, 24);
+			static::$pool->column('host', Table::TYPE_STRING, 24);
+			static::$pool->column('body', Table::TYPE_STRING, 64);
+			static::$pool->create();
+		}
+		return static::$pool;
+	}
 
 	/**
 	 * Add new task to the pool, so we can understand what is running now
-	 * @param Task $task
-	 * @return void
+	 * @param string $id
+	 * @param string $body
+	 * @param string $host
+	 * @return Closure
 	 */
-	public static function add(Task $task): void {
-		$taskId = $task->getId();
-		if (isset(static::$pool[$taskId])) {
-			throw new RuntimeException("Task {$taskId} already exists");
+	public static function add(string $id, string $body, string $host = 'localhost'): Closure {
+		if (static::pool()->exists($id)) {
+			throw new RuntimeException("Task {$id} already exists");
 		}
-		static::$pool[$taskId] = $task;
+
+		static::pool()->set($id, [
+			'id' => substr($id, 0, 24),
+			'host' => substr($host, 0, 24),
+			'body' => substr($body, 0, 64),
+		]);
+
+		return static function () use ($id) {
+			static::remove($id);
+		};
 	}
 
 	/**
 	 * Remove the specified task from the pool, so we will not count it when it's done
-	 * @param Task $task
+	 * @param string $id
 	 * @return void
 	 */
-	public static function remove(Task $task): void {
-		$taskId = $task->getId();
-		if (!isset(static::$pool[$taskId])) {
-			throw new RuntimeException("Task {$taskId} does not exist");
+	public static function remove(string $id): void {
+		if (!static::pool()->exists($id)) {
+			throw new RuntimeException("Task {$id} does not exist");
 		}
-		unset(static::$pool[$taskId]);
+		static::pool()->delete($id);
 	}
 
 	/**
 	 * Get all active tasks in the pool
 	 *
-	 * @return array<int,Task>
+	 * @return Table
 	 */
-	public static function getList(): array {
-		return static::$pool;
+	public static function getList(): Table {
+		return static::pool();
 	}
 
 	/**
@@ -61,6 +87,6 @@ final class TaskPool {
 	 * @return int
 	 */
 	public static function getCount(): int {
-		return sizeof(static::$pool);
+		return static::pool()->count();
 	}
 }

@@ -33,12 +33,6 @@ class Client {
 	/** @var string $url */
 	protected string $url;
 
-	/** @var string $path */
-	protected string $path;
-
-	/** @var string $header */
-	protected string $header;
-
 	/** @var string $buddyVersion */
 	protected string $buddyVersion;
 
@@ -49,22 +43,18 @@ class Client {
 	 * Initialize the Client that will use provided
 	 * @param ?Response $responseBuilder
 	 * @param ?string $url
-	 * @param Endpoint $endpointBundle
 	 * @return void
 	 */
 	public function __construct(
 		protected ?Response $responseBuilder = null,
-		?string $url = null,
-		Endpoint $endpointBundle = Endpoint::Sql
+		?string $url = null
 	) {
 		// If no url passed, set default one
 		if (!$url) {
 			$url = static::DEFAULT_URL;
 		}
-		$this->path = $endpointBundle->value;
 		$this->setServerUrl($url);
 		$this->buddyVersion = Buddy::getVersion();
-		$this->header = static::CONTENT_TYPE_HEADER;
 	}
 
 	/**
@@ -95,14 +85,12 @@ class Client {
 	 * Send the request where request represents the SQL query to be send
 	 * @param string $request
 	 * @param ?string $path
-	 * @param ?string $header
 	 * @param bool $disableAgentHeader
 	 * @return Response
 	 */
 	public function sendRequest(
 		string $request,
 		?string $path = null,
-		?string $header = null,
 		bool $disableAgentHeader = false,
 	): Response {
 		$t = microtime(true);
@@ -112,15 +100,20 @@ class Client {
 		if ($request === '') {
 			throw new ManticoreSearchClientError('Empty request passed');
 		}
-		$path ??= $this->path;
+		if (!$path) {
+			$path = Endpoint::Sql->value;
+		}
 
+		if (str_ends_with($path, 'bulk')) {
+			$header = "Content-Type: application/x-ndjson\n";
+		}
 		// We urlencode all the requests to the /sql endpoint
 		if (str_starts_with($path, 'sql')) {
 			$request = 'query=' . urlencode($request);
 		}
 		$fullReqUrl = "{$this->url}/$path";
 		$agentHeader = $disableAgentHeader ? '' : "User-Agent: Manticore Buddy/{$this->buddyVersion}\n";
-		$header = ($header ?? "Content-Type: application/x-www-form-urlencoded\n");
+		$header ??= "Content-Type: application/x-www-form-urlencoded\n";
 		$opts = [
 			'http' => [
 				'method'  => 'POST',

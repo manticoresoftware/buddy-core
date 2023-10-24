@@ -50,10 +50,6 @@ final class Task {
 	protected GenericError $error;
 	protected TaskResult $result;
 
-	// Extended properties for make things simpler
-	protected string $host = '';
-	protected string $body = '';
-
 	/** @var ?Settings $settings */
 	protected static ?Settings $settings = null;
 
@@ -121,8 +117,9 @@ final class Task {
 		$this->processCallbacks('run');
 		$this->status = TaskStatus::Running;
 		$this->future = go(
-			function (Closure $fn, array $argv): void {
+			function (): void {
 				try {
+					[$fn, $argv] = $this->argv;
 					$this->result = $fn(...$argv);
 				} catch (Throwable $t) {
 					[$errorClass, $errorMessage] = [$t::class, $t->getMessage()];
@@ -133,8 +130,9 @@ final class Task {
 					$this->error = $e;
 				} finally {
 					$this->status = TaskStatus::Finished;
+					$this->processCallbacks();
 				}
-			}, ...$this->argv
+			}
 		);
 
 		if (!$this->future) {
@@ -243,40 +241,5 @@ final class Task {
 		}
 
 		return $this->result;
-	}
-
-	/**
-	 * Set host that we received from the HTTP header – Host
-	 * @param string $host
-	 * @return static
-	 */
-	public function setHost(string $host): static {
-		$this->host = $host;
-		return $this;
-	}
-
-	/**
-	 * Get host property
-	 * @return string
-	 */
-	public function getHost(): string {
-		return $this->host;
-	}
-
-	// Now setter and getter for body property
-	/**
-   * @param string $body
-   * return static
-   */
-	public function setBody(string $body): static {
-		$this->body = $body;
-		return $this;
-	}
-
-	/**
-   * @return string
-   */
-	public function getBody(): string {
-		return $this->body;
 	}
 }

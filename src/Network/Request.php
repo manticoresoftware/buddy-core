@@ -150,19 +150,19 @@ final class Request {
 		// Checking if request format and endpoint are supported
 		/** @var array{path:string,query?:string} $urlInfo */
 		$urlInfo = parse_url($payload['message']['path_query']);
-		$this->path = ltrim($urlInfo['path'], '/');
-		if ($this->path === 'sql' && isset($urlInfo['query'])) {
+		$path = ltrim($urlInfo['path'], '/');
+		if ($path === 'sql' && isset($urlInfo['query'])) {
 			// We need to keep the query parameters part in the sql queries
 			// as it's required for the following requests to Manticore
-			$this->path .= '?' . $urlInfo['query'];
+			$path .= '?' . $urlInfo['query'];
 		}
-		if (str_contains($this->path, '/_doc/') || str_contains($this->path, '/_create/')
-			|| str_ends_with($this->path, '/_doc') || str_ends_with($this->path, '/_create')) {
+		if (str_contains($path, '/_doc/') || str_contains($path, '/_create/')
+			|| str_ends_with($path, '/_doc') || str_ends_with($path, '/_create')) {
 			// We don't differentiate elastic-like insert and replace queries here
 			// since this is irrelevant for the following Buddy processing logic
 			$endpointBundle = ManticoreEndpoint::Insert;
 		} else {
-			$endpointBundle = match ($this->path) {
+			$endpointBundle = match ($path) {
 				'bulk', '_bulk' => ManticoreEndpoint::Bulk,
 				'cli' => ManticoreEndpoint::Cli,
 				'cli_json' => ManticoreEndpoint::CliJson,
@@ -180,7 +180,7 @@ final class Request {
 			'unknown sql request' => RequestFormat::SQL,
 			default => throw new InvalidNetworkRequestError("Do not know how to handle '{$payload['type']}' type"),
 		};
-
+		$this->path = $path;
 		$this->format = $format;
 		$this->endpointBundle = $endpointBundle;
 		$this->payload = static::removeComments($payload['message']['body']);
