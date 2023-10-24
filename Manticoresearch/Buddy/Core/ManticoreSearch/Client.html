@@ -158,24 +158,6 @@
                 <td></td>
             </tr>
                     <tr>
-                <td class="type" id="property_path">
-                                        protected                                        string
-                                                                                
-                                    </td>
-                <td>$path</td>
-                <td class="last"></td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td class="type" id="property_header">
-                                        protected                                        string
-                                                                                
-                                    </td>
-                <td>$header</td>
-                <td class="last"></td>
-                <td></td>
-            </tr>
-                    <tr>
                 <td class="type" id="property_buddyVersion">
                                         protected                                        string
                                                                                 
@@ -204,7 +186,7 @@
                     void
                 </div>
                 <div class="col-md-8">
-                    <a href="#method___construct">__construct</a>(<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>|null $responseBuilder = null, string|null $url = null, <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Endpoint">Endpoint</abbr> $endpointBundle = Endpoint::Sql)
+                    <a href="#method___construct">__construct</a>(<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>|null $responseBuilder = null, string|null $url = null)
         
                                             <p><p>Initialize the Client that will use provided</p></p>                </div>
                 <div class="col-md-2"></div>
@@ -234,29 +216,9 @@
                     <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_sendRequest">sendRequest</a>(string $request, string $path = null, bool $disableAgentHeader = false)
+                    <a href="#method_sendRequest">sendRequest</a>(string $request, string|null $path = null, bool $disableAgentHeader = false)
         
                                             <p><p>Send the request where request represents the SQL query to be send</p></p>                </div>
-                <div class="col-md-2"></div>
-            </div>
-                    <div class="row">
-                <div class="col-md-2 type">
-                    void
-                </div>
-                <div class="col-md-8">
-                    <a href="#method_setPath">setPath</a>(string $path)
-        
-                                            <p><p>Set path that we will use to append to final url for sending requests</p></p>                </div>
-                <div class="col-md-2"></div>
-            </div>
-                    <div class="row">
-                <div class="col-md-2 type">
-                    void
-                </div>
-                <div class="col-md-8">
-                    <a href="#method_setContentTypeHeader">setContentTypeHeader</a>(string $header)
-        
-                                            <p><p>Set Content-Type header for the request</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -320,9 +282,9 @@ or validate and throw error if we have missing table in the list</p></p>        
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line 55</div>
+        <div class="location">at line 48</div>
         <code>                    void
-    <strong>__construct</strong>(<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>|null $responseBuilder = null, string|null $url = null, <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Endpoint">Endpoint</abbr> $endpointBundle = Endpoint::Sql)
+    <strong>__construct</strong>(<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>|null $responseBuilder = null, string|null $url = null)
         </code>
     </h3>
     <div class="details">    
@@ -347,11 +309,6 @@ or validate and throw error if we have missing table in the list</p></p>        
                 <td>$url</td>
                 <td></td>
             </tr>
-                    <tr>
-                <td><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Endpoint">Endpoint</abbr></td>
-                <td>$endpointBundle</td>
-                <td></td>
-            </tr>
             </table>
 
             
@@ -373,7 +330,7 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_setResponseBuilder">
-        <div class="location">at line 75</div>
+        <div class="location">at line 65</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
     <strong>setResponseBuilder</strong>(<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a> $responseBuilder)
         </code>
@@ -416,7 +373,7 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_setServerUrl">
-        <div class="location">at line 85</div>
+        <div class="location">at line 75</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
     <strong>setServerUrl</strong>(string $url)
         </code>
@@ -459,9 +416,9 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_sendRequest">
-        <div class="location">at line 101</div>
+        <div class="location">at line 91</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
-    <strong>sendRequest</strong>(string $request, string $path = null, bool $disableAgentHeader = false)
+    <strong>sendRequest</strong>(string $request, string|null $path = null, bool $disableAgentHeader = false)
         </code>
     </h3>
     <div class="details">    
@@ -482,7 +439,7 @@ or validate and throw error if we have missing table in the list</p></p>        
                 <td></td>
             </tr>
                     <tr>
-                <td>string</td>
+                <td>string|null</td>
                 <td>$path</td>
                 <td></td>
             </tr>
@@ -511,94 +468,8 @@ or validate and throw error if we have missing table in the list</p></p>        
 
             </div>
                     <div class="method-item">
-                    <h3 id="method_setPath">
-        <div class="location">at line 154</div>
-        <code>                    void
-    <strong>setPath</strong>(string $path)
-        </code>
-    </h3>
-    <div class="details">    
-            
-    
-            
-
-        <div class="method-description">
-                            <p><p>Set path that we will use to append to final url for sending requests</p></p>                        
-        </div>
-        <div class="tags">
-                            <h4>Parameters</h4>
-
-                    <table class="table table-condensed">
-                    <tr>
-                <td>string</td>
-                <td>$path</td>
-                <td></td>
-            </tr>
-            </table>
-
-            
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td>void</td>
-            <td></td>
-        </tr>
-    </table>
-
-            
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
-                    <h3 id="method_setContentTypeHeader">
-        <div class="location">at line 163</div>
-        <code>                    void
-    <strong>setContentTypeHeader</strong>(string $header)
-        </code>
-    </h3>
-    <div class="details">    
-            
-    
-            
-
-        <div class="method-description">
-                            <p><p>Set Content-Type header for the request</p></p>                        
-        </div>
-        <div class="tags">
-                            <h4>Parameters</h4>
-
-                    <table class="table table-condensed">
-                    <tr>
-                <td>string</td>
-                <td>$header</td>
-                <td></td>
-            </tr>
-            </table>
-
-            
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td>void</td>
-            <td></td>
-        </tr>
-    </table>
-
-            
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
                     <h3 id="method_getAllTables">
-        <div class="location">at line 180</div>
+        <div class="location">at line 159</div>
         <code>                    <a target="_blank" rel="noopener" href="https://www.php.net/Generator">Generator</a>
     <strong>getAllTables</strong>(array $types = [])
         </code>
@@ -655,7 +526,7 @@ And filter only required types or any if not specified</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_validateTables">
-        <div class="location">at line 205</div>
+        <div class="location">at line 184</div>
         <code>                    array
     <strong>validateTables</strong>(array $tables = [], array $types = [])
         </code>
@@ -721,7 +592,7 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_hasTable">
-        <div class="location">at line 235</div>
+        <div class="location">at line 214</div>
         <code>                    bool
     <strong>hasTable</strong>(string $table)
         </code>
@@ -765,7 +636,7 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getSettings">
-        <div class="location">at line 245</div>
+        <div class="location">at line 224</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a>
     <strong>getSettings</strong>()
         </code>
@@ -798,7 +669,7 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fetchSettings">
-        <div class="location">at line 256</div>
+        <div class="location">at line 235</div>
         <code>            protected        <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a>
     <strong>fetchSettings</strong>()
         </code>
