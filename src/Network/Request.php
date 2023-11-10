@@ -155,6 +155,9 @@ final class Request {
 			// We need to keep the query parameters part in the sql queries
 			// as it's required for the following requests to Manticore
 			$path .= '?' . $urlInfo['query'];
+		} elseif (str_ends_with($path, '/_bulk')) {
+			// Convert the elastic bulk request path to the Manticore one
+			$path = '_bulk';
 		}
 		if (str_contains($path, '/_doc/') || str_contains($path, '/_create/')
 			|| str_ends_with($path, '/_doc') || str_ends_with($path, '/_create')) {
