@@ -234,13 +234,22 @@ final class Request {
 	 * @throws QueryParseError
 	 */
 	protected static function removeComments(string $query): string {
-		$query = preg_replace(
-			'/(?<!\')(?<=\s)(--|#)[^\r\n\'\"]*(?=[\r\n]|$)|\/\*.*?\*\//ms',
-			'',
+		$query = preg_replace_callback(
+			'/((\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\')|("--"[^"\r\n]*"|#[^"\r\n]*|\/\*[^!][\s\S]*?\*\/))/',
+			function ($matches) {
+				if (strpos($matches[0], '--') === 0
+				|| strpos($matches[0], '#') === 0
+				|| strpos($matches[0], '/*') === 0) {
+					return '';
+				}
+
+				return $matches[0];
+			},
 			$query
 		);
+
 		if ($query === null) {
-			throw new QueryParseError('Error while removing comments from the query using regex');
+			QueryParseError::throw('Error while removing comments from the query using regex: '.  preg_last_error_msg());
 		}
 		/** @var string $query */
 		return trim($query);

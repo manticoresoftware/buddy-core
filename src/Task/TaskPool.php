@@ -49,11 +49,13 @@ final class TaskPool {
 			throw new RuntimeException("Task {$id} already exists");
 		}
 
-		static::pool()->set($id, [
+		static::pool()->set(
+			$id, [
 			'id' => substr($id, 0, 24),
 			'host' => substr($host, 0, 24),
 			'body' => substr($body, 0, 64),
-		]);
+			]
+		);
 
 		return static function () use ($id) {
 			static::remove($id);
