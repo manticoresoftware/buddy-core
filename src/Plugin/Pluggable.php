@@ -362,7 +362,7 @@ final class Pluggable {
 			$pluggable->reload();
 		}
 
-		return array_column($pluggable->getList(), 'short');
+		return array_column($pluggable->getList(), 'full');
 	}
 
 
