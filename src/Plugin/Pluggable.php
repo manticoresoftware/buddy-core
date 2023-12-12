@@ -318,7 +318,7 @@ final class Pluggable {
 
 	/**
 	 * Get list of core plugin names
-	 * @return array<string>
+	 * @return array<array{full:string,short:string,version:string}>
 	 * @throws Exception
 	 */
 	public function fetchCorePlugins(): array {
@@ -338,7 +338,7 @@ final class Pluggable {
 
 	/**
 	 * Get list of external plugin names
-	 * @return array<string>
+	 * @return array<array{full:string,short:string,version:string}>
 	 * @throws Exception
 	 */
 	public function fetchExtraPlugins(): array {
