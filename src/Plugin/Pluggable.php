@@ -348,7 +348,7 @@ final class Pluggable {
 	/**
 	 * Helper function to get external or core plugins
 	 * @param string $path
-	 * @return array<string>
+	 * @return array<array{full:string,short:string,version:string}>
 	 * @throws Exception
 	 */
 	public function fetchPlugins(string $path = ''): array {
@@ -362,7 +362,7 @@ final class Pluggable {
 			$pluggable->reload();
 		}
 
-		return array_column($pluggable->getList(), 'full');
+		return $pluggable->getList();
 	}
 
 
