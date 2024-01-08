@@ -11,7 +11,6 @@
 
 //use Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Client as HTTPClient;
-use Manticoresearch\Buddy\Core\ManticoreSearch\Endpoint as ManticoreEndpoint;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Response;
 use Manticoresearch\Buddy\CoreTest\Trait\TestInEnvironmentTrait;
 use Manticoresearch\Buddy\CoreTest\Trait\TestProtectedTrait;
@@ -50,12 +49,8 @@ class ClientTest extends TestCase {
 			HTTPClient::DEFAULT_URL,
 			$this->refCls->getProperty('url')->getValue($this->client)
 		);
-		$this->assertEquals(
-			ManticoreEndpoint::Sql->value,
-			$this->refCls->getProperty('path')->getValue($this->client)
-		);
 
-		$client = new HTTPClient(new Response(), 'localhost:1000', ManticoreEndpoint::Insert);
+		$client = new HTTPClient(new Response(), 'localhost:1000');
 		$this->assertInstanceOf(HTTPClient::class, $client);
 	}
 

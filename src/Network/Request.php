@@ -249,7 +249,9 @@ final class Request {
 		);
 
 		if ($query === null) {
-			QueryParseError::throw('Error while removing comments from the query using regex: '.  preg_last_error_msg());
+			QueryParseError::throw(
+				'Error while removing comments from the query using regex: '.  preg_last_error_msg()
+			);
 		}
 		/** @var string $query */
 		return trim($query);

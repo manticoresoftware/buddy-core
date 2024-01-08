@@ -102,7 +102,10 @@ final class Pluggable {
 		$composerFile = $this->getPluginComposerFile();
 		$composerContent = file_get_contents($composerFile);
 		if ($composerContent === false) {
-			throw new Exception("Unable to read composer file from plugin dir: $composerFile, make sure that you have correct permissions on plugin dir");
+			throw new Exception(
+				"Unable to read composer file from plugin dir: $composerFile"
+					. ', make sure that you have correct permissions on plugin dir'
+			);
 		}
 		/** @var array{require?:array<string,string>} $composerJson */
 		$composerJson = json_decode($composerContent, true);

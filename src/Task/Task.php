@@ -120,6 +120,8 @@ final class Task {
 			function (): void {
 				try {
 					[$fn, $argv] = $this->argv;
+					/** @var Closure $fn */
+					/** @var array<mixed> $argv */
 					$this->result = $fn(...$argv);
 				} catch (Throwable $t) {
 					[$errorClass, $errorMessage] = [$t::class, $t->getMessage()];
