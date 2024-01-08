@@ -18,7 +18,7 @@ jobs:
       - name: Run tests inside docker container
         uses: manticoresoftware/addnab-docker-run-action@v3
         with:
-          image: manticoresearch/manticore-executor-kit:latest
+          image: ghcr.io/manticoresoftware/manticoresearch:test-kit-latest
           options: -v ${{ github.workspace }}:/workdir --cap-add SYS_ADMIN --security-opt apparmor=unconfined
           run: |
             # the entrypoint is rewritten so we need to launch searchd manually
@@ -36,7 +36,7 @@ jobs:
       - name: Run tests inside docker container
         uses: manticoresoftware/addnab-docker-run-action@v3
         with:
-          image: manticoresearch/manticore-executor-kit:latest
+          image: ghcr.io/manticoresoftware/manticoresearch:test-kit-latest
           options: --cap-add SYS_ADMIN --security-opt apparmor=unconfined
           run: |
             git clone https://github.com/manticoresoftware/manticoresearch-buddy.git /workdir
@@ -68,7 +68,7 @@ jobs:
       - name: Run PHPCS to check following the standard
         uses: manticoresoftware/addnab-docker-run-action@v3
         with:
-          image: manticoresearch/manticore-executor-kit:latest
+          image: ghcr.io/manticoresoftware/manticoresearch:test-kit-latest
           options: -v ${{ github.workspace }}:/workdir
           run: |
             cd /workdir
@@ -86,7 +86,7 @@ jobs:
       - name: Run PHPStan to analyze the codebase
         uses: manticoresoftware/addnab-docker-run-action@v3
         with:
-          image: manticoresearch/manticore-executor-kit:latest
+          image: ghcr.io/manticoresoftware/manticoresearch:test-kit-latest
           options: -v ${{ github.workspace }}:/workdir
           run: |
             cd /workdir
