@@ -171,6 +171,7 @@ final class Request {
 				'bulk', '_bulk' => ManticoreEndpoint::Bulk,
 				'cli' => ManticoreEndpoint::Cli,
 				'cli_json' => ManticoreEndpoint::CliJson,
+                'search' => ManticoreEndpoint::Search,
 				'sql?mode=raw', 'sql', '' => ManticoreEndpoint::Sql,
 				'insert', 'replace' => ManticoreEndpoint::Insert,
 				'_license' => ManticoreEndpoint::Elastic,
