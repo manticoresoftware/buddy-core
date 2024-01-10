@@ -18,5 +18,5 @@ enum Endpoint: string {
 	case Sql = 'sql?mode=raw';
 	case Bulk = 'bulk';
 	case Elastic = 'elastic';
-    case Search = 'search';
+	case Search = 'search';
 }
