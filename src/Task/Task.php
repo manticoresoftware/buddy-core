@@ -125,10 +125,15 @@ final class Task {
 					$this->result = $fn(...$argv);
 				} catch (Throwable $t) {
 					[$errorClass, $errorMessage] = [$t::class, $t->getMessage()];
-					$e = new GenericError("$errorClass: $errorMessage");
-					if ($errorMessage) {
-						$e->setResponseError($errorMessage);
+					if ($t instanceof GenericError) {
+						$e = $t;
+					} else {
+						$e = new GenericError("$errorClass: $errorMessage");
+						if ($errorMessage) {
+							$e->setResponseError($errorMessage);
+						}
 					}
+
 					$this->error = $e;
 				} finally {
 					$this->status = TaskStatus::Finished;

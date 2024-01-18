@@ -100,9 +100,9 @@ class TaskTest extends TestCase {
 		$this->assertEquals(TaskStatus::Finished, $task->getStatus());
 		$this->assertEquals(false, $task->isSucceed());
 		$error = $task->getError();
-		$this->assertEquals(true, $error instanceof GenericError);
-		$this->assertEquals(BuddyRequestError::class . ': ' . $errorMessage, $error->getMessage());
-		$this->assertEquals($errorMessage, $error->getResponseError());
+		$this->assertEquals(true, $error instanceof BuddyRequestError);
+		$this->assertEquals($errorMessage, $error->getMessage());
+		$this->assertEquals('Something went wrong', $error->getResponseError());
 	}
 
 	public function testTaskDeferredHasFLag(): void {
