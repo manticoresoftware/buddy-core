@@ -163,12 +163,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "3be0ca84679bef00d3c16472d258bb88d12b23f6"
+                "reference": "4e5be9ee7d924d8efc58d676439b0c7bd18a9ce4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/3be0ca84679bef00d3c16472d258bb88d12b23f6",
-                "reference": "3be0ca84679bef00d3c16472d258bb88d12b23f6",
+                "url": "https://api.github.com/repos/composer/composer/zipball/4e5be9ee7d924d8efc58d676439b0c7bd18a9ce4",
+                "reference": "4e5be9ee7d924d8efc58d676439b0c7bd18a9ce4",
                 "shasum": ""
             },
             "require": {
@@ -270,7 +270,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-08T10:03:34+00:00"
+            "time": "2024-01-12T13:20:59+00:00"
         },
         {
             "name": "composer/metadata-minifier",
@@ -2075,12 +2075,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "4eec9df2bcc0e83fe002ffefcd8f9cb088691eda"
+                "reference": "776a9e935b23963a262b7e2cb74559b3fbd0bbcb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/4eec9df2bcc0e83fe002ffefcd8f9cb088691eda",
-                "reference": "4eec9df2bcc0e83fe002ffefcd8f9cb088691eda",
+                "url": "https://api.github.com/repos/symfony/process/zipball/776a9e935b23963a262b7e2cb74559b3fbd0bbcb",
+                "reference": "776a9e935b23963a262b7e2cb74559b3fbd0bbcb",
                 "shasum": ""
             },
             "require": {
@@ -2128,7 +2128,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-26T14:02:49+00:00"
+            "time": "2024-01-17T08:57:11+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -2591,12 +2591,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "eb036d5a09f782286820729b64b238db76917958"
+                "reference": "ce019e9ad711e31ee87c2c4c72e538b5240970c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/eb036d5a09f782286820729b64b238db76917958",
-                "reference": "eb036d5a09f782286820729b64b238db76917958",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/ce019e9ad711e31ee87c2c4c72e538b5240970c3",
+                "reference": "ce019e9ad711e31ee87c2c4c72e538b5240970c3",
                 "shasum": ""
             },
             "require": {
@@ -2642,7 +2642,7 @@
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
                 "source": "https://github.com/nikic/PHP-Parser/tree/master"
             },
-            "time": "2024-01-07T17:54:10+00:00"
+            "time": "2024-01-14T09:02:54+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -2816,12 +2816,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "bf326a2751a43cbc0a036c29c9ce9ec47d8a912a"
+                "reference": "790bdaf2ead9e373f8ddb00ffa3fddf863baef32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/bf326a2751a43cbc0a036c29c9ce9ec47d8a912a",
-                "reference": "bf326a2751a43cbc0a036c29c9ce9ec47d8a912a",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/790bdaf2ead9e373f8ddb00ffa3fddf863baef32",
+                "reference": "790bdaf2ead9e373f8ddb00ffa3fddf863baef32",
                 "shasum": ""
             },
             "require": {
@@ -2871,7 +2871,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-08T12:25:21+00:00"
+            "time": "2024-01-17T14:22:43+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -3198,12 +3198,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "241c4aa189ef1f3b7608de2da5510a59f1d22a01"
+                "reference": "8785132d9b6ad4d640d3127917b4be2ad0f5f991"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/241c4aa189ef1f3b7608de2da5510a59f1d22a01",
-                "reference": "241c4aa189ef1f3b7608de2da5510a59f1d22a01",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/8785132d9b6ad4d640d3127917b4be2ad0f5f991",
+                "reference": "8785132d9b6ad4d640d3127917b4be2ad0f5f991",
                 "shasum": ""
             },
             "require": {
@@ -3293,7 +3293,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-07T09:57:50+00:00"
+            "time": "2024-01-18T06:27:31+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -4331,12 +4331,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "2ab648b9a420f9f573b73a7c847ff3517fa2a82f"
+                "reference": "625975cbabf6534b7ee602608c58e6e1cbafd152"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/2ab648b9a420f9f573b73a7c847ff3517fa2a82f",
-                "reference": "2ab648b9a420f9f573b73a7c847ff3517fa2a82f",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/625975cbabf6534b7ee602608c58e6e1cbafd152",
+                "reference": "625975cbabf6534b7ee602608c58e6e1cbafd152",
                 "shasum": ""
             },
             "require": {
@@ -4346,7 +4346,7 @@
                 "php": ">=5.4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0 || ^9.0"
+                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0 || ^9.3.4"
             },
             "default-branch": true,
             "bin": [
@@ -4404,7 +4404,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-01-06T09:21:55+00:00"
+            "time": "2024-01-17T20:50:55+00:00"
         },
         {
             "name": "theseer/tokenizer",
