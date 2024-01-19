@@ -122,6 +122,15 @@
                 <td></td>
             </tr>
                     <tr>
+                <td class="type" id="property_corePlugins">
+                    static                    protected                                        string[]
+                                                                                
+                                    </td>
+                <td>$corePlugins</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
+                    <tr>
                 <td class="type" id="property_pluginDir">
                                         protected                                        string
                                                                                 
@@ -153,6 +162,16 @@
                     <a href="#method___construct">__construct</a>(<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a> $settings, array $hooks = [])
         
                                             <p><p>Initialize and set plugin dir</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;void
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_setCorePlugins">setCorePlugins</a>(array $plugins)
+        
+                                            <p><p>Set core plugins</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -369,6 +388,16 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
 we have all vendor packages installed with CREATE PLUGIN command</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;string
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_getShortName">getShortName</a>(string $fullName)
+        
+                                            <p><p>Helper to get short name from the full qualitifed name of the plugin</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
             </div>
 
 
@@ -377,7 +406,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line 41</div>
+        <div class="location">at line 44</div>
         <code>                    void
     <strong>__construct</strong>(<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a> $settings, array $hooks = [])
         </code>
@@ -424,8 +453,51 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_setCorePlugins">
+        <div class="location">at line 55</div>
+        <code>        static            void
+    <strong>setCorePlugins</strong>(array $plugins)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Set core plugins</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$plugins</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_setContainer">
-        <div class="location">at line 52</div>
+        <div class="location">at line 64</div>
         <code>        static            void
     <strong>setContainer</strong>(<abbr title="Psr\Container\ContainerInterface">ContainerInterface</abbr> $container)
         </code>
@@ -468,7 +540,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_getContainer">
-        <div class="location">at line 60</div>
+        <div class="location">at line 72</div>
         <code>        static            <abbr title="Psr\Container\ContainerInterface">ContainerInterface</abbr>
     <strong>getContainer</strong>()
         </code>
@@ -501,7 +573,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_install">
-        <div class="location">at line 70</div>
+        <div class="location">at line 82</div>
         <code>                    void
     <strong>install</strong>(string $package)
         </code>
@@ -553,7 +625,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_remove">
-        <div class="location">at line 89</div>
+        <div class="location">at line 101</div>
         <code>                    void
     <strong>remove</strong>(string $package)
         </code>
@@ -596,7 +668,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_getList">
-        <div class="location">at line 100</div>
+        <div class="location">at line 112</div>
         <code>                    array
     <strong>getList</strong>()
         </code>
@@ -638,7 +710,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_getClassNamespaceByFullName">
-        <div class="location">at line 141</div>
+        <div class="location">at line 153</div>
         <code>                    string
     <strong>getClassNamespaceByFullName</strong>(string $name)
         </code>
@@ -682,7 +754,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_reload">
-        <div class="location">at line 176</div>
+        <div class="location">at line 196</div>
         <code>                    void
     <strong>reload</strong>()
         </code>
@@ -724,7 +796,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_unregisterAutoload">
-        <div class="location">at line 185</div>
+        <div class="location">at line 205</div>
         <code>                    void
     <strong>unregisterAutoload</strong>()
         </code>
@@ -757,7 +829,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_registerAutoload">
-        <div class="location">at line 198</div>
+        <div class="location">at line 218</div>
         <code>                    void
     <strong>registerAutoload</strong>()
         </code>
@@ -799,7 +871,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_autoloader">
-        <div class="location">at line 247</div>
+        <div class="location">at line 267</div>
         <code>                    void
     <strong>autoloader</strong>(string $className)
         </code>
@@ -842,7 +914,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_composer">
-        <div class="location">at line 282</div>
+        <div class="location">at line 302</div>
         <code>            protected        <abbr title="Symfony\Component\Console\Output\BufferedOutput">BufferedOutput</abbr>
     <strong>composer</strong>(string $command, array $options, string|null $package = null)
         </code>
@@ -904,7 +976,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fetchCorePlugins">
-        <div class="location">at line 327</div>
+        <div class="location">at line 347</div>
         <code>                    array
     <strong>fetchCorePlugins</strong>()
         </code>
@@ -946,7 +1018,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fetchExtraPlugins">
-        <div class="location">at line 347</div>
+        <div class="location">at line 366</div>
         <code>                    array
     <strong>fetchExtraPlugins</strong>()
         </code>
@@ -988,7 +1060,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fetchPlugins">
-        <div class="location">at line 357</div>
+        <div class="location">at line 376</div>
         <code>                    array
     <strong>fetchPlugins</strong>(string $path = &#039;&#039;)
         </code>
@@ -1040,7 +1112,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_registerHooks">
-        <div class="location">at line 377</div>
+        <div class="location">at line 396</div>
         <code>            protected        void
     <strong>registerHooks</strong>()
         </code>
@@ -1074,7 +1146,7 @@ It's called on init phase once and keep updated on event emited from the plugin<
             </div>
                     <div class="method-item">
                     <h3 id="method_setPluginDir">
-        <div class="location">at line 390</div>
+        <div class="location">at line 409</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a>
     <strong>setPluginDir</strong>(string $dir)
         </code>
@@ -1117,7 +1189,7 @@ It's called on init phase once and keep updated on event emited from the plugin<
             </div>
                     <div class="method-item">
                     <h3 id="method_getPluginDir">
-        <div class="location">at line 399</div>
+        <div class="location">at line 418</div>
         <code>                    string
     <strong>getPluginDir</strong>()
         </code>
@@ -1150,7 +1222,7 @@ It's called on init phase once and keep updated on event emited from the plugin<
             </div>
                     <div class="method-item">
                     <h3 id="method_findPluginDir">
-        <div class="location">at line 408</div>
+        <div class="location">at line 427</div>
         <code>            protected        string
     <strong>findPluginDir</strong>()
         </code>
@@ -1192,7 +1264,7 @@ It's called on init phase once and keep updated on event emited from the plugin<
             </div>
                     <div class="method-item">
                     <h3 id="method_getPluginComposerFile">
-        <div class="location">at line 434</div>
+        <div class="location">at line 453</div>
         <code>            protected        string
     <strong>getPluginComposerFile</strong>()
         </code>
@@ -1234,7 +1306,7 @@ It's called on init phase once and keep updated on event emited from the plugin<
             </div>
                     <div class="method-item">
                     <h3 id="method_getPSR4AutoloadFile">
-        <div class="location">at line 450</div>
+        <div class="location">at line 469</div>
         <code>            protected        string
     <strong>getPSR4AutoloadFile</strong>()
         </code>
@@ -1277,7 +1349,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getNSAutoloadFile">
-        <div class="location">at line 467</div>
+        <div class="location">at line 486</div>
         <code>            protected        string
     <strong>getNSAutoloadFile</strong>()
         </code>
@@ -1312,6 +1384,49 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>
             </tr>
             </table>
 
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getShortName">
+        <div class="location">at line 502</div>
+        <code>        static    protected        string
+    <strong>getShortName</strong>(string $fullName)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Helper to get short name from the full qualitifed name of the plugin</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$fullName</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
             
             
                     </div>
