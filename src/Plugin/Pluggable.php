@@ -26,6 +26,9 @@ final class Pluggable {
 	/** @var array<mixed> */
 	protected array $autoloadMap = [];
 
+	/** @var array<string> */
+	protected static array $corePlugins = [];
+
 	/** @var string */
 	protected string $pluginDir;
 
@@ -42,6 +45,15 @@ final class Pluggable {
 		$this->setPluginDir(
 			$this->findPluginDir()
 		);
+	}
+
+	/**
+	 * Set core plugins
+	 * @param array<string> $plugins
+	 * @return void
+	 */
+	public static function setCorePlugins(array $plugins): void {
+		static::$corePlugins = $plugins;
 	}
 
 	/**
@@ -139,6 +151,14 @@ final class Pluggable {
 	 * @return string
 	 */
 	public function getClassNamespaceByFullName(string $name): string {
+		// It's simple in case it's core plugin
+		if (in_array($name, static::$corePlugins)) {
+			$baseName = static::getShortName($name);
+			$ns = str_replace(' ', '', ucwords(str_replace('-', ' ', $baseName)));
+			return "Manticoresearch\\Buddy\\Base\\Plugin\\$ns\\";
+		}
+
+		// For external plugin, get it f
 		$composerFile = $this->pluginDir
 			. DIRECTORY_SEPARATOR
 			. 'vendor'
@@ -325,18 +345,17 @@ final class Pluggable {
 	 * @throws Exception
 	 */
 	public function fetchCorePlugins(): array {
-		$projectRoot = realpath(
-			__DIR__ . DIRECTORY_SEPARATOR . '..'
-			. DIRECTORY_SEPARATOR . '..'
-			. DIRECTORY_SEPARATOR . '..'
-			. DIRECTORY_SEPARATOR . '..'
-			. DIRECTORY_SEPARATOR . '..'
-			. DIRECTORY_SEPARATOR
-		);
-		if (!is_string($projectRoot)) {
-			throw new Exception('Failed to find project root');
+		$plugins = [];
+		$version = Buddy::getVersion();
+		foreach (static::$corePlugins as $fullName) {
+			$plugins[] = [
+				'full' => $fullName,
+				'short' => static::getShortName($fullName),
+				'version' => $version,
+			];
 		}
-		return $this->fetchPlugins($projectRoot);
+
+		return $plugins;
 	}
 
 	/**
@@ -473,5 +492,18 @@ final class Pluggable {
 			. 'composer'
 			. DIRECTORY_SEPARATOR
 			. 'autoload_namespaces.php';
+	}
+
+	/**
+	 * Helper to get short name from the full qualitifed name of the plugin
+	 * @param  string $fullName
+	 * @return string
+	 */
+	protected static function getShortName(string $fullName): string {
+		return substr(
+			$fullName,
+			strpos($fullName, static::PLUGIN_PREFIX)
+				+ strlen(static::PLUGIN_PREFIX)
+		);
 	}
 }
