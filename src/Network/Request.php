@@ -164,6 +164,8 @@ final class Request {
 			// We don't differentiate elastic-like insert and replace queries here
 			// since this is irrelevant for the following Buddy processing logic
 			$endpointBundle = ManticoreEndpoint::Insert;
+		} elseif (str_contains($path, '/_update/')) {
+			$endpointBundle = ManticoreEndpoint::Update;
 		} elseif (str_ends_with($path, '/_mapping')) {
 			$endpointBundle = ManticoreEndpoint::Elastic;
 		} else {

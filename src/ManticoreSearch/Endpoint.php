@@ -19,4 +19,5 @@ enum Endpoint: string {
 	case Bulk = 'bulk';
 	case Elastic = 'elastic';
 	case Search = 'search';
+	case Update = 'update';
 }
