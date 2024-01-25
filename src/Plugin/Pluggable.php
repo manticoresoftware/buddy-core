@@ -345,6 +345,9 @@ final class Pluggable {
 	 * @throws Exception
 	 */
 	public function fetchCorePlugins(): array {
+		// Register all predefined hooks for core plugins only for now
+		$this->registerHooks();
+
 		$plugins = [];
 		$version = Buddy::getVersion();
 		foreach (static::$corePlugins as $fullName) {
@@ -364,7 +367,10 @@ final class Pluggable {
 	 * @throws Exception
 	 */
 	public function fetchExtraPlugins(): array {
-		return $this->fetchPlugins();
+		$pluggable = $this;
+		$pluggable->reload();
+
+		return $pluggable->getList();
 	}
 
 	/**
@@ -375,10 +381,7 @@ final class Pluggable {
 	 */
 	public function fetchPlugins(string $path = ''): array {
 		if ($path) {
-			$pluggable = clone $this;
-			$pluggable->setPluginDir($path);
-			// Register all predefined hooks for core plugins only for now
-			$pluggable->registerHooks();
+
 		} else {
 			$pluggable = $this;
 			$pluggable->reload();
