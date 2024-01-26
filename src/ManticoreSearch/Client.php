@@ -260,6 +260,11 @@ class Client {
 		/** @var array{0:array{columns:array<mixed>,data:array{Setting_name:string,Value:string}}} */
 		$data = (array)json_decode($resp->getBody(), true);
 		foreach ($data[0]['data'] as ['Variable_name' => $key, 'Value' => $value]) {
+			// If the key is plugin_dir check env first and after choose
+			// most priority
+			if ($key === 'common.plugin_dir') {
+				$value = getenv('PLUGIN_DIR') ?: $value;
+			}
 			$settings->push(
 				new Map(
 					[

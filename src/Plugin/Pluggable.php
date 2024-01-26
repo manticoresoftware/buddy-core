@@ -381,7 +381,6 @@ final class Pluggable {
 	 */
 	public function fetchPlugins(string $path = ''): array {
 		if ($path) {
-
 		} else {
 			$pluggable = $this;
 			$pluggable->reload();
