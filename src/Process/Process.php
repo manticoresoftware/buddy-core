@@ -24,12 +24,12 @@ final class Process {
 
 	/**
 	 * Create a new process based on the given instance
-	 * @param  Daemon $daemon
+	 * @param  BaseProcessor $processor
 	 * @return static
 	 */
-	public static function create(Daemon $daemon): static {
+	public static function create(BaseProcessor $processor): static {
 		$process = new SwooleProcess(
-			static function (SwooleProcess $worker) use ($daemon) {
+			static function (SwooleProcess $worker) use ($processor) {
 				chdir(sys_get_temp_dir());
 
 				while ($msg = $worker->read()) {
@@ -41,12 +41,12 @@ final class Process {
 						throw new \Exception('Incorrect data received');
 					}
 					[$method, $args] = $msg;
-					$daemon->$method(...$args);
+					$processor->$method(...$args);
 				}
 			}, true, 2
 		);
 
-		return new static($daemon::class, $process);
+		return new static($processor::class, $process);
 	}
 
 	/**
@@ -75,7 +75,7 @@ final class Process {
 	 * @return static
 	 */
 	public function execute(string $method, array $args = []): static {
-		Buddy::debug("[process: ] execute: $method " . json_encode($args));
+		Buddy::debug("[process] execute: $method " . json_encode($args));
 		$this->process->write(serialize([$method, $args]));
 		return $this;
 	}

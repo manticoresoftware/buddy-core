@@ -24,22 +24,6 @@ abstract class BaseHandler {
 	abstract public function getProps(): array;
 
 	/**
-	 * Initialization step in case if it's required to run once on Buddy start
-	 * @return void
-	 */
-	public static function start(): void {
-
-	}
-
-	/**
-	 * Shutdown step that we run once buddy is stopping
-	 * @return void
-	 */
-	public static function stop(): void {
-
-	}
-
-	/**
 	 * Register hook with closure processor that will receive its data and may do something
 	 * @param string $name
 	 * @param callable $fn
