@@ -375,17 +375,12 @@ final class Pluggable {
 
 	/**
 	 * Helper function to get external or core plugins
-	 * @param string $path
 	 * @return array<array{full:string,short:string,version:string}>
 	 * @throws Exception
 	 */
-	public function fetchPlugins(string $path = ''): array {
-		if ($path) {
-		} else {
-			$pluggable = $this;
-			$pluggable->reload();
-		}
-
+	public function fetchPlugins(): array {
+		$pluggable = $this;
+		$pluggable->reload();
 		return $pluggable->getList();
 	}
 
