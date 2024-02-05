@@ -22,7 +22,7 @@ use RuntimeException;
 class Client {
 	const CONTENT_TYPE_HEADER = "Content-Type: application/x-www-form-urlencoded\n";
 	const URL_PREFIX = 'http://';
-	const HTTP_REQUEST_TIMEOUT = 300;
+	const HTTP_REQUEST_TIMEOUT = 0;
 	const DEFAULT_URL = 'http://127.0.0.1:9308';
 
 	/**
