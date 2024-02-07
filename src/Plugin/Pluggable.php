@@ -380,9 +380,12 @@ final class Pluggable {
 	 * @throws Exception
 	 */
 	public function fetchPlugins(string $path = ''): array {
-		if ($path) {
-		} else {
-			$pluggable = $this;
+		// Todo @Don Hardman should fix this method. It produces error:
+		// Variable $pluggable might not be defined.
+
+
+		$pluggable = $this;
+		if (!$path) {
 			$pluggable->reload();
 		}
 
