@@ -111,16 +111,6 @@
 <abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></small></td>
             </tr>
                     <tr>
-                <td class="type" id="property_responseErrorCode">
-                                        protected                                        int
-                                                                                
-                                    </td>
-                <td>$responseErrorCode</td>
-                <td class="last"></td>
-                <td><small>from&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html#property_responseErrorCode">
-<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></small></td>
-            </tr>
-                    <tr>
                 <td class="type" id="property_proxyOriginalError">
                                         protected                                        bool
                                                                                 
@@ -183,17 +173,6 @@
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
-                    <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a>
-                </div>
-                <div class="col-md-8">
-                    <a href="#method_setResponseErrorCode">setResponseErrorCode</a>(int $responseErrorCode)
-        
-                                            <p><p>Set response error code that we will return to client</p></p>                </div>
-                <div class="col-md-2"><small>from&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html#method_setResponseErrorCode">
-<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></small></div>
-            </div>
-                    <div class="row">
-                <div class="col-md-2 type">
                     string
                 </div>
                 <div class="col-md-8">
@@ -201,17 +180,6 @@
         
                                             <p><p>Client error message, that we return to the manticore to return to client</p></p>                </div>
                 <div class="col-md-2"><small>from&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html#method_getResponseError">
-<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></small></div>
-            </div>
-                    <div class="row">
-                <div class="col-md-2 type">
-                    int
-                </div>
-                <div class="col-md-8">
-                    <a href="#method_getResponseErrorCode">getResponseErrorCode</a>()
-        
-                                            <p><p>Client HTTP error code 0 when proxy original one</p></p>                </div>
-                <div class="col-md-2"><small>from&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html#method_getResponseErrorCode">
 <abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></small></div>
             </div>
                     <div class="row">
@@ -257,7 +225,7 @@
                     <div class="method-item">
                     <h3 id="method___construct">
         <div class="location">in <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html#method___construct">
-<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> at line 34</div>
+<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> at line 31</div>
         <code>final                    void
     <strong>__construct</strong>(string $message = &#039;&#039;, int $code = 0, <a target="_blank" rel="noopener" href="https://www.php.net/Throwable">Throwable</a>|null $previous = null)
         </code>
@@ -312,7 +280,7 @@
                     <div class="method-item">
                     <h3 id="method_create">
         <div class="location">in <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html#method_create">
-<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> at line 44</div>
+<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> at line 41</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a>
     <strong>create</strong>(string $responseError, bool $proxyOriginalError = false)
         </code>
@@ -361,7 +329,7 @@
                     <div class="method-item">
                     <h3 id="method_throw">
         <div class="location">in <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html#method_throw">
-<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> at line 57</div>
+<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> at line 54</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a>
     <strong>throw</strong>(string $responseError, bool $proxyOriginalError = false)
         </code>
@@ -410,7 +378,7 @@
                     <div class="method-item">
                     <h3 id="method_setResponseError">
         <div class="location">in <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html#method_setResponseError">
-<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> at line 67</div>
+<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> at line 64</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a>
     <strong>setResponseError</strong>(string $responseError)
         </code>
@@ -452,53 +420,9 @@
 
             </div>
                     <div class="method-item">
-                    <h3 id="method_setResponseErrorCode">
-        <div class="location">in <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html#method_setResponseErrorCode">
-<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> at line 79</div>
-        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a>
-    <strong>setResponseErrorCode</strong>(int $responseErrorCode)
-        </code>
-    </h3>
-    <div class="details">    
-            
-    
-            
-
-        <div class="method-description">
-                            <p><p>Set response error code that we will return to client</p></p>                        
-        </div>
-        <div class="tags">
-                            <h4>Parameters</h4>
-
-                    <table class="table table-condensed">
-                    <tr>
-                <td>int</td>
-                <td>$responseErrorCode</td>
-                <td></td>
-            </tr>
-            </table>
-
-            
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td><a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></td>
-            <td></td>
-        </tr>
-    </table>
-
-            
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
                     <h3 id="method_getResponseError">
         <div class="location">in <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html#method_getResponseError">
-<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> at line 91</div>
+<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> at line 76</div>
         <code>                    string
     <strong>getResponseError</strong>(string $default = &#039;Something went wrong&#039;)
         </code>
@@ -540,43 +464,9 @@
 
             </div>
                     <div class="method-item">
-                    <h3 id="method_getResponseErrorCode">
-        <div class="location">in <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html#method_getResponseErrorCode">
-<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> at line 100</div>
-        <code>                    int
-    <strong>getResponseErrorCode</strong>()
-        </code>
-    </h3>
-    <div class="details">    
-            
-    
-            
-
-        <div class="method-description">
-                            <p><p>Client HTTP error code 0 when proxy original one</p></p>                        
-        </div>
-        <div class="tags">
-            
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td>int</td>
-            <td></td>
-        </tr>
-    </table>
-
-            
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
                     <h3 id="method_hasResponseError">
         <div class="location">in <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html#method_hasResponseError">
-<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> at line 108</div>
+<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> at line 84</div>
         <code>                    bool
     <strong>hasResponseError</strong>()
         </code>
@@ -610,7 +500,7 @@
                     <div class="method-item">
                     <h3 id="method_setProxyOriginalError">
         <div class="location">in <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html#method_setProxyOriginalError">
-<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> at line 118</div>
+<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> at line 94</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a>
     <strong>setProxyOriginalError</strong>(bool $proxyOriginalError)
         </code>
@@ -654,7 +544,7 @@
                     <div class="method-item">
                     <h3 id="method_getProxyOriginalError">
         <div class="location">in <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html#method_getProxyOriginalError">
-<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> at line 128</div>
+<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> at line 104</div>
         <code>                    bool
     <strong>getProxyOriginalError</strong>()
         </code>
