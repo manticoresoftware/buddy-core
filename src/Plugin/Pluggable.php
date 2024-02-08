@@ -367,31 +367,10 @@ final class Pluggable {
 	 * @throws Exception
 	 */
 	public function fetchExtraPlugins(): array {
-		$pluggable = $this;
-		$pluggable->reload();
+		$this->reload();
 
-		return $pluggable->getList();
+		return $this->getList();
 	}
-
-	/**
-	 * Helper function to get external or core plugins
-	 * @param string $path
-	 * @return array<array{full:string,short:string,version:string}>
-	 * @throws Exception
-	 */
-	public function fetchPlugins(string $path = ''): array {
-		// Todo @Don Hardman should fix this method. It produces error:
-		// Variable $pluggable might not be defined.
-
-
-		$pluggable = $this;
-		if (!$path) {
-			$pluggable->reload();
-		}
-
-		return $pluggable->getList();
-	}
-
 
 	/**
 	 * Register all hooks to known core plugins
