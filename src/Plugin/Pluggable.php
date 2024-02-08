@@ -367,28 +367,10 @@ final class Pluggable {
 	 * @throws Exception
 	 */
 	public function fetchExtraPlugins(): array {
-		$pluggable = $this;
-		$pluggable->reload();
+		$this->reload();
 
-		return $pluggable->getList();
+		return $this->getList();
 	}
-
-	/**
-	 * Helper function to get external or core plugins
-	 * @param string $path
-	 * @return array<array{full:string,short:string,version:string}>
-	 * @throws Exception
-	 */
-	public function fetchPlugins(string $path = ''): array {
-		if ($path) {
-		} else {
-			$pluggable = $this;
-			$pluggable->reload();
-		}
-
-		return $pluggable->getList();
-	}
-
 
 	/**
 	 * Register all hooks to known core plugins
