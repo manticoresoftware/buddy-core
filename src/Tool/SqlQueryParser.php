@@ -13,7 +13,8 @@ class SqlQueryParser
 	 */
 	protected static self|null $instance = null;
 	/**
-	 * @var array<string, array<string, string>>|null
+	 * @var array<string, array<int, array{table:string, expr_type:string, base_expr:string,
+	 *   sub_tree:array<int, array<string, string|bool>>}>>|null
 	 */
 	private static array|null $parsedPayload = null;
 	/**
@@ -65,7 +66,9 @@ class SqlQueryParser
 
 	/**
 	 * @param string $payload
-	 * @return array<string, array<string, string>>|null
+	 * @return array<string, array<int,
+	 *   array{table:string, expr_type:string, base_expr:string,
+	 * sub_tree: array<int, array<string, string|bool>>}>>|null
 	 */
 	public static function parse(string $payload): ?array {
 		$parsedPayload = static::getInstance()::getParser()->parse($payload);
@@ -82,14 +85,18 @@ class SqlQueryParser
 	}
 
 	/**
-	 * @return array<string, array<string, string>>|null
+	 * @return array<string, array<int,
+	 *   array{table:string, expr_type:string, base_expr:string,
+	 * sub_tree: array<int, array<string, string|bool>>}>>|null
 	 */
 	public static function getParsedPayload(): ?array {
 		return static::getInstance()::$parsedPayload;
 	}
 
 	/**
-	 * @param array<string, array<string, string>> $parsedPayload
+	 * @param array<string, array<int,
+	 *   array{table: string, expr_type:string, base_expr:string,
+	 * sub_tree: array<int, array<string, string|bool>>}>> $parsedPayload
 	 * @return void
 	 */
 	public static function setParsedPayload(array $parsedPayload): void {
