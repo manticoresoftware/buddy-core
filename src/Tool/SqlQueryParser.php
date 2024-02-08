@@ -2,10 +2,12 @@
 
 namespace Manticoresearch\Buddy\Core\Tool;
 
+use Manticoresearch\Buddy\Core\Error\QueryParseError;
 use PHPSQLParser\PHPSQLCreator;
 use PHPSQLParser\PHPSQLParser;
+use PHPSQLParser\exceptions\UnsupportedFeatureException;
 
-class SqlQueryParser
+final class SqlQueryParser
 {
 
 	/**
@@ -78,10 +80,14 @@ class SqlQueryParser
 
 	/**
 	 * @return string
-	 * @throws \PHPSQLParser\exceptions\UnsupportedFeatureException
+	 * @throws QueryParseError
 	 */
 	public static function getCompletedPayload(): string {
-		return static::getInstance()::getCreator()->create(static::getParsedPayload());
+		try {
+			return static::getInstance()::getCreator()->create(static::getParsedPayload());
+		} catch (UnsupportedFeatureException $exception) {
+			throw new QueryParseError($exception->getMessage());
+		}
 	}
 
 	/**

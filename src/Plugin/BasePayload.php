@@ -16,8 +16,7 @@ use Manticoresearch\Buddy\Core\ManticoreSearch\Settings;
 use Manticoresearch\Buddy\Core\Network\Request;
 use Manticoresearch\Buddy\Core\Tool\SqlQueryParser;
 
-abstract class BasePayload
-{
+abstract class BasePayload {
 	protected Settings $manticoreSettings;
 
 	public static SqlQueryParser $sqlQueryParser;
@@ -76,6 +75,10 @@ abstract class BasePayload
 		return "$ns\\Handler";
 	}
 
+	/**
+	 * @param SqlQueryParser $sqlQueryParser
+	 * @return void
+	 */
 	public static function setParser(SqlQueryParser $sqlQueryParser): void {
 		static::$sqlQueryParser = $sqlQueryParser;
 	}
