@@ -14,12 +14,20 @@ namespace Manticoresearch\Buddy\Core\Plugin;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Endpoint;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Settings;
 use Manticoresearch\Buddy\Core\Network\Request;
+use Manticoresearch\Buddy\Core\Process\BaseProcessor;
 use Manticoresearch\Buddy\Core\Tool\SqlQueryParser;
 
 abstract class BasePayload {
 	protected Settings $manticoreSettings;
 
 	public static SqlQueryParser $sqlQueryParser;
+	/**
+	 * Get processors that plugin supports, list of classes
+	 * @return array<BaseProcessor>
+	 */
+	public static function getProcessors(): array {
+		return [];
+	}
 
 	/**
 	 * Set current settings to use in request

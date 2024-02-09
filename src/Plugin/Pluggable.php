@@ -373,6 +373,18 @@ final class Pluggable {
 	}
 
 	/**
+	 * Helper function to get external or core plugins
+	 * @return array<array{full:string,short:string,version:string}>
+	 * @throws Exception
+	 */
+	public function fetchPlugins(): array {
+		$pluggable = $this;
+		$pluggable->reload();
+		return $pluggable->getList();
+	}
+
+
+	/**
 	 * Register all hooks to known core plugins
 	 * It's called on init phase once and keep updated on event emited from the plugin
 	 * @return void
