@@ -307,6 +307,16 @@ by using fully qualified composer name of it</p></p>                </div>
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
+                    array
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_fetchPlugins">fetchPlugins</a>()
+        
+                                            <p><p>Helper function to get external or core plugins</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
                     void
                 </div>
                 <div class="col-md-8">
@@ -1049,8 +1059,50 @@ by using fully qualified composer name of it</p></p>
 
             </div>
                     <div class="method-item">
-                    <h3 id="method_registerHooks">
+                    <h3 id="method_fetchPlugins">
         <div class="location">at line 380</div>
+        <code>                    array
+    <strong>fetchPlugins</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Helper function to get external or core plugins</p></p>                        
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a target="_blank" rel="noopener" href="https://www.php.net/Exception">Exception</a></td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_registerHooks">
+        <div class="location">at line 392</div>
         <code>            protected        void
     <strong>registerHooks</strong>()
         </code>
@@ -1084,7 +1136,7 @@ It's called on init phase once and keep updated on event emited from the plugin<
             </div>
                     <div class="method-item">
                     <h3 id="method_setPluginDir">
-        <div class="location">at line 393</div>
+        <div class="location">at line 405</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a>
     <strong>setPluginDir</strong>(string $dir)
         </code>
@@ -1127,7 +1179,7 @@ It's called on init phase once and keep updated on event emited from the plugin<
             </div>
                     <div class="method-item">
                     <h3 id="method_getPluginDir">
-        <div class="location">at line 402</div>
+        <div class="location">at line 414</div>
         <code>                    string
     <strong>getPluginDir</strong>()
         </code>
@@ -1160,7 +1212,7 @@ It's called on init phase once and keep updated on event emited from the plugin<
             </div>
                     <div class="method-item">
                     <h3 id="method_findPluginDir">
-        <div class="location">at line 411</div>
+        <div class="location">at line 423</div>
         <code>            protected        string
     <strong>findPluginDir</strong>()
         </code>
@@ -1202,7 +1254,7 @@ It's called on init phase once and keep updated on event emited from the plugin<
             </div>
                     <div class="method-item">
                     <h3 id="method_getPluginComposerFile">
-        <div class="location">at line 437</div>
+        <div class="location">at line 449</div>
         <code>            protected        string
     <strong>getPluginComposerFile</strong>()
         </code>
@@ -1244,7 +1296,7 @@ It's called on init phase once and keep updated on event emited from the plugin<
             </div>
                     <div class="method-item">
                     <h3 id="method_getPSR4AutoloadFile">
-        <div class="location">at line 453</div>
+        <div class="location">at line 465</div>
         <code>            protected        string
     <strong>getPSR4AutoloadFile</strong>()
         </code>
@@ -1287,7 +1339,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getNSAutoloadFile">
-        <div class="location">at line 470</div>
+        <div class="location">at line 482</div>
         <code>            protected        string
     <strong>getNSAutoloadFile</strong>()
         </code>
@@ -1330,7 +1382,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getShortName">
-        <div class="location">at line 486</div>
+        <div class="location">at line 498</div>
         <code>        static    protected        string
     <strong>getShortName</strong>(string $fullName)
         </code>
