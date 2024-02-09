@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "578d07a1aa085dcf56fb0dd70b4abc4b",
+    "content-hash": "5980c3a60a016861cf4be8a86f1bc0eb",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -163,12 +163,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "33335fdfdd516b4dfcda4a645f4edea1d56d2576"
+                "reference": "be876b47a940c5ed1caabaa85e58b8fdece807d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/33335fdfdd516b4dfcda4a645f4edea1d56d2576",
-                "reference": "33335fdfdd516b4dfcda4a645f4edea1d56d2576",
+                "url": "https://api.github.com/repos/composer/composer/zipball/be876b47a940c5ed1caabaa85e58b8fdece807d5",
+                "reference": "be876b47a940c5ed1caabaa85e58b8fdece807d5",
                 "shasum": ""
             },
             "require": {
@@ -270,7 +270,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-08T16:41:02+00:00"
+            "time": "2024-02-09T13:26:07+00:00"
         },
         {
             "name": "composer/metadata-minifier",
@@ -645,16 +645,16 @@
         },
         {
             "name": "greenlion/php-sql-parser",
-            "version": "dev-master",
+            "version": "v4.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/greenlion/PHP-SQL-Parser.git",
-                "reference": "dec667f2d603d9461e0f193d5fa4d640674a8b0c"
+                "reference": "f0e4645eb1612f0a295e3d35bda4c7740ae8c366"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/greenlion/PHP-SQL-Parser/zipball/dec667f2d603d9461e0f193d5fa4d640674a8b0c",
-                "reference": "dec667f2d603d9461e0f193d5fa4d640674a8b0c",
+                "url": "https://api.github.com/repos/greenlion/PHP-SQL-Parser/zipball/f0e4645eb1612f0a295e3d35bda4c7740ae8c366",
+                "reference": "f0e4645eb1612f0a295e3d35bda4c7740ae8c366",
                 "shasum": ""
             },
             "require": {
@@ -663,9 +663,8 @@
             "require-dev": {
                 "analog/analog": "^1.0.6",
                 "phpunit/phpunit": "^9.5.13",
-                "squizlabs/php_codesniffer": "^2.8.1"
+                "squizlabs/php_codesniffer": "^1.5.1"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -702,7 +701,7 @@
                 "issues": "https://github.com/greenlion/PHP-SQL-Parser/issues",
                 "source": "https://github.com/greenlion/PHP-SQL-Parser"
             },
-            "time": "2023-12-18T00:03:32+00:00"
+            "time": "2023-03-09T20:54:23+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -2346,12 +2345,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-exporter.git",
-                "reference": "1fb79308cb5fc2b44bff6e8af10a5af6812e05b8"
+                "reference": "e857946f442a38ec9887505df0987e10e6742663"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/1fb79308cb5fc2b44bff6e8af10a5af6812e05b8",
-                "reference": "1fb79308cb5fc2b44bff6e8af10a5af6812e05b8",
+                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/e857946f442a38ec9887505df0987e10e6742663",
+                "reference": "e857946f442a38ec9887505df0987e10e6742663",
                 "shasum": ""
             },
             "require": {
@@ -2412,7 +2411,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-23T15:02:46+00:00"
+            "time": "2024-02-09T11:42:45+00:00"
         }
     ],
     "packages-dev": [
