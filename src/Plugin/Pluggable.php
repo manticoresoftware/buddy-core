@@ -367,10 +367,9 @@ final class Pluggable {
 	 * @throws Exception
 	 */
 	public function fetchExtraPlugins(): array {
-		$pluggable = $this;
-		$pluggable->reload();
+		$this->reload();
 
-		return $pluggable->getList();
+		return $this->getList();
 	}
 
 	/**
