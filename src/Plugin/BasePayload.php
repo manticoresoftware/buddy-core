@@ -15,10 +15,12 @@ use Manticoresearch\Buddy\Core\ManticoreSearch\Endpoint;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Settings;
 use Manticoresearch\Buddy\Core\Network\Request;
 use Manticoresearch\Buddy\Core\Process\BaseProcessor;
+use Manticoresearch\Buddy\Core\Tool\SqlQueryParser;
 
 abstract class BasePayload {
 	protected Settings $manticoreSettings;
 
+	public static SqlQueryParser $sqlQueryParser;
 	/**
 	 * Get processors that plugin supports, list of classes
 	 * @return array<BaseProcessor>
@@ -79,5 +81,13 @@ abstract class BasePayload {
 		$class = static::class;
 		$ns = substr($class, 0, strrpos($class, '\\') ?: 0);
 		return "$ns\\Handler";
+	}
+
+	/**
+	 * @param SqlQueryParser $sqlQueryParser
+	 * @return void
+	 */
+	public static function setParser(SqlQueryParser $sqlQueryParser): void {
+		static::$sqlQueryParser = $sqlQueryParser;
 	}
 }
