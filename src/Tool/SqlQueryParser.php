@@ -74,6 +74,10 @@ final class SqlQueryParser
 	 */
 	public static function parse(string $payload): ?array {
 		$parsedPayload = static::getInstance()::getParser()->parse($payload);
+
+		if (empty($parsedPayload)) {
+			return null;
+		}
 		static::setParsedPayload($parsedPayload);
 		return $parsedPayload;
 	}
