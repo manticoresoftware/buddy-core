@@ -22,6 +22,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 final class Pluggable {
 	const PLUGIN_PREFIX = 'buddy-plugin-';
+	const CORE_NS_PREFIX = 'Manticoresearch\\Buddy\\Base\\Plugin\\';
+	const EXTRA_NS_PREFIX = 'Manticoresearch\\Buddy\\Plugin\\';
 
 	/** @var array<mixed> */
 	protected array $autoloadMap = [];
@@ -371,18 +373,6 @@ final class Pluggable {
 
 		return $this->getList();
 	}
-
-	/**
-	 * Helper function to get external or core plugins
-	 * @return array<array{full:string,short:string,version:string}>
-	 * @throws Exception
-	 */
-	public function fetchPlugins(): array {
-		$pluggable = $this;
-		$pluggable->reload();
-		return $pluggable->getList();
-	}
-
 
 	/**
 	 * Register all hooks to known core plugins

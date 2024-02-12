@@ -30,6 +30,14 @@ abstract class BasePayload {
 	}
 
 	/**
+	 * Get info about this plugin
+	 * @return string
+	 */
+	public static function getInfo(): string {
+		return '';
+	}
+
+	/**
 	 * Set current settings to use in request
 	 *
 	 * @param Settings $manticoreSettings
