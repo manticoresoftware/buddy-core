@@ -106,6 +106,24 @@
                     <p></p>
                 </td>
             </tr>
+                    <tr>
+                <td>
+                                                                                                                        CORE_NS_PREFIX
+                                    </td>
+                <td class="last">
+                    <p><em></em></p>
+                    <p></p>
+                </td>
+            </tr>
+                    <tr>
+                <td>
+                                                                                                                        EXTRA_NS_PREFIX
+                                    </td>
+                <td class="last">
+                    <p><em></em></p>
+                    <p></p>
+                </td>
+            </tr>
             </table>
 
     
@@ -307,16 +325,6 @@ by using fully qualified composer name of it</p></p>                </div>
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
-                    array
-                </div>
-                <div class="col-md-8">
-                    <a href="#method_fetchPlugins">fetchPlugins</a>()
-        
-                                            <p><p>Helper function to get external or core plugins</p></p>                </div>
-                <div class="col-md-2"></div>
-            </div>
-                    <div class="row">
-                <div class="col-md-2 type">
                     void
                 </div>
                 <div class="col-md-8">
@@ -406,7 +414,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line 44</div>
+        <div class="location">at line 46</div>
         <code>                    void
     <strong>__construct</strong>(<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a> $settings, array $hooks = [])
         </code>
@@ -454,7 +462,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_setCorePlugins">
-        <div class="location">at line 55</div>
+        <div class="location">at line 57</div>
         <code>        static            void
     <strong>setCorePlugins</strong>(array $plugins)
         </code>
@@ -497,7 +505,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_setContainer">
-        <div class="location">at line 64</div>
+        <div class="location">at line 66</div>
         <code>        static            void
     <strong>setContainer</strong>(<abbr title="Psr\Container\ContainerInterface">ContainerInterface</abbr> $container)
         </code>
@@ -540,7 +548,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_getContainer">
-        <div class="location">at line 72</div>
+        <div class="location">at line 74</div>
         <code>        static            <abbr title="Psr\Container\ContainerInterface">ContainerInterface</abbr>
     <strong>getContainer</strong>()
         </code>
@@ -573,7 +581,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_install">
-        <div class="location">at line 82</div>
+        <div class="location">at line 84</div>
         <code>                    void
     <strong>install</strong>(string $package)
         </code>
@@ -625,7 +633,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_remove">
-        <div class="location">at line 101</div>
+        <div class="location">at line 103</div>
         <code>                    void
     <strong>remove</strong>(string $package)
         </code>
@@ -668,7 +676,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_getList">
-        <div class="location">at line 112</div>
+        <div class="location">at line 114</div>
         <code>                    array
     <strong>getList</strong>()
         </code>
@@ -710,7 +718,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_getClassNamespaceByFullName">
-        <div class="location">at line 153</div>
+        <div class="location">at line 155</div>
         <code>                    string
     <strong>getClassNamespaceByFullName</strong>(string $name)
         </code>
@@ -754,7 +762,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_reload">
-        <div class="location">at line 196</div>
+        <div class="location">at line 198</div>
         <code>                    void
     <strong>reload</strong>()
         </code>
@@ -796,7 +804,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_unregisterAutoload">
-        <div class="location">at line 205</div>
+        <div class="location">at line 207</div>
         <code>                    void
     <strong>unregisterAutoload</strong>()
         </code>
@@ -829,7 +837,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_registerAutoload">
-        <div class="location">at line 218</div>
+        <div class="location">at line 220</div>
         <code>                    void
     <strong>registerAutoload</strong>()
         </code>
@@ -871,7 +879,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_autoloader">
-        <div class="location">at line 267</div>
+        <div class="location">at line 269</div>
         <code>                    void
     <strong>autoloader</strong>(string $className)
         </code>
@@ -914,7 +922,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_composer">
-        <div class="location">at line 302</div>
+        <div class="location">at line 304</div>
         <code>            protected        <abbr title="Symfony\Component\Console\Output\BufferedOutput">BufferedOutput</abbr>
     <strong>composer</strong>(string $command, array $options, string|null $package = null)
         </code>
@@ -976,7 +984,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fetchCorePlugins">
-        <div class="location">at line 347</div>
+        <div class="location">at line 349</div>
         <code>                    array
     <strong>fetchCorePlugins</strong>()
         </code>
@@ -1018,7 +1026,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fetchExtraPlugins">
-        <div class="location">at line 369</div>
+        <div class="location">at line 371</div>
         <code>                    array
     <strong>fetchExtraPlugins</strong>()
         </code>
@@ -1059,50 +1067,8 @@ by using fully qualified composer name of it</p></p>
 
             </div>
                     <div class="method-item">
-                    <h3 id="method_fetchPlugins">
-        <div class="location">at line 380</div>
-        <code>                    array
-    <strong>fetchPlugins</strong>()
-        </code>
-    </h3>
-    <div class="details">    
-            
-    
-            
-
-        <div class="method-description">
-                            <p><p>Helper function to get external or core plugins</p></p>                        
-        </div>
-        <div class="tags">
-            
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td>array</td>
-            <td></td>
-        </tr>
-    </table>
-
-            
-                            <h4>Exceptions</h4>
-
-                    <table class="table table-condensed">
-                    <tr>
-                <td><a target="_blank" rel="noopener" href="https://www.php.net/Exception">Exception</a></td>
-                <td></td>
-            </tr>
-            </table>
-
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
                     <h3 id="method_registerHooks">
-        <div class="location">at line 392</div>
+        <div class="location">at line 382</div>
         <code>            protected        void
     <strong>registerHooks</strong>()
         </code>
@@ -1136,7 +1102,7 @@ It's called on init phase once and keep updated on event emited from the plugin<
             </div>
                     <div class="method-item">
                     <h3 id="method_setPluginDir">
-        <div class="location">at line 405</div>
+        <div class="location">at line 395</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a>
     <strong>setPluginDir</strong>(string $dir)
         </code>
@@ -1179,7 +1145,7 @@ It's called on init phase once and keep updated on event emited from the plugin<
             </div>
                     <div class="method-item">
                     <h3 id="method_getPluginDir">
-        <div class="location">at line 414</div>
+        <div class="location">at line 404</div>
         <code>                    string
     <strong>getPluginDir</strong>()
         </code>
@@ -1212,7 +1178,7 @@ It's called on init phase once and keep updated on event emited from the plugin<
             </div>
                     <div class="method-item">
                     <h3 id="method_findPluginDir">
-        <div class="location">at line 423</div>
+        <div class="location">at line 413</div>
         <code>            protected        string
     <strong>findPluginDir</strong>()
         </code>
@@ -1254,7 +1220,7 @@ It's called on init phase once and keep updated on event emited from the plugin<
             </div>
                     <div class="method-item">
                     <h3 id="method_getPluginComposerFile">
-        <div class="location">at line 449</div>
+        <div class="location">at line 439</div>
         <code>            protected        string
     <strong>getPluginComposerFile</strong>()
         </code>
@@ -1296,7 +1262,7 @@ It's called on init phase once and keep updated on event emited from the plugin<
             </div>
                     <div class="method-item">
                     <h3 id="method_getPSR4AutoloadFile">
-        <div class="location">at line 465</div>
+        <div class="location">at line 455</div>
         <code>            protected        string
     <strong>getPSR4AutoloadFile</strong>()
         </code>
@@ -1339,7 +1305,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getNSAutoloadFile">
-        <div class="location">at line 482</div>
+        <div class="location">at line 472</div>
         <code>            protected        string
     <strong>getNSAutoloadFile</strong>()
         </code>
@@ -1382,7 +1348,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getShortName">
-        <div class="location">at line 498</div>
+        <div class="location">at line 488</div>
         <code>        static    protected        string
     <strong>getShortName</strong>(string $fullName)
         </code>
