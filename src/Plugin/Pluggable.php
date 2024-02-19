@@ -371,8 +371,9 @@ final class Pluggable {
 	public function fetchLocalPlugins(): array {
 		$localPluginDir = realpath(__DIR__ . '/../../../../../plugins');
 		if (false === $localPluginDir) {
-			throw new Exception('Failed to detect local plugin dir');
+			return [];
 		}
+
 		$plugins = [];
 		$items = scandir($localPluginDir);
 		if (false === $items) {
