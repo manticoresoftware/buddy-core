@@ -364,6 +364,47 @@ final class Pluggable {
 	}
 
 	/**
+	 * Helper to fetch local plugins
+	 * @return array<array{full:string,short:string,version:string}>
+	 * @throws Exception
+	 */
+	public function fetchLocalPlugins(): array {
+		$localPluginDir = realpath(__DIR__ . '/../../../../../plugins');
+		if (false === $localPluginDir) {
+			throw new Exception('Failed to detect local plugin dir');
+		}
+		$plugins = [];
+		$items = scandir($localPluginDir);
+		if (false === $items) {
+			throw new Exception('Failed to readh local plugin dir');
+		}
+		foreach ($items as $item) {
+			if (!is_dir("$localPluginDir/$item") || $item === '.' || $item === '..') {
+				continue;
+			}
+
+			$shortName = str_replace(static::PLUGIN_PREFIX, '', $item);
+			$composerFile = "$localPluginDir/$item/composer.json";
+			$composerContent = file_get_contents($composerFile);
+			if (!is_string($composerContent)) {
+				throw new Exception("Failed to read composer file for plugin: $shortName");
+			}
+			/** @var array{name:?string} */
+			$composer = json_decode($composerContent, true);
+			if (!isset($composer['name'])) {
+				throw new Exception("Failed to detect local plugin name from file: $composerFile");
+			}
+			$plugins[] = [
+				'full' => $composer['name'],
+				'short' => $shortName,
+				'version' => 'dev-main',
+			];
+		}
+
+		return $plugins;
+	}
+
+	/**
 	 * Get list of external plugin names
 	 * @return array<array{full:string,short:string,version:string}>
 	 * @throws Exception
