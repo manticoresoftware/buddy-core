@@ -75,7 +75,7 @@ final class Process {
 	 * @return static
 	 */
 	public function execute(string $method, array $args = []): static {
-		Buddy::debug("[process] execute: $method " . json_encode($args));
+		Buddy::debugv("[process] execute: $method " . json_encode($args));
 		$this->process->write(serialize([$method, $args]));
 		return $this;
 	}

@@ -139,7 +139,7 @@ class Client {
 
 		$result = $this->responseBuilder->fromBody($this->response);
 		$time = (int)((microtime(true) - $t) * 1000000);
-		Buddy::debug("[{$time}µs] manticore request: $request");
+		Buddy::debugv("[{$time}µs] manticore request: $request");
 		return $result;
 	}
 
