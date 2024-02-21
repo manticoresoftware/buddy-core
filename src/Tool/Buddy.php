@@ -41,14 +41,27 @@ final class Buddy {
 	 *
 	 * @param string $message
 	 * @param string $eol
+	 * @param int $verbosity 1
 	 * @return void
 	 */
-	public static function debug(string $message, string $eol = PHP_EOL): void {
-		if (!getenv('DEBUG')) {
+	public static function debug(string $message, string $eol = PHP_EOL, int $verbosity = 1): void {
+		$debug = (int)getenv('DEBUG');
+		if ($debug < $verbosity) {
 			return;
 		}
 
 		echo "{$message} {$eol}";
+	}
+
+	/**
+	 * Wrapper to display message with higher level of the verbosity
+	 *
+	 * @param string $message
+	 * @param string $eol
+	 * @return void
+	 */
+	public static function debugv(string $message, string $eol = PHP_EOL): void {
+		static::debug($message, $eol, 2);
 	}
 
 	/**
