@@ -2,6 +2,7 @@
 
 namespace Manticoresearch\Buddy\Core\Tool;
 
+use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\Error\QueryParseError;
 use PHPSQLParser\PHPSQLCreator;
 use PHPSQLParser\PHPSQLParser;
@@ -111,5 +112,17 @@ final class SqlQueryParser
 	 */
 	public static function setParsedPayload(array $parsedPayload): void {
 		static::getInstance()::$parsedPayload = $parsedPayload;
+	}
+
+	/**
+	 * Helper that allows removal of starting and ending quotes from string,
+	 * cause parser usually leaves it as is ('manticore', "manticore", `manticore`)
+	 *
+	 * @param string $var
+	 * @return string
+	 */
+	public static function removeQuotes(string $var): string
+	{
+		return trim($var, " \n\r\t\v\x00'`\"");
 	}
 }
