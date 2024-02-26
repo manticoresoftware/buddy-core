@@ -18,6 +18,9 @@ class GenericError extends Exception {
 	/** @var string $responseError */
 	protected string $responseError = '';
 
+	/** @var int $responseErrorCode */
+	protected int $responseErrorCode = 0;
+
 	/** @var bool */
 	protected bool $proxyOriginalError = false;
 
@@ -68,6 +71,18 @@ class GenericError extends Exception {
 	}
 
 	/**
+	 * Set response error code that we will return to client
+	 *
+	 * @param int $responseErrorCode
+	 * @return static
+	 */
+	public function setResponseErrorCode(int $responseErrorCode): static {
+		$this->responseErrorCode = $responseErrorCode;
+
+		return $this;
+	}
+
+	/**
 	 * Client error message, that we return to the manticore to return to client
 	 *
 	 * @param string $default
@@ -75,6 +90,15 @@ class GenericError extends Exception {
 	 */
 	public function getResponseError(string $default = 'Something went wrong'): string {
 		return $this->hasResponseError() ? $this->responseError : $default;
+	}
+
+	/**
+	 * Client HTTP error code 0 when proxy original one
+	 *
+	 * @return int
+	 */
+	public function getResponseErrorCode(): int {
+		return $this->responseErrorCode;
 	}
 
 	/**

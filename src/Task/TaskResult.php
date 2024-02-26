@@ -29,9 +29,14 @@ final class TaskResult {
 	 * @param array<mixed> $data
 	 * @param string $error
 	 * @param string $warning
+	 *  It must contain HTTP error code that will be returned to client
 	 * @return void
 	 */
-	public function __construct(protected array $data, protected string $error, protected string $warning) {
+	public function __construct(
+		protected array $data,
+		protected string $error,
+		protected string $warning
+	) {
 		$this->total = sizeof($data);
 	}
 
@@ -180,7 +185,7 @@ final class TaskResult {
 		}
 		$struct = [
 			'total' => $this->total,
-			'error' => $this->error,
+			'error' => '',
 			'warning' => $this->warning,
 		];
 
@@ -191,6 +196,10 @@ final class TaskResult {
 		if ($this->data) {
 			$struct['data'] = $this->data;
 		}
-		return [$struct];
+		return $this->error ?
+			[
+				'error' => $this->error,
+			] : [$struct]
+		;
 	}
 }
