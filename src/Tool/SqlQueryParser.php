@@ -2,7 +2,6 @@
 
 namespace Manticoresearch\Buddy\Core\Tool;
 
-use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\Error\QueryParseError;
 use PHPSQLParser\PHPSQLCreator;
 use PHPSQLParser\PHPSQLParser;
@@ -121,8 +120,7 @@ final class SqlQueryParser
 	 * @param string $var
 	 * @return string
 	 */
-	public static function removeQuotes(string $var): string
-	{
+	public static function removeQuotes(string $var): string {
 		return trim($var, " \n\r\t\v\x00'`\"");
 	}
 }
