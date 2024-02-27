@@ -21,6 +21,6 @@ class Fields {
 	const TYPE_STRING = 'string';
 	const TYPE_JSON = 'json';
 	const TYPE_MVA = 'mva';
-	const TYPE_MVA64 = 'multi64';
+	const TYPE_MVA64 = 'mva64';
 	const TYPE_FLOAT_VECTOR = 'float_vector';
 }
