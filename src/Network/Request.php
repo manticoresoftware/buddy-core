@@ -166,7 +166,7 @@ final class Request {
 			$endpointBundle = ManticoreEndpoint::Insert;
 		} elseif (str_contains($path, '/_update/')) {
 			$endpointBundle = ManticoreEndpoint::Update;
-		} elseif (str_ends_with($path, '/_mapping')) {
+		} elseif (str_starts_with($path, '_index_template/') || str_ends_with($path, '/_mapping')) {
 			$endpointBundle = ManticoreEndpoint::Elastic;
 		} else {
 			$endpointBundle = match ($path) {
