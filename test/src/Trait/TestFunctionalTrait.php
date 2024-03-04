@@ -349,7 +349,7 @@ trait TestFunctionalTrait {
 		$request = [
 			'type' => 'unknown json request',
 			'error' => $error,
-			'version' => 1,
+			'version' => 2,
 			'message' => [
 				'path_query' => '/sql?mode=raw',
 				'body' => $query,

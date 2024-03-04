@@ -20,10 +20,10 @@ class ResponseTest extends TestCase {
 	public function testBuddyResponseFromErrorAndMessageOk(): void {
 		echo "\nTesting the building of Buddy response \n";
 		$result = [
-			'version' => 1,
+			'version' => 2,
 			'type' => 'json response',
-			'message' => ['test message'],
-			'error' => 'simple error #1',
+			'message' => ['error' => 'simple error #1'],
+			'error_code' => 0,
 		];
 		$err = 'simple error #1';
 		$error = new GenericError('this error goes to log');
@@ -38,10 +38,10 @@ class ResponseTest extends TestCase {
 	public function testBuddyResponseFromMessageOk(): void {
 		echo "\nTesting the building of Buddy response from message\n";
 		$result = [
-			'version' => 1,
+			'version' => 2,
 			'type' => 'json response',
 			'message' => ['test message'],
-			'error' => '',
+			'error_code' => 200,
 		];
 		$this->assertEquals(
 			json_encode($result),
@@ -61,12 +61,10 @@ class ResponseTest extends TestCase {
 	public function testBuddyResponseFromErrorOk(): void {
 		echo "\nTesting the building of Buddy response from error\n";
 		$result = [
-			'version' => 1,
+			'version' => 2,
 			'type' => 'json response',
-			'message' => [
-				['total' => 0, 'warning' => '', 'error' => 'simple error #1'],
-			],
-			'error' => 'simple error #1',
+			'message' => ['error' => 'simple error #1'],
+			'error_code' => 0,
 		];
 		$error = new GenericError();
 		$errorMsg = 'simple error #1';
