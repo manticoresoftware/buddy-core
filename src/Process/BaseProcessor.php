@@ -15,7 +15,7 @@ abstract class BaseProcessor {
 	/** @var Process $process */
 	protected Process $process;
 
-	public function __construct() {
+	final public function __construct() {
 		$this->process = Process::create($this);
 	}
 	/**
@@ -43,5 +43,13 @@ abstract class BaseProcessor {
 	public function execute(string $method, array $args = []): static {
 		$this->process->execute($method, $args);
 		return $this;
+	}
+
+	/**
+	 * Get internal swoole process
+	 * @return Process
+	 */
+	public function getProcess(): Process {
+		return $this->process;
 	}
 }

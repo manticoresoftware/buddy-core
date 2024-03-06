@@ -31,7 +31,6 @@ final class Process {
 		$process = new SwooleProcess(
 			static function (SwooleProcess $worker) use ($processor) {
 				chdir(sys_get_temp_dir());
-
 				while ($msg = $worker->read()) {
 					if (!is_string($msg)) {
 						throw new \Exception('Incorrect data received');
