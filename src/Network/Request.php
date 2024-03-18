@@ -37,6 +37,7 @@ final class Request {
 	public string $path;
 	public string $error;
 	public string $payload;
+	public string $httpMethod;
 	public int $version;
 
 	/**
@@ -140,7 +141,15 @@ final class Request {
 	}
 
 	/**
-	 * @param array{type:string,error:string,message:array{path_query:string,body:string},version:int} $payload
+	 * @param array{
+	 * type:string,
+	 * error:string,
+	 * message:array{
+	 *  path_query:string,
+	 *  body:string,
+	 *  http_method?:string},
+	 * version:int
+	 * } $payload
 	 * @return static
 	 * @throws InvalidNetworkRequestError
 	 */
@@ -188,6 +197,7 @@ final class Request {
 			'unknown sql request' => RequestFormat::SQL,
 			default => throw new InvalidNetworkRequestError("Do not know how to handle '{$payload['type']}' type"),
 		};
+		$this->httpMethod = $payload['message']['http_method'] ?? '';
 		$this->path = $path;
 		$this->format = $format;
 		$this->endpointBundle = $endpointBundle;
