@@ -31,6 +31,7 @@ abstract class BaseProcessor {
 	 * @return void
 	 */
 	public function stop(): void {
+		$this->process->stopWorkers();
 		$this->process->destroy();
 	}
 

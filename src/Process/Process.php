@@ -15,11 +15,87 @@ use Manticoresearch\Buddy\Core\Tool\Buddy;
 use Swoole\Process as SwooleProcess;
 
 final class Process {
+	/** @var array<Worker> $workers */
+	protected array $workers;
+
 	/**
 	 * @param SwooleProcess $process
 	 * @return void
 	 */
 	public function __construct(public readonly string $name, public readonly SwooleProcess $process) {
+	}
+
+	/**
+	 * Add extra worker to current process, so base processor can control it
+	 * @param callable $fn
+	 * @param bool $shouldStart if we should start instantly the worker
+	 * @return Worker
+	 */
+	public function addWorker(callable $fn, bool $shouldStart = false): Worker {
+		$worker = new Worker($fn);
+		$this->workers[] = $worker;
+		if ($shouldStart) {
+			$worker->start();
+		}
+		return $worker;
+	}
+
+	/**
+	 * Remove the given worker from the pool and stop it
+	 * @param  Worker $worker
+	 * @return static
+	 */
+	public function removeWorker(Worker $worker): static {
+		foreach ($this->workers as $k => $curWorker) {
+			if ($curWorker->id !== $worker->id) {
+				continue;
+			}
+
+			if ($curWorker->isRunning()) {
+				$curWorker->stop();
+			}
+			unset($this->workers[$k]);
+			break;
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Get all workers we set
+	 * @return array<Worker>
+	 */
+	public function getWorkers(): array {
+		return $this->workers;
+	}
+	/**
+	 * Start all workers that is not running
+	 * @return static
+	 */
+	public function startWorkers(): static {
+		foreach ($this->workers as $worker) {
+			if ($worker->isRunning()) {
+				continue;
+			}
+			$worker->start();
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Stop all workers that are running
+	 * @return static
+	 */
+	public function stopWorkers(): static {
+		foreach ($this->workers as $worker) {
+			if (!$worker->isRunning()) {
+				continue;
+			}
+			$worker->stop();
+		}
+
+		return $this;
 	}
 
 	/**
