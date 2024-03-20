@@ -23,16 +23,19 @@ final class Worker {
 	 */
 	public readonly string $id;
 
+	public readonly string $name;
+
 	/** @var SwooleProcess $process */
 	protected SwooleProcess $process;
 
 	/**
 	 * Create a new wrapper on givent closure that we will put into the swoole process
 	 * @param callable $fn
-	 * @return void
+	 * @param string $name
 	 */
-	final public function __construct(callable $fn) {
+	final public function __construct(callable $fn, string $name = '') {
 		$this->id = uniqid();
+		$this->name = $name;
 		$this->process = new SwooleProcess($fn);
 	}
 

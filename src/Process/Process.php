@@ -29,10 +29,11 @@ final class Process {
 	 * Add extra worker to current process, so base processor can control it
 	 * @param callable $fn
 	 * @param bool $shouldStart if we should start instantly the worker
+	 * @param string $name
 	 * @return Worker
 	 */
-	public function addWorker(callable $fn, bool $shouldStart = false): Worker {
-		$worker = new Worker($fn);
+	public function addWorker(callable $fn, bool $shouldStart = false, string $name = ''): Worker {
+		$worker = new Worker($fn, $name);
 		$this->workers[] = $worker;
 		if ($shouldStart) {
 			$worker->start();
@@ -42,7 +43,7 @@ final class Process {
 
 	/**
 	 * Remove the given worker from the pool and stop it
-	 * @param  Worker $worker
+	 * @param Worker $worker
 	 * @return static
 	 */
 	public function removeWorker(Worker $worker): static {
@@ -68,6 +69,7 @@ final class Process {
 	public function getWorkers(): array {
 		return $this->workers;
 	}
+
 	/**
 	 * Start all workers that is not running
 	 * @return static
@@ -100,7 +102,7 @@ final class Process {
 
 	/**
 	 * Create a new process based on the given instance
-	 * @param  BaseProcessor $processor
+	 * @param BaseProcessor $processor
 	 * @return static
 	 */
 	public static function create(BaseProcessor $processor): static {
