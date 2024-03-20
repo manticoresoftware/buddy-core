@@ -112,6 +112,15 @@
                 <td></td>
             </tr>
                     <tr>
+                <td class="type" id="property_name">
+                                                                                string
+                                                                                
+                                    </td>
+                <td>$name</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
+                    <tr>
                 <td class="type" id="property_process">
                                         protected                                        <abbr title="Swoole\Process">Process</abbr>
                                                                                 
@@ -128,10 +137,10 @@
             <div class="container-fluid underlined">
                     <div class="row">
                 <div class="col-md-2 type">
-                    void
+                    
                 </div>
                 <div class="col-md-8">
-                    <a href="#method___construct">__construct</a>(callable $fn)
+                    <a href="#method___construct">__construct</a>(callable $fn, string $name = &#039;&#039;)
         
                                             <p><p>Create a new wrapper on givent closure that we will put into the swoole process</p></p>                </div>
                 <div class="col-md-2"></div>
@@ -174,9 +183,9 @@
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line 34</div>
-        <code>final                    void
-    <strong>__construct</strong>(callable $fn)
+        <div class="location">at line 36</div>
+        <code>final                    
+    <strong>__construct</strong>(callable $fn, string $name = &#039;&#039;)
         </code>
     </h3>
     <div class="details">    
@@ -196,18 +205,14 @@
                 <td>$fn</td>
                 <td></td>
             </tr>
+                    <tr>
+                <td>string</td>
+                <td>$name</td>
+                <td></td>
+            </tr>
             </table>
 
             
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td>void</td>
-            <td></td>
-        </tr>
-    </table>
-
             
             
             
@@ -217,7 +222,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_start">
-        <div class="location">at line 43</div>
+        <div class="location">at line 46</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
     <strong>start</strong>()
         </code>
@@ -250,7 +255,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_stop">
-        <div class="location">at line 52</div>
+        <div class="location">at line 55</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
     <strong>stop</strong>()
         </code>
@@ -283,7 +288,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_isRunning">
-        <div class="location">at line 61</div>
+        <div class="location">at line 64</div>
         <code>                    bool
     <strong>isRunning</strong>()
         </code>

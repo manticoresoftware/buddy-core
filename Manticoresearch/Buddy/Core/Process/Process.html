@@ -131,7 +131,7 @@
                     <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_addWorker">addWorker</a>(callable $fn, bool $shouldStart = false)
+                    <a href="#method_addWorker">addWorker</a>(callable $fn, bool $shouldStart = false, string $name = &#039;&#039;)
         
                                             <p><p>Add extra worker to current process, so base processor can control it</p></p>                </div>
                 <div class="col-md-2"></div>
@@ -274,9 +274,9 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_addWorker">
-        <div class="location">at line 34</div>
+        <div class="location">at line 35</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
-    <strong>addWorker</strong>(callable $fn, bool $shouldStart = false)
+    <strong>addWorker</strong>(callable $fn, bool $shouldStart = false, string $name = &#039;&#039;)
         </code>
     </h3>
     <div class="details">    
@@ -301,6 +301,11 @@
                 <td>$shouldStart</td>
                 <td><p>if we should start instantly the worker</p></td>
             </tr>
+                    <tr>
+                <td>string</td>
+                <td>$name</td>
+                <td></td>
+            </tr>
             </table>
 
             
@@ -322,7 +327,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_removeWorker">
-        <div class="location">at line 48</div>
+        <div class="location">at line 49</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a>
     <strong>removeWorker</strong>(<a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a> $worker)
         </code>
@@ -365,7 +370,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getWorkers">
-        <div class="location">at line 68</div>
+        <div class="location">at line 69</div>
         <code>                    array
     <strong>getWorkers</strong>()
         </code>
@@ -398,7 +403,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_startWorkers">
-        <div class="location">at line 75</div>
+        <div class="location">at line 77</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a>
     <strong>startWorkers</strong>()
         </code>
@@ -431,7 +436,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_stopWorkers">
-        <div class="location">at line 90</div>
+        <div class="location">at line 92</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a>
     <strong>stopWorkers</strong>()
         </code>
@@ -464,7 +469,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_create">
-        <div class="location">at line 106</div>
+        <div class="location">at line 108</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a>
     <strong>create</strong>(<a href="../../../../Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a> $processor)
         </code>
@@ -507,7 +512,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_destroy">
-        <div class="location">at line 130</div>
+        <div class="location">at line 132</div>
         <code>                    void
     <strong>destroy</strong>()
         </code>
@@ -541,7 +546,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_start">
-        <div class="location">at line 138</div>
+        <div class="location">at line 140</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a>
     <strong>start</strong>()
         </code>
@@ -574,7 +579,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_execute">
-        <div class="location">at line 152</div>
+        <div class="location">at line 154</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a>
     <strong>execute</strong>(string $method, array $args = [])
         </code>
