@@ -11,34 +11,52 @@
 
 namespace Manticoresearch\Buddy\Core\Process;
 
+use Exception;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
 use Swoole\Process as SwooleProcess;
 
 final class Process {
-	/** @var array<Worker> $workers */
+	/** @var array<string,Worker> $workers */
 	protected array $workers;
 
 	/**
 	 * @param SwooleProcess $process
 	 * @return void
 	 */
-	public function __construct(public readonly string $name, public readonly SwooleProcess $process) {
+	public function __construct(public readonly SwooleProcess $process) {
+	}
+
+
+	/**
+	 * Create a worker with given id
+	 * @param  callable $fn
+	 * @param  string|null $id
+	 * @return Worker
+	 */
+	public static function createWorker(callable $fn, ?string $id = null): Worker {
+		if (!isset($id)) {
+			$id = uniqid();
+		}
+
+		return new Worker($id, $fn);
 	}
 
 	/**
 	 * Add extra worker to current process, so base processor can control it
-	 * @param callable $fn
+	 * @param Worker $worker
 	 * @param bool $shouldStart if we should start instantly the worker
-	 * @param string $name
-	 * @return Worker
+	 * @return static
 	 */
-	public function addWorker(callable $fn, bool $shouldStart = false, string $name = ''): Worker {
-		$worker = new Worker($fn, $name);
-		$this->workers[] = $worker;
+	public function addWorker(Worker $worker, bool $shouldStart = false): static {
+		if (isset($this->workers[$worker->id])) {
+			throw new Exception("Failed to add worker with cuz id '{$worker->id}' exists already");
+		}
+
+		$this->workers[$worker->id] = $worker;
 		if ($shouldStart) {
 			$worker->start();
 		}
-		return $worker;
+		return $this;
 	}
 
 	/**
@@ -47,24 +65,35 @@ final class Process {
 	 * @return static
 	 */
 	public function removeWorker(Worker $worker): static {
-		foreach ($this->workers as $k => $curWorker) {
-			if ($curWorker->id !== $worker->id) {
-				continue;
-			}
-
-			if ($curWorker->isRunning()) {
-				$curWorker->stop();
-			}
-			unset($this->workers[$k]);
-			break;
+		if (!isset($this->workers[$worker->id])) {
+			throw new Exception("Missing worker with id '{$worker->id}' in the pool");
 		}
+
+		$worker = $this->workers[$worker->id];
+		if ($worker->isRunning()) {
+			$worker->stop();
+		}
+		unset($this->workers[$worker->id]);
 
 		return $this;
 	}
 
 	/**
+	 * Fetch worker from the pool
+	 * @param  string $id
+	 * @return Worker
+	 */
+	public function getWorker(string $id): Worker {
+		if (!isset($this->workers[$id])) {
+			throw new Exception("Missing worker with id '{$id}' in the pool");
+		}
+
+		return $this->workers[$id];
+	}
+
+	/**
 	 * Get all workers we set
-	 * @return array<Worker>
+	 * @return array<string,Worker>
 	 */
 	public function getWorkers(): array {
 		return $this->workers;
@@ -123,7 +152,7 @@ final class Process {
 			}, true, 2
 		);
 
-		return new static($processor::class, $process);
+		return new static($process);
 	}
 
 	/**
