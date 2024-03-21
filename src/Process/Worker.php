@@ -17,27 +17,32 @@ use Swoole\Process as SwooleProcess;
  * This is just wrapper to hide Swoole to external plugins
  */
 final class Worker {
-	/**
-	 * @var string $id Unique identified for the worker,
-	 *  assigned on the start for idnetification
-	 */
-	public readonly string $id;
-
-	public readonly string $name;
-
+	/** @var array<callable> */
+	protected array $onStart = [];
+	/** @var array<callable> */
+	protected array $onStop = [];
 	/** @var SwooleProcess $process */
 	protected SwooleProcess $process;
 
 	/**
 	 * Create a new wrapper on givent closure that we will put into the swoole process
 	 * @param callable $fn
-	 * @param string $name
+	 * @param string $id
 	 */
-	final public function __construct(callable $fn, string $name = '') {
-		$this->id = uniqid();
-		$this->name = $name;
+	final public function __construct(public readonly string $id, callable $fn) {
 		$this->process = new SwooleProcess($fn);
 	}
+
+	/**
+	 * Add closure that will be executed on start
+	 * @param  callable $fn
+	 * @return static
+	 */
+	public function onStart(callable $fn): static {
+		$this->onStart[] = $fn;
+		return $this;
+	}
+
 
 	/**
 	 * Start the current process
@@ -45,6 +50,19 @@ final class Worker {
 	 */
 	public function start(): static {
 		$this->process->start();
+		foreach ($this->onStart as $fn) {
+			$fn();
+		}
+		return $this;
+	}
+
+	/**
+	 * Add closure that will be executedo n stop
+	 * @param  callable $fn
+	 * @return static
+	 */
+	public function onStop(callable $fn): static {
+		$this->onStop[] = $fn;
 		return $this;
 	}
 
@@ -53,6 +71,9 @@ final class Worker {
 	 * @return static
 	 */
 	public function stop(): static {
+		foreach ($this->onStop as $fn) {
+			$fn();
+		}
 		$this->process->exit();
 		return $this;
 	}
@@ -63,6 +84,6 @@ final class Worker {
 	 */
 	public function isRunning(): bool {
 		$status = $this->process->wait(false);
-		return !!$status;
+		return !$status;
 	}
 }
