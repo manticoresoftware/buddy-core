@@ -92,7 +92,7 @@
                                                 <li><a href="#letterL">L</a></li>
                                                 <li><a href="#letterM">M</a></li>
                                                 <li><a href="#letterN">N</a></li>
-                                                <li class="disabled"><a href="#letterO">O</a></li>
+                                                <li><a href="#letterO">O</a></li>
                                                 <li><a href="#letterP">P</a></li>
                                                 <li><a href="#letterQ">Q</a></li>
                                                 <li><a href="#letterR">R</a></li>
@@ -158,7 +158,9 @@
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::composer</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
                     <dd><p>Execute low level composer command through Application class</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html#method_countCJK">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr>::countCJK</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr></a></em></dt>
-                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_create">
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_createWorker">
+<abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr>::createWorker</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></em></dt>
+                    <dd><p>Create a worker with given id</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_create">
 <abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr>::create</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></em></dt>
                     <dd><p>Create a new process based on the given instance</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_callbacks">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#callbacks</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
@@ -301,7 +303,9 @@ we have all vendor packages installed with CREATE PLUGIN command</p></dd><dt><a 
 <abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr>::getTable</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html#method_getProcess">
 <abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>::getProcess</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
-                    <dd><p>Get internal swoole process</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_getWorkers">
+                    <dd><p>Get internal swoole process</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_getWorker">
+<abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr>::getWorker</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></em></dt>
+                    <dd><p>Fetch worker from the pool</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_getWorkers">
 <abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr>::getWorkers</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></em></dt>
                     <dd><p>Get all workers we set</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_getId">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::getId</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
@@ -353,9 +357,7 @@ Normally it's done on initialization stage of the Buddy base</p></dd><dt><a href
 <abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr>::isEmpty</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a></em></dt>
                     <dd><p>Check if the data is empty</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_install">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::install</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
-                    <dd><p>Install specified package in plugin dir by using composer call</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Process/Worker.html#property_id">
-<abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>#id</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
-                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Worker.html#method_isRunning">
+                    <dd><p>Install specified package in plugin dir by using composer call</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Worker.html#method_isRunning">
 <abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>::isRunning</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
                     <dd><p>Get the current state of the worker if it's running</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_id">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#id</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
@@ -394,12 +396,18 @@ we can return response to client asap</p></dd><dt><a href="Manticoresearch/Buddy
                     <dd></dd>        </dl><h2 id="letterN">N</h2>
         <dl id="indexN"><dt><a href="Manticoresearch/Buddy/Core/Network/Response.html#method_none">
 <abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr>::none</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a></em></dt>
-                    <dd><p>Helper to create empty response with nothing to response (shortcut to use)</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Process/Worker.html#property_name">
-<abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>#name</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
-                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_none">
+                    <dd><p>Helper to create empty response with nothing to response (shortcut to use)</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_none">
 <abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr>::none</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></em></dt>
                     <dd><p>Entrypoint to the object creation with none of data</p></dd>        </dl><h2 id="letterO">O</h2>
-        <dl id="indexO"><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_on">
+        <dl id="indexO"><dt>$<a href="Manticoresearch/Buddy/Core/Process/Worker.html#property_onStart">
+<abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>#onStart</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
+                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Process/Worker.html#property_onStop">
+<abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>#onStop</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Worker.html#method_onStart">
+<abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>::onStart</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
+                    <dd><p>Add closure that will be executed on start</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Worker.html#method_onStop">
+<abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>::onStop</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
+                    <dd><p>Add closure that will be executedo n stop</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_on">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::on</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd><p>Register callback that will be handled before execution
 Useful to run hooks or something like this</p></dd>        </dl><h2 id="letterP">P</h2>

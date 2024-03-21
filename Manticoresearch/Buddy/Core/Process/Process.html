@@ -102,7 +102,7 @@
             <table class="table table-condensed">
                     <tr>
                 <td class="type" id="property_workers">
-                                        protected                                        <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>[]
+                                        protected                                        <abbr title="Manticoresearch\Buddy\Core\Process\array&lt;string,\Manticoresearch\Buddy\Core\Process\Worker&gt;">Worker&gt;</abbr>
                                                                                 
                                     </td>
                 <td>$workers</td>
@@ -120,7 +120,7 @@
                     void
                 </div>
                 <div class="col-md-8">
-                    <a href="#method___construct">__construct</a>(string $name, <abbr title="Swoole\Process">Process</abbr> $process)
+                    <a href="#method___construct">__construct</a>(<abbr title="Swoole\Process">Process</abbr> $process)
         
                                             <p class="no-description">No description</p>
                                     </div>
@@ -128,10 +128,20 @@
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
-                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
+                    static&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_addWorker">addWorker</a>(callable $fn, bool $shouldStart = false, string $name = &#039;&#039;)
+                    <a href="#method_createWorker">createWorker</a>(callable $fn, string|null $id = null)
+        
+                                            <p><p>Create a worker with given id</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_addWorker">addWorker</a>(<a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a> $worker, bool $shouldStart = false)
         
                                             <p><p>Add extra worker to current process, so base processor can control it</p></p>                </div>
                 <div class="col-md-2"></div>
@@ -144,6 +154,16 @@
                     <a href="#method_removeWorker">removeWorker</a>(<a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a> $worker)
         
                                             <p><p>Remove the given worker from the pool and stop it</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_getWorker">getWorker</a>(string $id)
+        
+                                            <p><p>Fetch worker from the pool</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -225,9 +245,9 @@
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line 25</div>
+        <div class="location">at line 26</div>
         <code>                    void
-    <strong>__construct</strong>(string $name, <abbr title="Swoole\Process">Process</abbr> $process)
+    <strong>__construct</strong>(<abbr title="Swoole\Process">Process</abbr> $process)
         </code>
     </h3>
     <div class="details">    
@@ -243,11 +263,6 @@
                             <h4>Parameters</h4>
 
                     <table class="table table-condensed">
-                    <tr>
-                <td>string</td>
-                <td>$name</td>
-                <td></td>
-            </tr>
                     <tr>
                 <td><abbr title="Swoole\Process">Process</abbr></td>
                 <td>$process</td>
@@ -273,10 +288,10 @@
 
             </div>
                     <div class="method-item">
-                    <h3 id="method_addWorker">
-        <div class="location">at line 35</div>
-        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
-    <strong>addWorker</strong>(callable $fn, bool $shouldStart = false, string $name = &#039;&#039;)
+                    <h3 id="method_createWorker">
+        <div class="location">at line 36</div>
+        <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
+    <strong>createWorker</strong>(callable $fn, string|null $id = null)
         </code>
     </h3>
     <div class="details">    
@@ -285,7 +300,7 @@
             
 
         <div class="method-description">
-                            <p><p>Add extra worker to current process, so base processor can control it</p></p>                        
+                            <p><p>Create a worker with given id</p></p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -297,13 +312,8 @@
                 <td></td>
             </tr>
                     <tr>
-                <td>bool</td>
-                <td>$shouldStart</td>
-                <td><p>if we should start instantly the worker</p></td>
-            </tr>
-                    <tr>
-                <td>string</td>
-                <td>$name</td>
+                <td>string|null</td>
+                <td>$id</td>
                 <td></td>
             </tr>
             </table>
@@ -326,8 +336,56 @@
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_addWorker">
+        <div class="location">at line 50</div>
+        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a>
+    <strong>addWorker</strong>(<a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a> $worker, bool $shouldStart = false)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Add extra worker to current process, so base processor can control it</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></td>
+                <td>$worker</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>bool</td>
+                <td>$shouldStart</td>
+                <td><p>if we should start instantly the worker</p></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_removeWorker">
-        <div class="location">at line 49</div>
+        <div class="location">at line 67</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a>
     <strong>removeWorker</strong>(<a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a> $worker)
         </code>
@@ -369,8 +427,51 @@
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_getWorker">
+        <div class="location">at line 86</div>
+        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
+    <strong>getWorker</strong>(string $id)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Fetch worker from the pool</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$id</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_getWorkers">
-        <div class="location">at line 69</div>
+        <div class="location">at line 98</div>
         <code>                    array
     <strong>getWorkers</strong>()
         </code>
@@ -403,7 +504,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_startWorkers">
-        <div class="location">at line 77</div>
+        <div class="location">at line 106</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a>
     <strong>startWorkers</strong>()
         </code>
@@ -436,7 +537,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_stopWorkers">
-        <div class="location">at line 92</div>
+        <div class="location">at line 121</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a>
     <strong>stopWorkers</strong>()
         </code>
@@ -469,7 +570,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_create">
-        <div class="location">at line 108</div>
+        <div class="location">at line 137</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a>
     <strong>create</strong>(<a href="../../../../Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a> $processor)
         </code>
@@ -512,7 +613,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_destroy">
-        <div class="location">at line 132</div>
+        <div class="location">at line 161</div>
         <code>                    void
     <strong>destroy</strong>()
         </code>
@@ -546,7 +647,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_start">
-        <div class="location">at line 140</div>
+        <div class="location">at line 169</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a>
     <strong>start</strong>()
         </code>
@@ -579,7 +680,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_execute">
-        <div class="location">at line 154</div>
+        <div class="location">at line 183</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a>
     <strong>execute</strong>(string $method, array $args = [])
         </code>
