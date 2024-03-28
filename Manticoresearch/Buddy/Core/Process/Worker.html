@@ -129,6 +129,15 @@
                 <td class="last"></td>
                 <td></td>
             </tr>
+                    <tr>
+                <td class="type" id="property_pid">
+                                        protected                                        int
+                                                                                
+                                    </td>
+                <td>$pid</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
             </table>
 
     
@@ -182,6 +191,16 @@
                 <div class="col-md-8">
                     <a href="#method_stop">stop</a>()
         
+                                            <p><p>Stop handle that actually send kill and process stop on its own</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_terminate">terminate</a>()
+        
                                             <p><p>Stop the current process</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
@@ -203,7 +222,7 @@
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line 32</div>
+        <div class="location">at line 34</div>
         <code>final                    
     <strong>__construct</strong>(string $id, callable $fn)
         </code>
@@ -242,7 +261,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_onStart">
-        <div class="location">at line 41</div>
+        <div class="location">at line 52</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
     <strong>onStart</strong>(callable $fn)
         </code>
@@ -285,7 +304,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_start">
-        <div class="location">at line 51</div>
+        <div class="location">at line 62</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
     <strong>start</strong>()
         </code>
@@ -318,7 +337,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_onStop">
-        <div class="location">at line 64</div>
+        <div class="location">at line 77</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
     <strong>onStop</strong>(callable $fn)
         </code>
@@ -361,9 +380,42 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_stop">
-        <div class="location">at line 73</div>
+        <div class="location">at line 86</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
     <strong>stop</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Stop handle that actually send kill and process stop on its own</p></p>                        
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_terminate">
+        <div class="location">at line 95</div>
+        <code>            protected        <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
+    <strong>terminate</strong>()
         </code>
     </h3>
     <div class="details">    
@@ -394,7 +446,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_isRunning">
-        <div class="location">at line 85</div>
+        <div class="location">at line 107</div>
         <code>                    bool
     <strong>isRunning</strong>()
         </code>

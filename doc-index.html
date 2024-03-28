@@ -441,6 +441,8 @@ Useful to run hooks or something like this</p></dd>        </dl><h2 id="letterP"
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Process.html">Manticoresearch\Buddy\Core\Process</a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Process/Worker.html#property_process">
 <abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>#process</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
+                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Process/Worker.html#property_pid">
+<abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>#pid</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_processCallbacks">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::processCallbacks</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd><p>Process all callbacks if we have any</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/TaskPool.html#property_pool">
@@ -580,7 +582,7 @@ cause parser usually leaves it as is ('manticore', "manticore", <code>manticore<
 <abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>::start</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
                     <dd><p>Start the current process</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Worker.html#method_stop">
 <abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>::stop</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
-                    <dd><p>Stop the current process</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_status">
+                    <dd><p>Stop handle that actually send kill and process stop on its own</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_status">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#status</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd><p>Current task status</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_settings">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#settings</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
@@ -606,7 +608,9 @@ cause parser usually leaves it as is ('manticore', "manticore", <code>manticore<
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Plugin.html">Manticoresearch\Buddy\Core\Plugin</a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html#property_table">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr>#table</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr></a></em></dt>
-                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Task.html">Manticoresearch\Buddy\Core\Task</a></em></dt>
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Worker.html#method_terminate">
+<abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>::terminate</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
+                    <dd><p>Stop the current process</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Task.html">Manticoresearch\Buddy\Core\Task</a></em></dt>
                     <dd><p>The most important thing for this class you should call
 Task::init() first with runtime file and [init.php]
 Task::setSettings() with passed settings before you can use anything [main.php]</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskPool.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskPool">TaskPool</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Task.html">Manticoresearch\Buddy\Core\Task</a></em></dt>
