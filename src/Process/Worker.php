@@ -17,31 +17,74 @@ use Swoole\Process as SwooleProcess;
  * This is just wrapper to hide Swoole to external plugins
  */
 final class Worker {
-	/**
-	 * @var string $id Unique identified for the worker,
-	 *  assigned on the start for idnetification
-	 */
-	public readonly string $id;
-
+	/** @var array<callable> */
+	protected array $onStart = [];
+	/** @var array<callable> */
+	protected array $onStop = [];
 	/** @var SwooleProcess $process */
-	protected SwooleProcess $process;
+	protected readonly SwooleProcess $process;
+	/** @var int $pid current pid of the worke */
+	protected int $pid;
 
 	/**
 	 * Create a new wrapper on givent closure that we will put into the swoole process
 	 * @param callable $fn
-	 * @return void
+	 * @param string $id
 	 */
-	final public function __construct(callable $fn) {
-		$this->id = uniqid();
-		$this->process = new SwooleProcess($fn);
+	final public function __construct(public readonly string $id, callable $fn) {
+		$workerFn = function (/* SwooleProcess $worker */) use ($fn) {
+			SwooleProcess::signal(
+				SIGTERM, function (/* $sig */) {
+					$this->terminate();
+				}
+			);
+
+			$fn();
+		};
+		$this->process = new SwooleProcess($workerFn);
 	}
+
+	/**
+	 * Add closure that will be executed on start
+	 * @param  callable $fn
+	 * @return static
+	 */
+	public function onStart(callable $fn): static {
+		$this->onStart[] = $fn;
+		return $this;
+	}
+
 
 	/**
 	 * Start the current process
 	 * @return static
 	 */
 	public function start(): static {
-		$this->process->start();
+		/** @var int $pid */
+		$pid = $this->process->start();
+		$this->pid = $pid;
+		foreach ($this->onStart as $fn) {
+			$fn();
+		}
+		return $this;
+	}
+
+	/**
+	 * Add closure that will be executedo n stop
+	 * @param  callable $fn
+	 * @return static
+	 */
+	public function onStop(callable $fn): static {
+		$this->onStop[] = $fn;
+		return $this;
+	}
+
+	/**
+	 * Stop handle that actually send kill and process stop on its own
+	 * @return static
+	 */
+	public function stop(): static {
+		SwooleProcess::kill($this->pid, SIGTERM);
 		return $this;
 	}
 
@@ -49,8 +92,11 @@ final class Worker {
 	 * Stop the current process
 	 * @return static
 	 */
-	public function stop(): static {
-		$this->process->exit();
+	protected function terminate(): static {
+		foreach ($this->onStop as $fn) {
+			$fn();
+		}
+		$this->process->exit(); // @phpstan-ignore-line
 		return $this;
 	}
 
@@ -60,6 +106,6 @@ final class Worker {
 	 */
 	public function isRunning(): bool {
 		$status = $this->process->wait(false);
-		return !!$status;
+		return !$status;
 	}
 }
