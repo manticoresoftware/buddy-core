@@ -119,7 +119,9 @@
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::autoloader</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
                     <dd><p>Implement own autoloader that will allow us to skip installed packages</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_addWorker">
 <abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr>::addWorker</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></em></dt>
-                    <dd><p>Add extra worker to current process, so base processor can control it</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskPool.html#method_add">
+                    <dd><p>Add extra worker to current process, so base processor can control it</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_addTicker">
+<abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr>::addTicker</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></em></dt>
+                    <dd><p>Add ticker to run periodicaly</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskPool.html#method_add">
 <abbr title="Manticoresearch\Buddy\Core\Task\TaskPool">TaskPool</abbr>::add</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskPool.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskPool">TaskPool</abbr></a></em></dt>
                     <dd><p>Add new task to the pool, so we can understand what is running now</p></dd>        </dl><h2 id="letterB">B</h2>
         <dl id="indexB"><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#property_buddyVersion">
@@ -158,6 +160,8 @@
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::composer</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
                     <dd><p>Execute low level composer command through Application class</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html#method_countCJK">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr>::countCJK</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr></a></em></dt>
+                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html#property_client">
+<abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>#client</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_createWorker">
 <abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr>::createWorker</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></em></dt>
                     <dd><p>Create a worker with given id</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_create">
@@ -481,7 +485,9 @@ It's called on init phase once and keep updated on event emited from the plugin<
 <abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr>::rowLine</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_removeWorker">
 <abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr>::removeWorker</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></em></dt>
-                    <dd><p>Remove the given worker from the pool and stop it</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_result">
+                    <dd><p>Remove the given worker from the pool and stop it</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_removeTicker">
+<abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr>::removeTicker</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></em></dt>
+                    <dd><p>Stop given timerId returned by addTicker method</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_result">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#result</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_run">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::run</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
@@ -558,7 +564,9 @@ cause parser usually leaves it as is ('manticore', "manticore", <code>manticore<
 <abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr>::setData</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html#method_setWidth">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr>::setWidth</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr></a></em></dt>
-                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html#method_start">
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html#method_setClient">
+<abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>::setClient</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
+                    <dd><p>Set the client to the current process namespace</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html#method_start">
 <abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>::start</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
                     <dd><p>Initialization step in case if it's required to run once on Buddy start</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html#method_stop">
 <abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>::stop</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
