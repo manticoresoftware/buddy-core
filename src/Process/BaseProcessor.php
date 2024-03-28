@@ -11,13 +11,27 @@
 
 namespace Manticoresearch\Buddy\Core\Process;
 
+use Manticoresearch\Buddy\Core\ManticoreSearch\Client;
+
 abstract class BaseProcessor {
 	/** @var Process $process */
 	protected Process $process;
+	protected Client $client;
 
 	final public function __construct() {
 		$this->process = Process::create($this);
 	}
+
+	/**
+	 * Set the client to the current process namespace
+	 * @param Client $client
+	 * @return static
+	 */
+	final public function setClient(Client $client): static {
+		$this->client = $client;
+		return $this;
+	}
+
 	/**
 	 * Initialization step in case if it's required to run once on Buddy start
 	 * @return void
