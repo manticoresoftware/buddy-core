@@ -21,7 +21,7 @@
 		"symfony/console": "^6.2",
 		"symfony/dependency-injection": "^6.1",
 		"php-ds/php-ds": "^1.4",
-		"manticoresoftware/php-sql-parser": "v4.6.0-patch2"
+		"manticoresoftware/php-sql-parser": "v4.6.0-patch4"
 	},
 	"require-dev": {
 		"phpstan/phpstan": "^1.8",
