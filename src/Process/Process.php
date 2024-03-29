@@ -14,7 +14,6 @@ namespace Manticoresearch\Buddy\Core\Process;
 use Exception;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
 use Swoole\Process as SwooleProcess;
-use Swoole\Timer;
 
 final class Process {
 	/** @var array<string,Worker> $workers */
@@ -164,28 +163,6 @@ final class Process {
 	}
 
 	/**
-	 * Add ticker to run periodicaly
-	 * @param callable    $fn
-	 * @param int $period
-	 * @return int identifier of the ticker
-	 */
-	public static function addTicker(callable $fn, int $period = 1): int {
-		return Timer::tick(
-			$period * 1000,
-			$fn
-		);
-	}
-
-	/**
-	 * Stop given timerId returned by addTicker method
-	 * @param  int    $timerId
-	 * @return bool
-	 */
-	public static function removeTicker(int $timerId): bool {
-		return Timer::clear($timerId);
-	}
-
-	/**
 	 * Start the created process that will handle all actions
 	 * @return self
 	 */
@@ -195,7 +172,7 @@ final class Process {
 	}
 
 	/**
-	 * Executor of the Metric component in separate thread
+	 * Execute the process event in a single one shot way
 	 *
 	 * @param string $method
 	 *  Which method we want to execute

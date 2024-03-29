@@ -12,6 +12,7 @@
 namespace Manticoresearch\Buddy\Core\Process;
 
 use Manticoresearch\Buddy\Core\ManticoreSearch\Client;
+use Swoole\Timer;
 
 abstract class BaseProcessor {
 	/** @var Process $process */
@@ -47,6 +48,32 @@ abstract class BaseProcessor {
 	public function stop(): void {
 		$this->process->stopWorkers();
 		$this->process->destroy();
+	}
+
+	/**
+	 * Add ticker to run periodicaly
+	 * This is should not be called from the inside of the forked process
+	 * due to some limitations
+	 * @param callable    $fn
+	 * @param int $period
+	 * @return int identifier of the ticker
+	 */
+	public static function addTicker(callable $fn, int $period = 1): int {
+		return Timer::tick(
+			$period * 1000,
+			$fn
+		);
+	}
+
+	/**
+	 * Stop given timerId returned by addTicker method
+	 * This is should not be called from the inside of the forked process
+	 * due to some limitations
+	 * @param  int    $timerId
+	 * @return bool
+	 */
+	public static function removeTicker(int $timerId): bool {
+		return Timer::clear($timerId);
 	}
 
 	/**
