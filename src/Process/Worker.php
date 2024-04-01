@@ -33,12 +33,7 @@ final class Worker {
 	 */
 	final public function __construct(public readonly string $id, callable $fn) {
 		$workerFn = function (/* SwooleProcess $worker */) use ($fn) {
-			SwooleProcess::signal(
-				SIGTERM, function (/* $sig */) {
-					$this->terminate();
-				}
-			);
-
+			SwooleProcess::signal(SIGTERM, $this->terminate(...));
 			$fn();
 		};
 		$this->process = new SwooleProcess($workerFn);
@@ -90,14 +85,13 @@ final class Worker {
 
 	/**
 	 * Stop the current process
-	 * @return static
+	 * @return void
 	 */
-	protected function terminate(): static {
+	protected function terminate(): void {
 		foreach ($this->onStop as $fn) {
 			$fn();
 		}
 		$this->process->exit(); // @phpstan-ignore-line
-		return $this;
 	}
 
 	/**
