@@ -17,7 +17,7 @@ use Swoole\Process as SwooleProcess;
 
 final class Process {
 	/** @var array<string,Worker> $workers */
-	protected array $workers;
+	protected array $workers = [];
 
 	/**
 	 * @param SwooleProcess $process
@@ -132,42 +132,47 @@ final class Process {
 	/**
 	 * Create a new process based on the given instance
 	 * @param BaseProcessor $processor
+	 * @param ?callable $initFn
 	 * @return static
 	 */
-	public static function create(BaseProcessor $processor): static {
+	public static function create(BaseProcessor $processor, ?callable $initFn = null): static {
 		$process = new SwooleProcess(
-			static function (SwooleProcess $worker) use ($processor) {
+			static function (SwooleProcess $worker) use ($processor, $initFn) {
 				chdir(sys_get_temp_dir());
+				pcntl_async_signals(true);
+				pcntl_signal(SIGTERM, fn() => $worker->exit(0));
+				if ($initFn) {
+					$initFn();
+				}
 				while ($msg = $worker->read()) {
-					if (!is_string($msg)) {
-						throw new \Exception('Incorrect data received');
+					/** @var string $msg */
+					$fn = $processor->parseMessage($msg);
+					if (!$fn) {
+						continue;
 					}
-					$msg = unserialize($msg);
-					if (!is_array($msg)) {
-						throw new \Exception('Incorrect data received');
-					}
-					[$method, $args] = $msg;
-					$processor->$method(...$args);
+					$fn();
 				}
 			}, true, 2
 		);
-
 		return new static($process);
 	}
 
 	/**
-	 * @return void
+	 * Start the created process that will handle all actions
+	 * @return static
 	 */
-	public function destroy(): void {
-		$this->process->exit();
+	public function start(): static {
+		$this->process->start();
+		return $this;
 	}
 
 	/**
-	 * Start the created process that will handle all actions
-	 * @return self
+	 * Stop handle that actually send kill and process stop on its own
+	 * @return static
 	 */
-	public function start(): self {
-		$this->process->start();
+	public function stop(): static {
+		$this->stopWorkers();
+		SwooleProcess::kill($this->process->pid, SIGTERM);
 		return $this;
 	}
 

@@ -23,8 +23,6 @@ final class Worker {
 	protected array $onStop = [];
 	/** @var SwooleProcess $process */
 	protected readonly SwooleProcess $process;
-	/** @var int $pid current pid of the worke */
-	protected int $pid;
 
 	/**
 	 * Create a new wrapper on givent closure that we will put into the swoole process
@@ -32,8 +30,17 @@ final class Worker {
 	 * @param string $id
 	 */
 	final public function __construct(public readonly string $id, callable $fn) {
-		$workerFn = function (/* SwooleProcess $worker */) use ($fn) {
-			SwooleProcess::signal(SIGTERM, $this->terminate(...));
+		$workerFn = function (SwooleProcess $worker) use ($fn) {
+			pcntl_async_signals(true);
+			pcntl_signal(
+				SIGTERM, function () use ($worker) {
+					foreach ($this->onStop as $fn) {
+						$fn();
+					}
+
+					$worker->exit(0);
+				}
+			);
 			$fn();
 		};
 		$this->process = new SwooleProcess($workerFn);
@@ -55,9 +62,7 @@ final class Worker {
 	 * @return static
 	 */
 	public function start(): static {
-		/** @var int $pid */
-		$pid = $this->process->start();
-		$this->pid = $pid;
+		$this->process->start();
 		foreach ($this->onStart as $fn) {
 			$fn();
 		}
@@ -79,19 +84,8 @@ final class Worker {
 	 * @return static
 	 */
 	public function stop(): static {
-		SwooleProcess::kill($this->pid, SIGTERM);
+		SwooleProcess::kill($this->process->pid, SIGTERM);
 		return $this;
-	}
-
-	/**
-	 * Stop the current process
-	 * @return void
-	 */
-	protected function terminate(): void {
-		foreach ($this->onStop as $fn) {
-			$fn();
-		}
-		$this->process->exit(); // @phpstan-ignore-line
 	}
 
 	/**
