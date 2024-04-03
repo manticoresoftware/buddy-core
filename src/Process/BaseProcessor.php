@@ -15,18 +15,15 @@ use Manticoresearch\Buddy\Core\ManticoreSearch\Client;
 use Swoole\Timer;
 
 abstract class BaseProcessor {
-	const SYSTEM_METHODS = ['pause', 'resume'];
+	const SYSTEM_METHODS = ['pause', 'resume', 'shutdown'];
 
 	/** @var Process $process */
 	protected Process $process;
 	protected Client $client;
 	protected bool $isPaused = false;
 
-	/**
-	 * @param ?callable $initFn
-	 */
-	final public function __construct(?callable $initFn = null) {
-		$this->process = Process::create($this, $initFn);
+	final public function __construct() {
+		$this->process = Process::create($this);
 	}
 
 	/**
@@ -41,9 +38,11 @@ abstract class BaseProcessor {
 
 	/**
 	 * Initialization step in case if it's required to run once on Buddy start
-	 * @return void
+	 * It returns timers to register
+	 * @return array<array{0:callable,1:int}>
 	 */
-	public function start(): void {
+	public function start(): array {
+		return [];
 	}
 
 	/**
@@ -93,6 +92,15 @@ abstract class BaseProcessor {
 	public function resume(): static {
 		$this->isPaused = false;
 		return $this;
+	}
+
+	/**
+	 * Shutdown the server from the loop
+	 * @return void
+	 */
+	public function shutdown(): void {
+		Timer::clearAll();
+		$this->process->process->exit(0);
 	}
 
 	/**

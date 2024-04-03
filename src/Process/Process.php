@@ -132,18 +132,12 @@ final class Process {
 	/**
 	 * Create a new process based on the given instance
 	 * @param BaseProcessor $processor
-	 * @param ?callable $initFn
 	 * @return static
 	 */
-	public static function create(BaseProcessor $processor, ?callable $initFn = null): static {
+	public static function create(BaseProcessor $processor): static {
 		$process = new SwooleProcess(
-			static function (SwooleProcess $worker) use ($processor, $initFn) {
+			static function (SwooleProcess $worker) use ($processor) {
 				chdir(sys_get_temp_dir());
-				pcntl_async_signals(true);
-				pcntl_signal(SIGTERM, fn() => $worker->exit(0));
-				if ($initFn) {
-					$initFn();
-				}
 				while ($msg = $worker->read()) {
 					/** @var string $msg */
 					$fn = $processor->parseMessage($msg);
@@ -172,7 +166,7 @@ final class Process {
 	 */
 	public function stop(): static {
 		$this->stopWorkers();
-		SwooleProcess::kill($this->process->pid, SIGTERM);
+		$this->execute('shutdown');
 		return $this;
 	}
 
