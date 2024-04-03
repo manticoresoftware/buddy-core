@@ -11,63 +11,94 @@
 
 namespace Manticoresearch\Buddy\Core\Process;
 
+use Exception;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
 use Swoole\Process as SwooleProcess;
 
 final class Process {
-	/** @var array<Worker> $workers */
-	protected array $workers;
+	/** @var array<string,Worker> $workers */
+	protected array $workers = [];
 
 	/**
 	 * @param SwooleProcess $process
 	 * @return void
 	 */
-	public function __construct(public readonly string $name, public readonly SwooleProcess $process) {
+	public function __construct(public readonly SwooleProcess $process) {
+	}
+
+
+	/**
+	 * Create a worker with given id
+	 * @param  callable $fn
+	 * @param  string|null $id
+	 * @return Worker
+	 */
+	public static function createWorker(callable $fn, ?string $id = null): Worker {
+		if (!isset($id)) {
+			$id = uniqid();
+		}
+
+		return new Worker($id, $fn);
 	}
 
 	/**
 	 * Add extra worker to current process, so base processor can control it
-	 * @param callable $fn
+	 * @param Worker $worker
 	 * @param bool $shouldStart if we should start instantly the worker
-	 * @return Worker
+	 * @return static
 	 */
-	public function addWorker(callable $fn, bool $shouldStart = false): Worker {
-		$worker = new Worker($fn);
-		$this->workers[] = $worker;
+	public function addWorker(Worker $worker, bool $shouldStart = false): static {
+		if (isset($this->workers[$worker->id])) {
+			throw new Exception("Failed to add worker with cuz id '{$worker->id}' exists already");
+		}
+
+		$this->workers[$worker->id] = $worker;
 		if ($shouldStart) {
 			$worker->start();
 		}
-		return $worker;
+		return $this;
 	}
 
 	/**
 	 * Remove the given worker from the pool and stop it
-	 * @param  Worker $worker
+	 * @param Worker $worker
 	 * @return static
 	 */
 	public function removeWorker(Worker $worker): static {
-		foreach ($this->workers as $k => $curWorker) {
-			if ($curWorker->id !== $worker->id) {
-				continue;
-			}
-
-			if ($curWorker->isRunning()) {
-				$curWorker->stop();
-			}
-			unset($this->workers[$k]);
-			break;
+		if (!isset($this->workers[$worker->id])) {
+			throw new Exception("Missing worker with id '{$worker->id}' in the pool");
 		}
+
+		$worker = $this->workers[$worker->id];
+		if ($worker->isRunning()) {
+			$worker->stop();
+		}
+		unset($this->workers[$worker->id]);
 
 		return $this;
 	}
 
 	/**
+	 * Fetch worker from the pool
+	 * @param  string $id
+	 * @return Worker
+	 */
+	public function getWorker(string $id): Worker {
+		if (!isset($this->workers[$id])) {
+			throw new Exception("Missing worker with id '{$id}' in the pool");
+		}
+
+		return $this->workers[$id];
+	}
+
+	/**
 	 * Get all workers we set
-	 * @return array<Worker>
+	 * @return array<string,Worker>
 	 */
 	public function getWorkers(): array {
 		return $this->workers;
 	}
+
 	/**
 	 * Start all workers that is not running
 	 * @return static
@@ -100,7 +131,7 @@ final class Process {
 
 	/**
 	 * Create a new process based on the given instance
-	 * @param  BaseProcessor $processor
+	 * @param BaseProcessor $processor
 	 * @return static
 	 */
 	public static function create(BaseProcessor $processor): static {
@@ -108,40 +139,39 @@ final class Process {
 			static function (SwooleProcess $worker) use ($processor) {
 				chdir(sys_get_temp_dir());
 				while ($msg = $worker->read()) {
-					if (!is_string($msg)) {
-						throw new \Exception('Incorrect data received');
+					/** @var string $msg */
+					$fn = $processor->parseMessage($msg);
+					if (!$fn) {
+						continue;
 					}
-					$msg = unserialize($msg);
-					if (!is_array($msg)) {
-						throw new \Exception('Incorrect data received');
-					}
-					[$method, $args] = $msg;
-					$processor->$method(...$args);
+					$fn();
 				}
 			}, true, 2
 		);
-
-		return new static($processor::class, $process);
-	}
-
-	/**
-	 * @return void
-	 */
-	public function destroy(): void {
-		$this->process->exit();
+		return new static($process);
 	}
 
 	/**
 	 * Start the created process that will handle all actions
-	 * @return self
+	 * @return static
 	 */
-	public function start(): self {
+	public function start(): static {
 		$this->process->start();
 		return $this;
 	}
 
 	/**
-	 * Executor of the Metric component in separate thread
+	 * Stop handle that actually send kill and process stop on its own
+	 * @return static
+	 */
+	public function stop(): static {
+		$this->stopWorkers();
+		$this->execute('shutdown');
+		return $this;
+	}
+
+	/**
+	 * Execute the process event in a single one shot way
 	 *
 	 * @param string $method
 	 *  Which method we want to execute

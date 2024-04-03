@@ -11,19 +11,38 @@
 
 namespace Manticoresearch\Buddy\Core\Process;
 
+use Manticoresearch\Buddy\Core\ManticoreSearch\Client;
+use Swoole\Timer;
+
 abstract class BaseProcessor {
+	const SYSTEM_METHODS = ['pause', 'resume', 'shutdown'];
+
 	/** @var Process $process */
 	protected Process $process;
+	protected Client $client;
+	protected bool $isPaused = false;
 
 	final public function __construct() {
 		$this->process = Process::create($this);
 	}
+
+	/**
+	 * Set the client to the current process namespace
+	 * @param Client $client
+	 * @return static
+	 */
+	final public function setClient(Client $client): static {
+		$this->client = $client;
+		return $this;
+	}
+
 	/**
 	 * Initialization step in case if it's required to run once on Buddy start
-	 * @return void
+	 * It returns timers to register
+	 * @return array<array{0:callable,1:int}>
 	 */
-	public function start(): void {
-		$this->process->start();
+	public function start(): array {
+		return [];
 	}
 
 	/**
@@ -31,12 +50,85 @@ abstract class BaseProcessor {
 	 * @return void
 	 */
 	public function stop(): void {
-		$this->process->stopWorkers();
-		$this->process->destroy();
+		$this->process->stop();
+	}
+
+	/**
+	 * Temporarely suspend the process
+	 * This is method to use with execute only
+	 * @return static
+	 */
+	public function pause(): static {
+		$this->isPaused = true;
+		return $this;
+	}
+
+	/**
+	 * Parse and return callable function to run in case we able to do so
+	 * and not yet paused, when paused - do nothing
+	 * @param string $message received message from the process read function
+	 * @return ?callable
+	 */
+	public function parseMessage(string $message = ''): ?callable {
+		$message = unserialize($message);
+		if (!is_array($message)) {
+			return null;
+		}
+
+		[$method, $args] = $message;
+
+		// Always running for system methods to make them execute
+		if ($this->isPaused && !in_array($method, static::SYSTEM_METHODS)) {
+			return null;
+		}
+
+		return fn() => $this->$method(...$args);
+	}
+
+	/**
+	 * This is method to use with execute only
+	 * @return static
+	 */
+	public function resume(): static {
+		$this->isPaused = false;
+		return $this;
+	}
+
+	/**
+	 * Shutdown the server from the loop
+	 * @return void
+	 */
+	public function shutdown(): void {
+		Timer::clearAll();
+		$this->process->process->exit(0);
+	}
+
+	/**
+	 * Add self-removable ticker to run periodicaly
+	 * Due to some limitations it should be called for methods
+	 * That returns true to remove and false when keep going
+	 * @param callable    $fn
+	 * @param int $period
+	 * @return int identifier of the ticker
+	 */
+	public function addTicker(callable $fn, int $period = 1): int {
+		$tickerFn = static function (int $timerId) use ($fn) {
+			$result = $fn();
+			if ($result !== true) {
+				return;
+			}
+
+			Timer::clear($timerId);
+		};
+		return Timer::tick(
+			$period * 1000,
+			$tickerFn
+		);
 	}
 
 	/**
 	 * Just proxy to the internal process
+	 * Reserverd events: pause, resume
 	 * @param  string $method
 	 * @param  array<mixed>  $args
 	 * @return static

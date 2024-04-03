@@ -137,7 +137,6 @@ final class Task {
 					$this->error = $e;
 				} finally {
 					$this->status = TaskStatus::Finished;
-					$this->processCallbacks();
 				}
 			}
 		);
@@ -164,6 +163,10 @@ final class Task {
 		Coroutine::join([$this->future]);
 		if ($exceptionOnError && !$this->isSucceed()) {
 			throw $this->getError();
+		}
+
+		if ($this->isSucceed()) {
+			$this->processCallbacks();
 		}
 
 		return $this->status;
