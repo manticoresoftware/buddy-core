@@ -175,7 +175,7 @@ final class Request {
 			$endpointBundle = ManticoreEndpoint::Insert;
 		} elseif (str_contains($path, '/_update/')) {
 			$endpointBundle = ManticoreEndpoint::Update;
-		} elseif (str_starts_with($path, '_index_template/') || str_ends_with($path, '/_mapping')) {
+		} elseif (static::isElasticPath($path)) {
 			$endpointBundle = ManticoreEndpoint::Elastic;
 		} else {
 			$endpointBundle = match ($path) {
@@ -205,6 +205,20 @@ final class Request {
 		$this->error = $payload['error'];
 		$this->version = $payload['version'];
 		return $this;
+	}
+
+	/**
+	 * Helper function to detect if request path refers to Elastic-like request 
+	 *
+	 * @param string $path
+	 * @return bool
+	 */
+	protected function isElasticPath(string $path): bool {
+		return str_starts_with($path, '_index_template/') || str_ends_with($path, '_nodes')
+		|| str_ends_with($path, '_xpack') || str_ends_with($path, '.kibana')
+		|| str_ends_with($path, '/_mapping') || str_ends_with($path, '/_search')
+		|| str_ends_with($path, '.kibana') || str_starts_with($path, '.kibana_task_manager')
+		|| str_starts_with($path, '_cluster');
 	}
 
 	/**
@@ -247,6 +261,7 @@ final class Request {
 	 * @throws QueryParseError
 	 */
 	protected static function removeComments(string $query): string {
+		return trim($query);
 		$query = preg_replace_callback(
 			'/((\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\')|(--[^"\r\n]*|#[^"\r\n]*|\/\*[^!][\s\S]*?\*\/))/',
 			function ($matches) {
