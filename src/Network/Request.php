@@ -201,7 +201,9 @@ final class Request {
 		$this->path = $path;
 		$this->format = $format;
 		$this->endpointBundle = $endpointBundle;
-		$this->payload = static::removeComments($payload['message']['body']);
+		$this->payload = (in_array($endpointBundle, [ManticoreEndpoint::Elastic, ManticoreEndpoint::Bulk]))
+			? trim($payload['message']['body'])
+			: static::removeComments($payload['message']['body']);
 		$this->error = $payload['error'];
 		$this->version = $payload['version'];
 		return $this;
