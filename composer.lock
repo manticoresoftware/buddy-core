@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "68b78e2a55b5806acf3346f4887cc8ad",
+    "content-hash": "dd58b424646ef7483e1d9f914a9d8584",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -715,16 +715,16 @@
         },
         {
             "name": "manticoresoftware/php-sql-parser",
-            "version": "v4.6.0-patch6",
+            "version": "v4.6.0-patch7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/manticoresoftware/PHP-SQL-Parser.git",
-                "reference": "62dcf91694530b2c52a60c383c37b6d0e85ded37"
+                "reference": "4544fc6d068f822f319285425fc8e7f7f2c61c4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/manticoresoftware/PHP-SQL-Parser/zipball/62dcf91694530b2c52a60c383c37b6d0e85ded37",
-                "reference": "62dcf91694530b2c52a60c383c37b6d0e85ded37",
+                "url": "https://api.github.com/repos/manticoresoftware/PHP-SQL-Parser/zipball/4544fc6d068f822f319285425fc8e7f7f2c61c4e",
+                "reference": "4544fc6d068f822f319285425fc8e7f7f2c61c4e",
                 "shasum": ""
             },
             "require": {
@@ -771,7 +771,7 @@
                 "issues": "https://github.com/greenlion/PHP-SQL-Parser/issues",
                 "source": "https://github.com/greenlion/PHP-SQL-Parser"
             },
-            "time": "2024-04-24T15:34:36+00:00"
+            "time": "2024-04-24T22:46:22+00:00"
         },
         {
             "name": "php-ds/php-ds",
