@@ -7,16 +7,19 @@ use PHPSQLParser\PHPSQLCreator;
 use PHPSQLParser\PHPSQLParser;
 use PHPSQLParser\exceptions\UnsupportedFeatureException;
 
+/**
+ * @phpstan-template T of array
+ */
 final class SqlQueryParser
 {
 
 	/**
-	 * @var SqlQueryParser|null
+	 * @phpstan-var SqlQueryParser<T>|null
 	 */
 	protected static self|null $instance = null;
+
 	/**
-	 * @var array<string, array<int, array{table:string, expr_type:string, base_expr:string,
-	 *   sub_tree:array<int, array<string, string|bool>>}>>|null
+	 * @phpstan-var T $parsedPayload
 	 */
 	private static array|null $parsedPayload = null;
 	/**
@@ -40,11 +43,13 @@ final class SqlQueryParser
 	}
 
 	/**
-	 * @return self
+	 * @return SqlQueryParser<T>
 	 */
 	public static function getInstance(): self {
 		if (self::$instance === null) {
-			self::$instance = new self();
+			/** @var SqlQueryParser<T> $self */
+			$self = new self();
+			self::$instance = $self;
 			self::$parser = new PHPSQLParser();
 			self::$creator = new PHPSQLCreator();
 		}
@@ -67,10 +72,10 @@ final class SqlQueryParser
 	}
 
 	/**
+	 * @phpstan-param string $payload
+	 * @phpstan-return T
 	 * @param string $payload
-	 * @return array<string, array<int,
-	 *   array{table:string, expr_type:string, base_expr:string,
-	 * sub_tree: array<int, array<string, string|bool>>}>>|null
+	 * return array|null
 	 */
 	public static function parse(string $payload): ?array {
 		$parsedPayload = static::getInstance()::getParser()->parse($payload);
@@ -95,18 +100,14 @@ final class SqlQueryParser
 	}
 
 	/**
-	 * @return array<string, array<int,
-	 *   array{table:string, expr_type:string, base_expr:string,
-	 * sub_tree: array<int, array<string, string|bool>>}>>|null
+	 * @return T
 	 */
 	public static function getParsedPayload(): ?array {
 		return static::getInstance()::$parsedPayload;
 	}
 
 	/**
-	 * @param array<string, array<int,
-	 *   array{table: string, expr_type:string, base_expr:string,
-	 * sub_tree: array<int, array<string, string|bool>>}>> $parsedPayload
+	 * @param T $parsedPayload
 	 * @return void
 	 */
 	public static function setParsedPayload(array $parsedPayload): void {
