@@ -17,9 +17,13 @@ use Manticoresearch\Buddy\Core\Network\Request;
 use Manticoresearch\Buddy\Core\Process\BaseProcessor;
 use Manticoresearch\Buddy\Core\Tool\SqlQueryParser;
 
+/**
+ * @phpstan-template T of array
+ */
 abstract class BasePayload {
 	protected Settings $manticoreSettings;
 
+	/** @var SqlQueryParser<T> */
 	public static SqlQueryParser $sqlQueryParser;
 	/**
 	 * Get processors that plugin supports, list of classes
@@ -92,7 +96,7 @@ abstract class BasePayload {
 	}
 
 	/**
-	 * @param SqlQueryParser $sqlQueryParser
+	 * @param SqlQueryParser<T> $sqlQueryParser
 	 * @return void
 	 */
 	public static function setParser(SqlQueryParser $sqlQueryParser): void {
