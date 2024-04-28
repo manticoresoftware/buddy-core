@@ -76,4 +76,22 @@ final class Buddy {
 		}
 		return $version;
 	}
+
+	/**
+	 * Get the process name with suffix and id if passed
+	 *
+	 * @param string $name The base name to use
+	 * @param null|string $suffix
+	 * @param null|int $id
+	 * @return string
+	 */
+	public static function getProcessName(string $name, ?string $suffix = null, ?int $id = null) : string {
+		if ($suffix) {
+			$name .= '-' . $suffix;
+		}
+		if (isset($id)) {
+			$name .= ' [' . $id . ']';
+		}
+		return $name;
+	}
 }
