@@ -1,18 +1,20 @@
 <?php declare(strict_types=1);
 
 /*
-  Copyright (c) 2024, Manticore Software LTD (https://manticoresearch.com)
+	Copyright (c) 2024, Manticore Software LTD (https://manticoresearch.com)
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 3 or any later
-  version. You should have received a copy of the GPL license along with this
-  program; if you did not, you can find it at http://www.gnu.org/
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License version 3 or any later
+	version. You should have received a copy of the GPL license along with this
+	program; if you did not, you can find it at http://www.gnu.org/
+*
 */
 
 namespace Manticoresearch\Buddy\Core\Process;
 
 use Exception;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
+use Manticoresearch\Buddy\Core\Tool\Strings;
 use Swoole\Process as SwooleProcess;
 
 final class Process {
@@ -25,7 +27,6 @@ final class Process {
 	 */
 	public function __construct(public readonly SwooleProcess $process) {
 	}
-
 
 	/**
 	 * Create a worker with given id
@@ -137,6 +138,8 @@ final class Process {
 	public static function create(BaseProcessor $processor): static {
 		$process = new SwooleProcess(
 			static function (SwooleProcess $worker) use ($processor) {
+				$name = Buddy::getProcessName(Strings::classNameToIdentifier($processor::class));
+				swoole_set_process_name($name);
 				chdir(sys_get_temp_dir());
 				while ($msg = $worker->read()) {
 					/** @var string $msg */
