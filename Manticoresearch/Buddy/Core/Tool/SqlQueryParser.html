@@ -150,6 +150,28 @@
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
+                    static&nbsp;bool
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_hasMatchPreprocessed">hasMatchPreprocessed</a>()
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;void
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_setMatchPreprocessor">setMatchPreprocessor</a>(<a target="_blank" rel="noopener" href="https://www.php.net/Closure">Closure</a> $callback)
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
                     static&nbsp;array|null
                 </div>
                 <div class="col-md-8">
@@ -211,7 +233,7 @@ cause parser usually leaves it as is ('manticore', "manticore", <code>manticore<
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___clone">
-        <div class="location">at line 38</div>
+        <div class="location">at line 49</div>
         <code>final            protected        
     <strong>__clone</strong>()
         </code>
@@ -236,7 +258,7 @@ cause parser usually leaves it as is ('manticore', "manticore", <code>manticore<
             </div>
                     <div class="method-item">
                     <h3 id="method___wakeup">
-        <div class="location">at line 41</div>
+        <div class="location">at line 52</div>
         <code>final                    
     <strong>__wakeup</strong>()
         </code>
@@ -261,7 +283,7 @@ cause parser usually leaves it as is ('manticore', "manticore", <code>manticore<
             </div>
                     <div class="method-item">
                     <h3 id="method_getInstance">
-        <div class="location">at line 48</div>
+        <div class="location">at line 59</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Tool/SqlQueryParser.html"><abbr title="Manticoresearch\Buddy\Core\Tool\SqlQueryParser">SqlQueryParser</abbr></a>
     <strong>getInstance</strong>()
         </code>
@@ -294,8 +316,86 @@ cause parser usually leaves it as is ('manticore', "manticore", <code>manticore<
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_hasMatchPreprocessed">
+        <div class="location">at line 88</div>
+        <code>        static            bool
+    <strong>hasMatchPreprocessed</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_setMatchPreprocessor">
+        <div class="location">at line 98</div>
+        <code>        static            void
+    <strong>setMatchPreprocessor</strong>(<a target="_blank" rel="noopener" href="https://www.php.net/Closure">Closure</a> $callback)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a target="_blank" rel="noopener" href="https://www.php.net/Closure">Closure</a></td>
+                <td>$callback</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_parse">
-        <div class="location">at line 80</div>
+        <div class="location">at line 109</div>
         <code>        static            array|null
     <strong>parse</strong>(string $payload)
         </code>
@@ -331,6 +431,15 @@ cause parser usually leaves it as is ('manticore', "manticore", <code>manticore<
     </table>
 
             
+                            <h4>Exceptions</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></td>
+                <td></td>
+            </tr>
+            </table>
+
             
             
                     </div>
@@ -339,7 +448,7 @@ cause parser usually leaves it as is ('manticore', "manticore", <code>manticore<
             </div>
                     <div class="method-item">
                     <h3 id="method_getCompletedPayload">
-        <div class="location">at line 94</div>
+        <div class="location">at line 128</div>
         <code>        static            string
     <strong>getCompletedPayload</strong>()
         </code>
@@ -382,7 +491,7 @@ cause parser usually leaves it as is ('manticore', "manticore", <code>manticore<
             </div>
                     <div class="method-item">
                     <h3 id="method_getParsedPayload">
-        <div class="location">at line 105</div>
+        <div class="location">at line 139</div>
         <code>        static            array|null
     <strong>getParsedPayload</strong>()
         </code>
@@ -416,7 +525,7 @@ cause parser usually leaves it as is ('manticore', "manticore", <code>manticore<
             </div>
                     <div class="method-item">
                     <h3 id="method_setParsedPayload">
-        <div class="location">at line 113</div>
+        <div class="location">at line 147</div>
         <code>        static            void
     <strong>setParsedPayload</strong>(array $parsedPayload)
         </code>
@@ -460,7 +569,7 @@ cause parser usually leaves it as is ('manticore', "manticore", <code>manticore<
             </div>
                     <div class="method-item">
                     <h3 id="method_removeQuotes">
-        <div class="location">at line 124</div>
+        <div class="location">at line 158</div>
         <code>        static            string
     <strong>removeQuotes</strong>(string $var)
         </code>
