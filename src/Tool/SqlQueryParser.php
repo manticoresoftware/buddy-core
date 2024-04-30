@@ -2,6 +2,8 @@
 
 namespace Manticoresearch\Buddy\Core\Tool;
 
+use Closure;
+use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\Error\QueryParseError;
 use PHPSQLParser\PHPSQLCreator;
 use PHPSQLParser\PHPSQLParser;
@@ -10,8 +12,7 @@ use PHPSQLParser\exceptions\UnsupportedFeatureException;
 /**
  * @phpstan-template T of array
  */
-final class SqlQueryParser
-{
+final class SqlQueryParser {
 
 	/**
 	 * @phpstan-var SqlQueryParser<T>|null
@@ -22,6 +23,16 @@ final class SqlQueryParser
 	 * @phpstan-var T $parsedPayload
 	 */
 	private static array|null $parsedPayload = null;
+
+	private static Closure $preprocessorCallback;
+
+	/**
+	 * Parser is pretty slow.
+	 * We use preprocessor to not allow developer by mistake and run slow query parsing
+	 *
+	 * @var bool $preprocessorCalled
+	 */
+	private static bool $preprocessorCalled = false;
 	/**
 	 * @var PHPSQLParser
 	 */
@@ -72,12 +83,35 @@ final class SqlQueryParser
 	}
 
 	/**
+	 * @return bool
+	 */
+	public static function hasMatchPreprocessed(): bool {
+		$result = (bool)call_user_func(static::getInstance()::$preprocessorCallback);
+		static::getInstance()::$preprocessorCalled = $result;
+		return $result;
+	}
+
+	/**
+	 * @param Closure $callback
+	 * @return void
+	 */
+	public static function setMatchPreprocessor(Closure $callback): void {
+		static::getInstance()::$preprocessorCallback = $callback;
+	}
+
+	/**
 	 * @phpstan-param string $payload
 	 * @phpstan-return T
 	 * @param string $payload
 	 * return array|null
+	 * @throws GenericError
 	 */
 	public static function parse(string $payload): ?array {
+
+		if (static::getInstance()::$preprocessorCalled === false) {
+			throw GenericError::create("You can't run parser without preprocessing");
+		}
+
 		$parsedPayload = static::getInstance()::getParser()->parse($payload);
 
 		if (empty($parsedPayload)) {
