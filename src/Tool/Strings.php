@@ -11,6 +11,7 @@
 
 namespace Manticoresearch\Buddy\Core\Tool;
 
+/** @package Manticoresearch\Buddy\Core\Tool */
 final class Strings {
 
 	/**
@@ -42,5 +43,15 @@ final class Strings {
 	 */
 	public static function camelcaseBySeparator(string $string, string $separator = '_'): string {
 		return lcfirst(str_replace($separator, '', ucwords($string, $separator)));
+	}
+
+	/**
+   * Convert the class name to it's identifier with dash as separator
+	 *
+	 * @param string $string
+	 * @return string
+	 */
+	public static function classNameToIdentifier(string $string): string {
+		return strtolower(str_replace('\\', '-', $string));
 	}
 }
