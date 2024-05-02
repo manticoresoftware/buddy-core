@@ -5,7 +5,6 @@ namespace Manticoresearch\Buddy\Core\Tool;
 use Closure;
 use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\Error\QueryParseError;
-use Manticoresearch\Buddy\Core\Network\Request;
 use PHPSQLParser\PHPSQLCreator;
 use PHPSQLParser\PHPSQLParser;
 use PHPSQLParser\exceptions\UnsupportedFeatureException;
