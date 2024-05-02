@@ -102,7 +102,7 @@ final class SqlQueryParser {
 	public static function parse(string $payload): ?array {
 
 		if (static::getInstance()::$preprocessorCalled === false) {
-			throw GenericError::create("You can't run parser without preprocessing");
+			throw GenericError::create("You can't run PHP SQL parser without calling preprocessing");
 		}
 
 		$parsedPayload = static::getInstance()::getParser()->parse($payload);
