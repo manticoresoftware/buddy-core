@@ -5,6 +5,7 @@ namespace Manticoresearch\Buddy\Core\Tool;
 use Closure;
 use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\Error\QueryParseError;
+use Manticoresearch\Buddy\Core\Network\Request;
 use PHPSQLParser\PHPSQLCreator;
 use PHPSQLParser\PHPSQLParser;
 use PHPSQLParser\exceptions\UnsupportedFeatureException;
@@ -23,8 +24,6 @@ final class SqlQueryParser {
 	 * @phpstan-var T $parsedPayload
 	 */
 	private static array|null $parsedPayload = null;
-
-	private static Closure $preprocessorCallback;
 
 	/**
 	 * Parser is pretty slow.
@@ -83,21 +82,16 @@ final class SqlQueryParser {
 	}
 
 	/**
+	 * @param Closure $callback
+	 * @param mixed $args
 	 * @return bool
 	 */
-	public static function hasMatchPreprocessed(): bool {
-		$result = (bool)call_user_func(static::getInstance()::$preprocessorCallback);
+	public static function checkMatchPreprocessed(Closure $callback, mixed $args): bool {
+		$result = (bool)call_user_func($callback, $args);
 		static::getInstance()::$preprocessorCalled = $result;
 		return $result;
 	}
 
-	/**
-	 * @param Closure $callback
-	 * @return void
-	 */
-	public static function setMatchPreprocessor(Closure $callback): void {
-		static::getInstance()::$preprocessorCallback = $callback;
-	}
 
 	/**
 	 * @phpstan-param string $payload
