@@ -26,7 +26,7 @@ final class SqlQueryParser {
 
 	/**
 	 * Parser is pretty slow.
-	 * We use preprocessor to not allow developer by mistake and run slow query parsing
+	 * We use preprocessor to not allow developer by mistake run slow query parsing
 	 *
 	 * @var bool $preprocessorCalled
 	 */
