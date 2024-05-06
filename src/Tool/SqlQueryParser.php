@@ -12,25 +12,17 @@ use PHPSQLParser\exceptions\UnsupportedFeatureException;
 /**
  * @phpstan-template T of array
  */
-final class SqlQueryParser {
+final class SqlQueryParser
+{
 
 	/**
 	 * @phpstan-var SqlQueryParser<T>|null
 	 */
 	protected static self|null $instance = null;
-
 	/**
 	 * @phpstan-var T $parsedPayload
 	 */
 	private static array|null $parsedPayload = null;
-
-	/**
-	 * Parser is pretty slow.
-	 * We use preprocessor to not allow developer by mistake run slow query parsing
-	 *
-	 * @var bool $preprocessorCalled
-	 */
-	private static bool $preprocessorCalled = false;
 	/**
 	 * @var PHPSQLParser
 	 */
@@ -81,28 +73,19 @@ final class SqlQueryParser {
 	}
 
 	/**
-	 * @param Closure $callback
-	 * @param mixed $args
-	 * @return bool
-	 */
-	public static function checkMatchPreprocessed(Closure $callback, mixed $args): bool {
-		$result = (bool)call_user_func($callback, $args);
-		static::getInstance()::$preprocessorCalled = $result;
-		return $result;
-	}
-
-
-	/**
 	 * @phpstan-param string $payload
+	 * @phpstan-param Closure $preProcessorCallback
+	 * @phpstan-param mixed $args
 	 * @phpstan-return T
 	 * @param string $payload
 	 * return array|null
 	 * @throws GenericError
 	 */
-	public static function parse(string $payload): ?array {
+	public static function parse(string $payload, Closure $preProcessorCallback, mixed $args): ?array {
 
-		if (static::getInstance()::$preprocessorCalled === false) {
-			throw GenericError::create("You can't run PHP SQL parser without calling preprocessing");
+		$result = (bool)call_user_func($preProcessorCallback, $args);
+		if ($result === false) {
+			return null;
 		}
 
 		$parsedPayload = static::getInstance()::getParser()->parse($payload);
