@@ -2,6 +2,8 @@
 
 namespace Manticoresearch\Buddy\Core\Tool;
 
+use Closure;
+use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\Error\QueryParseError;
 use PHPSQLParser\PHPSQLCreator;
 use PHPSQLParser\PHPSQLParser;
@@ -17,7 +19,6 @@ final class SqlQueryParser
 	 * @phpstan-var SqlQueryParser<T>|null
 	 */
 	protected static self|null $instance = null;
-
 	/**
 	 * @phpstan-var T $parsedPayload
 	 */
@@ -73,11 +74,20 @@ final class SqlQueryParser
 
 	/**
 	 * @phpstan-param string $payload
+	 * @phpstan-param Closure $preProcessorCallback
+	 * @phpstan-param mixed $args
 	 * @phpstan-return T
 	 * @param string $payload
 	 * return array|null
+	 * @throws GenericError
 	 */
-	public static function parse(string $payload): ?array {
+	public static function parse(string $payload, Closure $preProcessorCallback, mixed $args): ?array {
+
+		$result = (bool)call_user_func($preProcessorCallback, $args);
+		if ($result === false) {
+			return null;
+		}
+
 		$parsedPayload = static::getInstance()::getParser()->parse($payload);
 
 		if (empty($parsedPayload)) {
