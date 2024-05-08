@@ -173,10 +173,10 @@ final class Request {
 			// We don't differentiate elastic-like insert and replace queries here
 			// since this is irrelevant for the following Buddy processing logic
 			$endpointBundle = ManticoreEndpoint::Insert;
-		} elseif (str_contains($path, '/_update/')) {
-			$endpointBundle = ManticoreEndpoint::Update;
 		} elseif (static::isElasticPath($path)) {
 			$endpointBundle = ManticoreEndpoint::Elastic;
+		} elseif (str_contains($path, '/_update/')) {
+			$endpointBundle = ManticoreEndpoint::Update;
 		} else {
 			$endpointBundle = match ($path) {
 				'bulk', '_bulk' => ManticoreEndpoint::Bulk,
@@ -215,7 +215,7 @@ final class Request {
 	 */
 	protected function isElasticPath(string $path): bool {
 		return str_starts_with($path, '_index_template/') || str_ends_with($path, '_nodes')
-		|| str_ends_with($path, '_xpack') || str_ends_with($path, '.kibana')
+		|| str_starts_with($path, '_xpack') || str_starts_with($path, '.kibana/')
 		|| str_ends_with($path, '/_mapping') || str_ends_with($path, '/_search')
 		|| str_ends_with($path, '.kibana') || str_starts_with($path, '.kibana_task_manager')
 		|| str_starts_with($path, '_cluster');

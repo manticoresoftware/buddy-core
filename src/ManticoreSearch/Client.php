@@ -127,7 +127,10 @@ class Client {
 		];
 
 		$context = stream_context_create($opts);
+		//$fullReqUrl = str_replace('9308','19308',$fullReqUrl);
+		Buddy::debug("TEST1 " . $fullReqUrl . " " . $request);
 		$result = file_get_contents($fullReqUrl, false, $context);
+		Buddy::debug("TEST2: $result");
 		if ($result === false) {
 			throw new ManticoreSearchClientError("Cannot connect to server at $fullReqUrl");
 		}
