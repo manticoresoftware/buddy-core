@@ -19,6 +19,7 @@ use Generator;
 use Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
 use RuntimeException;
+use Swoole\ConnectionPool;
 use Swoole\Coroutine\Http\Client as HttpClient;
 
 class Client {
@@ -44,8 +45,8 @@ class Client {
 	/** @var Settings */
 	protected Settings $settings;
 
-	/** @var Vector<HttpClient> $connections */
-	protected Vector $connections;
+	/** @var ConnectionPool $connectionPool */
+	protected ConnectionPool $connectionPool;
 
 	/**
 	 * Initialize the Client that will use provided
@@ -62,7 +63,11 @@ class Client {
 			$url = static::DEFAULT_URL;
 		}
 		$this->setServerUrl($url);
-		$this->connections = new Vector();
+		$this->connectionPool = new ConnectionPool(
+			function () {
+				return new HttpClient($this->host, $this->port);
+			}
+		);
 		$this->buddyVersion = Buddy::getVersion();
 	}
 
@@ -127,7 +132,6 @@ class Client {
 		$headers = [
 			'Content-Type' => $contentTypeHeader,
 			'User-Agent' => $userAgentHeader,
-			'Connection' => 'close',
 		];
 		$method = $isAsync ? 'runAsyncRequest' : 'runSyncRequest';
 		$this->response = $this->$method($path, $request, $headers);
@@ -149,16 +153,15 @@ class Client {
 	 * @return string
 	 */
 	protected function runAsyncRequest(string $path, string $request, array $headers): string {
-		$client = $this->getHttpClient();
-		defer(
-			function () use ($client) {
-				$this->connections->push($client);
-			}
-		);
+		/** @var HttpClient $client */
+		$client = $this->connectionPool->get();
+		$headers['Connection'] = 'keep-alive';
 		$client->set(['timeout' => -1]);
 		$client->setHeaders($headers);
 		$client->post("/$path", $request);
-		return $client->body;
+		$result = $client->body;
+		$this->connectionPool->put($client);
+		return $result;
 	}
 
 	/**
@@ -169,6 +172,7 @@ class Client {
 	 * @return string
 	 */
 	protected function runSyncRequest(string $path, string $request, array $headers): string {
+		$headers['Connection'] = 'close';
 		$contextOptions = [
 			'http' => [
 				'method' => 'POST',
@@ -325,18 +329,4 @@ class Client {
 		// Finally build the settings
 		return Settings::fromVector($settings);
 	}
-
-	/**
-	 * Get HTTP client to communicate and cache it for future use
-	 * @return HttpClient
-	 */
-	protected function getHttpClient(): HttpClient {
-		if ($this->connections->isEmpty()) {
-			$client = new HttpClient($this->host, $this->port);
-		} else {
-			$client = $this->connections->pop();
-		}
-		return $client;
-	}
-
 }
