@@ -45,9 +45,16 @@ class ClientTest extends TestCase {
 
 	public function testManticoreHTTPClientCreate(): void {
 		$this->assertInstanceOf(HTTPClient::class, $this->client);
+		$parsedUrl = parse_url(HTTPClient::DEFAULT_URL);
+		$host = $parsedUrl['host'];
+		$port = isset($parsedUrl['port']) ? $parsedUrl['port'] : 0;
 		$this->assertEquals(
-			HTTPClient::DEFAULT_URL,
-			$this->refCls->getProperty('url')->getValue($this->client)
+			$host,
+			$this->refCls->getProperty('host')->getValue($this->client)
+		);
+		$this->assertEquals(
+			$port,
+			$this->refCls->getProperty('port')->getValue($this->client)
 		);
 
 		$client = new HTTPClient(new Response(), 'localhost:1000');
@@ -57,7 +64,8 @@ class ClientTest extends TestCase {
 	public function testResponseUrlSetOk(): void {
 		$url = 'http://localhost:1000';
 		$this->client->setServerUrl($url);
-		$this->assertEquals($url, $this->refCls->getProperty('url')->getValue($this->client));
+		$this->assertEquals('localhost', $this->refCls->getProperty('host')->getValue($this->client));
+		$this->assertEquals(1000, $this->refCls->getProperty('port')->getValue($this->client));
 	}
 
 	// public function testResponseUrlSetFail(): void {
