@@ -18,6 +18,9 @@ use Generator;
 use Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
 use RuntimeException;
+use Swoole\Coroutine;
+use Swoole\Coroutine\Http\Client as HttpClient;
+use Swoole\Coroutine\WaitGroup;
 
 class Client {
 	const CONTENT_TYPE_HEADER = "Content-Type: application/x-www-form-urlencoded\n";
@@ -30,8 +33,11 @@ class Client {
 	 */
 	protected string $response;
 
-	/** @var string $url */
-	protected string $url;
+	/** @var string $host */
+	protected string $host;
+
+	/** @var int $port */
+	protected int $port;
 
 	/** @var string $buddyVersion */
 	protected string $buddyVersion;
@@ -73,11 +79,11 @@ class Client {
 	 * @return static
 	 */
 	public function setServerUrl($url): static {
-		if (!str_starts_with($url, self::URL_PREFIX)) {
-			$url = self::URL_PREFIX . $url;
+		if (str_starts_with($url, static::URL_PREFIX)) {
+			$url = substr($url, strlen(static::URL_PREFIX));
 		}
-
-		$this->url = $url;
+		$this->host = (string)strtok($url, ':');
+		$this->port = (int)strtok(':');
 		return $this;
 	}
 
@@ -103,40 +109,31 @@ class Client {
 		if (!$path) {
 			$path = Endpoint::Sql->value;
 		}
-
 		if (str_ends_with($path, 'bulk')) {
-			$header = "Content-Type: application/x-ndjson\n";
+			$contentTypeHeader = "application/x-ndjson";
+		} else {
+			$contentTypeHeader = "application/x-www-form-urlencoded";
 		}
 		// We urlencode all the requests to the /sql endpoint
 		if (str_starts_with($path, 'sql')) {
 			$request = 'query=' . urlencode($request);
 		}
-		$fullReqUrl = "{$this->url}/$path";
-		$agentHeader = $disableAgentHeader ? '' : "User-Agent: Manticore Buddy/{$this->buddyVersion}\n";
-		$header ??= "Content-Type: application/x-www-form-urlencoded\n";
-		$opts = [
-			'http' => [
-				'method'  => 'POST',
-				'header'  => $header
-					. $agentHeader
-					. "Connection: close\n",
-				'content' => $request,
-				// 'timeout' => static::HTTP_REQUEST_TIMEOUT,
-				'ignore_errors' => true,
-			],
-		];
+		$userAgentHeader = $disableAgentHeader ? '' : "Manticore Buddy/{$this->buddyVersion}";
+		$client = new HttpClient($this->host, $this->port);
+		$client->set(['timeout' => -1]);
+		$client->setHeaders(
+			[
+				'Content-Type' => $contentTypeHeader,
+				'User-Agent' => $userAgentHeader,
+				'Connection' => 'close',
+			]
+		);
+		$client->post("/$path", $request);
+		$this->response = $client->body;
 
-		$context = stream_context_create($opts);
-		$result = file_get_contents($fullReqUrl, false, $context);
-		if ($result === false) {
-			throw new ManticoreSearchClientError("Cannot connect to server at $fullReqUrl");
-		}
-
-		$this->response = (string)$result;
 		if ($this->response === '') {
 			throw new ManticoreSearchClientError('No response passed from server');
 		}
-
 		$result = $this->responseBuilder->fromBody($this->response);
 		$time = (int)((microtime(true) - $t) * 1000000);
 		Buddy::debugv("[{$time}µs] manticore request: $request");
@@ -223,7 +220,105 @@ class Client {
 	 */
 	public function getSettings(): Settings {
 		if (!isset($this->settings)) {
-			$this->settings = $this->fetchSettings();
+		$vector = new Vector();
+		$vector->push(
+			new Map(
+				[
+				'key' => 'configuration_file',
+				'value' => '/etc/manticoresearch/manticore.conf',
+				]
+			)
+		);
+		$vector->push(
+			new Map(
+				[
+				'key' => 'worker_pid',
+				'value' => 7718,
+				]
+			)
+		);
+		$vector->push(
+			new Map(
+				[
+				'key' => 'searchd.auto_schema',
+				'value' => '1',
+				]
+			)
+		);
+		$vector->push(
+			new Map(
+				[
+				'key' => 'searchd.listen',
+				'value' => '0.0.0:9308:http',
+				]
+			)
+		);
+		$vector->push(
+			new Map(
+				[
+				'key' => 'searchd.log',
+				'value' => '/var/log/manticore/searchd.log',
+				]
+			)
+		);
+		$vector->push(
+			new Map(
+				[
+				'key' => 'searchd.query_log',
+				'value' => '/var/log/manticore/query.log',
+				]
+			)
+		);
+		$vector->push(
+			new Map(
+				[
+				'key' => 'searchd.pid_file',
+				'value' => '/var/run/manticore/searchd.pid',
+				]
+			)
+		);
+		$vector->push(
+			new Map(
+				[
+				'key' => 'searchd.data_dir',
+				'value' => '/var/lib/manticore',
+				]
+			)
+		);
+		$vector->push(
+			new Map(
+				[
+				'key' => 'searchd.query_log_format',
+				'value' => 'sphinxql',
+				]
+			)
+		);
+		$vector->push(
+			new Map(
+				[
+				'key' => 'searchd.buddy_path',
+				'value' => 'manticore-executor /workdir/src/main.php --debug',
+				]
+			)
+		);
+		$vector->push(
+			new Map(
+				[
+				'key' => 'common.plugin_dir',
+				'value' => '/usr/local/lib/manticore',
+				]
+			)
+		);
+		$vector->push(
+			new Map(
+				[
+				'key' => 'common.lemmatizer_base',
+				'value' => '/usr/share/manticore/morph/',
+				]
+			)
+		);
+$this->settings = Settings::fromVector($vector);
+			//$this->settings = $this->fetchSettings();
 		}
 		return $this->settings;
 	}
