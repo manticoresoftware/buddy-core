@@ -83,7 +83,10 @@ class GetManticoreResponseTest extends TestCase {
 		$this->setUpServer(false);
 		$query = '{"index":"test","id":1,"doc":{"col1" : 1}}';
 		$mntResp = new Response(MockManticoreServer::JSON_INSERT_RESPONSE['ok']);
-		$this->assertEquals($mntResp, $this->httpClient->sendRequest($query, ManticoreEndpoint::Insert->value, isAsync: false));
+		$this->assertEquals(
+			$mntResp,
+			$this->httpClient->sendRequest($query, ManticoreEndpoint::Insert->value, isAsync: false)
+		);
 	}
 
 	public function testFailResponsesToJSONRequest(): void {
@@ -91,6 +94,9 @@ class GetManticoreResponseTest extends TestCase {
 		$this->setUpServer(true);
 		$query = '{"index":"test","id":1,"doc":{"col1" : 1}}';
 		$mntResp = new Response(MockManticoreServer::JSON_INSERT_RESPONSE['fail']);
-		$this->assertEquals($mntResp, $this->httpClient->sendRequest($query, ManticoreEndpoint::Insert->value, isAsync: false));
+		$this->assertEquals(
+			$mntResp,
+			$this->httpClient->sendRequest($query, ManticoreEndpoint::Insert->value, isAsync: false)
+		);
 	}
 }

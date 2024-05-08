@@ -47,7 +47,7 @@ class ClientTest extends TestCase {
 		$this->assertInstanceOf(HTTPClient::class, $this->client);
 		$parsedUrl = parse_url(HTTPClient::DEFAULT_URL);
 		$host = $parsedUrl['host'];
-		$port = isset($parsedUrl['port']) ? $parsedUrl['port'] : 0;
+		$port = $parsedUrl['port'];
 		$this->assertEquals(
 			$host,
 			$this->refCls->getProperty('host')->getValue($this->client)
