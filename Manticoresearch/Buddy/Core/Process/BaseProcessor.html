@@ -173,8 +173,7 @@
                 <div class="col-md-8">
                     <a href="#method_start">start</a>()
         
-                                            <p><p>Initialization step in case if it's required to run once on Buddy start
-It returns timers to register</p></p>                </div>
+                                            <p><p>Initialization step in case if it's required to run once on Buddy start.</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -184,7 +183,7 @@ It returns timers to register</p></p>                </div>
                 <div class="col-md-8">
                     <a href="#method_stop">stop</a>()
         
-                                            <p><p>Shutdown step that we run once buddy is stopping</p></p>                </div>
+                                            <p><p>Shutdown step that we run once the application is stopping</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -194,8 +193,8 @@ It returns timers to register</p></p>                </div>
                 <div class="col-md-8">
                     <a href="#method_pause">pause</a>()
         
-                                            <p><p>Temporarely suspend the process
-This is method to use with execute only</p></p>                </div>
+                                            <p><p>Temporarily suspend the process
+This is a method to be used with execute only</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -205,8 +204,8 @@ This is method to use with execute only</p></p>                </div>
                 <div class="col-md-8">
                     <a href="#method_parseMessage">parseMessage</a>(string $message = &#039;&#039;)
         
-                                            <p><p>Parse and return callable function to run in case we able to do so
-and not yet paused, when paused - do nothing</p></p>                </div>
+                                            <p><p>Parse and return callable function to run in case we are able to do so
+and the process is not yet paused. When paused, do nothing.</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -236,9 +235,7 @@ and not yet paused, when paused - do nothing</p></p>                </div>
                 <div class="col-md-8">
                     <a href="#method_addTicker">addTicker</a>(callable $fn, int $period = 1)
         
-                                            <p><p>Add self-removable ticker to run periodicaly
-Due to some limitations it should be called for methods
-That returns true to remove and false when keep going</p></p>                </div>
+                                            <p><p>Add self-removable ticker to run periodically.</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -249,7 +246,7 @@ That returns true to remove and false when keep going</p></p>                </d
                     <a href="#method_execute">execute</a>(string $method, array $args = [])
         
                                             <p><p>Just proxy to the internal process
-Reserverd events: pause, resume</p></p>                </div>
+Reserved events: pause, resume</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -338,7 +335,7 @@ Reserverd events: pause, resume</p></p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_start">
-        <div class="location">at line 44</div>
+        <div class="location">at line 46</div>
         <code>                    array
     <strong>start</strong>()
         </code>
@@ -349,8 +346,9 @@ Reserverd events: pause, resume</p></p>                </div>
             
 
         <div class="method-description">
-                            <p><p>Initialization step in case if it's required to run once on Buddy start
-It returns timers to register</p></p>                        
+                            <p><p>Initialization step in case if it's required to run once on Buddy start.</p></p>                <p><p>It returns timers to register.
+We should not invoke anything that must be invoked inside a coroutine here.
+All initialization should be done in a lazy load approach inside the forked process.</p></p>        
         </div>
         <div class="tags">
             
@@ -372,7 +370,7 @@ It returns timers to register</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_stop">
-        <div class="location">at line 52</div>
+        <div class="location">at line 54</div>
         <code>                    void
     <strong>stop</strong>()
         </code>
@@ -383,7 +381,7 @@ It returns timers to register</p></p>
             
 
         <div class="method-description">
-                            <p><p>Shutdown step that we run once buddy is stopping</p></p>                        
+                            <p><p>Shutdown step that we run once the application is stopping</p></p>                        
         </div>
         <div class="tags">
             
@@ -405,7 +403,7 @@ It returns timers to register</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_pause">
-        <div class="location">at line 61</div>
+        <div class="location">at line 63</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a>
     <strong>pause</strong>()
         </code>
@@ -416,8 +414,8 @@ It returns timers to register</p></p>
             
 
         <div class="method-description">
-                            <p><p>Temporarely suspend the process
-This is method to use with execute only</p></p>                        
+                            <p><p>Temporarily suspend the process
+This is a method to be used with execute only</p></p>                        
         </div>
         <div class="tags">
             
@@ -439,7 +437,7 @@ This is method to use with execute only</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_parseMessage">
-        <div class="location">at line 72</div>
+        <div class="location">at line 74</div>
         <code>                    callable|null
     <strong>parseMessage</strong>(string $message = &#039;&#039;)
         </code>
@@ -450,8 +448,8 @@ This is method to use with execute only</p></p>
             
 
         <div class="method-description">
-                            <p><p>Parse and return callable function to run in case we able to do so
-and not yet paused, when paused - do nothing</p></p>                        
+                            <p><p>Parse and return callable function to run in case we are able to do so
+and the process is not yet paused. When paused, do nothing.</p></p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -460,7 +458,7 @@ and not yet paused, when paused - do nothing</p></p>
                     <tr>
                 <td>string</td>
                 <td>$message</td>
-                <td><p>received message from the process read function</p></td>
+                <td><p>Received message from the process read function</p></td>
             </tr>
             </table>
 
@@ -483,7 +481,7 @@ and not yet paused, when paused - do nothing</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_resume">
-        <div class="location">at line 92</div>
+        <div class="location">at line 94</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a>
     <strong>resume</strong>()
         </code>
@@ -516,7 +514,7 @@ and not yet paused, when paused - do nothing</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_shutdown">
-        <div class="location">at line 101</div>
+        <div class="location">at line 103</div>
         <code>                    void
     <strong>shutdown</strong>()
         </code>
@@ -549,7 +547,7 @@ and not yet paused, when paused - do nothing</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_addTicker">
-        <div class="location">at line 114</div>
+        <div class="location">at line 116</div>
         <code>                    int
     <strong>addTicker</strong>(callable $fn, int $period = 1)
         </code>
@@ -560,9 +558,8 @@ and not yet paused, when paused - do nothing</p></p>
             
 
         <div class="method-description">
-                            <p><p>Add self-removable ticker to run periodicaly
-Due to some limitations it should be called for methods
-That returns true to remove and false when keep going</p></p>                        
+                            <p><p>Add self-removable ticker to run periodically.</p></p>                <p><p>Due to some limitations, it should be called for methods
+that return true to remove and false when keep going.</p></p>        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -599,7 +596,7 @@ That returns true to remove and false when keep going</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_execute">
-        <div class="location">at line 136</div>
+        <div class="location">at line 138</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a>
     <strong>execute</strong>(string $method, array $args = [])
         </code>
@@ -611,7 +608,7 @@ That returns true to remove and false when keep going</p></p>
 
         <div class="method-description">
                             <p><p>Just proxy to the internal process
-Reserverd events: pause, resume</p></p>                        
+Reserved events: pause, resume</p></p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -648,7 +645,7 @@ Reserverd events: pause, resume</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getProcess">
-        <div class="location">at line 145</div>
+        <div class="location">at line 147</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a>
     <strong>getProcess</strong>()
         </code>

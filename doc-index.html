@@ -98,7 +98,7 @@
                                                 <li><a href="#letterR">R</a></li>
                                                 <li><a href="#letterS">S</a></li>
                                                 <li><a href="#letterT">T</a></li>
-                                                <li><a href="#letterU">U</a></li>
+                                                <li class="disabled"><a href="#letterU">U</a></li>
                                                 <li><a href="#letterV">V</a></li>
                                                 <li><a href="#letterW">W</a></li>
                                                 <li class="disabled"><a href="#letterX">X</a></li>
@@ -119,9 +119,7 @@
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::autoloader</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
                     <dd><p>Implement own autoloader that will allow us to skip installed packages</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html#method_addTicker">
 <abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>::addTicker</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
-                    <dd><p>Add self-removable ticker to run periodicaly
-Due to some limitations it should be called for methods
-That returns true to remove and false when keep going</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_addWorker">
+                    <dd><p>Add self-removable ticker to run periodically.</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_addWorker">
 <abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr>::addWorker</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></em></dt>
                     <dd><p>Add extra worker to current process, so base processor can control it</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskPool.html#method_add">
 <abbr title="Manticoresearch\Buddy\Core\Task\TaskPool">TaskPool</abbr>::add</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskPool.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskPool">TaskPool</abbr></a></em></dt>
@@ -140,6 +138,8 @@ That returns true to remove and false when keep going</p></dd><dt><a href="Manti
         <dl id="indexC"><dt><a href="Manticoresearch/Buddy/Core/Error/GenericError.html#method_create">
 <abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>::create</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></em></dt>
                     <dd><p>Little helper to simplify error creation</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/ManticoreSearch.html">Manticoresearch\Buddy\Core\ManticoreSearch</a></em></dt>
+                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#property_connections">
+<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>#connections</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#property_columns">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>#columns</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html#property_configurationFile">
@@ -170,6 +170,8 @@ That returns true to remove and false when keep going</p></dd><dt><a href="Manti
 <abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr>::create</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></em></dt>
                     <dd><p>Create a new process based on the given instance</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_callbacks">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#callbacks</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
+                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_channel">
+<abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#channel</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_create">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::create</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd><p>Main entry point to create a task</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#property_columns">
@@ -207,7 +209,7 @@ That returns true to remove and false when keep going</p></dd><dt><a href="Manti
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html#method_execute">
 <abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>::execute</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
                     <dd><p>Just proxy to the internal process
-Reserverd events: pause, resume</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_execute">
+Reserved events: pause, resume</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_execute">
 <abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr>::execute</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></em></dt>
                     <dd><p>Execute the process event in a single one shot way</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_error">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#error</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
@@ -261,7 +263,9 @@ It can be useful for tests</p></dd><dt><a href="Manticoresearch/Buddy/Core/Netwo
                     <dd><p>Get all tables for this instance by running SHOW TABLES
 And filter only required types or any if not specified</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_getSettings">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>::getSettings</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
-                    <dd><p>Get cached settings or fetch if not</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#method_getError">
+                    <dd><p>Get cached settings or fetch if not</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_getHttpClient">
+<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>::getHttpClient</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
+                    <dd><p>Get HTTP client to communicate and cache it for future use</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#method_getError">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>::getError</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#method_getBody">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>::getBody</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
@@ -340,7 +344,9 @@ Normally it's done on initialization stage of the Buddy base</p></dd><dt><a href
                     <dd></dd>        </dl><h2 id="letterH">H</h2>
         <dl id="indexH"><dt><a href="Manticoresearch/Buddy/Core/Error/GenericError.html#method_hasResponseError">
 <abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>::hasResponseError</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></em></dt>
-                    <dd><p>Check if response error is set</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_hasTable">
+                    <dd><p>Check if response error is set</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#property_host">
+<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>#host</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_hasTable">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>::hasTable</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#method_hasError">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>::hasError</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
@@ -370,7 +376,7 @@ Normally it's done on initialization stage of the Buddy base</p></dd><dt><a href
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#id</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_isDeferred">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#isDeferred</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
-                    <dd><p>This flag shows that this task is deffered and
+                    <dd><p>This flag shows that this task is deferred and
 we can return response to client asap</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_isDeferred">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::isDeferred</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd><p>Check if this task is deferred</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_isRunning">
@@ -420,6 +426,8 @@ we can return response to client asap</p></dd><dt><a href="Manticoresearch/Buddy
 Useful to run hooks or something like this</p></dd>        </dl><h2 id="letterP">P</h2>
         <dl id="indexP"><dt>$<a href="Manticoresearch/Buddy/Core/Error/GenericError.html#property_proxyOriginalError">
 <abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>#proxyOriginalError</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></em></dt>
+                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#property_port">
+<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>#port</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#method_postprocess">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>::postprocess</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
                     <dd><p>Run callable function on results and postprocess it with custom logic</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#method_parse">
@@ -443,11 +451,11 @@ Useful to run hooks or something like this</p></dd>        </dl><h2 id="letterP"
 <abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>#process</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html#method_pause">
 <abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>::pause</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
-                    <dd><p>Temporarely suspend the process
-This is method to use with execute only</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html#method_parseMessage">
+                    <dd><p>Temporarily suspend the process
+This is a method to be used with execute only</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html#method_parseMessage">
 <abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>::parseMessage</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
-                    <dd><p>Parse and return callable function to run in case we able to do so
-and not yet paused, when paused - do nothing</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Process.html">Manticoresearch\Buddy\Core\Process</a></em></dt>
+                    <dd><p>Parse and return callable function to run in case we are able to do so
+and the process is not yet paused. When paused, do nothing.</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Process.html">Manticoresearch\Buddy\Core\Process</a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Process/Worker.html#property_process">
 <abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>#process</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_processCallbacks">
@@ -469,7 +477,11 @@ and not yet paused, when paused - do nothing</p></dd><dt><a href="Manticoresearc
 <abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>#responseErrorCode</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#property_response">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>#response</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
-                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/ManticoreSearch.html">Manticoresearch\Buddy\Core\ManticoreSearch</a></em></dt>
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_runAsyncRequest">
+<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>::runAsyncRequest</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
+                    <dd><p>Run the async request that is not blocking and must be run inside a coroutine</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_runSyncRequest">
+<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>::runSyncRequest</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
+                    <dd><p>Run the old styled sync client request that is blocking</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/ManticoreSearch.html">Manticoresearch\Buddy\Core\ManticoreSearch</a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Network/Request.html"><abbr title="Manticoresearch\Buddy\Core\Network\Request">Request</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Network.html">Manticoresearch\Buddy\Core\Network</a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Network/Request.html#method_removeComments">
 <abbr title="Manticoresearch\Buddy\Core\Network\Request">Request</abbr>::removeComments</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Network/Request.html"><abbr title="Manticoresearch\Buddy\Core\Network\Request">Request</abbr></a></em></dt>
@@ -576,10 +588,9 @@ cause parser usually leaves it as is ('manticore', "manticore", <code>manticore<
 <abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>::setClient</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
                     <dd><p>Set the client to the current process namespace</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html#method_start">
 <abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>::start</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
-                    <dd><p>Initialization step in case if it's required to run once on Buddy start
-It returns timers to register</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html#method_stop">
+                    <dd><p>Initialization step in case if it's required to run once on Buddy start.</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html#method_stop">
 <abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>::stop</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
-                    <dd><p>Shutdown step that we run once buddy is stopping</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html#method_shutdown">
+                    <dd><p>Shutdown step that we run once the application is stopping</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html#method_shutdown">
 <abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>::shutdown</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
                     <dd><p>Shutdown the server from the loop</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_startWorkers">
 <abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr>::startWorkers</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></em></dt>
@@ -629,9 +640,7 @@ Task::setSettings() with passed settings before you can use anything [main.php]<
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_toString">
 <abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr>::toString</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></em></dt>
                     <dd><p>Convert the initialized data into the final response encoded with JSON</p></dd>        </dl><h2 id="letterU">U</h2>
-        <dl id="indexU"><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#property_url">
-<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>#url</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
-                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_unregisterAutoload">
+        <dl id="indexU"><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_unregisterAutoload">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::unregisterAutoload</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
                     <dd><p>Remove old composer autoloader just to register new one</p></dd>        </dl><h2 id="letterV">V</h2>
         <dl id="indexV"><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_validateTables">
