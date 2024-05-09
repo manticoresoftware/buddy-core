@@ -135,7 +135,7 @@ final class TableFormatter {
 		$data = [];
 		$height = 1;
 		foreach ($this->keys as $key) {
-			$data[$key] = isset($row[$key]) ? static::valueToLines($row[$key]) : [''];
+			$data[$key] = isset($row[$key]) ? static::valueToLines((string)$row[$key]) : [''];
 			$height = max($height, sizeof($data[$key]));
 		}
 
@@ -179,7 +179,7 @@ final class TableFormatter {
 		}
 		$this->keys = array_keys($data[0]);
 		foreach ($this->keys as $key) {
-			$this->setWidth($key, $key);
+			$this->setWidth($key, (string)$key);
 		}
 		foreach ($data as $row) {
 			foreach ($row as $columnKey => $columnValue) {
