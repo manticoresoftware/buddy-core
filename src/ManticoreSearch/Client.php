@@ -9,6 +9,7 @@
  program; if you did not, you can find it at http://www.gnu.org/
  */
 
+
 namespace Manticoresearch\Buddy\Core\ManticoreSearch;
 
 use Ds\Map;
@@ -18,6 +19,8 @@ use Generator;
 use Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
 use RuntimeException;
+use Swoole\ConnectionPool;
+use Swoole\Coroutine\Http\Client as HttpClient;
 
 class Client {
 	const CONTENT_TYPE_HEADER = "Content-Type: application/x-www-form-urlencoded\n";
@@ -30,14 +33,20 @@ class Client {
 	 */
 	protected string $response;
 
-	/** @var string $url */
-	protected string $url;
+	/** @var string $host */
+	protected string $host;
+
+	/** @var int $port */
+	protected int $port;
 
 	/** @var string $buddyVersion */
 	protected string $buddyVersion;
 
 	/** @var Settings */
 	protected Settings $settings;
+
+	/** @var ConnectionPool $connectionPool */
+	protected ConnectionPool $connectionPool;
 
 	/**
 	 * Initialize the Client that will use provided
@@ -54,6 +63,11 @@ class Client {
 			$url = static::DEFAULT_URL;
 		}
 		$this->setServerUrl($url);
+		$this->connectionPool = new ConnectionPool(
+			function () {
+				return new HttpClient($this->host, $this->port);
+			}
+		);
 		$this->buddyVersion = Buddy::getVersion();
 	}
 
@@ -73,11 +87,11 @@ class Client {
 	 * @return static
 	 */
 	public function setServerUrl($url): static {
-		if (!str_starts_with($url, self::URL_PREFIX)) {
-			$url = self::URL_PREFIX . $url;
+		if (str_starts_with($url, static::URL_PREFIX)) {
+			$url = substr($url, strlen(static::URL_PREFIX));
 		}
-
-		$this->url = $url;
+		$this->host = (string)strtok($url, ':');
+		$this->port = (int)strtok(':');
 		return $this;
 	}
 
@@ -86,12 +100,14 @@ class Client {
 	 * @param string $request
 	 * @param ?string $path
 	 * @param bool $disableAgentHeader
+	 * @param bool $isAsync
 	 * @return Response
 	 */
 	public function sendRequest(
 		string $request,
 		?string $path = null,
 		bool $disableAgentHeader = false,
+		bool $isAsync = true,
 	): Response {
 		$t = microtime(true);
 		if (!isset($this->responseBuilder)) {
@@ -103,44 +119,79 @@ class Client {
 		if (!$path) {
 			$path = Endpoint::Sql->value;
 		}
-
 		if (str_ends_with($path, 'bulk')) {
-			$header = "Content-Type: application/x-ndjson\n";
+			$contentTypeHeader = 'application/x-ndjson';
+		} else {
+			$contentTypeHeader = 'application/x-www-form-urlencoded';
 		}
 		// We urlencode all the requests to the /sql endpoint
 		if (str_starts_with($path, 'sql')) {
 			$request = 'query=' . urlencode($request);
 		}
-		$fullReqUrl = "{$this->url}/$path";
-		$agentHeader = $disableAgentHeader ? '' : "User-Agent: Manticore Buddy/{$this->buddyVersion}\n";
-		$header ??= "Content-Type: application/x-www-form-urlencoded\n";
-		$opts = [
-			'http' => [
-				'method'  => 'POST',
-				'header'  => $header
-					. $agentHeader
-					. "Connection: close\n",
-				'content' => $request,
-				// 'timeout' => static::HTTP_REQUEST_TIMEOUT,
-				'ignore_errors' => true,
-			],
+		$userAgentHeader = $disableAgentHeader ? '' : "Manticore Buddy/{$this->buddyVersion}";
+		$headers = [
+			'Content-Type' => $contentTypeHeader,
+			'User-Agent' => $userAgentHeader,
 		];
+		$method = $isAsync ? 'runAsyncRequest' : 'runSyncRequest';
+		$this->response = $this->$method($path, $request, $headers);
 
-		$context = stream_context_create($opts);
-		$result = file_get_contents($fullReqUrl, false, $context);
-		if ($result === false) {
-			throw new ManticoreSearchClientError("Cannot connect to server at $fullReqUrl");
-		}
-
-		$this->response = (string)$result;
 		if ($this->response === '') {
 			throw new ManticoreSearchClientError('No response passed from server');
 		}
-
 		$result = $this->responseBuilder->fromBody($this->response);
 		$time = (int)((microtime(true) - $t) * 1000000);
 		Buddy::debugv("[{$time}µs] manticore request: $request");
 		return $result;
+	}
+
+	/**
+	 * Run the async request that is not blocking and must be run inside a coroutine
+	 * @param string $path
+	 * @param string $request
+	 * @param array<string,string> $headers
+	 * @return string
+	 */
+	protected function runAsyncRequest(string $path, string $request, array $headers): string {
+		/** @var HttpClient $client */
+		$client = $this->connectionPool->get();
+		$headers['Connection'] = 'keep-alive';
+		$client->set(['timeout' => -1]);
+		$client->setHeaders($headers);
+		$client->post("/$path", $request);
+		$result = $client->body;
+		$this->connectionPool->put($client);
+		return $result;
+	}
+
+	/**
+	 * Run the old styled sync client request that is blocking
+	 * @param string $path
+	 * @param string $request
+	 * @param array<string,string> $headers
+	 * @return string
+	 */
+	protected function runSyncRequest(string $path, string $request, array $headers): string {
+		$headers['Connection'] = 'close';
+		$contextOptions = [
+			'http' => [
+				'method' => 'POST',
+				'header' => implode(
+					"\r\n", array_map(
+						fn($key, $value) => "$key: $value",
+						array_keys($headers),
+						$headers
+					)
+				),
+				'content' => $request,
+				'timeout' => -1, // No timeout
+			],
+		];
+		$context = stream_context_create($contextOptions);
+		$protocol = static::URL_PREFIX;
+		$url = "{$protocol}{$this->host}:{$this->port}/$path";
+
+		return (string)file_get_contents($url, false, $context);
 	}
 
 	// Bunch of methods to help us reduce copy pasting, maybe we will move it out to separate class
@@ -233,7 +284,7 @@ class Client {
 	 * @return Settings
 	 */
 	protected function fetchSettings(): Settings {
-		$resp = $this->sendRequest('SHOW SETTINGS');
+		$resp = $this->sendRequest('SHOW SETTINGS', isAsync: false);
 		/** @var array{0:array{columns:array<mixed>,data:array{Setting_name:string,Value:string}}} */
 		$data = (array)json_decode($resp->getBody(), true);
 		$settings = new Vector();
@@ -261,7 +312,7 @@ class Client {
 		}
 
 		// Gather variables also
-		$resp = $this->sendRequest('SHOW VARIABLES');
+		$resp = $this->sendRequest('SHOW VARIABLES', isAsync: false);
 		/** @var array{0:array{columns:array<mixed>,data:array{Setting_name:string,Value:string}}} */
 		$data = (array)json_decode($resp->getBody(), true);
 		foreach ($data[0]['data'] as ['Variable_name' => $key, 'Value' => $value]) {
@@ -278,5 +329,4 @@ class Client {
 		// Finally build the settings
 		return Settings::fromVector($settings);
 	}
-
 }

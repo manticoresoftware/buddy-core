@@ -37,8 +37,10 @@ abstract class BaseProcessor {
 	}
 
 	/**
-	 * Initialization step in case if it's required to run once on Buddy start
-	 * It returns timers to register
+	 * Initialization step in case if it's required to run once on Buddy start.
+	 * It returns timers to register.
+	 * We should not invoke anything that must be invoked inside a coroutine here.
+	 * All initialization should be done in a lazy load approach inside the forked process.
 	 * @return array<array{0:callable,1:int}>
 	 */
 	public function start(): array {
@@ -46,7 +48,7 @@ abstract class BaseProcessor {
 	}
 
 	/**
-	 * Shutdown step that we run once buddy is stopping
+	 * Shutdown step that we run once the application is stopping
 	 * @return void
 	 */
 	public function stop(): void {
@@ -54,8 +56,8 @@ abstract class BaseProcessor {
 	}
 
 	/**
-	 * Temporarely suspend the process
-	 * This is method to use with execute only
+	 * Temporarily suspend the process
+	 * This is a method to be used with execute only
 	 * @return static
 	 */
 	public function pause(): static {
@@ -64,9 +66,9 @@ abstract class BaseProcessor {
 	}
 
 	/**
-	 * Parse and return callable function to run in case we able to do so
-	 * and not yet paused, when paused - do nothing
-	 * @param string $message received message from the process read function
+	 * Parse and return callable function to run in case we are able to do so
+	 * and the process is not yet paused. When paused, do nothing.
+	 * @param string $message Received message from the process read function
 	 * @return ?callable
 	 */
 	public function parseMessage(string $message = ''): ?callable {
@@ -104,9 +106,9 @@ abstract class BaseProcessor {
 	}
 
 	/**
-	 * Add self-removable ticker to run periodicaly
-	 * Due to some limitations it should be called for methods
-	 * That returns true to remove and false when keep going
+	 * Add self-removable ticker to run periodically.
+	 * Due to some limitations, it should be called for methods
+	 * that return true to remove and false when keep going.
 	 * @param callable    $fn
 	 * @param int $period
 	 * @return int identifier of the ticker
@@ -128,9 +130,9 @@ abstract class BaseProcessor {
 
 	/**
 	 * Just proxy to the internal process
-	 * Reserverd events: pause, resume
+	 * Reserved events: pause, resume
 	 * @param  string $method
-	 * @param  array<mixed>  $args
+	 * @param  array<mixed> $args
 	 * @return static
 	 */
 	public function execute(string $method, array $args = []): static {

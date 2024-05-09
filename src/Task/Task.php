@@ -15,7 +15,7 @@ use Closure;
 use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Settings;
 use RuntimeException;
-use Swoole\Coroutine;
+use Swoole\Coroutine\Channel;
 use Throwable;
 
 /**
@@ -28,7 +28,7 @@ final class Task {
 	protected int $id;
 
 	/**
-	 * This flag shows that this task is deffered and
+	 * This flag shows that this task is deferred and
 	 * we can return response to client asap
 	 *
 	 * @var bool $isDeferred
@@ -40,6 +40,9 @@ final class Task {
 
 	/** @var int|false $future */
 	protected int|false $future;
+
+	/** @var Channel $channel */
+	protected Channel $channel;
 
 	/**
 	 * Current task status
@@ -60,6 +63,7 @@ final class Task {
 	public function __construct(protected array $argv = []) {
 		$this->id = (int)(microtime(true) * 10000);
 		$this->status = TaskStatus::Pending;
+		$this->channel = new Channel(1);
 	}
 
 	/**
@@ -133,10 +137,10 @@ final class Task {
 							$e->setResponseError($errorMessage);
 						}
 					}
-
 					$this->error = $e;
 				} finally {
 					$this->status = TaskStatus::Finished;
+					$this->channel->push(1);
 				}
 			}
 		);
@@ -160,7 +164,7 @@ final class Task {
 	 * @throws GenericError
 	 */
 	public function wait(bool $exceptionOnError = false): TaskStatus {
-		Coroutine::join([$this->future]);
+		$this->channel->pop();
 		if ($exceptionOnError && !$this->isSucceed()) {
 			throw $this->getError();
 		}

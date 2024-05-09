@@ -149,7 +149,7 @@ final class Process {
 					}
 					$fn();
 				}
-			}, true, 2
+			}, true, 2, true
 		);
 		return new static($process);
 	}
