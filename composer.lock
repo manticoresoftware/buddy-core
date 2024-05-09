@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8cbdf4ba964695831f1544f059cca064",
+    "content-hash": "8950676fc3b197905983243febf9a429",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -163,12 +163,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "2fe3244ddb68aa5260844a57c18ff027e279b83d"
+                "reference": "829e0e767ffc4533904612668ea9479dba8f3997"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/2fe3244ddb68aa5260844a57c18ff027e279b83d",
-                "reference": "2fe3244ddb68aa5260844a57c18ff027e279b83d",
+                "url": "https://api.github.com/repos/composer/composer/zipball/829e0e767ffc4533904612668ea9479dba8f3997",
+                "reference": "829e0e767ffc4533904612668ea9479dba8f3997",
                 "shasum": ""
             },
             "require": {
@@ -270,7 +270,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-05-04T21:03:15+00:00"
+            "time": "2024-05-08T12:27:20+00:00"
         },
         {
             "name": "composer/metadata-minifier",
@@ -579,16 +579,16 @@
         },
         {
             "name": "composer/xdebug-handler",
-            "version": "3.0.4",
+            "version": "3.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/xdebug-handler.git",
-                "reference": "4f988f8fdf580d53bdb2d1278fe93d1ed5462255"
+                "reference": "6c1925561632e83d60a44492e0b344cf48ab85ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/4f988f8fdf580d53bdb2d1278fe93d1ed5462255",
-                "reference": "4f988f8fdf580d53bdb2d1278fe93d1ed5462255",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/6c1925561632e83d60a44492e0b344cf48ab85ef",
+                "reference": "6c1925561632e83d60a44492e0b344cf48ab85ef",
                 "shasum": ""
             },
             "require": {
@@ -625,7 +625,7 @@
             "support": {
                 "irc": "ircs://irc.libera.chat:6697/composer",
                 "issues": "https://github.com/composer/xdebug-handler/issues",
-                "source": "https://github.com/composer/xdebug-handler/tree/3.0.4"
+                "source": "https://github.com/composer/xdebug-handler/tree/3.0.5"
             },
             "funding": [
                 {
@@ -641,7 +641,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-26T18:29:49+00:00"
+            "time": "2024-05-06T16:37:16+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -715,16 +715,16 @@
         },
         {
             "name": "manticoresoftware/php-sql-parser",
-            "version": "v4.6.0-patch8",
+            "version": "v4.6.0-patch9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/manticoresoftware/PHP-SQL-Parser.git",
-                "reference": "2e0901fc73211316b94f5685998b0c2643cfd2c6"
+                "reference": "0cbe7e54224e2f0a60fbd91823d1dc5e4390a536"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/manticoresoftware/PHP-SQL-Parser/zipball/2e0901fc73211316b94f5685998b0c2643cfd2c6",
-                "reference": "2e0901fc73211316b94f5685998b0c2643cfd2c6",
+                "url": "https://api.github.com/repos/manticoresoftware/PHP-SQL-Parser/zipball/0cbe7e54224e2f0a60fbd91823d1dc5e4390a536",
+                "reference": "0cbe7e54224e2f0a60fbd91823d1dc5e4390a536",
                 "shasum": ""
             },
             "require": {
@@ -771,7 +771,7 @@
                 "issues": "https://github.com/greenlion/PHP-SQL-Parser/issues",
                 "source": "https://github.com/greenlion/PHP-SQL-Parser"
             },
-            "time": "2024-04-30T20:48:10+00:00"
+            "time": "2024-05-09T12:54:25+00:00"
         },
         {
             "name": "php-ds/php-ds",
@@ -2862,12 +2862,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "78d3d9945d8053be07b6f0018587314a59f7fc1d"
+                "reference": "7069037f146592c198433dd8e2941252e5a29212"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/78d3d9945d8053be07b6f0018587314a59f7fc1d",
-                "reference": "78d3d9945d8053be07b6f0018587314a59f7fc1d",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/7069037f146592c198433dd8e2941252e5a29212",
+                "reference": "7069037f146592c198433dd8e2941252e5a29212",
                 "shasum": ""
             },
             "require": {
@@ -2913,7 +2913,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-05-06T13:10:15+00:00"
+            "time": "2024-05-09T08:18:05+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
