@@ -149,20 +149,11 @@
                 <td></td>
             </tr>
                     <tr>
-                <td class="type" id="property_host">
+                <td class="type" id="property_url">
                                         protected                                        string
                                                                                 
                                     </td>
-                <td>$host</td>
-                <td class="last"></td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td class="type" id="property_port">
-                                        protected                                        int
-                                                                                
-                                    </td>
-                <td>$port</td>
+                <td>$url</td>
                 <td class="last"></td>
                 <td></td>
             </tr>
@@ -181,15 +172,6 @@
                                                                                 
                                     </td>
                 <td>$settings</td>
-                <td class="last"></td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td class="type" id="property_connectionPool">
-                                        protected                                        <abbr title="Swoole\ConnectionPool">ConnectionPool</abbr>
-                                                                                
-                                    </td>
-                <td>$connectionPool</td>
                 <td class="last"></td>
                 <td></td>
             </tr>
@@ -234,29 +216,9 @@
                     <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_sendRequest">sendRequest</a>(string $request, string|null $path = null, bool $disableAgentHeader = false, bool $isAsync = true)
+                    <a href="#method_sendRequest">sendRequest</a>(string $request, string|null $path = null, bool $disableAgentHeader = false)
         
                                             <p><p>Send the request where request represents the SQL query to be send</p></p>                </div>
-                <div class="col-md-2"></div>
-            </div>
-                    <div class="row">
-                <div class="col-md-2 type">
-                    string
-                </div>
-                <div class="col-md-8">
-                    <a href="#method_runAsyncRequest">runAsyncRequest</a>(string $path, string $request, array $headers)
-        
-                                            <p><p>Run the async request that is not blocking and must be run inside a coroutine</p></p>                </div>
-                <div class="col-md-2"></div>
-            </div>
-                    <div class="row">
-                <div class="col-md-2 type">
-                    string
-                </div>
-                <div class="col-md-8">
-                    <a href="#method_runSyncRequest">runSyncRequest</a>(string $path, string $request, array $headers)
-        
-                                            <p><p>Run the old styled sync client request that is blocking</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -320,7 +282,7 @@ or validate and throw error if we have missing table in the list</p></p>        
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line 57</div>
+        <div class="location">at line 48</div>
         <code>                    void
     <strong>__construct</strong>(<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>|null $responseBuilder = null, string|null $url = null)
         </code>
@@ -368,7 +330,7 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_setResponseBuilder">
-        <div class="location">at line 79</div>
+        <div class="location">at line 65</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
     <strong>setResponseBuilder</strong>(<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a> $responseBuilder)
         </code>
@@ -411,7 +373,7 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_setServerUrl">
-        <div class="location">at line 89</div>
+        <div class="location">at line 75</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
     <strong>setServerUrl</strong>(string $url)
         </code>
@@ -454,9 +416,9 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_sendRequest">
-        <div class="location">at line 106</div>
+        <div class="location">at line 91</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
-    <strong>sendRequest</strong>(string $request, string|null $path = null, bool $disableAgentHeader = false, bool $isAsync = true)
+    <strong>sendRequest</strong>(string $request, string|null $path = null, bool $disableAgentHeader = false)
         </code>
     </h3>
     <div class="details">    
@@ -486,11 +448,6 @@ or validate and throw error if we have missing table in the list</p></p>        
                 <td>$disableAgentHeader</td>
                 <td></td>
             </tr>
-                    <tr>
-                <td>bool</td>
-                <td>$isAsync</td>
-                <td></td>
-            </tr>
             </table>
 
             
@@ -511,114 +468,8 @@ or validate and throw error if we have missing table in the list</p></p>        
 
             </div>
                     <div class="method-item">
-                    <h3 id="method_runAsyncRequest">
-        <div class="location">at line 155</div>
-        <code>            protected        string
-    <strong>runAsyncRequest</strong>(string $path, string $request, array $headers)
-        </code>
-    </h3>
-    <div class="details">    
-            
-    
-            
-
-        <div class="method-description">
-                            <p><p>Run the async request that is not blocking and must be run inside a coroutine</p></p>                        
-        </div>
-        <div class="tags">
-                            <h4>Parameters</h4>
-
-                    <table class="table table-condensed">
-                    <tr>
-                <td>string</td>
-                <td>$path</td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td>string</td>
-                <td>$request</td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td>array</td>
-                <td>$headers</td>
-                <td></td>
-            </tr>
-            </table>
-
-            
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td>string</td>
-            <td></td>
-        </tr>
-    </table>
-
-            
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
-                    <h3 id="method_runSyncRequest">
-        <div class="location">at line 174</div>
-        <code>            protected        string
-    <strong>runSyncRequest</strong>(string $path, string $request, array $headers)
-        </code>
-    </h3>
-    <div class="details">    
-            
-    
-            
-
-        <div class="method-description">
-                            <p><p>Run the old styled sync client request that is blocking</p></p>                        
-        </div>
-        <div class="tags">
-                            <h4>Parameters</h4>
-
-                    <table class="table table-condensed">
-                    <tr>
-                <td>string</td>
-                <td>$path</td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td>string</td>
-                <td>$request</td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td>array</td>
-                <td>$headers</td>
-                <td></td>
-            </tr>
-            </table>
-
-            
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td>string</td>
-            <td></td>
-        </tr>
-    </table>
-
-            
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
                     <h3 id="method_getAllTables">
-        <div class="location">at line 210</div>
+        <div class="location">at line 159</div>
         <code>                    <a target="_blank" rel="noopener" href="https://www.php.net/Generator">Generator</a>
     <strong>getAllTables</strong>(array $types = [])
         </code>
@@ -675,7 +526,7 @@ And filter only required types or any if not specified</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_validateTables">
-        <div class="location">at line 235</div>
+        <div class="location">at line 184</div>
         <code>                    array
     <strong>validateTables</strong>(array $tables = [], array $types = [])
         </code>
@@ -741,7 +592,7 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_hasTable">
-        <div class="location">at line 265</div>
+        <div class="location">at line 214</div>
         <code>                    bool
     <strong>hasTable</strong>(string $table)
         </code>
@@ -785,7 +636,7 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getSettings">
-        <div class="location">at line 275</div>
+        <div class="location">at line 224</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a>
     <strong>getSettings</strong>()
         </code>
@@ -818,7 +669,7 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fetchSettings">
-        <div class="location">at line 286</div>
+        <div class="location">at line 235</div>
         <code>            protected        <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a>
     <strong>fetchSettings</strong>()
         </code>
