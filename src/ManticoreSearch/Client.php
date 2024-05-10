@@ -48,6 +48,9 @@ class Client {
 	/** @var ConnectionPool $connectionPool */
 	protected ConnectionPool $connectionPool;
 
+	/** @var bool $isAsync */
+	protected bool $isAsync = true;
+
 	/**
 	 * Initialize the Client that will use provided
 	 * @param ?Response $responseBuilder
@@ -69,6 +72,16 @@ class Client {
 			}
 		);
 		$this->buddyVersion = Buddy::getVersion();
+	}
+
+	/**
+	 * Set to use async mode or not in all next requests
+	 * @param bool $value
+	 * @return static
+	 */
+	public function setIsAsync(bool $value): static {
+		$this->isAsync = $value;
+		return $this;
 	}
 
 	/**
@@ -100,14 +113,12 @@ class Client {
 	 * @param string $request
 	 * @param ?string $path
 	 * @param bool $disableAgentHeader
-	 * @param bool $isAsync
 	 * @return Response
 	 */
 	public function sendRequest(
 		string $request,
 		?string $path = null,
-		bool $disableAgentHeader = false,
-		bool $isAsync = true,
+		bool $disableAgentHeader = false
 	): Response {
 		$t = microtime(true);
 		if (!isset($this->responseBuilder)) {
@@ -133,7 +144,7 @@ class Client {
 			'Content-Type' => $contentTypeHeader,
 			'User-Agent' => $userAgentHeader,
 		];
-		$method = $isAsync ? 'runAsyncRequest' : 'runSyncRequest';
+		$method = $this->isAsync ? 'runAsyncRequest' : 'runSyncRequest';
 		$this->response = $this->$method($path, $request, $headers);
 
 		if ($this->response === '') {
@@ -284,7 +295,9 @@ class Client {
 	 * @return Settings
 	 */
 	protected function fetchSettings(): Settings {
-		$resp = $this->sendRequest('SHOW SETTINGS', isAsync: false);
+		$oldIsAsync = $this->isAsync;
+		$this->setIsAsync(false);
+		$resp = $this->sendRequest('SHOW SETTINGS');
 		/** @var array{0:array{columns:array<mixed>,data:array{Setting_name:string,Value:string}}} */
 		$data = (array)json_decode($resp->getBody(), true);
 		$settings = new Vector();
@@ -312,7 +325,7 @@ class Client {
 		}
 
 		// Gather variables also
-		$resp = $this->sendRequest('SHOW VARIABLES', isAsync: false);
+		$resp = $this->sendRequest('SHOW VARIABLES');
 		/** @var array{0:array{columns:array<mixed>,data:array{Setting_name:string,Value:string}}} */
 		$data = (array)json_decode($resp->getBody(), true);
 		foreach ($data[0]['data'] as ['Variable_name' => $key, 'Value' => $value]) {
@@ -326,6 +339,7 @@ class Client {
 			);
 		}
 
+		$this->setIsAsync($oldIsAsync);
 		// Finally build the settings
 		return Settings::fromVector($settings);
 	}

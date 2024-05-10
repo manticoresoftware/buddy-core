@@ -37,6 +37,7 @@ class GetManticoreResponseTest extends TestCase {
 		self::setBuddyVersion();
 		$serverUrl = self::setUpMockManticoreServer($isInErrorMode);
 		$this->httpClient = new HTTPClient(new Response(), $serverUrl);
+		$this->httpClient->setIsAsync(false);
 	}
 
 	protected function tearDown(): void {
@@ -49,15 +50,15 @@ class GetManticoreResponseTest extends TestCase {
 
 		$query = 'CREATE TABLE IF NOT EXISTS test(col1 text)';
 		$mntResp = new Response(MockManticoreServer::CREATE_RESPONSE['ok']);
-		$this->assertEquals($mntResp, $this->httpClient->sendRequest($query, isAsync: false));
+		$this->assertEquals($mntResp, $this->httpClient->sendRequest($query));
 
 		$query = 'INSERT INTO test(col1) VALUES("test")';
 		$mntResp = new Response(MockManticoreServer::SQL_INSERT_RESPONSE['ok']);
-		$this->assertEquals($mntResp, $this->httpClient->sendRequest($query, isAsync: false));
+		$this->assertEquals($mntResp, $this->httpClient->sendRequest($query));
 
 		$query = 'SELECT * FROM @@system.sessions';
 		$mntResp = new Response(MockManticoreServer::SHOW_QUERIES_RESPONSE['ok']);
-		$this->assertEquals($mntResp, $this->httpClient->sendRequest($query, isAsync: false));
+		$this->assertEquals($mntResp, $this->httpClient->sendRequest($query));
 	}
 
 	public function testFailResponsesToSQLRequest(): void {
@@ -66,16 +67,16 @@ class GetManticoreResponseTest extends TestCase {
 
 		$query = 'CREATE TABLE IF NOT EXISTS testcol1 text';
 		$mntResp = new Response(MockManticoreServer::CREATE_RESPONSE['fail']);
-		$this->assertEquals($mntResp, $this->httpClient->sendRequest($query, isAsync: false));
+		$this->assertEquals($mntResp, $this->httpClient->sendRequest($query));
 
 		$query = 'INSERT INTO test(col1) VALUES("test")';
 		$mntResp = new Response(MockManticoreServer::SQL_INSERT_RESPONSE['fail']);
-		$this->assertEquals($mntResp, $this->httpClient->sendRequest($query, isAsync: false));
+		$this->assertEquals($mntResp, $this->httpClient->sendRequest($query));
 
 		$query = 'SELECT connid AS ID FROM @@system.sessions';
 		$this->expectException(ManticoreSearchClientError::class);
 		$this->expectExceptionMessage('No response passed from server');
-		$this->httpClient->sendRequest($query, isAsync: false);
+		$this->httpClient->sendRequest($query);
 	}
 
 	public function testOkResponsesToJSONRequest(): void {
@@ -85,7 +86,7 @@ class GetManticoreResponseTest extends TestCase {
 		$mntResp = new Response(MockManticoreServer::JSON_INSERT_RESPONSE['ok']);
 		$this->assertEquals(
 			$mntResp,
-			$this->httpClient->sendRequest($query, ManticoreEndpoint::Insert->value, isAsync: false)
+			$this->httpClient->sendRequest($query, ManticoreEndpoint::Insert->value)
 		);
 	}
 
@@ -96,7 +97,7 @@ class GetManticoreResponseTest extends TestCase {
 		$mntResp = new Response(MockManticoreServer::JSON_INSERT_RESPONSE['fail']);
 		$this->assertEquals(
 			$mntResp,
-			$this->httpClient->sendRequest($query, ManticoreEndpoint::Insert->value, isAsync: false)
+			$this->httpClient->sendRequest($query, ManticoreEndpoint::Insert->value)
 		);
 	}
 }
