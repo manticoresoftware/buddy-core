@@ -20,6 +20,7 @@ use Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
 use RuntimeException;
 use Swoole\ConnectionPool;
+use Swoole\Coroutine;
 use Swoole\Coroutine\Http\Client as HttpClient;
 
 class Client {
@@ -72,16 +73,6 @@ class Client {
 			}
 		);
 		$this->buddyVersion = Buddy::getVersion();
-	}
-
-	/**
-	 * Set to use async mode or not in all next requests
-	 * @param bool $value
-	 * @return static
-	 */
-	public function setIsAsync(bool $value): static {
-		$this->isAsync = $value;
-		return $this;
 	}
 
 	/**
@@ -144,7 +135,8 @@ class Client {
 			'Content-Type' => $contentTypeHeader,
 			'User-Agent' => $userAgentHeader,
 		];
-		$method = $this->isAsync ? 'runAsyncRequest' : 'runSyncRequest';
+		$isAsync = Coroutine::getCid() > 0;
+		$method = $isAsync ? 'runAsyncRequest' : 'runSyncRequest';
 		$this->response = $this->$method($path, $request, $headers);
 
 		if ($this->response === '') {
@@ -196,6 +188,7 @@ class Client {
 				),
 				'content' => $request,
 				'timeout' => -1, // No timeout
+				'ignore_errors' => true,
 			],
 		];
 		$context = stream_context_create($contextOptions);
@@ -295,8 +288,6 @@ class Client {
 	 * @return Settings
 	 */
 	protected function fetchSettings(): Settings {
-		$oldIsAsync = $this->isAsync;
-		$this->setIsAsync(false);
 		$resp = $this->sendRequest('SHOW SETTINGS');
 		/** @var array{0:array{columns:array<mixed>,data:array{Setting_name:string,Value:string}}} */
 		$data = (array)json_decode($resp->getBody(), true);
@@ -339,7 +330,6 @@ class Client {
 			);
 		}
 
-		$this->setIsAsync($oldIsAsync);
 		// Finally build the settings
 		return Settings::fromVector($settings);
 	}

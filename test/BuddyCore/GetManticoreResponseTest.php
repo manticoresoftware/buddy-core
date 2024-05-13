@@ -37,7 +37,6 @@ class GetManticoreResponseTest extends TestCase {
 		self::setBuddyVersion();
 		$serverUrl = self::setUpMockManticoreServer($isInErrorMode);
 		$this->httpClient = new HTTPClient(new Response(), $serverUrl);
-		$this->httpClient->setIsAsync(false);
 	}
 
 	protected function tearDown(): void {
