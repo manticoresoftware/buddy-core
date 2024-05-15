@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="robots" content="index, follow, all" />
-    <title>Manticoresearch\Buddy\Core\Process\Worker | Manticore Buddy Core Docs</title>
+    <title>Manticoresearch\Buddy\Core\Process\WorkerRunnerInterface | Manticore Buddy Core Docs</title>
 
             <link rel="stylesheet" type="text/css" href="../../../../css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="../../../../css/bootstrap-theme.min.css">
@@ -19,7 +19,7 @@
 
     </head>
 
-    <body id="class" data-name="class:Manticoresearch_Buddy_Core_Process_Worker" data-root-path="../../../../" data-search-index-url="../../../../doctum-search.json">
+    <body id="class" data-name="class:Manticoresearch_Buddy_Core_Process_WorkerRunnerInterface" data-root-path="../../../../" data-search-index-url="../../../../doctum-search.json">
             <div id="content">
         <div id="left-column">
                 <div id="control-panel">
@@ -74,19 +74,19 @@
 
                         <div class="namespace-breadcrumbs">
             <ol class="breadcrumb">
-                <li><span class="label label-default">class</span></li>
-                        <li><a href="../../../../Manticoresearch.html">Manticoresearch</a></li><li class="backslash">\</li><li><a href="../../../../Manticoresearch/Buddy.html">Buddy</a></li><li class="backslash">\</li><li><a href="../../../../Manticoresearch/Buddy/Core.html">Core</a></li><li class="backslash">\</li><li><a href="../../../../Manticoresearch/Buddy/Core/Process.html">Process</a></li><li class="backslash">\</li><li>Worker</li>
+                <li><span class="label label-default">interface</span></li>
+                        <li><a href="../../../../Manticoresearch.html">Manticoresearch</a></li><li class="backslash">\</li><li><a href="../../../../Manticoresearch/Buddy.html">Buddy</a></li><li class="backslash">\</li><li><a href="../../../../Manticoresearch/Buddy/Core.html">Core</a></li><li class="backslash">\</li><li><a href="../../../../Manticoresearch/Buddy/Core/Process.html">Process</a></li><li class="backslash">\</li><li>WorkerRunnerInterface</li>
             </ol>
         </div>
                 <div id="page-content">
     <div class="page-header">
-        <h1>Worker    
+        <h1>WorkerRunnerInterface    
             </h1>
     </div>
 
     
-    <p>final         class
-    <strong>Worker</strong>
+    <p>        interface
+    <strong>WorkerRunnerInterface</strong>
 </p>
 
         
@@ -95,66 +95,45 @@
         
 
             <div class="description">
-            <p><p>This is just wrapper to hide Swoole to external plugins</p></p>                    </div>
+            <p><p>The worker runner is processed in the following way. First, we call init method and after run.</p></p>            <p><p>When we get some signal to stop it we call stop or stop is also called when run returned control to the main process.</p></p>        </div>
             
         
     
-            <h2>Properties</h2>
-
-            <table class="table table-condensed">
-                    <tr>
-                <td class="type" id="property_process">
-                                        protected                                        <abbr title="Swoole\Process">Process</abbr>
-                                                                                
-                                    </td>
-                <td>$process</td>
-                <td class="last"></td>
-                <td></td>
-            </tr>
-            </table>
-
     
             <h2>Methods</h2>
 
             <div class="container-fluid underlined">
                     <div class="row">
                 <div class="col-md-2 type">
-                    
+                    void
                 </div>
                 <div class="col-md-8">
-                    <a href="#method___construct">__construct</a>(string $id, <a href="../../../../Manticoresearch/Buddy/Core/Process/WorkerRunnerInterface.html"><abbr title="Manticoresearch\Buddy\Core\Process\WorkerRunnerInterface">WorkerRunnerInterface</abbr></a> $runner)
+                    <a href="#method_init">init</a>()
         
-                                            <p><p>Create a new wrapper on givent closure that we will put into the swoole process</p></p>                </div>
+                                            <p class="no-description">No description</p>
+                                    </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
-                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
+                    void
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_start">start</a>()
+                    <a href="#method_run">run</a>()
         
-                                            <p><p>Start the current process</p></p>                </div>
+                                            <p class="no-description">No description</p>
+                                    </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
-                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
+                    void
                 </div>
                 <div class="col-md-8">
                     <a href="#method_stop">stop</a>()
         
-                                            <p><p>Stop handle that actually send kill and process stop on its own</p></p>                </div>
-                <div class="col-md-2"></div>
-            </div>
-                    <div class="row">
-                <div class="col-md-2 type">
-                    bool
-                </div>
-                <div class="col-md-8">
-                    <a href="#method_isRunning">isRunning</a>()
-        
-                                            <p><p>Get the current state of the worker if it's running</p></p>                </div>
+                                            <p class="no-description">No description</p>
+                                    </div>
                 <div class="col-md-2"></div>
             </div>
             </div>
@@ -164,10 +143,10 @@
 
             <div id="method-details">
                     <div class="method-item">
-                    <h3 id="method___construct">
-        <div class="location">at line 30</div>
-        <code>final                    
-    <strong>__construct</strong>(string $id, <a href="../../../../Manticoresearch/Buddy/Core/Process/WorkerRunnerInterface.html"><abbr title="Manticoresearch\Buddy\Core\Process\WorkerRunnerInterface">WorkerRunnerInterface</abbr></a> $runner)
+                    <h3 id="method_init">
+        <div class="location">at line 19</div>
+        <code>                    void
+    <strong>init</strong>()
         </code>
     </h3>
     <div class="details">    
@@ -176,25 +155,20 @@
             
 
         <div class="method-description">
-                            <p><p>Create a new wrapper on givent closure that we will put into the swoole process</p></p>                        
+                            <p class="no-description">No description</p>
+                    
         </div>
         <div class="tags">
-                            <h4>Parameters</h4>
+            
+                            <h4>Return Value</h4>
 
                     <table class="table table-condensed">
-                    <tr>
-                <td>string</td>
-                <td>$id</td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td><a href="../../../../Manticoresearch/Buddy/Core/Process/WorkerRunnerInterface.html"><abbr title="Manticoresearch\Buddy\Core\Process\WorkerRunnerInterface">WorkerRunnerInterface</abbr></a></td>
-                <td>$runner</td>
-                <td><p>process to run</p></td>
-            </tr>
-            </table>
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
 
-            
             
             
             
@@ -203,10 +177,10 @@
 
             </div>
                     <div class="method-item">
-                    <h3 id="method_start">
-        <div class="location">at line 48</div>
-        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
-    <strong>start</strong>()
+                    <h3 id="method_run">
+        <div class="location">at line 20</div>
+        <code>                    void
+    <strong>run</strong>()
         </code>
     </h3>
     <div class="details">    
@@ -215,7 +189,8 @@
             
 
         <div class="method-description">
-                            <p><p>Start the current process</p></p>                        
+                            <p class="no-description">No description</p>
+                    
         </div>
         <div class="tags">
             
@@ -223,7 +198,7 @@
 
                     <table class="table table-condensed">
         <tr>
-            <td><a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></td>
+            <td>void</td>
             <td></td>
         </tr>
     </table>
@@ -237,8 +212,8 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_stop">
-        <div class="location">at line 58</div>
-        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a>
+        <div class="location">at line 21</div>
+        <code>                    void
     <strong>stop</strong>()
         </code>
     </h3>
@@ -248,7 +223,8 @@
             
 
         <div class="method-description">
-                            <p><p>Stop handle that actually send kill and process stop on its own</p></p>                        
+                            <p class="no-description">No description</p>
+                    
         </div>
         <div class="tags">
             
@@ -256,40 +232,7 @@
 
                     <table class="table table-condensed">
         <tr>
-            <td><a href="../../../../Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></td>
-            <td></td>
-        </tr>
-    </table>
-
-            
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
-                    <h3 id="method_isRunning">
-        <div class="location">at line 67</div>
-        <code>                    bool
-    <strong>isRunning</strong>()
-        </code>
-    </h3>
-    <div class="details">    
-            
-    
-            
-
-        <div class="method-description">
-                            <p><p>Get the current state of the worker if it's running</p></p>                        
-        </div>
-        <div class="tags">
-            
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td>bool</td>
+            <td>void</td>
             <td></td>
         </tr>
     </table>
