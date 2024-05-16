@@ -211,6 +211,15 @@
                 <td class="last"></td>
                 <td></td>
             </tr>
+                    <tr>
+                <td class="type" id="property_mySQLTool">
+                                                                                <abbr title="Manticoresearch\Buddy\Core\Network\Manticoresearch\Buddy\Core\ManticoreSearch\MySQLTool">MySQLTool</abbr>|null
+                                                                                
+                                    </td>
+                <td>$mySQLTool</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
             </table>
 
     
@@ -302,6 +311,16 @@ It can be useful for tests</p></p>                </div>
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
+                    static&nbsp;<abbr title="Manticoresearch\Buddy\Core\Network\Manticoresearch\Buddy\Core\ManticoreSearch\MySQLTool">MySQLTool</abbr>|null
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_detectMySQLTool">detectMySQLTool</a>(string $query)
+        
+                                            <p><p>Detect if the request is sent with some MySQLTool, like DBeaver, etc.</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
                     static&nbsp;string
                 </div>
                 <div class="col-md-8">
@@ -318,7 +337,7 @@ It can be useful for tests</p></p>                </div>
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line 46</div>
+        <div class="location">at line 48</div>
         <code>                    void
     <strong>__construct</strong>()
         </code>
@@ -352,7 +371,7 @@ It can be useful for tests</p></p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_default">
-        <div class="location">at line 55</div>
+        <div class="location">at line 57</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Network/Request.html"><abbr title="Manticoresearch\Buddy\Core\Network\Request">Request</abbr></a>
     <strong>default</strong>(string $id = &#039;0&#039;)
         </code>
@@ -395,7 +414,7 @@ It can be useful for tests</p></p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_fromString">
-        <div class="location">at line 76</div>
+        <div class="location">at line 78</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Network/Request.html"><abbr title="Manticoresearch\Buddy\Core\Network\Request">Request</abbr></a>
     <strong>fromString</strong>(string $data, string $id = &#039;0&#039;)
         </code>
@@ -443,7 +462,7 @@ It can be useful for tests</p></p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_fromArray">
-        <div class="location">at line 99</div>
+        <div class="location">at line 101</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Network/Request.html"><abbr title="Manticoresearch\Buddy\Core\Network\Request">Request</abbr></a>
     <strong>fromArray</strong>(array $data, string $id = &#039;0&#039;)
         </code>
@@ -492,7 +511,7 @@ It can be useful for tests</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fromPayload">
-        <div class="location">at line 116</div>
+        <div class="location">at line 118</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Network/Request.html"><abbr title="Manticoresearch\Buddy\Core\Network\Request">Request</abbr></a>
     <strong>fromPayload</strong>(array $payload, string $id = &#039;0&#039;)
         </code>
@@ -540,7 +559,7 @@ It can be useful for tests</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_validateOrFail">
-        <div class="location">at line 130</div>
+        <div class="location">at line 132</div>
         <code>        static            array
     <strong>validateOrFail</strong>(string $data)
         </code>
@@ -592,7 +611,7 @@ It can be useful for tests</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_parseOrFail">
-        <div class="location">at line 156</div>
+        <div class="location">at line 158</div>
         <code>            protected        <a href="../../../../Manticoresearch/Buddy/Core/Network/Request.html"><abbr title="Manticoresearch\Buddy\Core\Network\Request">Request</abbr></a>
     <strong>parseOrFail</strong>(array $payload)
         </code>
@@ -645,7 +664,7 @@ It can be useful for tests</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_validateInputFields">
-        <div class="location">at line 227</div>
+        <div class="location">at line 230</div>
         <code>            protected        void
     <strong>validateInputFields</strong>(array $payload, array $fields)
         </code>
@@ -692,8 +711,51 @@ It can be useful for tests</p></p>
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_detectMySQLTool">
+        <div class="location">at line 253</div>
+        <code>        static    protected        <abbr title="Manticoresearch\Buddy\Core\Network\Manticoresearch\Buddy\Core\ManticoreSearch\MySQLTool">MySQLTool</abbr>|null
+    <strong>detectMySQLTool</strong>(string $query)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Detect if the request is sent with some MySQLTool, like DBeaver, etc.</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$query</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><abbr title="Manticoresearch\Buddy\Core\Network\Manticoresearch\Buddy\Core\ManticoreSearch\MySQLTool">MySQLTool</abbr>|null</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_removeComments">
-        <div class="location">at line 251</div>
+        <div class="location">at line 269</div>
         <code>        static    protected        string
     <strong>removeComments</strong>(string $query)
         </code>
