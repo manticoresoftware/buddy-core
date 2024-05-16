@@ -49,8 +49,8 @@ class Client {
 	/** @var ConnectionPool $connectionPool */
 	protected ConnectionPool $connectionPool;
 
-	/** @var bool $isAsync */
-	protected bool $isAsync = true;
+	/** @var bool $forceSync */
+	protected bool $forceSync = false;
 
 	/**
 	 * Initialize the Client that will use provided
@@ -136,7 +136,7 @@ class Client {
 			'User-Agent' => $userAgentHeader,
 		];
 		$isAsync = Coroutine::getCid() > 0;
-		$method = $isAsync ? 'runAsyncRequest' : 'runSyncRequest';
+		$method = !$this->forceSync && $isAsync ? 'runAsyncRequest' : 'runSyncRequest';
 		$this->response = $this->$method($path, $request, $headers);
 
 		if ($this->response === '') {
@@ -146,6 +146,16 @@ class Client {
 		$time = (int)((microtime(true) - $t) * 1000000);
 		Buddy::debugv("[{$time}µs] manticore request: $request");
 		return $result;
+	}
+
+	/**
+	 * Force to use sync client instead of async detection
+	 * @param bool $value
+	 * @return static
+	 */
+	public function setForceSync(bool $value = true): static {
+		$this->forceSync = $value;
+		return $this;
 	}
 
 	/**
