@@ -15,6 +15,7 @@ use Ds\Vector;
 use Manticoresearch\Buddy\Core\Error\InvalidNetworkRequestError;
 use Manticoresearch\Buddy\Core\Error\QueryParseError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Endpoint as ManticoreEndpoint;
+use Manticoresearch\Buddy\Core\ManticoreSearch\MySQLTool;
 use Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Settings as ManticoreSettings;
 
@@ -39,6 +40,7 @@ final class Request {
 	public string $payload;
 	public string $httpMethod;
 	public int $version;
+	public ?MySQLTool $mySQLTool;
 
 	/**
 	 * @return void
@@ -201,6 +203,7 @@ final class Request {
 		$this->path = $path;
 		$this->format = $format;
 		$this->endpointBundle = $endpointBundle;
+		$this->mySQLTool = static::detectMySQLTool($payload['message']['body']);
 		$this->payload = (in_array($endpointBundle, [ManticoreEndpoint::Elastic, ManticoreEndpoint::Bulk]))
 			? trim($payload['message']['body'])
 			: static::removeComments($payload['message']['body']);
@@ -240,6 +243,21 @@ final class Request {
 
 			static::validateInputFields($payload[$k], static::MESSAGE_FIELDS);
 		}
+	}
+
+	/**
+	 * Detect if the request is sent with some MySQLTool, like DBeaver, etc.
+	 * @param string $query
+	 * @return ?MySQLTool
+	 */
+	protected static function detectMySQLTool(string $query): ?MySQLTool {
+		foreach (MySQLTool::cases() as $tool) {
+			if (strpos($query, "/* ApplicationName={$tool->value}") === 0) {
+				return $tool;
+			}
+		}
+
+		return null;
 	}
 
 	/**
