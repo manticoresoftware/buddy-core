@@ -2862,12 +2862,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "3cb6d59576582b02416751cf13a082f1420bc791"
+                "reference": "e3df58291513ce3fe0f3185edd32e4c988a9f6aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/3cb6d59576582b02416751cf13a082f1420bc791",
-                "reference": "3cb6d59576582b02416751cf13a082f1420bc791",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e3df58291513ce3fe0f3185edd32e4c988a9f6aa",
+                "reference": "e3df58291513ce3fe0f3185edd32e4c988a9f6aa",
                 "shasum": ""
             },
             "require": {
@@ -2913,7 +2913,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-05-18T15:55:52+00:00"
+            "time": "2024-05-20T12:02:03+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -4373,12 +4373,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "57e09801c2fbae2d257b8b75bebb3deeb7e9deb2"
+                "reference": "b0bb13380d7cd4109867837e40d613899155f0fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/57e09801c2fbae2d257b8b75bebb3deeb7e9deb2",
-                "reference": "57e09801c2fbae2d257b8b75bebb3deeb7e9deb2",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/b0bb13380d7cd4109867837e40d613899155f0fd",
+                "reference": "b0bb13380d7cd4109867837e40d613899155f0fd",
                 "shasum": ""
             },
             "require": {
@@ -4446,7 +4446,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-05-20T08:11:32+00:00"
+            "time": "2024-05-20T16:05:31+00:00"
         },
         {
             "name": "theseer/tokenizer",
