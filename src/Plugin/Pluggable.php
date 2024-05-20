@@ -40,10 +40,9 @@ final class Pluggable {
 	/**
 	 * Initialize and set plugin dir
 	 * @param Settings $settings
-	 * @param array<array{0:string,1:string,2:callable}> $hooks
 	 * @return void
 	 */
-	public function __construct(public Settings $settings, public array $hooks = []) {
+	public function __construct(public Settings $settings) {
 		$this->setPluginDir(
 			$this->findPluginDir()
 		);
@@ -347,9 +346,6 @@ final class Pluggable {
 	 * @throws Exception
 	 */
 	public function fetchCorePlugins(): array {
-		// Register all predefined hooks for core plugins only for now
-		$this->registerHooks();
-
 		$plugins = [];
 		$version = Buddy::getVersion();
 		foreach (static::$corePlugins as $fullName) {
@@ -418,11 +414,12 @@ final class Pluggable {
 
 	/**
 	 * Register all hooks to known core plugins
-	 * It's called on init phase once and keep updated on event emited from the plugin
+	 * It's called on init phase once and keep updated on event emitted from the plugin
+	 * @param array<array{0:string,1:string,2:callable}> $hooks
 	 * @return void
 	 */
-	protected function registerHooks(): void {
-		foreach ($this->hooks as [$plugin, $hook, $fn]) {
+	public function registerHooks(array $hooks): void {
+		foreach ($hooks as [$plugin, $hook, $fn]) {
 			$prefix = $this->getClassNamespaceByFullName($plugin);
 			$className = $prefix . 'Handler';
 			$className::registerHook($hook, $fn);
