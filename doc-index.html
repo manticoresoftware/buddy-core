@@ -92,7 +92,7 @@
                                                 <li><a href="#letterL">L</a></li>
                                                 <li><a href="#letterM">M</a></li>
                                                 <li><a href="#letterN">N</a></li>
-                                                <li><a href="#letterO">O</a></li>
+                                                <li class="disabled"><a href="#letterO">O</a></li>
                                                 <li><a href="#letterP">P</a></li>
                                                 <li><a href="#letterQ">Q</a></li>
                                                 <li><a href="#letterR">R</a></li>
@@ -374,7 +374,9 @@ Normally it's done on initialization stage of the Buddy base</p></dd><dt><a href
 <abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>#isPaused</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Worker.html#method_isRunning">
 <abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>::isRunning</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
-                    <dd><p>Get the current state of the worker if it's running</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_id">
+                    <dd><p>Get the current state of the worker if it's running</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/WorkerRunnerInterface.html#method_init">
+<abbr title="Manticoresearch\Buddy\Core\Process\WorkerRunnerInterface">WorkerRunnerInterface</abbr>::init</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/WorkerRunnerInterface.html"><abbr title="Manticoresearch\Buddy\Core\Process\WorkerRunnerInterface">WorkerRunnerInterface</abbr></a></em></dt>
+                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_id">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#id</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_isDeferred">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#isDeferred</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
@@ -416,15 +418,7 @@ we can return response to client asap</p></dd><dt><a href="Manticoresearch/Buddy
                     <dd><p>Helper to create empty response with nothing to response (shortcut to use)</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_none">
 <abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr>::none</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></em></dt>
                     <dd><p>Entrypoint to the object creation with none of data</p></dd>        </dl><h2 id="letterO">O</h2>
-        <dl id="indexO"><dt>$<a href="Manticoresearch/Buddy/Core/Process/Worker.html#property_onStart">
-<abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>#onStart</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
-                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Process/Worker.html#property_onStop">
-<abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>#onStop</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
-                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Worker.html#method_onStart">
-<abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>::onStart</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
-                    <dd><p>Add closure that will be executed on start</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Worker.html#method_onStop">
-<abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>::onStop</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
-                    <dd><p>Add closure that will be executedo n stop</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_on">
+        <dl id="indexO"><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_on">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::on</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd><p>Register callback that will be handled before execution
 Useful to run hooks or something like this</p></dd>        </dl><h2 id="letterP">P</h2>
@@ -511,7 +505,9 @@ It's called on init phase once and keep updated on event emitted from the plugin
 <abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>::resume</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
                     <dd><p>This is method to use with execute only</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_removeWorker">
 <abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr>::removeWorker</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></em></dt>
-                    <dd><p>Remove the given worker from the pool and stop it</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_result">
+                    <dd><p>Remove the given worker from the pool and stop it</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/WorkerRunnerInterface.html#method_run">
+<abbr title="Manticoresearch\Buddy\Core\Process\WorkerRunnerInterface">WorkerRunnerInterface</abbr>::run</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/WorkerRunnerInterface.html"><abbr title="Manticoresearch\Buddy\Core\Process\WorkerRunnerInterface">WorkerRunnerInterface</abbr></a></em></dt>
+                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_result">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#result</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_run">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::run</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
@@ -610,7 +606,9 @@ cause parser usually leaves it as is ('manticore', "manticore", <code>manticore<
 <abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>::start</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
                     <dd><p>Start the current process</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Worker.html#method_stop">
 <abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>::stop</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
-                    <dd><p>Stop handle that actually send kill and process stop on its own</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_status">
+                    <dd><p>Stop handle that actually send kill and process stop on its own</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/WorkerRunnerInterface.html#method_stop">
+<abbr title="Manticoresearch\Buddy\Core\Process\WorkerRunnerInterface">WorkerRunnerInterface</abbr>::stop</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/WorkerRunnerInterface.html"><abbr title="Manticoresearch\Buddy\Core\Process\WorkerRunnerInterface">WorkerRunnerInterface</abbr></a></em></dt>
+                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_status">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#status</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd><p>Current task status</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_settings">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#settings</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
@@ -670,7 +668,8 @@ or validate and throw error if we have missing table in the list</p></dd><dt>$<a
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Process/Process.html#property_workers">
 <abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr>#workers</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Process.html">Manticoresearch\Buddy\Core\Process</a></em></dt>
-                    <dd><p>This is just wrapper to hide Swoole to external plugins</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_wait">
+                    <dd><p>This is just wrapper to hide Swoole to external plugins</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/WorkerRunnerInterface.html"><abbr title="Manticoresearch\Buddy\Core\Process\WorkerRunnerInterface">WorkerRunnerInterface</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Process.html">Manticoresearch\Buddy\Core\Process</a></em></dt>
+                    <dd><p>The worker runner is processed in the following way. First, we call init method and after run.</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_wait">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::wait</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd><p>Blocking call to wait till the task is finished</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_withData">
 <abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr>::withData</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></em></dt>
