@@ -30,16 +30,16 @@ final class Process {
 
 	/**
 	 * Create a worker with given id
-	 * @param  callable $fn
+	 * @param  WorkerRunnerInterface $runner
 	 * @param  string|null $id
 	 * @return Worker
 	 */
-	public static function createWorker(callable $fn, ?string $id = null): Worker {
+	public static function createWorker(WorkerRunnerInterface $runner, ?string $id = null): Worker {
 		if (!isset($id)) {
 			$id = uniqid();
 		}
 
-		return new Worker($id, $fn);
+		return new Worker($id, $runner);
 	}
 
 	/**

@@ -18,45 +18,27 @@ use Swoole\Process as SwooleProcess;
  * This is just wrapper to hide Swoole to external plugins
  */
 final class Worker {
-	/** @var array<callable> */
-	protected array $onStart = [];
-	/** @var array<callable> */
-	protected array $onStop = [];
 	/** @var SwooleProcess $process */
 	protected readonly SwooleProcess $process;
 
 	/**
 	 * Create a new wrapper on givent closure that we will put into the swoole process
-	 * @param callable $fn
 	 * @param string $id
+	 * @param WorkerRunnerInterface $runner
+	 * process to run
 	 */
-	final public function __construct(public readonly string $id, callable $fn) {
-		$workerFn = function (SwooleProcess $worker) use ($fn) {
+	final public function __construct(public readonly string $id, WorkerRunnerInterface $runner) {
+		$workerFn = function () use ($runner) {
 			pcntl_async_signals(true);
-			pcntl_signal(
-				SIGTERM, function () use ($worker) {
-					foreach ($this->onStop as $fn) {
-						$fn();
-					}
-
-					$worker->exit(0);
-				}
-			);
-			$fn();
+			pcntl_signal(SIGTERM, $runner->stop(...));
+			$runner->init();
+			$runner->run();
+			$runner->stop();
 		};
 		$this->process = new SwooleProcess($workerFn);
 		$this->process->name(Strings::classNameToIdentifier(static::class) . ' [' . $id . ']');
 	}
 
-	/**
-	 * Add closure that will be executed on start
-	 * @param  callable $fn
-	 * @return static
-	 */
-	public function onStart(callable $fn): static {
-		$this->onStart[] = $fn;
-		return $this;
-	}
 
 
 	/**
@@ -65,21 +47,9 @@ final class Worker {
 	 */
 	public function start(): static {
 		$this->process->start();
-		foreach ($this->onStart as $fn) {
-			$fn();
-		}
 		return $this;
 	}
 
-	/**
-	 * Add closure that will be executedo n stop
-	 * @param  callable $fn
-	 * @return static
-	 */
-	public function onStop(callable $fn): static {
-		$this->onStop[] = $fn;
-		return $this;
-	}
 
 	/**
 	 * Stop handle that actually send kill and process stop on its own
