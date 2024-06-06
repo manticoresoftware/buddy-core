@@ -359,10 +359,10 @@ class Client {
 		$q = "CALL KEYWORDS('{$query}', '{$table}')";
 		/** @var array<array{data:array<array{tokenized:string}>}> $keywordsResult */
 		$keywordsResult = $this->sendRequest($q)->getResult();
-		$tokenized = array_column($keywordsResult[0]['data'] ?? [], 'tokenized');
+		$normalized = array_column($keywordsResult[0]['data'] ?? [], 'normalized');
 		$words = [];
 		// 2. For each tokenized word, we get the suggestions from the suggest function
-		foreach ($tokenized as $word) {
+		foreach ($normalized as $word) {
 			/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $suggestResult */
 			$suggestResult = $this
 				->sendRequest(
@@ -372,6 +372,10 @@ class Client {
 			/** @var array{suggest:string,distance:int,docs:int} $suggestion */
 			$suggestions = $suggestResult[0]['data'] ?? [];
 			$choices = [];
+			// When we have not suggestions, we use original form of word
+			if (!$suggestions) {
+				$choices = [$word];
+			}
 			foreach ($suggestions as $suggestion) {
 				// If the distance is out of allowed, we use original word form
 				if ($suggestion['distance'] > $distance) {
@@ -394,7 +398,6 @@ class Client {
 			}
 			$combinations = $temp;
 		}
-
 		return array_map(fn($v) => implode(' ', $v), $combinations);
 	}
 
