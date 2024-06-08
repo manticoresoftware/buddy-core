@@ -20,4 +20,5 @@ enum Endpoint: string {
 	case Elastic = 'elastic';
 	case Search = 'search';
 	case Update = 'update';
+	case Autocomplete = 'autocomplete';
 }
