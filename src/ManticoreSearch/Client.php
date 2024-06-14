@@ -357,7 +357,7 @@ class Client {
 	public function fetchFuzzyVariations(string $query, string $table, int $distance = 2, int $limit = 3): array {
 		// 1. Tokenize the query first with the keywords function
 		$q = "CALL KEYWORDS('{$query}', '{$table}')";
-		/** @var array<array{data:array<array{tokenized:string}>}> $keywordsResult */
+		/** @var array<array{data:array<array{normalized:string,tokenized:string}>}> $keywordsResult */
 		$keywordsResult = $this->sendRequest($q)->getResult();
 		$normalized = array_column($keywordsResult[0]['data'] ?? [], 'normalized');
 		$words = [];
