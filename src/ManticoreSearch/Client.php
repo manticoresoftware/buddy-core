@@ -350,7 +350,7 @@ class Client {
 	 * @param string $table The table to be used in the suggest function
 	 * @param int $distance The maximum distance between the query word and the suggestion
 	 * @param int $limit The maximum number of suggestions for each tokenized word
-	 * @return array<string> The list of combinations of words with typo and fuzzy correction
+	 * @return array<array<string>> The list of variations for each word presented in query phrase
 	 * @throws RuntimeException
 	 * @throws ManticoreSearchClientError
 	 */
@@ -387,18 +387,7 @@ class Client {
 			}
 			$words[] = $choices;
 		}
-		// 3. We combine all the words with the same distance to get the final combinations
-		$combinations = [[]]; // Initialize with an empty array to start the recursion
-		foreach ($words as $choices) {
-			$temp = [];
-			foreach ($combinations as $combination) {
-				foreach ($choices as $choice) {
-					$temp[] = array_merge($combination, [$choice]);
-				}
-			}
-			$combinations = $temp;
-		}
-		return array_map(fn($v) => implode(' ', $v), $combinations);
+		return $words;
 	}
 
 }
