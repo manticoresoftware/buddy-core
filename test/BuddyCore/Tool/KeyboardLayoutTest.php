@@ -58,4 +58,13 @@ class KeyboardLayoutTest extends TestCase {
 		$output = $KL->convert($input, 'de');
 		$this->assertEquals('hello world', $output);
 	}
+
+	/**
+	 * Get all supported languages that we have in the keyboard layout config
+	 */
+	public function testGetSupportedLanguages(): void {
+		$langs = KeyboardLayout::getSupportedLanguages();
+		$supportedLangs = ['be','bg','br','ch','de','dk','es','fr','uk','gr','it','no','pt','ru','se','ua','us'];
+		$this->assertEquals($supportedLangs, $langs);
+	}
 }

@@ -18,7 +18,7 @@ final class KeyboardLayout {
 	const SPACING = " \n\r\t";
 
 	/** @var array<string,array<string>> $langMap */
-	protected readonly array $langMap;
+	protected static array $langMap;
 
 	/**
 	 * Initialize the object with a given language code layout
@@ -37,7 +37,7 @@ final class KeyboardLayout {
 		if (!isset($langMap[$targetLang])) {
 			throw new Exception("Unknown language code '$targetLang'");
 		}
-		$this->langMap = $langMap;
+		static::$langMap = $langMap;
 	}
 
 	/**
@@ -47,14 +47,14 @@ final class KeyboardLayout {
 	 * @return string
 	 */
 	public function convert(string $input, string $sourceLang): string {
-		if (!isset($this->langMap[$sourceLang])) {
+		if (!isset(static::$langMap[$sourceLang])) {
 			throw new Exception("Unknown language code '$sourceLang'");
 		}
 		if ($sourceLang === $this->targetLang) {
 			throw new Exception('Cannot convert to the same language');
 		}
 
-		$indexMap = array_flip(array_filter($this->langMap[$sourceLang]));
+		$indexMap = array_flip(array_filter(static::$langMap[$sourceLang]));
 		$output = '';
 		$chars = preg_split('//u', $input, -1, PREG_SPLIT_NO_EMPTY) ?: [];
 		foreach ($chars as $char) {
@@ -63,8 +63,16 @@ final class KeyboardLayout {
 				continue;
 			}
 			$index = $indexMap[$char] ?? null;
-			$output .= $this->langMap[$this->targetLang][$index] ?? $char;
+			$output .= static::$langMap[$this->targetLang][$index] ?? $char;
 		}
 		return $output;
+	}
+
+	/**
+	 * Get the list of all supported language keyboard layouts codes
+	 * @return array<string>
+	 */
+	public static function getSupportedLanguages(): array {
+		return array_keys(static::$langMap);
 	}
 }
