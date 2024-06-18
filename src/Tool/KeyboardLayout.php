@@ -69,6 +69,78 @@ final class KeyboardLayout {
 	}
 
 	/**
+	 * Get results of the conversion for all languages in array
+	 * @param string $input input phrase
+	 * @param array<string> $langs list of languages to convert to
+	 * @return array<string>
+	 */
+	public function convertMany(string $input, array $langs): array {
+		$result = [];
+		foreach ($langs as $lang) {
+			$result[] = $this->convert($input, $lang);
+		}
+		return $result;
+	}
+
+	/**
+	 * Convert the input string to the target language layout by using multiple languages
+	 * It works almost the same as convertMany but combine ALL possible pairs of languages
+	 * @param string $input
+	 * @param array<string> $langs
+	 * @return array<string>
+	 * @throws Exception
+	 */
+	public static function combineMany(string $input, array $langs): array {
+		$result = [];
+		$pairs = static::getPairs($langs);
+		foreach ($pairs as $target => $sources) {
+			$self = new static($target);
+			$result = array_merge($result, $self->convertMany($input, $sources));
+		}
+		return $result;
+	}
+
+	/**
+	 * The same as combineMany but combine all available languages we support
+	 * @param string $input
+	 * @return array<string>
+	 * @throws Exception
+	 */
+	public static function combineAll(string $input): array {
+		return static::combineMany($input, static::getSupportedLanguages());
+	}
+
+	/**
+	 * Get all available sorted by target language pairs of passed languages
+	 * @param array<string> $langs
+	 * @return array<string,array<string>>
+	 */
+	public static function getPairs(array $langs): array {
+		$pairs = [];
+		// 1. Combine all possible pairs first
+		foreach ($langs as $lang1) {
+			foreach ($langs as $lang2) {
+				if ($lang1 != $lang2) {
+					$pairs[] = [$lang1, $lang2];
+				}
+			}
+		}
+
+		// 1. Sort pairs by target language
+		$sorted = [];
+		foreach ($pairs as $pair) {
+			$target = $pair[1];
+			$source = $pair[0];
+			if (!isset($sorted[$target])) {
+				$sorted[$target] = array();
+			}
+			$sorted[$target][] = $source;
+		}
+
+		return $sorted;
+	}
+
+	/**
 	 * Get the list of all supported language keyboard layouts codes
 	 * @return array<string>
 	 */

@@ -67,4 +67,16 @@ class KeyboardLayoutTest extends TestCase {
 		$supportedLangs = ['be','bg','br','ch','de','dk','es','fr','uk','gr','it','no','pt','ru','se','ua','us'];
 		$this->assertEquals($supportedLangs, $langs);
 	}
+
+	public function testCombineMany(): void {
+		$langs = ['ru', 'us'];
+		$input = 'руддщ world';
+		$result = KeyboardLayout::combineMany($input, $langs);
+		$this->assertEquals(['hello world', 'руддщ цщкдв'], $result);
+
+		$langs = ['ru', 'us', 'de'];
+		$input = 'руддщ world';
+		$result = KeyboardLayout::combineMany($input, $langs);
+		$this->assertEquals(['hello world','руддщ world','hello world','руддщ world','руддщ цщкдв','руддщ цщкдв'], $result);
+	}
 }
