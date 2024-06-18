@@ -343,4 +343,51 @@ class Client {
 		// Finally build the settings
 		return Settings::fromVector($settings);
 	}
+
+		/**
+	 * Helper to build combinations of words with typo and fuzzy correction to next combine in searches
+	 * @param string $query The query to be tokenized
+	 * @param string $table The table to be used in the suggest function
+	 * @param int $distance The maximum distance between the query word and the suggestion
+	 * @param int $limit The maximum number of suggestions for each tokenized word
+	 * @return array<array<string>> The list of variations for each word presented in query phrase
+	 * @throws RuntimeException
+	 * @throws ManticoreSearchClientError
+	 */
+	public function fetchFuzzyVariations(string $query, string $table, int $distance = 2, int $limit = 3): array {
+		// 1. Tokenize the query first with the keywords function
+		$q = "CALL KEYWORDS('{$query}', '{$table}')";
+		/** @var array<array{data:array<array{normalized:string,tokenized:string}>}> $keywordsResult */
+		$keywordsResult = $this->sendRequest($q)->getResult();
+		$normalized = array_column($keywordsResult[0]['data'] ?? [], 'normalized');
+		$words = [];
+		// 2. For each tokenized word, we get the suggestions from the suggest function
+		foreach ($normalized as $word) {
+			/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $suggestResult */
+			$suggestResult = $this
+				->sendRequest(
+					"CALL SUGGEST('{$word}', '{$table}', {$limit} as limit)"
+				)
+				->getResult();
+			/** @var array{suggest:string,distance:int,docs:int} $suggestion */
+			$suggestions = $suggestResult[0]['data'] ?? [];
+			$choices = [];
+			// When we have not suggestions, we use original form of word
+			if (!$suggestions) {
+				$choices = [$word];
+			}
+			foreach ($suggestions as $suggestion) {
+				// If the distance is out of allowed, we use original word form
+				if ($suggestion['distance'] > $distance) {
+					$choices[] = $word;
+					break;
+				}
+
+				$choices[] = $suggestion['suggest'];
+			}
+			$words[] = $choices;
+		}
+		return $words;
+	}
+
 }
