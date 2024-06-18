@@ -77,6 +77,7 @@ class KeyboardLayoutTest extends TestCase {
 		$langs = ['ru', 'us', 'de'];
 		$input = 'руддщ world';
 		$result = KeyboardLayout::combineMany($input, $langs);
-		$this->assertEquals(['hello world','руддщ world','hello world','руддщ world','руддщ цщкдв','руддщ цщкдв'], $result);
+		// We get unique combinations as output, but real combinatinos are 6
+		$this->assertEquals(['hello world','руддщ world','руддщ цщкдв'], $result);
 	}
 }

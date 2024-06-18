@@ -97,7 +97,7 @@ final class KeyboardLayout {
 			$self = new static($target);
 			$result = array_merge($result, $self->convertMany($input, $sources));
 		}
-		return $result;
+		return array_values(array_unique($result));
 	}
 
 	/**
@@ -120,9 +120,11 @@ final class KeyboardLayout {
 		// 1. Combine all possible pairs first
 		foreach ($langs as $lang1) {
 			foreach ($langs as $lang2) {
-				if ($lang1 != $lang2) {
-					$pairs[] = [$lang1, $lang2];
+				if ($lang1 === $lang2) {
+					continue;
 				}
+
+				$pairs[] = [$lang1, $lang2];
 			}
 		}
 
@@ -132,7 +134,7 @@ final class KeyboardLayout {
 			$target = $pair[1];
 			$source = $pair[0];
 			if (!isset($sorted[$target])) {
-				$sorted[$target] = array();
+				$sorted[$target] = [];
 			}
 			$sorted[$target][] = $source;
 		}
