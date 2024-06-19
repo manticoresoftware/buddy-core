@@ -88,7 +88,7 @@
                                                 <li><a href="#letterH">H</a></li>
                                                 <li><a href="#letterI">I</a></li>
                                                 <li class="disabled"><a href="#letterJ">J</a></li>
-                                                <li><a href="#letterK">K</a></li>
+                                                <li class="disabled"><a href="#letterK">K</a></li>
                                                 <li><a href="#letterL">L</a></li>
                                                 <li><a href="#letterM">M</a></li>
                                                 <li><a href="#letterN">N</a></li>
@@ -179,16 +179,7 @@
 <abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr>#columns</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_column">
 <abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr>::column</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></em></dt>
-                    <dd><p>Add new column to the current result</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/KeyboardLayout.html#method_convert">
-<abbr title="Manticoresearch\Buddy\Core\Tool\KeyboardLayout">KeyboardLayout</abbr>::convert</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/KeyboardLayout.html"><abbr title="Manticoresearch\Buddy\Core\Tool\KeyboardLayout">KeyboardLayout</abbr></a></em></dt>
-                    <dd><p>Convert the input string to the target language layout</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/KeyboardLayout.html#method_convertMany">
-<abbr title="Manticoresearch\Buddy\Core\Tool\KeyboardLayout">KeyboardLayout</abbr>::convertMany</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/KeyboardLayout.html"><abbr title="Manticoresearch\Buddy\Core\Tool\KeyboardLayout">KeyboardLayout</abbr></a></em></dt>
-                    <dd><p>Get results of the conversion for all languages in array</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/KeyboardLayout.html#method_combineMany">
-<abbr title="Manticoresearch\Buddy\Core\Tool\KeyboardLayout">KeyboardLayout</abbr>::combineMany</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/KeyboardLayout.html"><abbr title="Manticoresearch\Buddy\Core\Tool\KeyboardLayout">KeyboardLayout</abbr></a></em></dt>
-                    <dd><p>Convert the input string to the target language layout by using multiple languages
-It works almost the same as convertMany but combine ALL possible pairs of languages</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/KeyboardLayout.html#method_combineAll">
-<abbr title="Manticoresearch\Buddy\Core\Tool\KeyboardLayout">KeyboardLayout</abbr>::combineAll</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/KeyboardLayout.html"><abbr title="Manticoresearch\Buddy\Core\Tool\KeyboardLayout">KeyboardLayout</abbr></a></em></dt>
-                    <dd><p>The same as combineMany but combine all available languages we support</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/Strings.html#method_camelcaseToUnderscore">
+                    <dd><p>Add new column to the current result</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/Strings.html#method_camelcaseToUnderscore">
 <abbr title="Manticoresearch\Buddy\Core\Tool\Strings">Strings</abbr>::camelcaseToUnderscore</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/Strings.html"><abbr title="Manticoresearch\Buddy\Core\Tool\Strings">Strings</abbr></a></em></dt>
                     <dd><p>Single iteration implementation of camelcase to underscore</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/Strings.html#method_camelcaseBySeparator">
 <abbr title="Manticoresearch\Buddy\Core\Tool\Strings">Strings</abbr>::camelcaseBySeparator</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/Strings.html"><abbr title="Manticoresearch\Buddy\Core\Tool\Strings">Strings</abbr></a></em></dt>
@@ -351,11 +342,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></dd><dt><a 
                     <dd><p>Get version that is read from the file we provided before
 Normally it's done on initialization stage of the Buddy base</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/Buddy.html#method_getProcessName">
 <abbr title="Manticoresearch\Buddy\Core\Tool\Buddy">Buddy</abbr>::getProcessName</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/Buddy.html"><abbr title="Manticoresearch\Buddy\Core\Tool\Buddy">Buddy</abbr></a></em></dt>
-                    <dd><p>Get the process name with suffix and id if passed</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/KeyboardLayout.html#method_getPairs">
-<abbr title="Manticoresearch\Buddy\Core\Tool\KeyboardLayout">KeyboardLayout</abbr>::getPairs</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/KeyboardLayout.html"><abbr title="Manticoresearch\Buddy\Core\Tool\KeyboardLayout">KeyboardLayout</abbr></a></em></dt>
-                    <dd><p>Get all available sorted by target language pairs of passed languages</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/KeyboardLayout.html#method_getSupportedLanguages">
-<abbr title="Manticoresearch\Buddy\Core\Tool\KeyboardLayout">KeyboardLayout</abbr>::getSupportedLanguages</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/KeyboardLayout.html"><abbr title="Manticoresearch\Buddy\Core\Tool\KeyboardLayout">KeyboardLayout</abbr></a></em></dt>
-                    <dd><p>Get the list of all supported language keyboard layouts codes</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/SqlQueryParser.html#method_getInstance">
+                    <dd><p>Get the process name with suffix and id if passed</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/SqlQueryParser.html#method_getInstance">
 <abbr title="Manticoresearch\Buddy\Core\Tool\SqlQueryParser">SqlQueryParser</abbr>::getInstance</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/SqlQueryParser.html"><abbr title="Manticoresearch\Buddy\Core\Tool\SqlQueryParser">SqlQueryParser</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/SqlQueryParser.html#method_getCompletedPayload">
 <abbr title="Manticoresearch\Buddy\Core\Tool\SqlQueryParser">SqlQueryParser</abbr>::getCompletedPayload</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/SqlQueryParser.html"><abbr title="Manticoresearch\Buddy\Core\Tool\SqlQueryParser">SqlQueryParser</abbr></a></em></dt>
@@ -412,14 +399,11 @@ we can return response to client asap</p></dd><dt><a href="Manticoresearch/Buddy
                     <dd></dd>        </dl><h2 id="letterK">K</h2>
         <dl id="indexK"><dt>$<a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html#property_keys">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr>#keys</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr></a></em></dt>
-                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/KeyboardLayout.html"><abbr title="Manticoresearch\Buddy\Core\Tool\KeyboardLayout">KeyboardLayout</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Tool.html">Manticoresearch\Buddy\Core\Tool</a></em></dt>
                     <dd></dd>        </dl><h2 id="letterL">L</h2>
         <dl id="indexL"><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html#property_logLevel">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr>#logLevel</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html#property_lastInsertId">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr>#lastInsertId</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a></em></dt>
-                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Tool/KeyboardLayout.html#property_langMap">
-<abbr title="Manticoresearch\Buddy\Core\Tool\KeyboardLayout">KeyboardLayout</abbr>#langMap</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Tool/KeyboardLayout.html"><abbr title="Manticoresearch\Buddy\Core\Tool\KeyboardLayout">KeyboardLayout</abbr></a></em></dt>
                     <dd></dd>        </dl><h2 id="letterM">M</h2>
         <dl id="indexM"><dt><a href="Manticoresearch/Buddy/Core/Error/ManticoreSearchClientError.html"><abbr title="Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError">ManticoreSearchClientError</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Error.html">Manticoresearch\Buddy\Core\Error</a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Error/ManticoreSearchResponseError.html"><abbr title="Manticoresearch\Buddy\Core\Error\ManticoreSearchResponseError">ManticoreSearchResponseError</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Error.html">Manticoresearch\Buddy\Core\Error</a></em></dt>
@@ -733,9 +717,7 @@ or validate and throw error if we have missing table in the list</p></dd><dt>$<a
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::__construct</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method___construct">
 <abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr>::__construct</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></em></dt>
-                    <dd><p>Initialize the empty result</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/KeyboardLayout.html#method___construct">
-<abbr title="Manticoresearch\Buddy\Core\Tool\KeyboardLayout">KeyboardLayout</abbr>::__construct</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/KeyboardLayout.html"><abbr title="Manticoresearch\Buddy\Core\Tool\KeyboardLayout">KeyboardLayout</abbr></a></em></dt>
-                    <dd><p>Initialize the object with a given language code layout</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/SqlQueryParser.html#method___clone">
+                    <dd><p>Initialize the empty result</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/SqlQueryParser.html#method___clone">
 <abbr title="Manticoresearch\Buddy\Core\Tool\SqlQueryParser">SqlQueryParser</abbr>::__clone</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/SqlQueryParser.html"><abbr title="Manticoresearch\Buddy\Core\Tool\SqlQueryParser">SqlQueryParser</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/SqlQueryParser.html#method___wakeup">
 <abbr title="Manticoresearch\Buddy\Core\Tool\SqlQueryParser">SqlQueryParser</abbr>::__wakeup</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/SqlQueryParser.html"><abbr title="Manticoresearch\Buddy\Core\Tool\SqlQueryParser">SqlQueryParser</abbr></a></em></dt>
