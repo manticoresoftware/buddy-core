@@ -9,7 +9,7 @@
  program; if you did not, you can find it at http://www.gnu.org/
  */
 
-use Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError;
+use Manticoresearch\Buddy\Core\Error\ManticoreSearchResponseError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Client as HTTPClient;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Endpoint as ManticoreEndpoint;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Response;
@@ -73,8 +73,8 @@ class GetManticoreResponseTest extends TestCase {
 		$this->assertEquals($mntResp, $this->httpClient->sendRequest($query));
 
 		$query = 'SELECT connid AS ID FROM @@system.sessions';
-		$this->expectException(ManticoreSearchClientError::class);
-		$this->expectExceptionMessage('No response passed from server');
+		$this->expectException(ManticoreSearchResponseError::class);
+		$this->expectExceptionMessage('Invalid JSON found');
 		$this->httpClient->sendRequest($query);
 	}
 
