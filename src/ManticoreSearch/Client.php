@@ -138,10 +138,6 @@ class Client {
 		$isAsync = Coroutine::getCid() > 0;
 		$method = !$this->forceSync && $isAsync ? 'runAsyncRequest' : 'runSyncRequest';
 		$this->response = $this->$method($path, $request, $headers);
-
-		if ($this->response === '') {
-			throw new ManticoreSearchClientError('No response passed from server');
-		}
 		$result = $this->responseBuilder->fromBody($this->response);
 		$time = (int)((microtime(true) - $t) * 1000000);
 		Buddy::debugv("[{$time}µs] manticore request: $request");
@@ -172,6 +168,10 @@ class Client {
 		$client->set(['timeout' => -1]);
 		$client->setHeaders($headers);
 		$client->post("/$path", $request);
+		if ($client->errCode) {
+			$error = "Error while async request: {$client->errCode}: {$client->errMsg}";
+			throw new ManticoreSearchClientError($error);
+		}
 		$result = $client->body;
 		$this->connectionPool->put($client);
 		return $result;
@@ -205,7 +205,24 @@ class Client {
 		$protocol = static::URL_PREFIX;
 		$url = "{$protocol}{$this->host}:{$this->port}/$path";
 
-		return (string)file_get_contents($url, false, $context);
+		try {
+			return (string)file_get_contents($url, false, $context);
+		} catch (Exception $e) {
+			$errorMessage = $e->getMessage();
+
+			// Get the HTTP error code
+			$httpCode = 0;
+			// @phpstan-ignore-next-line
+			if (isset($http_response_header)) {
+				// @phpstan-ignore-next-line
+				$parts = explode(' ', $http_response_header[0]);
+				if (sizeof($parts) > 1) {
+					$httpCode = (int)$parts[1];
+				}
+			}
+			$errorMessage = "Error while sync request: {$httpCode}: {$errorMessage}";
+			throw new ManticoreSearchClientError($errorMessage);
+		}
 	}
 
 	// Bunch of methods to help us reduce copy pasting, maybe we will move it out to separate class
