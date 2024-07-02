@@ -198,6 +198,16 @@ It works almost the same as convertMany but combine ALL possible pairs of langua
                                             <p><p>Get the list of all supported language keyboard layouts codes</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;array
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_getLangMap">getLangMap</a>()
+        
+                                            <p><p>Lazy loading lang map from the config file and cache it for future usage</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
             </div>
 
 
@@ -249,7 +259,7 @@ It works almost the same as convertMany but combine ALL possible pairs of langua
             </div>
                     <div class="method-item">
                     <h3 id="method_convert">
-        <div class="location">at line 49</div>
+        <div class="location">at line 41</div>
         <code>                    string
     <strong>convert</strong>(string $input, string $sourceLang)
         </code>
@@ -297,7 +307,7 @@ It works almost the same as convertMany but combine ALL possible pairs of langua
             </div>
                     <div class="method-item">
                     <h3 id="method_convertMany">
-        <div class="location">at line 77</div>
+        <div class="location">at line 69</div>
         <code>                    array
     <strong>convertMany</strong>(string $input, array $langs)
         </code>
@@ -345,7 +355,7 @@ It works almost the same as convertMany but combine ALL possible pairs of langua
             </div>
                     <div class="method-item">
                     <h3 id="method_combineMany">
-        <div class="location">at line 93</div>
+        <div class="location">at line 85</div>
         <code>        static            array
     <strong>combineMany</strong>(string $input, array $langs)
         </code>
@@ -403,7 +413,7 @@ It works almost the same as convertMany but combine ALL possible pairs of langua
             </div>
                     <div class="method-item">
                     <h3 id="method_combineAll">
-        <div class="location">at line 109</div>
+        <div class="location">at line 101</div>
         <code>        static            array
     <strong>combineAll</strong>(string $input)
         </code>
@@ -455,7 +465,7 @@ It works almost the same as convertMany but combine ALL possible pairs of langua
             </div>
                     <div class="method-item">
                     <h3 id="method_getPairs">
-        <div class="location">at line 118</div>
+        <div class="location">at line 110</div>
         <code>        static            array
     <strong>getPairs</strong>(array $langs)
         </code>
@@ -498,7 +508,7 @@ It works almost the same as convertMany but combine ALL possible pairs of langua
             </div>
                     <div class="method-item">
                     <h3 id="method_getSupportedLanguages">
-        <div class="location">at line 149</div>
+        <div class="location">at line 141</div>
         <code>        static            array
     <strong>getSupportedLanguages</strong>()
         </code>
@@ -523,6 +533,48 @@ It works almost the same as convertMany but combine ALL possible pairs of langua
     </table>
 
             
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getLangMap">
+        <div class="location">at line 150</div>
+        <code>        static    protected        array
+    <strong>getLangMap</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Lazy loading lang map from the config file and cache it for future usage</p></p>                        
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a target="_blank" rel="noopener" href="https://www.php.net/Exception">Exception</a></td>
+                <td></td>
+            </tr>
+            </table>
+
             
             
                     </div>
