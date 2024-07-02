@@ -32,4 +32,26 @@ final class Arrays {
 
 		return $combinations;
 	}
+
+	/**
+	 * Set the value in nested array by dot notation path to it and ref
+	 * @param array<mixed> $array
+	 * @param string $keyPath
+	 * @param mixed $value
+	 * @return void
+	 */
+	public static function setValueByDotNotation(array &$array, string $keyPath, mixed &$value): void {
+		$keys = explode('.', $keyPath);
+		$current = &$array;
+
+		foreach ($keys as $key) {
+			if (!isset($current[$key]) || !is_array($current[$key])) {
+				$current[$key] = [];
+			}
+			$current = &$current[$key];
+		}
+
+		$current = $value;
+	}
+
 }

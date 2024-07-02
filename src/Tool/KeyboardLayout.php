@@ -26,18 +26,10 @@ final class KeyboardLayout {
 	 * @return void
 	 */
 	public function __construct(public string $targetLang) {
-		$configPath = __DIR__ . '/../../config/keyboard-layout.json';
-		$configContent = file_get_contents($configPath);
-		if ($configContent === false) {
-			throw new Exception("Unable to read keyboard layout config file at '$configPath'");
-		}
-
-		/** @var array<string,array<string>> $langMap */
-		$langMap = json_decode($configContent, true);
+		$langMap = static::getLangMap();
 		if (!isset($langMap[$targetLang])) {
 			throw new Exception("Unknown language code '$targetLang'");
 		}
-		static::$langMap = $langMap;
 	}
 
 	/**
@@ -147,6 +139,29 @@ final class KeyboardLayout {
 	 * @return array<string>
 	 */
 	public static function getSupportedLanguages(): array {
-		return array_keys(static::$langMap);
+		return array_keys(static::getLangMap());
+	}
+
+	/**
+	 * Lazy loading lang map from the config file and cache it for future usage
+	 * @return array<string,array<string>>
+	 * @throws Exception
+	 */
+	protected static function getLangMap(): array {
+		if (!isset(static::$langMap)) {
+			$configPath = __DIR__ . '/../../config/keyboard-layout.json';
+			$configContent = file_get_contents($configPath);
+			if ($configContent === false) {
+				throw new Exception("Unable to read keyboard layout config file at '$configPath'");
+			}
+
+			/** @var array<string,array<string>> $langMap */
+			$langMap = json_decode($configContent, true);
+			if (!is_array($langMap)) {
+				throw new Exception("Invalid keyboard layout config file at '$configPath'");
+			}
+			static::$langMap = $langMap;
+		}
+		return static::$langMap;
 	}
 }
