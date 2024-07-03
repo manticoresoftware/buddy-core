@@ -11,6 +11,8 @@
 
 namespace Manticoresearch\Buddy\Core\Tool;
 
+use RuntimeException;
+
 /** @package Manticoresearch\Buddy\Core\Tool */
 final class Arrays {
 	/**
@@ -35,18 +37,22 @@ final class Arrays {
 
 	/**
 	 * Set the value in nested array by dot notation path to it and ref
-	 * @param array<mixed> $array
+	 * @param array<string,mixed> $array
 	 * @param string $keyPath
 	 * @param mixed $value
 	 * @return void
+	 * @throws RuntimeException
 	 */
-	public static function setValueByDotNotation(array &$array, string $keyPath, mixed &$value): void {
+	public static function setValueByDotNotation(array &$array, string $keyPath, mixed $value): void {
 		$keys = explode('.', $keyPath);
 		$current = &$array;
 
 		foreach ($keys as $key) {
-			if (!isset($current[$key]) || !is_array($current[$key])) {
-				$current[$key] = [];
+			if (!is_array($current)) {
+				break;
+			}
+			if (!isset($current[$key])) {
+				throw new RuntimeException("Key '$key' does not exist in the array");
 			}
 			$current = &$current[$key];
 		}

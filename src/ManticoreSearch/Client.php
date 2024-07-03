@@ -123,6 +123,8 @@ class Client {
 		}
 		if (str_ends_with($path, 'bulk')) {
 			$contentTypeHeader = 'application/x-ndjson';
+		} elseif (str_ends_with($path, 'search')) {
+			$contentTypeHeader = 'application/json';
 		} else {
 			$contentTypeHeader = 'application/x-www-form-urlencoded';
 		}
