@@ -36,6 +36,15 @@ final class Strings {
 	}
 
 	/**
+	 * Underscore to camelcase
+	 * @param string $string
+	 * @return string
+	 */
+	public static function underscoreToCamelcase($string): string {
+		return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $string))));
+	}
+
+	/**
 	 * Single iteration implementation of separate string to camelcase
 	 *
 	 * @param string $string
