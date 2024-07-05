@@ -133,8 +133,8 @@ final class Request {
 		if ($data === '') {
 			throw new InvalidNetworkRequestError('The payload is missing');
 		}
-		/** @var array{type:string,error:string,message:array{path_query:string,body:string},version:int} */
-		$result = json_decode($data, true);
+		/** @var array{type:string,error:string,message:array{path_query:string,body:string},version:int} $result*/
+		$result = json_decode($data, true, 512, JSON_INVALID_UTF8_SUBSTITUTE);
 		if (!is_array($result)) {
 			throw new InvalidNetworkRequestError('Invalid request payload is passed');
 		}
