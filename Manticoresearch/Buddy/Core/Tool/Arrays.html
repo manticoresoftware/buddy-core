@@ -106,9 +106,9 @@
                     static&nbsp;array
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_getPositionalCombinations">getPositionalCombinations</a>(array $words, array $scoreMap = [])
+                    <a href="#method_getPositionalCombinations">getPositionalCombinations</a>(array $words)
         
-                                            <p><p>Get all combinations of words with typo and fuzzy correction, sorted by relevance based on scoreMap</p></p>                </div>
+                                            <p><p>Get all combinations of words with typo and fuzzy correction</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -121,17 +121,6 @@
                                             <p><p>Set the value in nested array by dot notation path to it and ref</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
-                    <div class="row">
-                <div class="col-md-2 type">
-                    static&nbsp;array
-                </div>
-                <div class="col-md-8">
-                    <a href="#method_normalizeValues">normalizeValues</a>(array $values)
-        
-                                            <p><p>Run normalization on the array values
-In case empty array passed, return empty array</p></p>                </div>
-                <div class="col-md-2"></div>
-            </div>
             </div>
 
 
@@ -140,9 +129,9 @@ In case empty array passed, return empty array</p></p>                </div>
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method_getPositionalCombinations">
-        <div class="location">at line 24</div>
+        <div class="location">at line 23</div>
         <code>        static            array
-    <strong>getPositionalCombinations</strong>(array $words, array $scoreMap = [])
+    <strong>getPositionalCombinations</strong>(array $words)
         </code>
     </h3>
     <div class="details">    
@@ -151,7 +140,7 @@ In case empty array passed, return empty array</p></p>                </div>
             
 
         <div class="method-description">
-                            <p><p>Get all combinations of words with typo and fuzzy correction, sorted by relevance based on scoreMap</p></p>                        
+                            <p><p>Get all combinations of words with typo and fuzzy correction</p></p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -160,11 +149,6 @@ In case empty array passed, return empty array</p></p>                </div>
                     <tr>
                 <td>array</td>
                 <td>$words</td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td>array</td>
-                <td>$scoreMap</td>
                 <td></td>
             </tr>
             </table>
@@ -188,7 +172,7 @@ In case empty array passed, return empty array</p></p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_setValueByDotNotation">
-        <div class="location">at line 77</div>
+        <div class="location">at line 46</div>
         <code>        static            void
     <strong>setValueByDotNotation</strong>(array $array, string $keyPath, mixed $value)
         </code>
@@ -242,50 +226,6 @@ In case empty array passed, return empty array</p></p>                </div>
             </tr>
             </table>
 
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
-                    <h3 id="method_normalizeValues">
-        <div class="location">at line 100</div>
-        <code>        static            array
-    <strong>normalizeValues</strong>(array $values)
-        </code>
-    </h3>
-    <div class="details">    
-            
-    
-            
-
-        <div class="method-description">
-                            <p><p>Run normalization on the array values
-In case empty array passed, return empty array</p></p>                        
-        </div>
-        <div class="tags">
-                            <h4>Parameters</h4>
-
-                    <table class="table table-condensed">
-                    <tr>
-                <td>array</td>
-                <td>$values</td>
-                <td></td>
-            </tr>
-            </table>
-
-            
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td>array</td>
-            <td></td>
-        </tr>
-    </table>
-
-            
             
             
                     </div>
