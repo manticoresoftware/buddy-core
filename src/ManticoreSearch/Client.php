@@ -17,6 +17,7 @@ use Ds\Vector;
 use Exception;
 use Generator;
 use Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError;
+use Manticoresearch\Buddy\Core\Tool\Arrays;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
 use RuntimeException;
 use Swoole\ConnectionPool;
@@ -369,7 +370,8 @@ class Client {
 	 * @param string $table The table to be used in the suggest function
 	 * @param int $distance The maximum distance between the query word and the suggestion
 	 * @param int $limit The maximum number of suggestions for each tokenized word
-	 * @return array<array<string>> The list of variations for each word presented in query phrase
+	 * @return array{array<array<string>>,array<string,float>}
+	 * The list of variations for each word presented in query phrase and scoreMap for each word
 	 * @throws RuntimeException
 	 * @throws ManticoreSearchClientError
 	 */
@@ -379,7 +381,14 @@ class Client {
 		/** @var array<array{data:array<array{normalized:string,tokenized:string}>}> $keywordsResult */
 		$keywordsResult = $this->sendRequest($q)->getResult();
 		$normalized = array_column($keywordsResult[0]['data'] ?? [], 'normalized');
+
+		/** @var array<array<string>> $words */
 		$words = [];
+		/** @var array<string,int> $distanceMap */
+		$distanceMap = [];
+		/** @var array<string,int> $docMap */
+		$docMap = [];
+
 		// 2. For each tokenized word, we get the suggestions from the suggest function
 		foreach ($normalized as $word) {
 			/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $suggestResult */
@@ -391,22 +400,48 @@ class Client {
 			/** @var array{suggest:string,distance:int,docs:int} $suggestion */
 			$suggestions = $suggestResult[0]['data'] ?? [];
 			$choices = [];
-			// When we have not suggestions, we use original form of word
-			if (!$suggestions) {
-				$choices = [$word];
-			}
 			foreach ($suggestions as $suggestion) {
-				// If the distance is out of allowed, we use original word form
+				// If distance out of allowed, we skip
 				if ($suggestion['distance'] > $distance) {
-					$choices[] = $word;
-					break;
+					continue;
 				}
 
-				$choices[] = $suggestion['suggest'];
+				$word = $suggestion['suggest'];
+				$choices[] = $word;
+				$distanceMap[$word] = $suggestion['distance'];
+				$docMap[$word] = $suggestion['docs'];
 			}
+
+			if (!$choices) {
+				continue;
+			}
+
 			$words[] = $choices;
 		}
-		return $words;
-	}
 
+		// 3. Normalize the distance and docs values
+		/** @var array<string,float> $docMapNormalized */
+		$docMapNormalized = Arrays::normalizeValues($docMap);
+		/** @var array<string,float> $distanceMapNormalized */
+		$distanceMapNormalized = Arrays::normalizeValues($distanceMap);
+		// Discard the original values
+		unset($docMap, $distanceMap);
+		// We are use minimum distance to avoid siutation when less docs affect relevance
+		$scoreFn = static function (float $distance, float $docs): float {
+			return (float)max($distance + 1, sqrt($docs)) / ($distance + 1);
+		};
+
+		/** @var array<string,float> $scoreMap */
+		$scoreMap = [];
+		foreach ($docMapNormalized as $word => $docScore) {
+			if (!isset($distanceMapNormalized[$word])) {
+				continue;
+			}
+
+			$distanceScore = $distanceMapNormalized[$word];
+			$scoreMap[$word] = $scoreFn($docScore, $distanceScore);
+		}
+
+		return [$words, $scoreMap];
+	}
 }
