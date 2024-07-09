@@ -16,20 +16,51 @@ use RuntimeException;
 /** @package Manticoresearch\Buddy\Core\Tool */
 final class Arrays {
 	/**
-	 * Get all combinations of words with typo and fuzzy correction
+	 * Get all combinations of words with typo and fuzzy correction, sorted by relevance based on scoreMap
 	 * @param array<array<string>> $words
+	 * @param array<string,float> $scoreMap
 	 * @return array<array<string>>
 	 */
-	public static function getPositionalCombinations(array $words): array {
+	public static function getPositionalCombinations(array $words, array $scoreMap = []): array {
 		$combinations = [[]]; // Initialize with an empty array to start the recursion
+		$hasScores = !empty($scoreMap);
+
 		foreach ($words as $choices) {
 			$temp = [];
 			foreach ($combinations as $combination) {
 				foreach ($choices as $choice) {
-					$temp[] = array_merge($combination, [$choice]);
+					$newCombination = array_merge($combination, [$choice]);
+					$temp[] = $newCombination;
 				}
 			}
 			$combinations = $temp;
+		}
+
+		if ($hasScores) {
+			// Calculate relevance scores for each combination
+			$scoredCombinations = array_map(
+				static function ($combination) use ($scoreMap) {
+					$score = 0.0;
+					foreach ($combination as $word) {
+						$score += $scoreMap[$word] ?? 0.0;
+					}
+					return ['combination' => $combination, 'score' => $score];
+				}, $combinations
+			);
+
+			// Sort combinations by relevance score in descending order
+			usort(
+				$scoredCombinations, static function (array $a, array $b) {
+					return $b['score'] <=> $a['score'];
+				}
+			);
+
+			// Extract sorted combinations
+			$combinations = array_map(
+				function ($item) {
+					return $item['combination'];
+				}, $scoredCombinations
+			);
 		}
 
 		return $combinations;
@@ -60,4 +91,29 @@ final class Arrays {
 		$current = $value;
 	}
 
+	/**
+	 * Run normalization on the array values
+	 * In case empty array passed, return empty array
+	 * @param array<int|string,int> $values
+	 * @return array<int|string,float>
+	 */
+	public static function normalizeValues(array $values): array {
+		// Nothing to normalize?
+		if (empty($values)) {
+			return [];
+		}
+
+		$min = min($values);
+		$max = max($values);
+
+		if (($max - $min) === 0) {
+			return array_fill_keys(array_keys($values), 1.0); // Avoid division by zero
+		}
+
+		return array_map(
+			function ($value) use ($min, $max) {
+				return ($value - $min) / ($max - $min);
+			}, $values
+		);
+	}
 }
