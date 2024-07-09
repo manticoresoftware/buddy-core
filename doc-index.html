@@ -346,7 +346,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></dd><dt><a 
 <abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr>::getStruct</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></em></dt>
                     <dd><p>Get resulting struct without JSON encoding</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/Arrays.html#method_getPositionalCombinations">
 <abbr title="Manticoresearch\Buddy\Core\Tool\Arrays">Arrays</abbr>::getPositionalCombinations</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/Arrays.html"><abbr title="Manticoresearch\Buddy\Core\Tool\Arrays">Arrays</abbr></a></em></dt>
-                    <dd><p>Get all combinations of words with typo and fuzzy correction</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/Buddy.html#method_getVersion">
+                    <dd><p>Get all combinations of words with typo and fuzzy correction, sorted by relevance based on scoreMap</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/Buddy.html#method_getVersion">
 <abbr title="Manticoresearch\Buddy\Core\Tool\Buddy">Buddy</abbr>::getVersion</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/Buddy.html"><abbr title="Manticoresearch\Buddy\Core\Tool\Buddy">Buddy</abbr></a></em></dt>
                     <dd><p>Get version that is read from the file we provided before
 Normally it's done on initialization stage of the Buddy base</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/Buddy.html#method_getProcessName">
@@ -440,7 +440,10 @@ we can return response to client asap</p></dd><dt><a href="Manticoresearch/Buddy
 <abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr>::none</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a></em></dt>
                     <dd><p>Helper to create empty response with nothing to response (shortcut to use)</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_none">
 <abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr>::none</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></em></dt>
-                    <dd><p>Entrypoint to the object creation with none of data</p></dd>        </dl><h2 id="letterO">O</h2>
+                    <dd><p>Entrypoint to the object creation with none of data</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/Arrays.html#method_normalizeValues">
+<abbr title="Manticoresearch\Buddy\Core\Tool\Arrays">Arrays</abbr>::normalizeValues</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/Arrays.html"><abbr title="Manticoresearch\Buddy\Core\Tool\Arrays">Arrays</abbr></a></em></dt>
+                    <dd><p>Run normalization on the array values
+In case empty array passed, return empty array</p></dd>        </dl><h2 id="letterO">O</h2>
         <dl id="indexO"><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_on">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::on</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd><p>Register callback that will be handled before execution
