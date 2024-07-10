@@ -9,28 +9,42 @@
   program; if you did not, you can find it at http://www.gnu.org/
 */
 
+namespace Manticoresearch\Buddy\Core\Network;
+
+use ArrayAccess;
+use Exception;
+use JsonSerializable;
+
+/**
+ * @package Manticoresearch\Buddy\Core\Network
+ * @template TKey of string
+ * @template TValue
+ * @implements ArrayAccess<TKey, TValue>
+ */
+
 final class Struct implements JsonSerializable, ArrayAccess {
 	/**
-	 * @param mixed $data
+	 * @param array<TKey, TValue> $data
+	 * @param array<string> $bigIntFields
 	 * @return void
 	 */
 	public function __construct(
-		private readonly mixed $data,
-		private readonly array $bigIntFields = []
+		private array $data,
+		private array $bigIntFields = []
 	) {
 	}
 
 	/**
-	 * @param mixed $name
-	 * @return mixed
+	 * @param TKey $name
+	 * @return TValue|null
 	 */
 	public function offsetGet(mixed $name): mixed {
 		return $this->data[$name] ?? null;
 	}
 
 	/**
-	 * @param mixed $name
-	 * @param mixed $value
+	 * @param TKey $name
+	 * @param TValue $value
 	 * @return void
 	 */
 	public function offsetSet(mixed $name, mixed $value): void {
@@ -38,7 +52,7 @@ final class Struct implements JsonSerializable, ArrayAccess {
 	}
 
 	/**
-	 * @param mixed $name
+	 * @param TKey $name
 	 * @return bool
 	 */
 	public function offsetExists(mixed $name): bool {
@@ -46,7 +60,7 @@ final class Struct implements JsonSerializable, ArrayAccess {
 	}
 
 	/**
-	 * @param mixed $name
+	 * @param TKey $name
 	 * @return void
 	 */
 	public function offsetUnset(mixed $name): void {
@@ -56,25 +70,40 @@ final class Struct implements JsonSerializable, ArrayAccess {
 	/**
 	 * Get the data as raw array
 	 *
-	 * @return array<mixed>
+	 * @return array<TKey, TValue>
 	 */
 	public function toArray(): array {
+		/** @var array<TKey, TValue> */
 		return (array)$this->data;
+	}
+
+	/**
+	 * Add new bigint field, so we will know how to handle it
+	 * @param string $field
+	 * @return void
+	 */
+	public function addBigIntField(string $field): void {
+		$this->bigIntFields[] = $field;
 	}
 
 	/**
 	 * Create Struct from JSON string with paths preservation for modified unsigned big integers
 	 * @param string $json
-	 * @return Struct
+	 * @return Struct<TKey, TValue>
 	 */
 	public static function fromJson(string $json): self {
-		$result = json_decode($json, true, 512, JSON_BIGINT_AS_STRING);
+		$defaultFlags = JSON_INVALID_UTF8_SUBSTITUTE;
+		/** @var array<TKey, TValue> */
+		$result = json_decode($json, true, 512, $defaultFlags);
 		$bigIntFields = [];
+		if (static::hasBiInt($json)) {
+			/** @var array<TKey, TValue> */
+			$modified = json_decode($json, true, 512, $defaultFlags | JSON_BIGINT_AS_STRING);
+			static::traverseAndTrack($modified, $result, $bigIntFields);
+			$result = $modified;
+		}
 
-		$originalData = json_decode($json, true, 512, 0);
-		$bigIntFields = [];
-		static::traverseAndTrack($result, $originalData, $bigIntFields);
-
+		/** @var Struct<TKey, TValue> */
 		return new self($result, $bigIntFields);
 	}
 
@@ -84,24 +113,48 @@ final class Struct implements JsonSerializable, ArrayAccess {
 	 * @return string
 	 */
 	public function jsonSerialize(): string {
-		$serialized = json_encode($this->data);
+		throw new Exception('Use toJson method instead');
+	}
 
-		$patterns = [];
-		$replacements = [];
-		foreach ($this->bigIntFields as $dotPath) {
-			[$pattern, $replacement] = static::getReplacePatterns($serialized, $dotPath);
-			$patterns[] = $pattern;
-			$replacements[] = $replacement;
+	/**
+	 * Encode the data to JSON string
+	 * @return string
+	 */
+	public function toJson(): string {
+		$serialized = json_encode($this->data);
+		if (false === $serialized) {
+			throw new Exception('Cannot encode data to JSON');
 		}
-		return preg_replace_callback($patterns, $replacements, $serialized);
+		if (!$this->bigIntFields) {
+			return $serialized;
+		}
+		$patterns = [];
+		foreach ($this->bigIntFields as $dotPath) {
+			$patterns[] = static::getReplacePattern($dotPath);
+		}
+
+		$json = preg_replace_callback(
+			$patterns,
+			static function (array $matches): string {
+				/** @var int $pos */
+				$pos = strrpos($matches[0], ':');
+				$field = substr($matches[0], 0, $pos);
+				return $field . ':' . $matches[2];
+			},
+			$serialized
+		);
+		if (!isset($json)) {
+			throw new Exception('Cannot encode data to JSON');
+		}
+		return $json;
 	}
 
 	/**
 	 * Get the pattern and replacement for the given path to accumulate and use in one shot replacement
 	 * @param string $path
-	 * @return array{string,string}
+	 * @return string
 	 */
-	private static function getReplacePatterns(string $path): array {
+	private static function getReplacePattern(string $path): string {
 		$parts = explode('.', $path);
 		$pattern = '/';
 
@@ -113,42 +166,48 @@ final class Struct implements JsonSerializable, ArrayAccess {
 			}
 		}
 
-		$pattern .= '("?)([^"{}[\\],]+)\1/';
-
-		$replacement = static function ($matches) {
-			$value = trim($matches[2], '"');
-			if (is_numeric($value) && strpos($value, '.') === false) {
-				return rtrim(substr($matches[0], 0, -strlen($matches[2]))) . $value;
-			} else {
-				return rtrim(substr($matches[0], 0, -strlen($matches[2]))) . $value;
-			}
-		};
-		return [$pattern, $replacement];
-
+		return $pattern . '("?)([^"{}[\\],]+)\1/';
 	}
 
 	/**
 	 * Traverse the data and track all fields that are big integers
 	 * @param mixed $data
 	 * @param mixed $originalData
-	 * @param array $bigIntFields
+	 * @param array<string> $bigIntFields
 	 * @param string $path
 	 * @return void
 	 */
-	private static function traverseAndTrack(mixed &$data, mixed $originalData, array &$bigIntFields, string $path = ''): void {
-		if (is_array($data)) {
-			foreach ($data as $key => &$value) {
-				$currentPath = $path ? "$path.$key" : $key;
-				if (isset($originalData[$key])) {
-					$originalValue = $originalData[$key];
-					if (is_string($value) && is_int($originalValue) && strlen($value) > 9) {
-						$bigIntFields[] = $currentPath;
-					} elseif (is_array($value) && is_array($originalValue)) {
-						static::traverseAndTrack($value, $originalValue, $bigIntFields, $currentPath);
-					}
-				}
+	private static function traverseAndTrack(
+		mixed &$data,
+		mixed $originalData,
+		array &$bigIntFields,
+		string $path = ''
+	): void {
+		if (!is_array($data) || !is_array($originalData)) {
+			return;
+		}
+
+		foreach ($data as $key => &$value) {
+			$currentPath = $path ? "$path.$key" : $key;
+			if (!isset($originalData[$key])) {
+				continue;
+			}
+
+			$originalValue = $originalData[$key];
+			if (is_string($value) && is_numeric($originalValue) && strlen($value) > 9) {
+				$bigIntFields[] = $currentPath;
+			} elseif (is_array($value) && is_array($originalValue)) {
+				static::traverseAndTrack($value, $originalValue, $bigIntFields, $currentPath);
 			}
 		}
 	}
-}
 
+	/**
+	 * Check if the JSON string contains any big integers
+	 * @param string $json
+	 * @return bool
+	 */
+	private static function hasBiInt(string $json): bool {
+		return !!preg_match('/(?<!")\b[1-9]\d{18,}\b(?!")/', $json);
+	}
+}
