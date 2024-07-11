@@ -116,4 +116,66 @@ final class Arrays {
 			}, $values
 		);
 	}
+
+	/**
+	 * Combine two arrays with relevance into single one that means two arrays will be merged in t
+	 * @param array<mixed> ...$arrays
+	 * @return array<mixed>
+	 */
+	public static function blend(array ...$arrays): array {
+		$maxLength = max(array_map('count', $arrays));
+		$result = [];
+
+		for ($i = 0; $i < $maxLength; $i++) {
+			foreach ($arrays as $array) {
+				if (!isset($array[$i])) {
+					continue;
+				}
+
+				$result[] = $array[$i];
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * @param array<string,float> ...$arrays
+	 * @return array<string,float>
+	 */
+	public static function getMapSum(array ...$arrays): array {
+		$result = [];
+
+		foreach ($arrays as $array) {
+			foreach ($array as $key => $value) {
+				if (!isset($result[$key])) {
+					$result[$key] = 0.0;
+				}
+				$result[$key] += (float)$value;
+			}
+		}
+
+		return $result;
+	}
+
+
+	/**
+	 * Boost multiple values in case they exist in array and place them on the first positions of the list
+	 * @param array<mixed> $values
+	 * @param mixed ...$valuesToBoost
+	 * @return array<mixed>
+	 */
+	public static function boostListValues(array $values, mixed ...$valuesToBoost): array {
+		$boostedValues = [];
+		foreach ($valuesToBoost as $value) {
+			$key = array_search($value, $values);
+			if (!is_int($key)) {
+				continue;
+			}
+
+			array_splice($values, $key, 1);
+			$boostedValues[] = $value;
+		}
+		return array_merge($boostedValues, $values);
+	}
 }
