@@ -394,7 +394,7 @@ class Client {
 			/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $suggestResult */
 			$suggestResult = $this
 				->sendRequest(
-					"CALL SUGGEST('{$word}', '{$table}', {$limit} as limit)"
+					"CALL SUGGEST('{$word}', '{$table}', {$limit} as limit, {$distance} as max_edits)"
 				)
 				->getResult();
 			/** @var array{suggest:string,distance:int,docs:int} $suggestion */
