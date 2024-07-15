@@ -401,11 +401,6 @@ class Client {
 			$suggestions = $suggestResult[0]['data'] ?? [];
 			$choices = [];
 			foreach ($suggestions as $suggestion) {
-				// If distance out of allowed, we skip
-				if ($suggestion['distance'] > $distance) {
-					continue;
-				}
-
 				$word = $suggestion['suggest'];
 				$choices[] = $word;
 				$distanceMap[$word] = $suggestion['distance'];
