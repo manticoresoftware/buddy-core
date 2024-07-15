@@ -106,9 +106,9 @@
                     static&nbsp;array
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_getPositionalCombinations">getPositionalCombinations</a>(array $words)
+                    <a href="#method_getPositionalCombinations">getPositionalCombinations</a>(array $words, array $scoreMap = [])
         
-                                            <p><p>Get all combinations of words with typo and fuzzy correction</p></p>                </div>
+                                            <p><p>Get all combinations of words with typo and fuzzy correction, sorted by relevance based on scoreMap</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -121,6 +121,48 @@
                                             <p><p>Set the value in nested array by dot notation path to it and ref</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;array
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_normalizeValues">normalizeValues</a>(array $values)
+        
+                                            <p><p>Run normalization on the array values
+In case empty array passed, return empty array</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;array
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_blend">blend</a>(array ...$arrays)
+        
+                                            <p><p>Combine two arrays with relevance into single one that means two arrays will be merged in t</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;array
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_getMapSum">getMapSum</a>(array ...$arrays)
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;array
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_boostListValues">boostListValues</a>(array $values, mixed ...$valuesToBoost)
+        
+                                            <p><p>Boost multiple values in case they exist in array and place them on the first positions of the list</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
             </div>
 
 
@@ -129,9 +171,9 @@
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method_getPositionalCombinations">
-        <div class="location">at line 23</div>
+        <div class="location">at line 24</div>
         <code>        static            array
-    <strong>getPositionalCombinations</strong>(array $words)
+    <strong>getPositionalCombinations</strong>(array $words, array $scoreMap = [])
         </code>
     </h3>
     <div class="details">    
@@ -140,7 +182,7 @@
             
 
         <div class="method-description">
-                            <p><p>Get all combinations of words with typo and fuzzy correction</p></p>                        
+                            <p><p>Get all combinations of words with typo and fuzzy correction, sorted by relevance based on scoreMap</p></p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -149,6 +191,11 @@
                     <tr>
                 <td>array</td>
                 <td>$words</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>array</td>
+                <td>$scoreMap</td>
                 <td></td>
             </tr>
             </table>
@@ -172,7 +219,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_setValueByDotNotation">
-        <div class="location">at line 46</div>
+        <div class="location">at line 77</div>
         <code>        static            void
     <strong>setValueByDotNotation</strong>(array $array, string $keyPath, mixed $value)
         </code>
@@ -226,6 +273,185 @@
             </tr>
             </table>
 
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_normalizeValues">
+        <div class="location">at line 100</div>
+        <code>        static            array
+    <strong>normalizeValues</strong>(array $values)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Run normalization on the array values
+In case empty array passed, return empty array</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$values</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_blend">
+        <div class="location">at line 125</div>
+        <code>        static            array
+    <strong>blend</strong>(array ...$arrays)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Combine two arrays with relevance into single one that means two arrays will be merged in t</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>...$arrays</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getMapSum">
+        <div class="location">at line 146</div>
+        <code>        static            array
+    <strong>getMapSum</strong>(array ...$arrays)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>...$arrays</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_boostListValues">
+        <div class="location">at line 168</div>
+        <code>        static            array
+    <strong>boostListValues</strong>(array $values, mixed ...$valuesToBoost)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Boost multiple values in case they exist in array and place them on the first positions of the list</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$values</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>mixed</td>
+                <td>...$valuesToBoost</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
             
             
                     </div>
