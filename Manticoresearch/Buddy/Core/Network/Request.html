@@ -301,6 +301,16 @@ It can be useful for tests</p></p>                </div>
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_isElasticPath">isElasticPath</a>(string $path)
+        
+                                            <p><p>Helper function to detect if request path refers to Elastic-like request</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
                     void
                 </div>
                 <div class="col-md-8">
@@ -663,8 +673,51 @@ It can be useful for tests</p></p>
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_isElasticPath">
+        <div class="location">at line 222</div>
+        <code>            protected        bool
+    <strong>isElasticPath</strong>(string $path)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Helper function to detect if request path refers to Elastic-like request</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$path</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_validateInputFields">
-        <div class="location">at line 231</div>
+        <div class="location">at line 245</div>
         <code>            protected        void
     <strong>validateInputFields</strong>(array $payload, array $fields)
         </code>
@@ -712,7 +765,7 @@ It can be useful for tests</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_detectMySQLTool">
-        <div class="location">at line 254</div>
+        <div class="location">at line 268</div>
         <code>        static    protected        <abbr title="Manticoresearch\Buddy\Core\Network\Manticoresearch\Buddy\Core\ManticoreSearch\MySQLTool">MySQLTool</abbr>|null
     <strong>detectMySQLTool</strong>(string $query)
         </code>
@@ -755,7 +808,7 @@ It can be useful for tests</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_removeComments">
-        <div class="location">at line 270</div>
+        <div class="location">at line 284</div>
         <code>        static    protected        string
     <strong>removeComments</strong>(string $query)
         </code>
