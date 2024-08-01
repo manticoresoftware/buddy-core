@@ -170,15 +170,15 @@ final class Request {
 			// Convert the elastic bulk request path to the Manticore one
 			$path = '_bulk';
 		}
-		if (str_contains($path, '/_doc/') || str_contains($path, '/_create/')
+		if (static::isElasticPath($path)) {
+			$endpointBundle = ManticoreEndpoint::Elastic;
+		} elseif (str_contains($path, '/_doc/') || str_contains($path, '/_create/')
 			|| str_ends_with($path, '/_doc') || str_ends_with($path, '/_create')) {
 			// We don't differentiate elastic-like insert and replace queries here
 			// since this is irrelevant for the following Buddy processing logic
 			$endpointBundle = ManticoreEndpoint::Insert;
 		} elseif (str_contains($path, '/_update/')) {
 			$endpointBundle = ManticoreEndpoint::Update;
-		} elseif (str_starts_with($path, '_index_template/') || str_ends_with($path, '/_mapping')) {
-			$endpointBundle = ManticoreEndpoint::Elastic;
 		} else {
 			$endpointBundle = match ($path) {
 				'bulk', '_bulk' => ManticoreEndpoint::Bulk,
@@ -211,6 +211,20 @@ final class Request {
 		$this->error = $payload['error'];
 		$this->version = $payload['version'];
 		return $this;
+	}
+
+	/**
+	 * Helper function to detect if request path refers to Elastic-like request
+	 *
+	 * @param string $path
+	 * @return bool
+	 */
+	protected function isElasticPath(string $path): bool {
+		return str_starts_with($path, '_index_template/') || str_ends_with($path, '_nodes')
+			|| str_starts_with($path, '_xpack') || str_starts_with($path, '.kibana/')
+			|| str_starts_with($path, '_cluster')
+			|| str_ends_with($path, '/_mapping') || str_ends_with($path, '/_search')
+			|| str_ends_with($path, '.kibana') || str_starts_with($path, '.kibana_task_manager');
 	}
 
 	/**
