@@ -113,12 +113,14 @@ final class Pluggable {
 	public function getList(): array {
 		$pluginPrefixLen = strlen(static::PLUGIN_PREFIX);
 		$composerFile = $this->getPluginComposerFile();
-		$composerContent = file_get_contents($composerFile);
+		$composerContent = file_exists($composerFile) && is_writable($this->getPluginDir())
+			? file_get_contents($composerFile)
+			: false;
 		if ($composerContent === false) {
-			throw new Exception(
-				"Unable to read composer file from plugin dir: $composerFile"
-					. ', make sure that you have correct permissions on plugin dir'
-			);
+			$message = "Pluggable system is disabled. Unable to read composer file from plugin dir: $composerFile, ";
+			$message .= 'make sure that you have correct permissions on plugin dir';
+			Buddy::warning($message);
+			return [];
 		}
 		/** @var array{require?:array<string,string>} $composerJson */
 		$composerJson = json_decode($composerContent, true);
@@ -478,7 +480,7 @@ final class Pluggable {
 	protected function getPluginComposerFile(): string {
 		$pluginDir = $this->getPluginDir();
 		$composerFile = $pluginDir. DIRECTORY_SEPARATOR. 'composer.json';
-		if (!file_exists($composerFile)) {
+		if (!file_exists($composerFile) && is_writable($pluginDir)) {
 			file_put_contents($composerFile, '{"minimum-stability":"dev"}');
 		}
 
@@ -530,5 +532,17 @@ final class Pluggable {
 			strpos($fullName, static::PLUGIN_PREFIX)
 				+ strlen(static::PLUGIN_PREFIX)
 		);
+	}
+
+	/**
+	 * Check if the plugin is registered in the autoloader
+	 * @return bool
+	 */
+	public function isRegistered(): bool {
+		$composerFile = $this->getPluginComposerFile();
+		if (!file_exists($composerFile) || !is_writable($this->getPluginDir())) {
+			return false;
+		}
+		return true;
 	}
 }

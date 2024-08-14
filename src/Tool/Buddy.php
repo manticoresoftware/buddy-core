@@ -11,6 +11,8 @@
 
 namespace Manticoresearch\Buddy\Core\Tool;
 
+use Throwable;
+
 final class Buddy {
 	/** @var string */
 	protected static string $versionFile;
@@ -33,7 +35,7 @@ final class Buddy {
 	 * @return void
 	 */
 	public static function info(string $message, string $eol = PHP_EOL): void {
-		echo "[!] {$message} {$eol}";
+		echo "[i] {$message} {$eol}";
 	}
 
 	/**
@@ -62,6 +64,40 @@ final class Buddy {
 	 */
 	public static function debugv(string $message, string $eol = PHP_EOL): void {
 		static::debug($message, $eol, 2);
+	}
+
+	/**
+	 * Warning that means you need to take a care about it but still continue
+	 * @param string $message
+	 * @param string $eol
+	 * @return void
+	 */
+	public static function warning(string $message, string $eol = PHP_EOL): void {
+		echo "[!] {$message} {$eol}";
+	}
+
+	/**
+	 * This method write unrecoverable error to the log
+	 * @param Throwable $t
+	 * @param string $prefix
+	 * @param string $eol
+	 * @return void
+	 */
+	public static function error(Throwable $t, string $prefix = '', string $eol = PHP_EOL): void {
+		$file = $t->getFile();
+		$line = $t->getLine();
+		$class = pathinfo($file, PATHINFO_FILENAME);
+		$trace = $t->getTraceAsString();
+		$prefix = $prefix ? "<$prefix> " : '';
+
+		$callerInfo = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1];
+		$callerFile = $callerInfo['file'] ?? 'unknown';
+		$callerLine = $callerInfo['line'] ?? 'unknown';
+		$callerClass = pathinfo($callerFile, PATHINFO_FILENAME);
+
+		$message = "[X] <Thrown: $class:$line> <Logged: $callerClass:$callerLine> {$prefix}{$t->getMessage()} {$eol}";
+		fwrite(STDERR, $message);
+		Buddy::debugv($trace);
 	}
 
 	/**
