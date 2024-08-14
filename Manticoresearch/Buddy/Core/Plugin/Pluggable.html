@@ -416,6 +416,16 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
                                             <p><p>Helper to get short name from the full qualitifed name of the plugin</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_isRegistered">isRegistered</a>()
+        
+                                            <p><p>Check if the plugin is registered in the autoloader</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
             </div>
 
 
@@ -723,7 +733,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_getClassNamespaceByFullName">
-        <div class="location">at line 154</div>
+        <div class="location">at line 156</div>
         <code>                    string
     <strong>getClassNamespaceByFullName</strong>(string $name)
         </code>
@@ -767,7 +777,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_reload">
-        <div class="location">at line 197</div>
+        <div class="location">at line 199</div>
         <code>                    void
     <strong>reload</strong>()
         </code>
@@ -809,7 +819,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_unregisterAutoload">
-        <div class="location">at line 206</div>
+        <div class="location">at line 208</div>
         <code>                    void
     <strong>unregisterAutoload</strong>()
         </code>
@@ -842,7 +852,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_registerAutoload">
-        <div class="location">at line 219</div>
+        <div class="location">at line 221</div>
         <code>                    void
     <strong>registerAutoload</strong>()
         </code>
@@ -884,7 +894,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_autoloader">
-        <div class="location">at line 268</div>
+        <div class="location">at line 270</div>
         <code>                    void
     <strong>autoloader</strong>(string $className)
         </code>
@@ -927,7 +937,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_composer">
-        <div class="location">at line 303</div>
+        <div class="location">at line 305</div>
         <code>            protected        <abbr title="Symfony\Component\Console\Output\BufferedOutput">BufferedOutput</abbr>
     <strong>composer</strong>(string $command, array $options, string|null $package = null)
         </code>
@@ -989,7 +999,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fetchCorePlugins">
-        <div class="location">at line 348</div>
+        <div class="location">at line 350</div>
         <code>                    array
     <strong>fetchCorePlugins</strong>()
         </code>
@@ -1031,7 +1041,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fetchLocalPlugins">
-        <div class="location">at line 367</div>
+        <div class="location">at line 369</div>
         <code>                    array
     <strong>fetchLocalPlugins</strong>()
         </code>
@@ -1073,7 +1083,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fetchExtraPlugins">
-        <div class="location">at line 409</div>
+        <div class="location">at line 411</div>
         <code>                    array
     <strong>fetchExtraPlugins</strong>()
         </code>
@@ -1115,7 +1125,7 @@ by using fully qualified composer name of it</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_registerHooks">
-        <div class="location">at line 421</div>
+        <div class="location">at line 423</div>
         <code>                    void
     <strong>registerHooks</strong>(array $hooks)
         </code>
@@ -1159,7 +1169,7 @@ It's called on init phase once and keep updated on event emitted from the plugin
             </div>
                     <div class="method-item">
                     <h3 id="method_setPluginDir">
-        <div class="location">at line 434</div>
+        <div class="location">at line 436</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a>
     <strong>setPluginDir</strong>(string $dir)
         </code>
@@ -1202,7 +1212,7 @@ It's called on init phase once and keep updated on event emitted from the plugin
             </div>
                     <div class="method-item">
                     <h3 id="method_getPluginDir">
-        <div class="location">at line 443</div>
+        <div class="location">at line 445</div>
         <code>                    string
     <strong>getPluginDir</strong>()
         </code>
@@ -1235,7 +1245,7 @@ It's called on init phase once and keep updated on event emitted from the plugin
             </div>
                     <div class="method-item">
                     <h3 id="method_findPluginDir">
-        <div class="location">at line 452</div>
+        <div class="location">at line 454</div>
         <code>            protected        string
     <strong>findPluginDir</strong>()
         </code>
@@ -1277,7 +1287,7 @@ It's called on init phase once and keep updated on event emitted from the plugin
             </div>
                     <div class="method-item">
                     <h3 id="method_getPluginComposerFile">
-        <div class="location">at line 478</div>
+        <div class="location">at line 480</div>
         <code>            protected        string
     <strong>getPluginComposerFile</strong>()
         </code>
@@ -1319,7 +1329,7 @@ It's called on init phase once and keep updated on event emitted from the plugin
             </div>
                     <div class="method-item">
                     <h3 id="method_getPSR4AutoloadFile">
-        <div class="location">at line 494</div>
+        <div class="location">at line 496</div>
         <code>            protected        string
     <strong>getPSR4AutoloadFile</strong>()
         </code>
@@ -1362,7 +1372,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getNSAutoloadFile">
-        <div class="location">at line 511</div>
+        <div class="location">at line 513</div>
         <code>            protected        string
     <strong>getNSAutoloadFile</strong>()
         </code>
@@ -1405,7 +1415,7 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getShortName">
-        <div class="location">at line 527</div>
+        <div class="location">at line 529</div>
         <code>        static    protected        string
     <strong>getShortName</strong>(string $fullName)
         </code>
@@ -1435,6 +1445,39 @@ we have all vendor packages installed with CREATE PLUGIN command</p></p>
                     <table class="table table-condensed">
         <tr>
             <td>string</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isRegistered">
+        <div class="location">at line 541</div>
+        <code>                    bool
+    <strong>isRegistered</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Check if the plugin is registered in the autoloader</p></p>                        
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
             <td></td>
         </tr>
     </table>
