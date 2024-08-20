@@ -37,6 +37,8 @@ final class Request {
 	public ManticoreSettings $settings;
 	public string $path;
 	public string $error;
+	/** @var array<mixed> $errorBody */
+	public array $errorBody;
 	public string $payload;
 	public string $httpMethod;
 	public int $version;
@@ -63,6 +65,7 @@ final class Request {
 		$self->path = ManticoreEndpoint::Sql->value;
 		$self->format = RequestFormat::JSON;
 		$self->error = '';
+		$self->errorBody = [];
 		$self->payload = '{}';
 		$self->version = 1;
 		return $self;
@@ -149,7 +152,8 @@ final class Request {
 	 * message:array{
 	 *  path_query:string,
 	 *  body:string,
-	 *  http_method?:string},
+	 *  http_method?:string,
+	 *  error_body?:array<mixed>},
 	 * version:int
 	 * } $payload
 	 * @return static
@@ -209,6 +213,7 @@ final class Request {
 			? trim($payload['message']['body'])
 			: static::removeComments($payload['message']['body']);
 		$this->error = $payload['error'];
+		$this->errorBody = $payload['message']['error_body'] ?? [];
 		$this->version = $payload['version'];
 		return $this;
 	}
