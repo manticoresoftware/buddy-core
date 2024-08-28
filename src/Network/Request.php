@@ -284,7 +284,7 @@ final class Request {
 	protected static function removeComments(string $query): string {
 		$query = preg_replace_callback(
 			'/((\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\')|(--[^"\r\n]*|#[^"\r\n]*|\/\*[^!][\s\S]*?\*\/))/',
-			function ($matches) {
+			static function (array $matches): string {
 				if (strpos($matches[0], '--') === 0
 				|| strpos($matches[0], '#') === 0
 				|| strpos($matches[0], '/*') === 0) {

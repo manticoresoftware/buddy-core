@@ -2120,12 +2120,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "3ff7583f87cb8560d38ba66f61d81826ddb97591"
+                "reference": "bb0a8b7772610211c2cd7d6e4e36acfcbadcb613"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/3ff7583f87cb8560d38ba66f61d81826ddb97591",
-                "reference": "3ff7583f87cb8560d38ba66f61d81826ddb97591",
+                "url": "https://api.github.com/repos/symfony/process/zipball/bb0a8b7772610211c2cd7d6e4e36acfcbadcb613",
+                "reference": "bb0a8b7772610211c2cd7d6e4e36acfcbadcb613",
                 "shasum": ""
             },
             "require": {
@@ -2173,7 +2173,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-07-26T12:49:40+00:00"
+            "time": "2024-07-29T06:33:22+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -2864,12 +2864,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "ac42e2722ef887a0e93122cb15a55f08865893fb"
+                "reference": "4318276cd9e139f9710098716243829de601a5f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/ac42e2722ef887a0e93122cb15a55f08865893fb",
-                "reference": "ac42e2722ef887a0e93122cb15a55f08865893fb",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/4318276cd9e139f9710098716243829de601a5f6",
+                "reference": "4318276cd9e139f9710098716243829de601a5f6",
                 "shasum": ""
             },
             "require": {
@@ -2915,7 +2915,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-07-29T06:59:39+00:00"
+            "time": "2024-07-31T08:52:33+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -4375,12 +4375,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "a3d11a96b68bb837e58e859f4376784d75aa2733"
+                "reference": "0855bf25484fd85b381443cfd169fa33495b61c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/a3d11a96b68bb837e58e859f4376784d75aa2733",
-                "reference": "a3d11a96b68bb837e58e859f4376784d75aa2733",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/0855bf25484fd85b381443cfd169fa33495b61c1",
+                "reference": "0855bf25484fd85b381443cfd169fa33495b61c1",
                 "shasum": ""
             },
             "require": {
@@ -4448,7 +4448,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-07-27T09:41:13+00:00"
+            "time": "2024-07-31T04:44:04+00:00"
         },
         {
             "name": "theseer/tokenizer",
