@@ -96,7 +96,7 @@ final class Struct implements JsonSerializable, ArrayAccess {
 		/** @var array<TKey, TValue> */
 		$result = json_decode($json, true, 512, $defaultFlags);
 		$bigIntFields = [];
-		if (static::hasBiInt($json)) {
+		if (static::hasBigInt($json)) {
 			/** @var array<TKey, TValue> */
 			$modified = json_decode($json, true, 512, $defaultFlags | JSON_BIGINT_AS_STRING);
 			static::traverseAndTrack($modified, $result, $bigIntFields);
@@ -207,7 +207,7 @@ final class Struct implements JsonSerializable, ArrayAccess {
 	 * @param string $json
 	 * @return bool
 	 */
-	private static function hasBiInt(string $json): bool {
+	private static function hasBigInt(string $json): bool {
 		return !!preg_match('/(?<!")\b[1-9]\d{18,}\b(?!")/', $json);
 	}
 }
