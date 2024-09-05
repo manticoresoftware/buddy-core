@@ -70,7 +70,9 @@ class Client {
 		$this->setServerUrl($url);
 		$this->connectionPool = new ConnectionPool(
 			function () {
-				return new HttpClient($this->host, $this->port);
+				$client = new HttpClient($this->host, $this->port);
+				$client->set(['timeout' => -1]);
+				return $client;
 			}
 		);
 		$this->buddyVersion = Buddy::getVersion();
@@ -165,15 +167,22 @@ class Client {
 	 * @return string
 	 */
 	protected function runAsyncRequest(string $path, string $request, array $headers): string {
+		$try = 0;
+		request: $client = $this->connectionPool->get();
 		/** @var HttpClient $client */
-		$client = $this->connectionPool->get();
 		$headers['Connection'] = 'keep-alive';
-		$client->set(['timeout' => -1]);
 		$client->setHeaders($headers);
 		$client->post("/$path", $request);
 		if ($client->errCode) {
-			$error = "Error while async request: {$client->errCode}: {$client->errMsg}";
-			throw new ManticoreSearchClientError($error);
+			/** @phpstan-ignore-next-line */
+			if ($client->errCode !== 104 || $try >= 3) {
+				$error = "Error while async request: {$client->errCode}: {$client->errMsg}";
+				throw new ManticoreSearchClientError($error);
+			}
+
+			Buddy::debug('Client: connection reset by peer, repeat: ' . (++$try));
+			$client->close();
+			goto request;
 		}
 		$result = $client->body;
 		$this->connectionPool->put($client);
