@@ -15,11 +15,15 @@ use Composer\Console\Application;
 use Exception;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Settings;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
+use Manticoresearch\Buddy\Core\Tool\Strings;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * @phpstan-type PluginItem array{full:string,short:string,version:string}
+ */
 final class Pluggable {
 	const PLUGIN_PREFIX = 'buddy-plugin-';
 	const CORE_NS_PREFIX = 'Manticoresearch\\Buddy\\Base\\Plugin\\';
@@ -28,8 +32,17 @@ final class Pluggable {
 	/** @var array<mixed> */
 	protected array $autoloadMap = [];
 
-	/** @var array<string> */
-	protected static array $corePlugins = [];
+	/** @var array<PluginItem> */
+	protected static array $corePlugins;
+
+	/** @var array<PluginItem> */
+	protected static array $localPlugins;
+
+	/** @var array<PluginItem> */
+	protected static array $extraPlugins;
+
+	/** @var array<string,true> Here we keep disabled plugins map */
+	protected static array $disabledPlugins = [];
 
 	/** @var string */
 	protected string $pluginDir;
@@ -54,7 +67,89 @@ final class Pluggable {
 	 * @return void
 	 */
 	public static function setCorePlugins(array $plugins): void {
-		static::$corePlugins = $plugins;
+		static::$corePlugins = [];
+		$version = Buddy::getVersion();
+		foreach ($plugins as $fullName) {
+			static::$corePlugins[] = [
+				'full' => $fullName,
+				'short' => static::getShortName($fullName),
+				'version' => $version,
+			];
+		}
+	}
+
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
+	public static function isCorePlugin(string $name): bool {
+		return !!array_filter(static::$corePlugins, fn ($plugin) => $plugin['full'] === $name);
+	}
+
+	/**
+	 * The cacheable method for getting core plugins
+	 * @return array<PluginItem>
+	 */
+	public function getCorePlugins(): array {
+		return static::$corePlugins;
+	}
+
+	/**
+	 * The cacheable method for getting local plugins
+	 * @param bool $refresh
+	 * @return array<PluginItem>
+	 */
+	public function getLocalPlugins(bool $refresh = false): array {
+		if (!isset(static::$localPlugins) || $refresh) {
+			static::$localPlugins = $this->fetchLocalPlugins();
+		}
+		return static::$localPlugins;
+	}
+
+	/**
+	 * The cacheable method for getting extra plugins
+	 * @param bool $refresh
+	 * @return array<PluginItem>
+	 */
+	public function getExtraPlugins(bool $refresh = false): array {
+		if (!isset(static::$extraPlugins) || $refresh) {
+			static::$extraPlugins = $this->fetchExtraPlugins();
+		}
+		return static::$extraPlugins;
+	}
+
+	/**
+	 * @return array<string,true>
+	 */
+	public static function getDisabledPlugins(): array {
+		return static::$disabledPlugins;
+	}
+
+	/**
+	 * Enable plugin by name
+	 * @param string $name
+	 * @return bool
+	 */
+	public function enablePlugin(string $name): bool {
+		if (isset(static::$disabledPlugins[$name])) {
+			return false;
+		}
+		static::$disabledPlugins[$name] = true;
+		return true;
+	}
+
+	/**
+	 * Disable plugin by name
+	 * @param string $name
+	 * @return bool
+	 */
+	public function disablePlugin(string $name): bool {
+		if (!isset(static::$disabledPlugins[$name])) {
+			return false;
+		}
+
+		unset(static::$disabledPlugins[$name]);
+		return true;
 	}
 
 	/**
@@ -155,7 +250,7 @@ final class Pluggable {
 	 */
 	public function getClassNamespaceByFullName(string $name): string {
 		// It's simple in case it's core plugin
-		if (in_array($name, static::$corePlugins)) {
+		if (static::isCorePlugin($name)) {
 			$baseName = static::getShortName($name);
 			$ns = str_replace(' ', '', ucwords(str_replace('-', ' ', $baseName)));
 			return "Manticoresearch\\Buddy\\Base\\Plugin\\$ns\\";
@@ -341,26 +436,6 @@ final class Pluggable {
 		return $output;
 	}
 
-
-	/**
-	 * Get list of core plugin names
-	 * @return array<array{full:string,short:string,version:string}>
-	 * @throws Exception
-	 */
-	public function fetchCorePlugins(): array {
-		$plugins = [];
-		$version = Buddy::getVersion();
-		foreach (static::$corePlugins as $fullName) {
-			$plugins[] = [
-				'full' => $fullName,
-				'short' => static::getShortName($fullName),
-				'version' => $version,
-			];
-		}
-
-		return $plugins;
-	}
-
 	/**
 	 * Helper to fetch local plugins
 	 * @return array<array{full:string,short:string,version:string}>
@@ -412,20 +487,6 @@ final class Pluggable {
 		$this->reload();
 
 		return $this->getList();
-	}
-
-	/**
-	 * Register all hooks to known core plugins
-	 * It's called on init phase once and keep updated on event emitted from the plugin
-	 * @param array<array{0:string,1:string,2:callable}> $hooks
-	 * @return void
-	 */
-	public function registerHooks(array $hooks): void {
-		foreach ($hooks as [$plugin, $hook, $fn]) {
-			$prefix = $this->getClassNamespaceByFullName($plugin);
-			$className = $prefix . 'Handler';
-			$className::registerHook($hook, $fn);
-		}
 	}
 
 	/**
@@ -544,5 +605,29 @@ final class Pluggable {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * @param callable $fn
+	 * @param array<string> $filter If we pass name we filter only for this plugin
+	 * @return void
+	 */
+	public function iterateProcessors(callable $fn, array $filter = []): void {
+		$list = [
+			[static::CORE_NS_PREFIX, $this->getCorePlugins()],
+			[static::EXTRA_NS_PREFIX, $this->getExtraPlugins()],
+			[static::EXTRA_NS_PREFIX, $this->getLocalPlugins()],
+		];
+		foreach ($list as [$prefix, $plugins]) {
+			foreach ($plugins as $plugin) {
+				// If we have filter, we
+				if ($filter && !in_array($plugin['full'], $filter)) {
+					continue;
+				}
+				$pluginPrefix = $prefix . ucfirst(Strings::camelcaseBySeparator($plugin['short'], '-'));
+				$pluginPayloadClass = "$pluginPrefix\\Payload";
+				array_map($fn, $pluginPayloadClass::getProcessors());
+			}
+		}
 	}
 }
