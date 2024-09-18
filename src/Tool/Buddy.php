@@ -89,8 +89,7 @@ final class Buddy {
 		$class = pathinfo($file, PATHINFO_FILENAME);
 		$trace = $t->getTraceAsString();
 		$prefix = $prefix ? "<$prefix> " : '';
-
-		$callerInfo = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1];
+		$callerInfo = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1] ?? [];
 		$callerFile = $callerInfo['file'] ?? 'unknown';
 		$callerLine = $callerInfo['line'] ?? 'unknown';
 		$callerClass = pathinfo($callerFile, PATHINFO_FILENAME);
