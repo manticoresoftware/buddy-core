@@ -86,15 +86,10 @@ class RequestTest extends TestCase {
 		$this->assertEquals(InvalidNetworkRequestError::class, $exCls);
 		$this->assertEquals("Mandatory field 'error' is missing", $exMsg);
 
-		$payload['error'] = [
-			'message' => 'some error',
-			'body' => [
-				'error' => 'some error',
-			],
-		];
+		$payload['error'] = 'abc';
 		[$exCls, $exMsg] = self::getExceptionInfo(Request::class, 'fromPayload', [$payload]);
 		$this->assertEquals(InvalidNetworkRequestError::class, $exCls);
-		$this->assertEquals("Field 'error' must be a string", $exMsg);
+		$this->assertEquals("Field 'error' must be an array", $exMsg);
 
 		$payload['error'] = [
 			'message' => 'some error',
