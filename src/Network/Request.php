@@ -22,7 +22,7 @@ use Manticoresearch\Buddy\Core\ManticoreSearch\Settings as ManticoreSettings;
 final class Request {
 	const PAYLOAD_FIELDS = [
 		'type' => 'string',
-		'error' => 'string',
+		'error' => 'array',
 		'message' => 'array',
 		'version' => 'integer',
 	];
@@ -114,7 +114,11 @@ final class Request {
 	/**
 	 * This method is same as fromArray but applied to payload
 	 *
-	 * @param array{type:string,error:string,message:array{path_query:string,body:string},version:int} $payload
+	 * @param array{
+	 *  type:string,
+	 *  error:array{message:string,body:array{error:string}},
+	 *  message:array{path_query:string,body:string},
+	 *  version:int} $payload
 	 * @param string $id
 	 * @return static
 	 */
@@ -129,14 +133,23 @@ final class Request {
 	 * Validate input data before we will parse it into a request
 	 *
 	 * @param string $data
-	 * @return array{type:string,error:string,message:array{path_query:string,body:string},version:int}
+	 * @return array{
+	 *  type:string,
+	 *  error:array{message:string,body:array{error:string}},
+	 *  message:array{path_query:string,body:string},
+	 *  version:int}
 	 * @throws InvalidNetworkRequestError
 	 */
 	public static function validateOrFail(string $data): array {
 		if ($data === '') {
 			throw new InvalidNetworkRequestError('The payload is missing');
 		}
-		/** @var array{type:string,error:string,message:array{path_query:string,body:string},version:int} $result*/
+		/** @var array{
+		 * type:string,
+		 * error:array{message:string,body:array{error:string}},
+		 * message:array{path_query:string,body:string},
+		 * version:int} $result
+		 */
 		$result = json_decode($data, true, 512, JSON_INVALID_UTF8_SUBSTITUTE);
 		if (!is_array($result)) {
 			throw new InvalidNetworkRequestError('Invalid request payload is passed');
@@ -230,7 +243,7 @@ final class Request {
 	 * 		body: string
 	 * 	}|array{
 	 * 		type:string,
-	 * 		error:string,
+	 * 		error:array{message:string,body:array{error:string}},
 	 * 		message:array{path_query:string,body:string},
 	 * 		version:int
 	 * 	} $payload

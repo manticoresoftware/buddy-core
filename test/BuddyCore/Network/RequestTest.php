@@ -150,7 +150,7 @@ class RequestTest extends TestCase {
 				.'悠久历史和文化的国家，是世界上人口最多的国家，也是世界上最大的'
 				.'发展家之一。它位于亚洲东部，拥有广阔的领土和多样的地理环境，包'
 				.'括高山、平原、沙漠、森林和海岸线。是联合国安理会常\' where i'
-				.'d=1;"; 
+				.'d=1;";
 		return [
 			[
 				'{"error":{"message":"some error","body":{"error":"some_error"}},"type":"unknown json request",'
