@@ -117,7 +117,7 @@ class RequestTest extends TestCase {
 	 * @return array<int, array<int, string>>
 	 */
 	public function utf8QueryProvider(): array {
-		$errorUtf8Text = "can\'t set ooop=\'是一个拥有悠久历史和文化的国'
+		$errorUtf8Text = 'can\'t set ooop=\'是一个拥有悠久历史和文化的国'
 				.'家，上人口最多的国家，也是世界上最大的发展家之一。它位于亚洲东'
 				.'部，拥有广阔的领土和多样的地理环境，包括高山、平原、沙漠、森林'
 				.'和海岸线。是联合国安理会常任理事国之一，拥有强大的经济和军事实'
@@ -145,7 +145,7 @@ class RequestTest extends TestCase {
 				.'悠久历史和文化的国家，是世界上人口最多的国家，也是世界上最大的'
 				.'发展家之一。它位于亚洲东部，拥有广阔的领土和多样的地理环境，包'
 				.'括高山、平原、沙漠、森林和海岸线。是联合国安理会常\' where i'
-				.'d=1;";
+				.'d=1;';
 		return [
 			[
 				'{"error":{"message":"some error","body":{"error":"some_error"}},"type":"unknown json request",'
@@ -154,8 +154,8 @@ class RequestTest extends TestCase {
 			],
 			[
 				'{"error":{"message":"' . $errorUtf8Text . '","body":{"error":"' . $errorUtf8Text . '"}},'
-				.'"type": "unknown json request","message": {"path_query": "/cli","body": "' . $errorUtf8Text . '"}'
-				.'"version": 1}',
+				.'"type": "unknown json request","message": {"path_query": "/cli","body": "' . $errorUtf8Text . '"},'
+				.'"version":1}',
 			],
 		];
 	}
