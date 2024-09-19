@@ -148,12 +148,16 @@ final class Request {
 	/**
 	 * @param array{
 	 * type:string,
-	 * error:string,
+	 * error:array{
+	 *  message:string,
+	 *  body:array{
+	 *   error:string
+	 *  }
+	 * },
 	 * message:array{
 	 *  path_query:string,
 	 *  body:string,
-	 *  http_method?:string,
-	 *  error_body?:array<mixed>},
+	 *  http_method?:string},
 	 * version:int
 	 * } $payload
 	 * @return static
