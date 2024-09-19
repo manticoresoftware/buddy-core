@@ -116,7 +116,7 @@ final class Request {
 	 *
 	 * @param array{
 	 *  type:string,
-	 *  error:array{message:string,body:array{error:string}},
+	 *  error:array{message:string,body?:array{error:string}},
 	 *  message:array{path_query:string,body:string},
 	 *  version:int} $payload
 	 * @param string $id
@@ -146,7 +146,7 @@ final class Request {
 		}
 		/** @var array{
 		 * type:string,
-		 * error:array{message:string,body:array{error:string}},
+		 * error:array{message:string,body?:array{error:string}},
 		 * message:array{path_query:string,body:string},
 		 * version:int} $result
 		 */
@@ -163,7 +163,7 @@ final class Request {
 	 * type:string,
 	 * error:array{
 	 *  message:string,
-	 *  body:array{
+	 *  body?:array{
 	 *   error:string
 	 *  }
 	 * },
@@ -242,8 +242,13 @@ final class Request {
 	 * 		path_query: string,
 	 * 		body: string
 	 * 	}|array{
+	 *      message:string,
+	 *      body?:array{
+	 *        error:string
+	 *      }
+	 *  }|array{
 	 * 		type:string,
-	 * 		error:array{message:string,body:array{error:string}},
+	 * 		error:array{message:string,body?:array{error:string}},
 	 * 		message:array{path_query:string,body:string},
 	 * 		version:int
 	 * 	} $payload

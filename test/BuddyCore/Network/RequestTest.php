@@ -89,7 +89,7 @@ class RequestTest extends TestCase {
 		$payload['error'] = 'abc';
 		[$exCls, $exMsg] = self::getExceptionInfo(Request::class, 'fromPayload', [$payload]);
 		$this->assertEquals(InvalidNetworkRequestError::class, $exCls);
-		$this->assertEquals("Field 'error' must be an array", $exMsg);
+		$this->assertEquals("Field 'error' must be a array", $exMsg);
 
 		$payload['error'] = [
 			'message' => 'some error',
