@@ -28,6 +28,10 @@ class RequestTest extends TestCase {
 			'message' => [
 				'path_query' => '/sql?mode=raw',
 				'body' => 'some query',
+				'error_body' => [
+					'error' => 'some error',
+					'status' => 400,
+				],
 			],
 			'version' => 2,
 		];
@@ -37,6 +41,7 @@ class RequestTest extends TestCase {
 		$this->assertEquals(RequestFormat::JSON, $request->format);
 		$this->assertEquals($payload['version'], $request->version);
 		$this->assertEquals($payload['error'], $request->error);
+		$this->assertEquals($payload['message']['error_body'], $request->errorBody);
 		$this->assertEquals(ManticoreEndpoint::Sql, $request->endpointBundle);
 
 		$payload['message']['path_query'] = '';

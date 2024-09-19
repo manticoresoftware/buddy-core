@@ -83,6 +83,29 @@ class ResponseTest extends TestCase {
 			json_encode($result),
 			(string)Response::fromError($error, RequestFormat::SQL)
 		);
+		$result = [
+			'version' => 2,
+			'type' => 'json response',
+			'message' => [
+				'error' => [
+					'type' => 'parse exception',
+				],
+				'status' => 400,
+			],
+			'error_code' => 0,
+		];
+		$error = new GenericError();
+		$errorMsg = [
+			'error' => [
+				'type' => 'parse exception',
+			],
+			'status' => 400,
+		];
+		$error->setResponseErrorBody($errorMsg);
+		$this->assertEquals(
+			json_encode($result),
+			(string)Response::fromError($error)
+		);
 	}
 
 	public function testBuddyResponseBuildFail(): void {
