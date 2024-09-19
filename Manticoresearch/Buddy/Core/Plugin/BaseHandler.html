@@ -97,6 +97,20 @@
             
         
     
+            <h2>Properties</h2>
+
+            <table class="table table-condensed">
+                    <tr>
+                <td class="type" id="property_hooks">
+                    static                    protected                                        <abbr title="Manticoresearch\Buddy\Core\Plugin\array&lt;string,callable[]&gt;">array&lt;string,callable[]&gt;</abbr>
+                                                                                
+                                    </td>
+                <td>$hooks</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
+            </table>
+
     
             <h2>Methods</h2>
 
@@ -123,6 +137,26 @@
                                     </div>
                 <div class="col-md-2"></div>
             </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;void
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_registerHook">registerHook</a>(string $name, callable $fn)
+        
+                                            <p><p>Register hook with closure processor that will receive its data and may do something</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;void
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_processHook">processHook</a>(string $name, array $data = [])
+        
+                                            <p><p>Process hook and pass the data that will be send to the callable function</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
             </div>
 
 
@@ -131,7 +165,7 @@
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method_run">
-        <div class="location">at line 18</div>
+        <div class="location">at line 21</div>
         <code>    abstract                <a href="../../../../Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a>
     <strong>run</strong>()
         </code>
@@ -165,7 +199,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getProps">
-        <div class="location">at line 21</div>
+        <div class="location">at line 24</div>
         <code>    abstract                array
     <strong>getProps</strong>()
         </code>
@@ -186,6 +220,102 @@
                     <table class="table table-condensed">
         <tr>
             <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_registerHook">
+        <div class="location">at line 32</div>
+        <code>        static            void
+    <strong>registerHook</strong>(string $name, callable $fn)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Register hook with closure processor that will receive its data and may do something</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$name</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>callable</td>
+                <td>$fn</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_processHook">
+        <div class="location">at line 43</div>
+        <code>        static    protected        void
+    <strong>processHook</strong>(string $name, array $data = [])
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Process hook and pass the data that will be send to the callable function</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$name</td>
+                <td><p>name of hook to process</p></td>
+            </tr>
+                    <tr>
+                <td>array</td>
+                <td>$data</td>
+                <td><p>Must be list of arguments to pass to a registered callable</p></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
             <td></td>
         </tr>
     </table>
