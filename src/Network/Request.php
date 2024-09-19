@@ -135,7 +135,7 @@ final class Request {
 	 * @param string $data
 	 * @return array{
 	 *  type:string,
-	 *  error:array{message:string,body:array{error:string}},
+	 *  error:array{message:string,body?:array{error:string}},
 	 *  message:array{path_query:string,body:string},
 	 *  version:int}
 	 * @throws InvalidNetworkRequestError
@@ -246,6 +246,8 @@ final class Request {
 	 *      body?:array{
 	 *        error:string
 	 *      }
+	 *  }|array{
+	 *      error:string
 	 *  }|array{
 	 * 		type:string,
 	 * 		error:array{message:string,body?:array{error:string}},
