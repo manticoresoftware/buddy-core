@@ -131,10 +131,11 @@ final class Pluggable {
 	 * @return bool
 	 */
 	public function enablePlugin(string $name): bool {
-		if (isset(static::$disabledPlugins[$name])) {
+		if (!isset(static::$disabledPlugins[$name])) {
 			return false;
 		}
-		static::$disabledPlugins[$name] = true;
+
+		unset(static::$disabledPlugins[$name]);
 		return true;
 	}
 
@@ -144,11 +145,11 @@ final class Pluggable {
 	 * @return bool
 	 */
 	public function disablePlugin(string $name): bool {
-		if (!isset(static::$disabledPlugins[$name])) {
+		if (isset(static::$disabledPlugins[$name])) {
 			return false;
 		}
 
-		unset(static::$disabledPlugins[$name]);
+		static::$disabledPlugins[$name] = true;
 		return true;
 	}
 
