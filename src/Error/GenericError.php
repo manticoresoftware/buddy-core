@@ -18,6 +18,9 @@ class GenericError extends Exception {
 	/** @var string $responseError */
 	protected string $responseError = '';
 
+	/** @var array<mixed> $responseErrorBody */
+	protected array $responseErrorBody = [];
+
 	/** @var int $responseErrorCode */
 	protected int $responseErrorCode = 0;
 
@@ -71,6 +74,18 @@ class GenericError extends Exception {
 	}
 
 	/**
+	 * Set response error body that we will return to client
+	 *
+	 * @param array<mixed> $responseErrorBody
+	 * @return static
+	 */
+	public function setResponseErrorBody(array $responseErrorBody): static {
+		$this->responseErrorBody = $responseErrorBody;
+
+		return $this;
+	}
+
+	/**
 	 * Set response error code that we will return to client
 	 *
 	 * @param int $responseErrorCode
@@ -93,6 +108,15 @@ class GenericError extends Exception {
 	}
 
 	/**
+	 * Compound client error message, that we return to the manticore if it exists; used by Manticore API clients
+	 *
+	 * @return array<mixed>|false
+	 */
+	public function getResponseErrorBody(): array|false {
+		return $this->hasResponseErrorBody() ? $this->responseErrorBody : false;
+	}
+
+	/**
 	 * Client HTTP error code 0 when proxy original one
 	 *
 	 * @return int
@@ -107,6 +131,14 @@ class GenericError extends Exception {
 	 */
 	public function hasResponseError(): bool {
 		return !!$this->responseError;
+	}
+
+	/**
+	 * Check if response error body is set
+	 * @return bool
+	 */
+	public function hasResponseErrorBody(): bool {
+		return !!$this->responseErrorBody;
 	}
 
 	/**
