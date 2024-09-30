@@ -224,7 +224,10 @@ final class Request {
 			|| str_starts_with($path, '_xpack') || str_starts_with($path, '.kibana/')
 			|| str_starts_with($path, '_cluster')
 			|| str_ends_with($path, '/_mapping') || str_ends_with($path, '/_search')
-			|| str_ends_with($path, '.kibana') || str_starts_with($path, '.kibana_task_manager');
+			|| str_ends_with($path, '.kibana') || str_starts_with($path, '.kibana_task_manager')
+			|| str_starts_with($path, '_aliases') || str_starts_with($path, '_alias/')
+			|| str_starts_with($path, '_template/') || str_starts_with($path, '_cat/')
+			|| str_ends_with($path, '/_field_caps') || str_starts_with($path, '_field_caps');
 	}
 
 	/**
