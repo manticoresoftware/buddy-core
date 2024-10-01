@@ -377,6 +377,7 @@ class Client {
 	 * Helper to build combinations of words with typo and fuzzy correction to next combine in searches
 	 * @param string $query The query to be tokenized
 	 * @param string $table The table to be used in the suggest function
+	 * @param bool $preserve If we should keep words that are not in the table
 	 * @param int $distance The maximum distance between the query word and the suggestion
 	 * @param int $limit The maximum number of suggestions for each tokenized word
 	 * @return array{array<array<string>>,array<string,float>}
@@ -384,7 +385,13 @@ class Client {
 	 * @throws RuntimeException
 	 * @throws ManticoreSearchClientError
 	 */
-	public function fetchFuzzyVariations(string $query, string $table, int $distance = 2, int $limit = 3): array {
+	public function fetchFuzzyVariations(
+		string $query,
+		string $table,
+		bool $preserve = false,
+		int $distance = 2,
+		int $limit = 3
+	): array {
 		// 1. Tokenize the query first with the keywords function
 		$q = "CALL KEYWORDS('{$query}', '{$table}')";
 		/** @var array<array{data:array<array{normalized:string,tokenized:string}>}> $keywordsResult */
@@ -416,7 +423,13 @@ class Client {
 				$docMap[$word] = $suggestion['docs'];
 			}
 
+			// Special case for empty suggestions
 			if (!$choices) {
+				if ($preserve) {
+					$words[] = [$word];
+					$distanceMap[$word] = 999;
+					$docMap[$word] = 0;
+				}
 				continue;
 			}
 
