@@ -336,7 +336,7 @@ or validate and throw error if we have missing table in the list</p></p>        
                     array
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_fetchFuzzyVariations">fetchFuzzyVariations</a>(string $query, string $table, int $distance = 2, int $limit = 3)
+                    <a href="#method_fetchFuzzyVariations">fetchFuzzyVariations</a>(string $query, string $table, bool $preserve = false, int $distance = 2, int $limit = 3)
         
                                             <p><p>Helper to build combinations of words with typo and fuzzy correction to next combine in searches</p></p>                </div>
                 <div class="col-md-2"></div>
@@ -918,9 +918,9 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fetchFuzzyVariations">
-        <div class="location">at line 387</div>
+        <div class="location">at line 388</div>
         <code>                    array
-    <strong>fetchFuzzyVariations</strong>(string $query, string $table, int $distance = 2, int $limit = 3)
+    <strong>fetchFuzzyVariations</strong>(string $query, string $table, bool $preserve = false, int $distance = 2, int $limit = 3)
         </code>
     </h3>
     <div class="details">    
@@ -944,6 +944,11 @@ or validate and throw error if we have missing table in the list</p></p>
                 <td>string</td>
                 <td>$table</td>
                 <td><p>The table to be used in the suggest function</p></td>
+            </tr>
+                    <tr>
+                <td>bool</td>
+                <td>$preserve</td>
+                <td><p>If we should keep words that are not in the table</p></td>
             </tr>
                     <tr>
                 <td>int</td>
