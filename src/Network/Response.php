@@ -15,6 +15,7 @@ use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat;
 use Manticoresearch\Buddy\Core\Plugin\TableFormatter;
 
+/** @package Manticoresearch\Buddy\Core\Network */
 final class Response {
   /**
 	 * Initialize response with string message to be returned (json encoded) and bool flag setting if response has error
@@ -102,17 +103,22 @@ final class Response {
 			}
 			$message['error'] = $responseError;
 		}
-		$payload = [
-			'version' => 2,
-			'type' => "{$format->value} response",
-			'message' => $message,
-			'error_code' => $error?->getResponseErrorCode() ?? 200,
-		];
+		$json = '{'
+			. '"version":2,'
+			. '"type":"' . $format->value . ' response",'
+			. '"message":%s,'
+			. '"error_code":' . ($error?->getResponseErrorCode() ?? 200)
+			. '}';
+		if ($message instanceof Struct) {
+			$json = sprintf($json, $message->toJson());
+		} else {
+			$json = sprintf(
+				$json,
+				json_encode($message, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_IGNORE),
+			);
+		}
 
-		return new static(
-			json_encode($payload, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_IGNORE),
-			self::checkForError($message)
-		);
+		return new static($json, self::checkForError($message));
 	}
 
   /**

@@ -12,6 +12,7 @@
 namespace Manticoresearch\Buddy\Core\ManticoreSearch;
 
 use Manticoresearch\Buddy\Core\Error\ManticoreSearchResponseError;
+use Manticoresearch\Buddy\Core\Network\Struct;
 use Throwable;
 
 class Response {
@@ -96,27 +97,27 @@ class Response {
 		if (!isset($this->body)) {
 			return;
 		}
-		$data = json_decode($this->body, true);
-		if (!is_array($data)) {
+		$isValid = Struct::isValid($this->body);
+		if (!$isValid) {
 			throw new ManticoreSearchResponseError('Invalid JSON found');
 		}
-		if (empty($data)) {
-			return;
+
+		$struct = Struct::fromJson($this->body);
+		if ($struct->isList()) {
+			/** @var array<string,mixed> */
+			$data = $struct[0];
+			$struct = Struct::fromData($data, $struct->getBigIntFields());
 		}
-		if (array_is_list($data)) {
-			/** @var array<string,string> */
-			$data = $data[0];
-		}
-		if (array_key_exists('error', $data) && is_string($data['error']) && $data['error'] !== '') {
-			$this->error = $data['error'];
+		if ($struct->hasKey('error') && is_string($struct['error']) && $struct['error'] !== '') {
+			$this->error = $struct['error'];
 		} else {
 			$this->error = null;
 		}
 		foreach (['columns', 'data'] as $prop) {
-			if (!array_key_exists($prop, $data) || !is_array($data[$prop])) {
+			if (!$struct->hasKey($prop) || !is_array($struct[$prop])) {
 				continue;
 			}
-			$this->$prop = $data[$prop];
+			$this->$prop = $struct[$prop];
 		}
 	}
 
