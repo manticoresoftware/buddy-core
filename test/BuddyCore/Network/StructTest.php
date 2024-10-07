@@ -26,16 +26,12 @@ final class StructTest extends TestCase {
 
 		$this->assertEquals('bar', $struct['foo']);
 		$this->assertEquals(42, $struct['baz']);
-		/** @phpstan-ignore-next-line */
 		$this->assertNull($struct['nonexistent']);
 
-		/** @phpstan-ignore-next-line */
 		$struct['new'] = 'value';
-		/** @phpstan-ignore-next-line */
 		$this->assertEquals('value', $struct['new']);
 
 		$this->assertTrue(isset($struct['foo']));
-		/** @phpstan-ignore-next-line */
 		$this->assertFalse(isset($struct['nonexistent']));
 
 		unset($struct['foo']);

@@ -17,12 +17,15 @@ use JsonSerializable;
 
 /**
  * @package Manticoresearch\Buddy\Core\Network
- * @template TKey of string
+ * @template TKey of string|int
  * @template TValue
  * @implements ArrayAccess<TKey, TValue>
  */
 
 final class Struct implements JsonSerializable, ArrayAccess {
+	const JSON_DEPTH = 512;
+	const JSON_FLAGS = JSON_INVALID_UTF8_SUBSTITUTE;
+
 	/**
 	 * @param array<TKey, TValue> $data
 	 * @param array<string> $bigIntFields
@@ -78,6 +81,13 @@ final class Struct implements JsonSerializable, ArrayAccess {
 	}
 
 	/**
+	 * @return array<string>
+	 */
+	public function getBigIntFields(): array {
+		return $this->bigIntFields;
+	}
+
+	/**
 	 * Add new bigint field, so we will know how to handle it
 	 * @param string $field
 	 * @return void
@@ -87,24 +97,60 @@ final class Struct implements JsonSerializable, ArrayAccess {
 	}
 
 	/**
+	 * Check if the input JSON is valid structure
+	 * @param string $json
+	 * @return bool
+	 */
+	public static function isValid(string $json): bool {
+		// TODO: replace with json_validate once we more to 8.3
+		$result = json_decode($json, true, static::JSON_DEPTH, static::JSON_FLAGS);
+		return !!$result;
+	}
+
+	/**
 	 * Create Struct from JSON string with paths preservation for modified unsigned big integers
 	 * @param string $json
 	 * @return Struct<TKey, TValue>
 	 */
 	public static function fromJson(string $json): self {
-		$defaultFlags = JSON_INVALID_UTF8_SUBSTITUTE;
 		/** @var array<TKey, TValue> */
-		$result = json_decode($json, true, 512, $defaultFlags);
+		$result = json_decode($json, true, static::JSON_DEPTH, static::JSON_FLAGS);
 		$bigIntFields = [];
 		if (static::hasBigInt($json)) {
 			/** @var array<TKey, TValue> */
-			$modified = json_decode($json, true, 512, $defaultFlags | JSON_BIGINT_AS_STRING);
+			$modified = json_decode($json, true, static::JSON_DEPTH, static::JSON_FLAGS | JSON_BIGINT_AS_STRING);
 			static::traverseAndTrack($modified, $result, $bigIntFields);
 			$result = $modified;
 		}
 
 		/** @var Struct<TKey, TValue> */
 		return new self($result, $bigIntFields);
+	}
+
+	/**
+	 * @param array<TKey,TValue> $data
+	 * @param array<string> $bigIntFields
+	 * @return Struct<TKey, TValue>
+	 */
+	public static function fromData(array $data, array $bigIntFields = []): self {
+		return new self($data, $bigIntFields);
+	}
+
+	/**
+	 * Check if underlying data is list
+	 * @return bool
+	 */
+	public function isList(): bool {
+		return $this->data && array_is_list($this->data);
+	}
+
+	/**
+	 * Check if the key exists in the data
+	 * @param string $key
+	 * @return bool
+	 */
+	public function hasKey(string $key): bool {
+		return array_key_exists($key, $this->data);
 	}
 
 	/**
