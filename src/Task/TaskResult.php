@@ -21,8 +21,8 @@ final class TaskResult {
 	/** @var int  */
 	protected int $total = 0;
 
-	/** @var string|array<mixed> If we set this flag, we will return only data and skip all other fields */
-	protected string|array $raw;
+	/** @var mixed If we set this flag, we will return only data and skip all other fields */
+	protected mixed $raw;
 
 	/**
 	 * Initialize the empty result
@@ -44,10 +44,10 @@ final class TaskResult {
 	 * Entrypoint to create raw result, that we probably need in some cases
 	 * For example, elastic like responses, cli tables and so on
 	 * Prefer to not use raw when you return standard structure to the client response
-	 * @param string|array<mixed> $raw
+	 * @param mixed $raw
 	 * @return static
 	 */
-	public static function raw(string|array $raw): static {
+	public static function raw(mixed $raw): static {
 		$obj = new static([], '', '');
 		$obj->raw = $raw;
 		return $obj;
@@ -91,7 +91,7 @@ final class TaskResult {
 	}
 
 	/**
-	 * Entrypoint to the object creation with error ocurred
+	 * Entrypoint to the object creation with error occurred
 	 * @param string $error
 	 * @return static
 	 */
@@ -100,7 +100,7 @@ final class TaskResult {
 	}
 
 	/**
-	 * Entrypoint to the object creation with error ocurred
+	 * Entrypoint to the object creation with error occurred
 	 * @param string $warning
 	 * @return static
 	 */
@@ -177,9 +177,9 @@ final class TaskResult {
 
 	/**
 	 * Get resulting struct without JSON encoding
-	 * @return string|array<mixed>|array{0:array{columns?:array<mixed>,data?:array<mixed>,total:int,error:string,warning:string}}
+	 * @return mixed
 	 */
-	public function getStruct(): string|array {
+	public function getStruct(): mixed {
 		if (isset($this->raw)) {
 			return $this->raw;
 		}
