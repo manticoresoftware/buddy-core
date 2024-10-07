@@ -12,6 +12,7 @@
 namespace Manticoresearch\Buddy\Core\ManticoreSearch;
 
 use Manticoresearch\Buddy\Core\Error\ManticoreSearchResponseError;
+use Manticoresearch\Buddy\Core\Network\Struct;
 use Throwable;
 
 class Response {
@@ -134,28 +135,27 @@ class Response {
 		if (!$this->body) {
 			throw new ManticoreSearchResponseError('Trying to parse empty response');
 		}
-
-		$result = json_decode($this->body, true);
-		if (!is_array($result)) {
+		$isValid = Struct::isValid($this->body);
+		if (!$isValid) {
 			throw new ManticoreSearchResponseError('Invalid JSON found');
 		}
 
-		$this->result = $result;
-		if ($result && array_is_list($result)) {
-			/** @var array<string,string> */
-			$result = $result[0];
+		$struct = Struct::fromJson($this->body);
+		if ($struct->isList()) {
+			/** @var array<string,mixed> */
+			$data = $struct[0];
+			$struct = Struct::fromData($data, $struct->getBigIntFields());
 		}
-
-		if (array_key_exists('error', $result) && is_string($result['error']) && $result['error'] !== '') {
-			$this->error = $result['error'];
+		if ($struct->hasKey('error') && is_string($struct['error']) && $struct['error'] !== '') {
+			$this->error = $struct['error'];
 		} else {
 			$this->error = null;
 		}
 		foreach (['columns', 'data'] as $prop) {
-			if (!array_key_exists($prop, $result) || !is_array($result[$prop])) {
+			if (!$struct->hasKey($prop) || !is_array($struct[$prop])) {
 				continue;
 			}
-			$this->$prop = $result[$prop];
+			$this->$prop = $struct[$prop];
 		}
 	}
 
