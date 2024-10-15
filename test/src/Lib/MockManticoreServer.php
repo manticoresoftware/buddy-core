@@ -49,7 +49,7 @@ final class MockManticoreServer {
 		. "\n"
 		. '"error":"",'
 		. "\n"
-		. '"warning":""'
+		. '"warning":"",'
 		. "\n"
 		. '"meta":[]'
 		. "\n}]",
