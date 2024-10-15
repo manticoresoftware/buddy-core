@@ -15,7 +15,7 @@ use Throwable;
 
 final class Buddy {
 
-	const PROTOCOL_VERSION = 3; 
+	const PROTOCOL_VERSION = 3;
 
 	/** @var string */
 	protected static string $versionFile;
