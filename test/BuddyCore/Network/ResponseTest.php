@@ -31,7 +31,7 @@ class ResponseTest extends TestCase {
 		$this->assertEquals($err, $error->getResponseError());
 		$this->assertEquals(
 			json_encode($result),
-			(string)Response::fromMessageAndError($result['message'], $error)
+			(string)Response::fromMessageAndError($result['message'], [], $error)
 		);
 	}
 
@@ -116,7 +116,7 @@ class ResponseTest extends TestCase {
 		$error = new BuddyRequestError('this error goes to log');
 		$error->setResponseError($err);
 		$this->assertEquals($err, $error->getResponseError());
-		$resp = (string)Response::fromMessageAndError($msg, $error);
+		$resp = (string)Response::fromMessageAndError($msg, [], $error);
 		$this->assertStringContainsString(
 			'"error":"' . $error->getResponseError() . '"',
 			$resp
