@@ -32,6 +32,11 @@ class Response {
 	protected ?string $error;
 
 	/**
+	 * @var array<string,string> $meta
+	 */
+	protected array $meta = [];
+
+	/**
 	 * @param ?string $body
 	 * @return void
 	 */
@@ -61,6 +66,23 @@ class Response {
 	 */
 	public function getResult(): array {
 		return (array)json_decode($this->getBody(), true);
+	}
+
+	/**
+	 * @param array<string,string> $meta
+	 * @return static
+	 */
+	public function setMeta(array $meta): static {
+		$this->meta = $meta;
+		return $this;
+	}
+
+	/**
+	 * Return the meta data from the request
+	 * @return array<string,string>
+	 */
+	public function getMeta(): array {
+		return $this->meta;
 	}
 
 	/**

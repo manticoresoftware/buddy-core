@@ -131,8 +131,10 @@ class Client {
 		} else {
 			$contentTypeHeader = 'application/x-www-form-urlencoded';
 		}
+		$showMeta = false;
 		// We urlencode all the requests to the /sql endpoint
 		if (str_starts_with($path, 'sql')) {
+			$showMeta = stripos(trim($request), 'SELECT') === 0;
 			$request = 'query=' . urlencode($request);
 		}
 		$userAgentHeader = $disableAgentHeader ? '' : "Manticore Buddy/{$this->buddyVersion}";
@@ -144,6 +146,18 @@ class Client {
 		$method = !$this->forceSync && $isAsync ? 'runAsyncRequest' : 'runSyncRequest';
 		$this->response = $this->$method($path, $request, $headers);
 		$result = $this->responseBuilder->fromBody($this->response);
+		if ($showMeta) {
+			$metaResponse = $this->$method($path, 'SHOW META', $headers);
+			/** @var array<array{data?:array<array{Variable_name:string,Value:string}>}> */
+			$metaResult = $this->responseBuilder->fromBody($metaResponse)->getResult();
+			$metaVars = $metaResult[0]['data'] ?? [];
+			$meta = [];
+			foreach ($metaVars as ['Variable_name' => $name, 'Value' => $value]) {
+				$meta[$name] = $value;
+			}
+			$result->setMeta($meta);
+		}
+
 		$time = (int)((microtime(true) - $t) * 1000000);
 		Buddy::debugv("[{$time}µs] manticore request: $request");
 		return $result;

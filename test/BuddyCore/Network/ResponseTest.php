@@ -12,6 +12,7 @@
 use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat;
 use Manticoresearch\Buddy\Core\Network\Response;
+use Manticoresearch\Buddy\Core\Tool\Buddy;
 use Manticoresearch\Buddy\CoreTest\Lib\BuddyRequestError;
 use PHPUnit\Framework\TestCase;
 
@@ -20,9 +21,10 @@ class ResponseTest extends TestCase {
 	public function testBuddyResponseFromErrorAndMessageOk(): void {
 		echo "\nTesting the building of Buddy response \n";
 		$result = [
-			'version' => 2,
+			'version' => Buddy::PROTOCOL_VERSION,
 			'type' => 'json response',
 			'message' => ['error' => 'simple error #1'],
+			'meta' => null,
 			'error_code' => 0,
 		];
 		$err = 'simple error #1';
@@ -31,16 +33,17 @@ class ResponseTest extends TestCase {
 		$this->assertEquals($err, $error->getResponseError());
 		$this->assertEquals(
 			json_encode($result),
-			(string)Response::fromMessageAndError($result['message'], $error)
+			(string)Response::fromMessageAndError($result['message'], [], $error)
 		);
 	}
 
 	public function testBuddyResponseFromMessageOk(): void {
 		echo "\nTesting the building of Buddy response from message\n";
 		$result = [
-			'version' => 2,
+			'version' => Buddy::PROTOCOL_VERSION,
 			'type' => 'json response',
 			'message' => ['test message'],
+			'meta' => null,
 			'error_code' => 200,
 		];
 		$this->assertEquals(
@@ -61,9 +64,10 @@ class ResponseTest extends TestCase {
 	public function testBuddyResponseFromErrorOk(): void {
 		echo "\nTesting the building of Buddy response from error\n";
 		$result = [
-			'version' => 2,
+			'version' => Buddy::PROTOCOL_VERSION,
 			'type' => 'json response',
 			'message' => ['error' => 'simple error #1'],
+			'meta' => null,
 			'error_code' => 0,
 		];
 		$error = new GenericError();
@@ -84,7 +88,7 @@ class ResponseTest extends TestCase {
 			(string)Response::fromError($error, RequestFormat::SQL)
 		);
 		$result = [
-			'version' => 2,
+			'version' => Buddy::PROTOCOL_VERSION,
 			'type' => 'json response',
 			'message' => [
 				'error' => [
@@ -92,6 +96,7 @@ class ResponseTest extends TestCase {
 				],
 				'status' => 400,
 			],
+			'meta' => null,
 			'error_code' => 0,
 		];
 		$error = new GenericError();
@@ -116,7 +121,7 @@ class ResponseTest extends TestCase {
 		$error = new BuddyRequestError('this error goes to log');
 		$error->setResponseError($err);
 		$this->assertEquals($err, $error->getResponseError());
-		$resp = (string)Response::fromMessageAndError($msg, $error);
+		$resp = (string)Response::fromMessageAndError($msg, [], $error);
 		$this->assertStringContainsString(
 			'"error":"' . $error->getResponseError() . '"',
 			$resp
