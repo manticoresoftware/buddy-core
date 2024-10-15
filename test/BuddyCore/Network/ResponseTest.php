@@ -20,7 +20,7 @@ class ResponseTest extends TestCase {
 	public function testBuddyResponseFromErrorAndMessageOk(): void {
 		echo "\nTesting the building of Buddy response \n";
 		$result = [
-			'version' => 2,
+			'version' => 3,
 			'type' => 'json response',
 			'message' => ['error' => 'simple error #1'],
 			'error_code' => 0,
@@ -38,7 +38,7 @@ class ResponseTest extends TestCase {
 	public function testBuddyResponseFromMessageOk(): void {
 		echo "\nTesting the building of Buddy response from message\n";
 		$result = [
-			'version' => 2,
+			'version' => 3,
 			'type' => 'json response',
 			'message' => ['test message'],
 			'error_code' => 200,
@@ -61,7 +61,7 @@ class ResponseTest extends TestCase {
 	public function testBuddyResponseFromErrorOk(): void {
 		echo "\nTesting the building of Buddy response from error\n";
 		$result = [
-			'version' => 2,
+			'version' => 3,
 			'type' => 'json response',
 			'message' => ['error' => 'simple error #1'],
 			'error_code' => 0,
@@ -84,7 +84,7 @@ class ResponseTest extends TestCase {
 			(string)Response::fromError($error, RequestFormat::SQL)
 		);
 		$result = [
-			'version' => 2,
+			'version' => 3,
 			'type' => 'json response',
 			'message' => [
 				'error' => [

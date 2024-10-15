@@ -108,7 +108,7 @@ final class Response {
 			}
 		}
 		$payload = [
-			'version' => 2,
+			'version' => 3,
 			'type' => "{$format->value} response",
 			'message' => $message,
 			'error_code' => $error?->getResponseErrorCode() ?? 200,

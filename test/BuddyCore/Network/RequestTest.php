@@ -34,7 +34,7 @@ class RequestTest extends TestCase {
 				'path_query' => '/sql?mode=raw',
 				'body' => 'some query',
 			],
-			'version' => 2,
+			'version' => 3,
 		];
 		$request = Request::fromPayload($payload);
 		$this->assertInstanceOf(Request::class, $request);
@@ -64,7 +64,7 @@ class RequestTest extends TestCase {
 				'path_query' => '/cli',
 				'body' => 'some query',
 			],
-			'version' => 2,
+			'version' => 3,
 		];
 
 		[$exCls, $exMsg] = self::getExceptionInfo(Request::class, 'fromPayload', [$payload]);
