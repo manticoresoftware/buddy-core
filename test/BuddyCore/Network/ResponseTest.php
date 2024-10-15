@@ -12,6 +12,7 @@
 use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat;
 use Manticoresearch\Buddy\Core\Network\Response;
+use Manticoresearch\Buddy\Core\Tool\Buddy;
 use Manticoresearch\Buddy\CoreTest\Lib\BuddyRequestError;
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +21,7 @@ class ResponseTest extends TestCase {
 	public function testBuddyResponseFromErrorAndMessageOk(): void {
 		echo "\nTesting the building of Buddy response \n";
 		$result = [
-			'version' => 3,
+			'version' => Buddy::PROTOCOL_VERSION,
 			'type' => 'json response',
 			'message' => ['error' => 'simple error #1'],
 			'error_code' => 0,

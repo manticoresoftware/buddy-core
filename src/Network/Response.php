@@ -15,6 +15,7 @@ use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat;
 use Manticoresearch\Buddy\Core\Plugin\TableFormatter;
 use Manticoresearch\Buddy\Core\Task\TaskResult;
+use Manticoresearch\Buddy\Core\Tool\Buddy;
 
 final class Response {
   /**
@@ -134,7 +135,7 @@ final class Response {
 			}
 		}
 		$payload = [
-			'version' => 3,
+			'version' => Buddy::PROTOCOL_VERSION,
 			'type' => "{$format->value} response",
 			'message' => $message,
 			'meta' => $meta ?: null,

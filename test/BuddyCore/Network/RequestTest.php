@@ -13,6 +13,7 @@ use Manticoresearch\Buddy\Core\Error\InvalidNetworkRequestError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Endpoint as ManticoreEndpoint;
 use Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat;
 use Manticoresearch\Buddy\Core\Network\Request;
+use Manticoresearch\Buddy\Core\Tool\Buddy;
 use Manticoresearch\Buddy\CoreTest\Trait\TestProtectedTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -34,7 +35,7 @@ class RequestTest extends TestCase {
 				'path_query' => '/sql?mode=raw',
 				'body' => 'some query',
 			],
-			'version' => 3,
+			'version' => Buddy::PROTOCOL_VERSION,
 		];
 		$request = Request::fromPayload($payload);
 		$this->assertInstanceOf(Request::class, $request);
