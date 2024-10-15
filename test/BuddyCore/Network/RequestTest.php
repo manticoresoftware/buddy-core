@@ -65,7 +65,7 @@ class RequestTest extends TestCase {
 				'path_query' => '/cli',
 				'body' => 'some query',
 			],
-			'version' => 3,
+			'version' => Buddy::PROTOCOL_VERSION,
 		];
 
 		[$exCls, $exMsg] = self::getExceptionInfo(Request::class, 'fromPayload', [$payload]);
