@@ -67,7 +67,7 @@ class ResponseTest extends TestCase {
 			'version' => Buddy::PROTOCOL_VERSION,
 			'type' => 'json response',
 			'message' => ['error' => 'simple error #1'],
-			'meta' => 'null',
+			'meta' => null,
 			'error_code' => 0,
 		];
 		$error = new GenericError();
@@ -96,6 +96,7 @@ class ResponseTest extends TestCase {
 				],
 				'status' => 400,
 			],
+			'meta' => null,
 			'error_code' => 0,
 		];
 		$error = new GenericError();
