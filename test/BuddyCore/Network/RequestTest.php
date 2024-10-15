@@ -23,12 +23,7 @@ class RequestTest extends TestCase {
 	public function testManticoreRequestValidationOk(): void {
 		echo "\nTesting the validation of a correct Manticore request\n";
 		$payload = [
-			'error' => [
-				'message' => 'some error',
-				'body' => [
-					'error' => 'some error',
-				],
-			],
+			'error' => 'some error',
 			'type' => 'unknown json request',
 			'message' => [
 				'path_query' => '/sql?mode=raw',
@@ -41,8 +36,7 @@ class RequestTest extends TestCase {
 		$this->assertEquals($payload['message']['body'], $request->payload);
 		$this->assertEquals(RequestFormat::JSON, $request->format);
 		$this->assertEquals($payload['version'], $request->version);
-		$this->assertEquals($payload['error']['message'], $request->error);
-		$this->assertEquals($payload['error']['body'], $request->errorBody);
+		$this->assertEquals($payload['error'], $request->error);
 		$this->assertEquals(ManticoreEndpoint::Sql, $request->endpointBundle);
 
 		$payload['message']['path_query'] = '';
@@ -53,12 +47,7 @@ class RequestTest extends TestCase {
 	public function testManticoreRequestValidationFail(): void {
 		echo "\nTesting the validation of an incorrect Manticore request\n";
 		$payload = [
-			'error' => [
-				'message' => 'some error',
-				'body' => [
-					'error' => 'some error',
-				],
-			],
+			'error' => 'some error',
 			'type' => 'error request',
 			'message' => [
 				'path_query' => '/cli',
@@ -86,17 +75,12 @@ class RequestTest extends TestCase {
 		$this->assertEquals(InvalidNetworkRequestError::class, $exCls);
 		$this->assertEquals("Mandatory field 'error' is missing", $exMsg);
 
-		$payload['error'] = 'abc';
+		$payload['error'] = 123;
 		[$exCls, $exMsg] = self::getExceptionInfo(Request::class, 'fromPayload', [$payload]);
 		$this->assertEquals(InvalidNetworkRequestError::class, $exCls);
-		$this->assertEquals("Field 'error' must be a array", $exMsg);
+		$this->assertEquals("Field 'error' must be a string", $exMsg);
 
-		$payload['error'] = [
-			'message' => 'some error',
-			'body' => [
-				'error' => 'some error',
-			],
-		];
+		$payload['error'] = 'some error';
 		$payload['message']['body'] = 123;
 		[$exCls, $exMsg] = self::getExceptionInfo(Request::class, 'fromPayload', [$payload]);
 		$this->assertEquals(InvalidNetworkRequestError::class, $exCls);
@@ -117,7 +101,14 @@ class RequestTest extends TestCase {
 	 * @return array<int, array<int, string>>
 	 */
 	public function utf8QueryProvider(): array {
-		$errorUtf8Text = 'can\'t set ooop=\'是一个拥有悠久历史和文化的国'
+		return [
+			[
+				'{"error":"some error","type":"unknown json request",'
+				.'"message":{"path_query":"/cli","body":"some query"},'
+				.'"version":1}',
+			],
+			[
+				'{"error": "can\'t set ooop=\'是一个拥有悠久历史和文化的国'
 				.'家，上人口最多的国家，也是世界上最大的发展家之一。它位于亚洲东'
 				.'部，拥有广阔的领土和多样的地理环境，包括高山、平原、沙漠、森林'
 				.'和海岸线。是联合国安理会常任理事国之一，拥有强大的经济和军事实'
@@ -145,17 +136,36 @@ class RequestTest extends TestCase {
 				.'悠久历史和文化的国家，是世界上人口最多的国家，也是世界上最大的'
 				.'发展家之一。它位于亚洲东部，拥有广阔的领土和多样的地理环境，包'
 				.'括高山、平原、沙漠、森林和海岸线。是联合国安理会常\' where i'
-				.'d=1;';
-		return [
-			[
-				'{"error":{"message":"some error","body":{"error":"some_error"}},"type":"unknown json request",'
-				.'"message":{"path_query":"/cli","body":"some query"},'
-				.'"version":1}',
-			],
-			[
-				'{"error":{"message":"' . $errorUtf8Text . '","body":{"error":"' . $errorUtf8Text . '"}},'
-				.'"type": "unknown json request","message": {"path_query": "/cli","body": "' . $errorUtf8Text . '"},'
-				.'"version":1}',
+				.'d=1;","type": "unknown json request","message": {"p'
+				.'ath_query": "/cli","body": "can\'t set ooop=\'是一个'
+				.'拥有悠久历史和文化的国家，上人口最多的国家，也是世界上最大的发'
+				.'展家之一。它位于亚洲东部，拥有广阔的领土和多样的地理环境，包括'
+				.'高山、平原、沙漠、森林和海岸线。是联合国安理会常任理事国之一，'
+				.'拥有强大的经济和军事实力，同时也是世界第二大经济体 是世界上人'
+				.'口最多的国家 是世界上人口最多的国家，也是世界上最大的发展家之'
+				.'一。它位于亚洲东部，拥有广阔的领土和多样的地理环境，包括高山、'
+				.'平原、沙漠、森林和海岸线。是联合国安理会常任理事国之一，拥有强'
+				.'大的经济和军事实力，同时也是世界第二大经济体。在文化方面，是四'
+				.'大文明古国之一，对世界哲学、科技、艺术等领域有着深远的影响。政'
+				.'治上，实行的是共产党领导的多党合作和政治协商制度。需要注意的是'
+				.'，对于国家的描述可能因不同的视角和价值观而有所不同。是世界上人'
+				.'口最多的国家，也是世界上最大的发展家之一。它位于亚洲东部，拥有'
+				.'广阔的领土和多样的地理环境，包括高山、平原、沙漠、森林和海岸线'
+				.'。是联合国安理会常任理事国之一，拥有强大的经济和军事实力，同时'
+				.'也是世界第二大经济体。在文化方面，是四大文明古国之一，对世界哲'
+				.'学、科技、艺术等领域有着深远的影响。政治上，实行的是共产党领导'
+				.'的多党合作和政治协商制度。需要注意的是，对于国家的描述可能因不'
+				.'同的视角和价值观而有所不同。是世界上人口最多的国家，也是世界上'
+				.'最大的发展家之一。它位于亚洲东部，拥有广阔的领土和多样的地理环'
+				.'境，包括高山、平原、沙漠、森林和海岸线。是联合国安理会常任理事'
+				.'国之一，拥有强大的经济和军事实力，同时也是世界第二大经济体。在'
+				.'文化方面，是四大文明古国之一，对世界哲学、科技、艺术等领域有着'
+				.'深远的影响。政治上，实行的是共产党领导的多党合作和政治协商制度'
+				.'。需要注意的是，对于国家的描述可能因不同的视角和价值观而有所不'
+				.'同。\', res=\'是一个拥有悠久历史和文化的国家，是世界上人口最'
+				.'多的国家，也是世界上最大的发展家之一。它位于亚洲东部，拥有广阔'
+				.'的领土和多样的地理环境，包括高山、平原、沙漠、森林和海岸线。是'
+				.'联合国安理会常\' where id=1;"},"version": 1}',
 			],
 		];
 	}

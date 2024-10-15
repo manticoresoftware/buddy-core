@@ -70,10 +70,9 @@ final class Response {
    * @return static
    */
 	public static function fromError(GenericError $error, RequestFormat $format = RequestFormat::JSON): static {
-		$errorMessage = $error->hasResponseErrorBody()
-			? $error->getResponseErrorBody()
-			: ['error' => $error->getResponseError()];
-		return static::fromMessageAndError($errorMessage, $error, $format);
+		return static::fromMessageAndError(
+			['error' => $error->getResponseError()], $error, $format
+		);
 	}
 
   /**
@@ -101,11 +100,7 @@ final class Response {
 			if ($format === RequestFormat::JSON) {
 				$message = [];
 			}
-			if ($error->hasResponseErrorBody()) {
-				$message = $error->getResponseErrorBody() + $message;
-			} else {
-				$message['error'] = $responseError;
-			}
+			$message['error'] = $responseError;
 		}
 		$payload = [
 			'version' => 2,
