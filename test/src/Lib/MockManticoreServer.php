@@ -276,7 +276,7 @@ final class MockManticoreServer {
 			str_starts_with($request, 'SELECT') => self::SHOW_QUERIES_RESPONSE[$responseType],
 			str_starts_with($request, 'SHOW+VARIABLES') => self::SHOW_VARIABLES_RESPONSE[$responseType],
 			str_starts_with($request, 'SHOW+TABLES') => self::SHOW_TABLES_RESPONSE[$responseType],
-			str_starts_with($request, 'SHOW+META') => self::SHOW_META_RESPONSE[$responseType],
+			str_starts_with($request, 'SHOW META') => self::SHOW_META_RESPONSE[$responseType],
 			default => '',
 		};
 		$this->sendResponse($resp);
