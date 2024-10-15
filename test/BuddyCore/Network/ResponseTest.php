@@ -24,6 +24,7 @@ class ResponseTest extends TestCase {
 			'version' => Buddy::PROTOCOL_VERSION,
 			'type' => 'json response',
 			'message' => ['error' => 'simple error #1'],
+			'meta' => null,
 			'error_code' => 0,
 		];
 		$err = 'simple error #1';
@@ -42,6 +43,7 @@ class ResponseTest extends TestCase {
 			'version' => Buddy::PROTOCOL_VERSION,
 			'type' => 'json response',
 			'message' => ['test message'],
+			'meta' => null,
 			'error_code' => 200,
 		];
 		$this->assertEquals(
@@ -65,6 +67,7 @@ class ResponseTest extends TestCase {
 			'version' => Buddy::PROTOCOL_VERSION,
 			'type' => 'json response',
 			'message' => ['error' => 'simple error #1'],
+			'meta' => 'null',
 			'error_code' => 0,
 		];
 		$error = new GenericError();
