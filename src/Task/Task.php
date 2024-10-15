@@ -27,6 +27,12 @@ final class Task {
 	/** @var int */
 	protected int $id;
 
+	/** @var int */
+	protected int $startTime;
+
+	/** @var int */
+	protected int $duration;
+
 	/**
 	 * This flag shows that this task is deferred and
 	 * we can return response to client asap
@@ -117,6 +123,7 @@ final class Task {
 	 * @return static
 	 */
 	public function run(): static {
+		$this->startTime = (int)(microtime(true) * 1000);
 		// Run callbacks before
 		$this->processCallbacks('run');
 		$this->status = TaskStatus::Running;
@@ -172,6 +179,8 @@ final class Task {
 		if ($this->isSucceed()) {
 			$this->processCallbacks();
 		}
+
+		$this->duration = (int)(microtime(true) * 1000) - $this->startTime;
 
 		return $this->status;
 	}
@@ -252,6 +261,13 @@ final class Task {
 	public function getResult(): TaskResult {
 		if (!isset($this->result)) {
 			throw new RuntimeException('There result was not set, you should be sure that isSucceed returned true.');
+		}
+
+		// Inject information about time running
+		$meta = $this->result->getMeta();
+		if ($meta) {
+			$meta['time'] = sprintf('%.3f', $this->duration / 1000);
+			$this->result->meta($meta);
 		}
 
 		return $this->result;

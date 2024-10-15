@@ -11,6 +11,8 @@
 
 namespace Manticoresearch\Buddy\Core\Task;
 
+use Manticoresearch\Buddy\Core\ManticoreSearch\Response;
+
 /**
  * Simple struct for task result data
  */
@@ -23,6 +25,9 @@ final class TaskResult {
 
 	/** @var string|array<mixed> If we set this flag, we will return only data and skip all other fields */
 	protected string|array $raw;
+
+	/** @var array<string,mixed> */
+	protected array $meta = [];
 
 	/**
 	 * Initialize the empty result
@@ -50,6 +55,17 @@ final class TaskResult {
 	public static function raw(string|array $raw): static {
 		$obj = new static([], '', '');
 		$obj->raw = $raw;
+		return $obj;
+	}
+
+	/**
+	 * Create new struct from a raw response of the Manticore to include meta in it also
+	 * @param Response $response
+	 * @return static
+	 */
+	public static function fromResponse(Response $response): static {
+		$obj = static::raw($response->getResult());
+		$obj->meta = $response->getMeta();
 		return $obj;
 	}
 
@@ -91,7 +107,7 @@ final class TaskResult {
 	}
 
 	/**
-	 * Entrypoint to the object creation with error ocurred
+	 * Entrypoint to the object creation with error occurred
 	 * @param string $error
 	 * @return static
 	 */
@@ -100,7 +116,7 @@ final class TaskResult {
 	}
 
 	/**
-	 * Entrypoint to the object creation with error ocurred
+	 * Entrypoint to the object creation with error occurred
 	 * @param string $warning
 	 * @return static
 	 */
@@ -108,6 +124,15 @@ final class TaskResult {
 		return new static([], '', $warning);
 	}
 
+	/**
+	 * Set meta data for the current result
+	 * @param array<string,mixed> $meta
+	 * @return static
+	 */
+	public function meta(array $meta): static {
+		$this->meta = $meta;
+		return $this;
+	}
 
 	/**
 	 * Set error for the current result
@@ -173,6 +198,14 @@ final class TaskResult {
 	public function toString(): string {
 		$struct = $this->getStruct();
 		return is_string($struct) ? $struct : (json_encode($struct) ?: '');
+	}
+
+	/**
+	 * Get current meta for this result
+	 * @return array<string,mixed>
+	 */
+	public function getMeta(): array {
+		return $this->meta;
 	}
 
 	/**

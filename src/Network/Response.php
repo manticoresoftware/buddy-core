@@ -14,6 +14,7 @@ namespace Manticoresearch\Buddy\Core\Network;
 use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat;
 use Manticoresearch\Buddy\Core\Plugin\TableFormatter;
+use Manticoresearch\Buddy\Core\Task\TaskResult;
 
 final class Response {
   /**
@@ -51,6 +52,15 @@ final class Response {
 		|| (is_string($message) && str_starts_with($message, TableFormatter::ERROR_PREFIX));
 	}
 
+	/**
+	 * @param TaskResult $result
+	 * @param RequestFormat $format
+	 * @return static
+	 */
+	public static function fromResult(TaskResult $result, RequestFormat $format = RequestFormat::JSON): static {
+		return static::fromMessageAndMeta($result->getStruct(), $result->getMeta(), $format);
+	}
+
   /**
 	 * Create response from the message when we have no error and success in respond
    * @see static::fromStringAndError()
@@ -59,7 +69,21 @@ final class Response {
    * @return static
    */
 	public static function fromMessage(mixed $message, RequestFormat $format = RequestFormat::JSON): static {
-		return static::fromMessageAndError($message, null, $format);
+		return static::fromMessageAndError($message, [], null, $format);
+	}
+
+	/**
+	 * @param mixed $message
+	 * @param array<string,mixed> $meta
+	 * @param RequestFormat $format
+	 * @return static
+	 */
+	public static function fromMessageAndMeta(
+		mixed $message = [],
+		array $meta = [],
+		RequestFormat $format = RequestFormat::JSON
+	) {
+		return static::fromMessageAndError($message, $meta, null, $format);
 	}
 
   /**
@@ -71,7 +95,7 @@ final class Response {
    */
 	public static function fromError(GenericError $error, RequestFormat $format = RequestFormat::JSON): static {
 		return static::fromMessageAndError(
-			['error' => $error->getResponseError()], $error, $format
+			['error' => $error->getResponseError()], [], $error, $format
 		);
 	}
 
@@ -86,12 +110,14 @@ final class Response {
   /**
 	 * Create response from the message and include error to it also
    * @param mixed $message
+	 * @param array<string,mixed> $meta
    * @param ?GenericError $error
    * @param RequestFormat $format
    * @return static
    */
 	public static function fromMessageAndError(
 		mixed $message = [],
+		array $meta = [],
 		?GenericError $error = null,
 		RequestFormat $format = RequestFormat::JSON
 	): static {
@@ -106,6 +132,7 @@ final class Response {
 			'version' => 2,
 			'type' => "{$format->value} response",
 			'message' => $message,
+			'meta' => $meta,
 			'error_code' => $error?->getResponseErrorCode() ?? 200,
 		];
 
