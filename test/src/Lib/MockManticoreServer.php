@@ -50,6 +50,8 @@ final class MockManticoreServer {
 		. '"error":"",'
 		. "\n"
 		. '"warning":""'
+		. "\n"
+		. '"meta":[]'
 		. "\n}]",
 	];
 	const SHOW_VARIABLES_RESPONSE = [
@@ -89,6 +91,10 @@ final class MockManticoreServer {
 		. "\n"
 		. '"warning":""'
 		. "\n}]",
+	];
+	const SHOW_META_RESPONSE = [
+		'fail' => '',
+		'ok' => '[]',
 	];
 
 	/**
@@ -262,21 +268,17 @@ final class MockManticoreServer {
 			$request = substr($request, 6);
 		}
 		$responseType = $this->hasErrorResponse ? 'fail' : 'ok';
-		if (stripos($request, 'CREATE') === 0) {
-			$resp = self::CREATE_RESPONSE[$responseType];
-		} elseif (stripos($request, 'INSERT') === 0) {
-			$resp = self::SQL_INSERT_RESPONSE[$responseType];
-		} elseif (ManticoreEndpoint::from($this->reqEndpoint) === ManticoreEndpoint::Insert) {
-			$resp = self::JSON_INSERT_RESPONSE[$responseType];
-		} elseif (stripos($request, 'SELECT') === 0) {
-			$resp = self::SHOW_QUERIES_RESPONSE[$responseType];
-		} elseif (stripos($request, 'SHOW+VARIABLES') === 0) {
-			$resp = self::SHOW_VARIABLES_RESPONSE[$responseType];
-		} elseif (stripos($request, 'SHOW+TABLES') === 0) {
-			$resp = self::SHOW_TABLES_RESPONSE[$responseType];
-		} else {
-			$resp = '';
-		}
+		$resp = match (true) {
+			str_starts_with($request, 'CREATE') => self::CREATE_RESPONSE[$responseType],
+			str_starts_with($request, 'INSERT') => self::SQL_INSERT_RESPONSE[$responseType],
+			(ManticoreEndpoint::from($this->reqEndpoint) === ManticoreEndpoint::Insert) =>
+				self::JSON_INSERT_RESPONSE[$responseType],
+			str_starts_with($request, 'SELECT') => self::SHOW_QUERIES_RESPONSE[$responseType],
+			str_starts_with($request, 'SHOW+VARIABLES') => self::SHOW_VARIABLES_RESPONSE[$responseType],
+			str_starts_with($request, 'SHOW+TABLES') => self::SHOW_TABLES_RESPONSE[$responseType],
+			str_starts_with($request, 'SHOW+META') => self::SHOW_META_RESPONSE[$responseType],
+			default => '',
+		};
 		$this->sendResponse($resp);
 	}
 
