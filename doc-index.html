@@ -218,6 +218,8 @@ It works almost the same as convertMany but combine ALL possible pairs of langua
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::disablePlugin</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
                     <dd><p>Disable plugin by name</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html#property_data">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr>#data</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr></a></em></dt>
+                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_duration">
+<abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#duration</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_defer">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::defer</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd><p>Set task to be deferred</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_data">
@@ -233,8 +235,6 @@ It works almost the same as convertMany but combine ALL possible pairs of langua
 <abbr title="Manticoresearch\Buddy\Core\Network\Request">Request</abbr>#endpointBundle</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Network/Request.html"><abbr title="Manticoresearch\Buddy\Core\Network\Request">Request</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Network/Request.html#property_error">
 <abbr title="Manticoresearch\Buddy\Core\Network\Request">Request</abbr>#error</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Network/Request.html"><abbr title="Manticoresearch\Buddy\Core\Network\Request">Request</abbr></a></em></dt>
-                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Network/Request.html#property_errorBody">
-<abbr title="Manticoresearch\Buddy\Core\Network\Request">Request</abbr>#errorBody</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Network/Request.html"><abbr title="Manticoresearch\Buddy\Core\Network\Request">Request</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#property_extraPlugins">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>#extraPlugins</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_enablePlugin">
@@ -272,9 +272,13 @@ Reserved events: pause, resume</p></dd><dt><a href="Manticoresearch/Buddy/Core/P
                     <dd><p>Helper to create request from prepare array data
 It can be useful for tests</p></dd><dt><a href="Manticoresearch/Buddy/Core/Network/Request.html#method_fromPayload">
 <abbr title="Manticoresearch\Buddy\Core\Network\Request">Request</abbr>::fromPayload</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Network/Request.html"><abbr title="Manticoresearch\Buddy\Core\Network\Request">Request</abbr></a></em></dt>
-                    <dd><p>This method is same as fromArray but applied to payload</p></dd><dt><a href="Manticoresearch/Buddy/Core/Network/Response.html#method_fromMessage">
+                    <dd><p>This method is same as fromArray but applied to payload</p></dd><dt><a href="Manticoresearch/Buddy/Core/Network/Response.html#method_fromResult">
+<abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr>::fromResult</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a></em></dt>
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Network/Response.html#method_fromMessage">
 <abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr>::fromMessage</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a></em></dt>
-                    <dd><p>Create response from the message when we have no error and success in respond</p></dd><dt><a href="Manticoresearch/Buddy/Core/Network/Response.html#method_fromError">
+                    <dd><p>Create response from the message when we have no error and success in respond</p></dd><dt><a href="Manticoresearch/Buddy/Core/Network/Response.html#method_fromMessageAndMeta">
+<abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr>::fromMessageAndMeta</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a></em></dt>
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Network/Response.html#method_fromError">
 <abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr>::fromError</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a></em></dt>
                     <dd><p>Create response from provided error, useful when we want to return error</p></dd><dt><a href="Manticoresearch/Buddy/Core/Network/Response.html#method_fromMessageAndError">
 <abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr>::fromMessageAndError</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a></em></dt>
@@ -292,7 +296,9 @@ It can be useful for tests</p></dd><dt><a href="Manticoresearch/Buddy/Core/Netwo
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::findPluginDir</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
                     <dd><p>Get path to the plugin dir where we install all of it</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_future">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#future</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
-                    <dd></dd>        </dl><h2 id="letterG">G</h2>
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_fromResponse">
+<abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr>::fromResponse</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></em></dt>
+                    <dd><p>Create new struct from a raw response of the Manticore to include meta in it also</p></dd>        </dl><h2 id="letterG">G</h2>
         <dl id="indexG"><dt><a href="Manticoresearch/Buddy/Core/Cache/Flag.html#method_get">
 <abbr title="Manticoresearch\Buddy\Core\Cache\Flag">Flag</abbr>::get</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Cache/Flag.html"><abbr title="Manticoresearch\Buddy\Core\Cache\Flag">Flag</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Cache/Flag.html#method_getCount">
@@ -300,9 +306,7 @@ It can be useful for tests</p></dd><dt><a href="Manticoresearch/Buddy/Core/Netwo
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Error.html">Manticoresearch\Buddy\Core\Error</a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Error/GenericError.html#method_getResponseError">
 <abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>::getResponseError</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></em></dt>
-                    <dd><p>Client error message, that we return to the manticore to return to client</p></dd><dt><a href="Manticoresearch/Buddy/Core/Error/GenericError.html#method_getResponseErrorBody">
-<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>::getResponseErrorBody</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></em></dt>
-                    <dd><p>Compound client error message, that we return to the manticore if it exists; used by Manticore API clients</p></dd><dt><a href="Manticoresearch/Buddy/Core/Error/GenericError.html#method_getResponseErrorCode">
+                    <dd><p>Client error message, that we return to the manticore to return to client</p></dd><dt><a href="Manticoresearch/Buddy/Core/Error/GenericError.html#method_getResponseErrorCode">
 <abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>::getResponseErrorCode</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></em></dt>
                     <dd><p>Client HTTP error code 0 when proxy original one</p></dd><dt><a href="Manticoresearch/Buddy/Core/Error/GenericError.html#method_getProxyOriginalError">
 <abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>::getProxyOriginalError</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></em></dt>
@@ -317,7 +321,9 @@ And filter only required types or any if not specified</p></dd><dt><a href="Mant
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>::getBody</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#method_getResult">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>::getResult</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
-                    <dd><p>Get parsed and json decoded reply from the Manticore daemon</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html#property_groupingInUtc">
+                    <dd><p>Get parsed and json decoded reply from the Manticore daemon</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#method_getMeta">
+<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>::getMeta</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
+                    <dd><p>Return the meta data from the request</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html#property_groupingInUtc">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr>#groupingInUtc</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/BaseHandler.html#method_getProps">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\BaseHandler">BaseHandler</abbr>::getProps</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/BaseHandler.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\BaseHandler">BaseHandler</abbr></a></em></dt>
@@ -384,7 +390,9 @@ we have all vendor packages installed with CREATE PLUGIN command</p></dd><dt><a 
 <abbr title="Manticoresearch\Buddy\Core\Task\TaskPool">TaskPool</abbr>::getList</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskPool.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskPool">TaskPool</abbr></a></em></dt>
                     <dd><p>Get all active tasks in the pool</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskPool.html#method_getCount">
 <abbr title="Manticoresearch\Buddy\Core\Task\TaskPool">TaskPool</abbr>::getCount</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskPool.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskPool">TaskPool</abbr></a></em></dt>
-                    <dd><p>Get total count of running tasks in a pool</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_getStruct">
+                    <dd><p>Get total count of running tasks in a pool</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_getMeta">
+<abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr>::getMeta</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></em></dt>
+                    <dd><p>Get current meta for this result</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_getStruct">
 <abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr>::getStruct</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></em></dt>
                     <dd><p>Get resulting struct without JSON encoding</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/Arrays.html#method_getPositionalCombinations">
 <abbr title="Manticoresearch\Buddy\Core\Tool\Arrays">Arrays</abbr>::getPositionalCombinations</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/Arrays.html"><abbr title="Manticoresearch\Buddy\Core\Tool\Arrays">Arrays</abbr></a></em></dt>
@@ -412,9 +420,7 @@ Normally it's done on initialization stage of the Buddy base</p></dd><dt><a href
 <abbr title="Manticoresearch\Buddy\Core\Cache\Flag">Flag</abbr>::has</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Cache/Flag.html"><abbr title="Manticoresearch\Buddy\Core\Cache\Flag">Flag</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Error/GenericError.html#method_hasResponseError">
 <abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>::hasResponseError</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></em></dt>
-                    <dd><p>Check if response error is set</p></dd><dt><a href="Manticoresearch/Buddy/Core/Error/GenericError.html#method_hasResponseErrorBody">
-<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>::hasResponseErrorBody</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></em></dt>
-                    <dd><p>Check if response error body is set</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#property_host">
+                    <dd><p>Check if response error is set</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#property_host">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>#host</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_hasTable">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>::hasTable</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
@@ -486,6 +492,8 @@ we can return response to client asap</p></dd><dt><a href="Manticoresearch/Buddy
                     <dd></dd>        </dl><h2 id="letterM">M</h2>
         <dl id="indexM"><dt><a href="Manticoresearch/Buddy/Core/Error/ManticoreSearchClientError.html"><abbr title="Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError">ManticoreSearchClientError</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Error.html">Manticoresearch\Buddy\Core\Error</a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Error/ManticoreSearchResponseError.html"><abbr title="Manticoresearch\Buddy\Core\Error\ManticoreSearchResponseError">ManticoreSearchResponseError</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Error.html">Manticoresearch\Buddy\Core\Error</a></em></dt>
+                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#property_meta">
+<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>#meta</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html#property_maxAllowedPacket">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr>#maxAllowedPacket</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Network/Request.html#property_mySQLTool">
@@ -496,7 +504,11 @@ we can return response to client asap</p></dd><dt><a href="Manticoresearch/Buddy
 <abbr title="Manticoresearch\Buddy\Core\Plugin\BasePayload">BasePayload</abbr>#manticoreSettings</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Plugin/BasePayload.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\BasePayload">BasePayload</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html#method_mbStrPad">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr>::mbStrPad</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/TableFormatter.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\TableFormatter">TableFormatter</abbr></a></em></dt>
-                    <dd></dd>        </dl><h2 id="letterN">N</h2>
+                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#property_meta">
+<abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr>#meta</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></em></dt>
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_meta">
+<abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr>::meta</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></em></dt>
+                    <dd><p>Set meta data for the current result</p></dd>        </dl><h2 id="letterN">N</h2>
         <dl id="indexN"><dt><a href="Manticoresearch/Buddy/Core/Network/Response.html#method_none">
 <abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr>::none</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a></em></dt>
                     <dd><p>Helper to create empty response with nothing to response (shortcut to use)</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_none">
@@ -567,8 +579,6 @@ and the process is not yet paused. When paused, do nothing.</p></dd><dt><a href=
 <abbr title="Manticoresearch\Buddy\Core\Cache\Flag">Flag</abbr>::remove</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Cache/Flag.html"><abbr title="Manticoresearch\Buddy\Core\Cache\Flag">Flag</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Error/GenericError.html#property_responseError">
 <abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>#responseError</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></em></dt>
-                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Error/GenericError.html#property_responseErrorBody">
-<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>#responseErrorBody</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Error/GenericError.html#property_responseErrorCode">
 <abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>#responseErrorCode</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#property_response">
@@ -622,9 +632,7 @@ cause parser usually leaves it as is ('manticore', "manticore", <code>manticore<
 <abbr title="Manticoresearch\Buddy\Core\Cache\Flag">Flag</abbr>::set</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Cache/Flag.html"><abbr title="Manticoresearch\Buddy\Core\Cache\Flag">Flag</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Error/GenericError.html#method_setResponseError">
 <abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>::setResponseError</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></em></dt>
-                    <dd><p>Set response error that we will return to client</p></dd><dt><a href="Manticoresearch/Buddy/Core/Error/GenericError.html#method_setResponseErrorBody">
-<abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>::setResponseErrorBody</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></em></dt>
-                    <dd><p>Set response error body that we will return to client</p></dd><dt><a href="Manticoresearch/Buddy/Core/Error/GenericError.html#method_setResponseErrorCode">
+                    <dd><p>Set response error that we will return to client</p></dd><dt><a href="Manticoresearch/Buddy/Core/Error/GenericError.html#method_setResponseErrorCode">
 <abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>::setResponseErrorCode</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></em></dt>
                     <dd><p>Set response error code that we will return to client</p></dd><dt><a href="Manticoresearch/Buddy/Core/Error/GenericError.html#method_setProxyOriginalError">
 <abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>::setProxyOriginalError</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></em></dt>
@@ -638,7 +646,9 @@ cause parser usually leaves it as is ('manticore', "manticore", <code>manticore<
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>::sendRequest</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
                     <dd><p>Send the request where request represents the SQL query to be send</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_setForceSync">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>::setForceSync</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
-                    <dd><p>Force to use sync client instead of async detection</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/ManticoreSearch.html">Manticoresearch\Buddy\Core\ManticoreSearch</a></em></dt>
+                    <dd><p>Force to use sync client instead of async detection</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#method_setMeta">
+<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>::setMeta</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/ManticoreSearch.html">Manticoresearch\Buddy\Core\ManticoreSearch</a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html#property_searchdAutoSchema">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr>#searchdAutoSchema</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html#property_searchdListen">
@@ -708,6 +718,8 @@ cause parser usually leaves it as is ('manticore', "manticore", <code>manticore<
 <abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>::stop</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
                     <dd><p>Stop handle that actually send kill and process stop on its own</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/WorkerRunnerInterface.html#method_stop">
 <abbr title="Manticoresearch\Buddy\Core\Process\WorkerRunnerInterface">WorkerRunnerInterface</abbr>::stop</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/WorkerRunnerInterface.html"><abbr title="Manticoresearch\Buddy\Core\Process\WorkerRunnerInterface">WorkerRunnerInterface</abbr></a></em></dt>
+                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_startTime">
+<abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#startTime</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_status">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#status</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd><p>Current task status</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_settings">
@@ -790,9 +802,9 @@ or validate and throw error if we have missing table in the list</p></dd><dt>$<a
 <abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr>::withTotal</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></em></dt>
                     <dd><p>Entrypoint to the object creation with total only, may be useful with affected rows only</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_withError">
 <abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr>::withError</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></em></dt>
-                    <dd><p>Entrypoint to the object creation with error ocurred</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_withWarning">
+                    <dd><p>Entrypoint to the object creation with error occurred</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_withWarning">
 <abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr>::withWarning</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></em></dt>
-                    <dd><p>Entrypoint to the object creation with error ocurred</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_warning">
+                    <dd><p>Entrypoint to the object creation with error occurred</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/TaskResult.html#method_warning">
 <abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr>::warning</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></em></dt>
                     <dd><p>Set warning for the current result</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/Buddy.html#method_warning">
 <abbr title="Manticoresearch\Buddy\Core\Tool\Buddy">Buddy</abbr>::warning</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/Buddy.html"><abbr title="Manticoresearch\Buddy\Core\Tool\Buddy">Buddy</abbr></a></em></dt>
