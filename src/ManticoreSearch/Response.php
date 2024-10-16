@@ -61,11 +61,20 @@ class Response {
 	}
 
 	/**
+	 * @param callable $fn
+	 * @return static
+	 */
+	public function filterResult(callable $fn): static {
+		$this->data = array_map($fn, $this->data);
+		return $this;
+	}
+
+	/**
 	 * Get parsed and json decoded reply from the Manticore daemon
 	 * @return array<mixed>
 	 */
 	public function getResult(): array {
-		return (array)json_decode($this->getBody(), true);
+		return $this->data;
 	}
 
 	/**
@@ -118,7 +127,8 @@ class Response {
 		if (!isset($this->body)) {
 			return;
 		}
-		$data = json_decode($this->body, true);
+
+		$data = (array)json_decode($this->body, true);
 		if (!is_array($data)) {
 			throw new ManticoreSearchResponseError('Invalid JSON found');
 		}
@@ -140,6 +150,8 @@ class Response {
 			}
 			$this->$prop = $data[$prop];
 		}
+
+		$this->data = $data;
 	}
 
 	/**
