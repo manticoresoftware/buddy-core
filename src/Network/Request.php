@@ -194,7 +194,7 @@ final class Request {
 		if (static::isElasticPath($path)) {
 			$endpointBundle = ManticoreEndpoint::Elastic;
 		} elseif (str_contains($path, '/_doc/') || str_contains($path, '/_create/')
-			|| str_ends_with($path, '/_doc') || str_ends_with($path, '/_create')) {
+			|| str_ends_with($path, '/_doc')) {
 			// We don't differentiate elastic-like insert and replace queries here
 			// since this is irrelevant for the following Buddy processing logic
 			$endpointBundle = ManticoreEndpoint::Insert;

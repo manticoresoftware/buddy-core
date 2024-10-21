@@ -139,16 +139,16 @@ final class MockManticoreServer {
 				usleep(1000);
 			} else {
 				socket_set_nonblock($this->conn);
-				$req  = $this->readSocketData();
+				$req = $this->readSocketData();
 				if (!trim($req)) {
 					exit("<Mock Manticore server terminated: Request parse failure: empty request passed>\n");
 				}
 				preg_match('/(\n|\r)/', $req, $matches, PREG_OFFSET_CAPTURE);
-				$reqUrlData = substr($req, 0, (int)$matches[0][1]);
+				$reqUrlData = isset($matches[0][1]) ? substr($req, 0, (int)$matches[0][1]) : '';
 				preg_match('/\s\/(.*?)\s/', $reqUrlData, $matches);
-				$this->reqEndpoint = $matches[1];
+				$this->reqEndpoint = $matches[1] ?? '';
 				preg_match('/(\n\n|\r\n\r\n|\r\r)/', $req, $matches, PREG_OFFSET_CAPTURE);
-				$reqBody = substr($req, $matches[0][1] + 4);
+				$reqBody = isset($matches[0][1]) ? substr($req, $matches[0][1] + 4) : '';
 				$this->process($reqBody);
 			}
 		}
