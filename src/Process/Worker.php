@@ -65,7 +65,6 @@ final class Worker {
 	 * @return bool
 	 */
 	public function isRunning(): bool {
-		$status = $this->process->wait(false);
-		return !$status;
+		return !!SwooleProcess::kill($this->process->pid, 0);
 	}
 }
