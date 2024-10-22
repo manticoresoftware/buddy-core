@@ -11,7 +11,6 @@
 
 //use Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Client as HTTPClient;
-use Manticoresearch\Buddy\Core\ManticoreSearch\Response;
 use Manticoresearch\Buddy\CoreTest\Trait\TestInEnvironmentTrait;
 use Manticoresearch\Buddy\CoreTest\Trait\TestProtectedTrait;
 use PHPUnit\Framework\TestCase;
@@ -57,7 +56,7 @@ class ClientTest extends TestCase {
 			$this->refCls->getProperty('port')->getValue($this->client)
 		);
 
-		$client = new HTTPClient(new Response(), 'localhost:1000');
+		$client = new HTTPClient('localhost:1000');
 		$this->assertInstanceOf(HTTPClient::class, $client);
 	}
 

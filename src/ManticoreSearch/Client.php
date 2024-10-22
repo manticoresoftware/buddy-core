@@ -55,14 +55,10 @@ class Client {
 
 	/**
 	 * Initialize the Client that will use provided
-	 * @param ?Response $responseBuilder
 	 * @param ?string $url
 	 * @return void
 	 */
-	public function __construct(
-		protected ?Response $responseBuilder = null,
-		?string $url = null
-	) {
+	public function __construct(?string $url = null) {
 		// If no url passed, set default one
 		if (!$url) {
 			$url = static::DEFAULT_URL;
@@ -76,16 +72,6 @@ class Client {
 			}
 		);
 		$this->buddyVersion = Buddy::getVersion();
-	}
-
-	/**
-	 * Set Response Builder
-	 * @param Response $responseBuilder
-	 * @return static
-	 */
-	public function setResponseBuilder(Response $responseBuilder): static {
-		$this->responseBuilder = $responseBuilder;
-		return $this;
 	}
 
 	/**
@@ -115,9 +101,6 @@ class Client {
 		bool $disableAgentHeader = false
 	): Response {
 		$t = microtime(true);
-		if (!isset($this->responseBuilder)) {
-			throw new RuntimeException("'responseBuilder' property of ManticoreHTTPClient class is not instantiated");
-		}
 		if ($request === '') {
 			throw new ManticoreSearchClientError('Empty request passed');
 		}
@@ -145,11 +128,11 @@ class Client {
 		$isAsync = Coroutine::getCid() > 0;
 		$method = !$this->forceSync && $isAsync ? 'runAsyncRequest' : 'runSyncRequest';
 		$this->response = $this->$method($path, $request, $headers);
-		$result = $this->responseBuilder->fromBody($this->response);
+		$result = Response::fromBody($this->response);
 		if ($showMeta) {
 			$metaResponse = $this->$method($path, 'SHOW META', $headers);
 			/** @var array<array{data?:array<array{Variable_name:string,Value:string}>}> */
-			$metaResult = $this->responseBuilder->fromBody($metaResponse)->getResult();
+			$metaResult = Response::fromBody($metaResponse)->getResult();
 			$metaVars = $metaResult[0]['data'] ?? [];
 			$meta = [];
 			foreach ($metaVars as ['Variable_name' => $name, 'Value' => $value]) {
