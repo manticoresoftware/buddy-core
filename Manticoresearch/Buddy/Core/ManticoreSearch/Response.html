@@ -101,11 +101,11 @@
 
             <table class="table table-condensed">
                     <tr>
-                <td class="type" id="property_data">
+                <td class="type" id="property_result">
                                         protected                                        <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\array&lt;string,mixed&gt;">array&lt;string,mixed&gt;</abbr>
                                                                                 
                                     </td>
-                <td>$data</td>
+                <td>$result</td>
                 <td class="last"></td>
                 <td></td>
             </tr>
@@ -115,6 +115,15 @@
                                                                                 
                                     </td>
                 <td>$columns</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_data">
+                                        protected                                        <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\array&lt;string,mixed&gt;">array&lt;string,mixed&gt;</abbr>
+                                                                                
+                                    </td>
+                <td>$data</td>
                 <td class="last"></td>
                 <td></td>
             </tr>
@@ -142,17 +151,6 @@
             <h2>Methods</h2>
 
             <div class="container-fluid underlined">
-                    <div class="row">
-                <div class="col-md-2 type">
-                    void
-                </div>
-                <div class="col-md-8">
-                    <a href="#method___construct">__construct</a>(string|null $body = null)
-        
-                                            <p class="no-description">No description</p>
-                                    </div>
-                <div class="col-md-2"></div>
-            </div>
                     <div class="row">
                 <div class="col-md-2 type">
                     <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\string|null">string|null</abbr>
@@ -265,52 +263,8 @@
 
             <div id="method-details">
                     <div class="method-item">
-                    <h3 id="method___construct">
-        <div class="location">at line 43</div>
-        <code>                    void
-    <strong>__construct</strong>(string|null $body = null)
-        </code>
-    </h3>
-    <div class="details">    
-            
-    
-            
-
-        <div class="method-description">
-                            <p class="no-description">No description</p>
-                    
-        </div>
-        <div class="tags">
-                            <h4>Parameters</h4>
-
-                    <table class="table table-condensed">
-                    <tr>
-                <td>string|null</td>
-                <td>$body</td>
-                <td></td>
-            </tr>
-            </table>
-
-            
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td>void</td>
-            <td></td>
-        </tr>
-    </table>
-
-            
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
                     <h3 id="method_getError">
-        <div class="location">at line 52</div>
+        <div class="location">at line 56</div>
         <code>                    <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\string|null">string|null</abbr>
     <strong>getError</strong>()
         </code>
@@ -344,7 +298,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getBody">
-        <div class="location">at line 59</div>
+        <div class="location">at line 63</div>
         <code>                    string
     <strong>getBody</strong>()
         </code>
@@ -378,7 +332,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_filterResult">
-        <div class="location">at line 67</div>
+        <div class="location">at line 71</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
     <strong>filterResult</strong>(callable $fn)
         </code>
@@ -422,7 +376,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getResult">
-        <div class="location">at line 76</div>
+        <div class="location">at line 80</div>
         <code>                    array
     <strong>getResult</strong>()
         </code>
@@ -455,7 +409,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_setMeta">
-        <div class="location">at line 84</div>
+        <div class="location">at line 91</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
     <strong>setMeta</strong>(array $meta)
         </code>
@@ -499,7 +453,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getMeta">
-        <div class="location">at line 93</div>
+        <div class="location">at line 100</div>
         <code>                    array
     <strong>getMeta</strong>()
         </code>
@@ -532,7 +486,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_hasError">
-        <div class="location">at line 101</div>
+        <div class="location">at line 108</div>
         <code>                    bool
     <strong>hasError</strong>()
         </code>
@@ -565,7 +519,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_postprocess">
-        <div class="location">at line 112</div>
+        <div class="location">at line 119</div>
         <code>                    void
     <strong>postprocess</strong>(callable $processor, array $args = [])
         </code>
@@ -622,7 +576,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_parse">
-        <div class="location">at line 126</div>
+        <div class="location">at line 133</div>
         <code>            protected        void
     <strong>parse</strong>()
         </code>
@@ -664,7 +618,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_fromBody">
-        <div class="location">at line 161</div>
+        <div class="location">at line 166</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
     <strong>fromBody</strong>(string $body)
         </code>
