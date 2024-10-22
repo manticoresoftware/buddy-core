@@ -15,16 +15,20 @@ use Manticoresearch\Buddy\Core\Error\ManticoreSearchResponseError;
 use Throwable;
 
 class Response {
-
 	/**
-	 * @var array<string,mixed> $data
+	 * @var array<string,mixed>
 	 */
-	protected array $data;
+	protected array $result;
 
 	/**
 	 * @var array<string,mixed> $columns
 	 */
 	protected array $columns;
+
+	/**
+	 * @var array<string,mixed> $data
+	 */
+	protected array $data;
 
 	/**
 	 * @var ?string $error
@@ -37,11 +41,11 @@ class Response {
 	protected array $meta = [];
 
 	/**
-	 * @param ?string $body
+	 * @param string $body
 	 * @return void
 	 */
-	public function __construct(
-		protected ?string $body = null
+	private function __construct(
+		protected string $body
 	) {
 		$this->parse();
 	}
@@ -57,7 +61,7 @@ class Response {
 	 * @return string
 	 */
 	public function getBody(): string {
-		return (string)$this->body;
+		return $this->body;
 	}
 
 	/**
@@ -65,7 +69,7 @@ class Response {
 	 * @return static
 	 */
 	public function filterResult(callable $fn): static {
-		$this->data = array_map($fn, $this->data);
+		$this->result = array_map($fn, $this->result);
 		return $this;
 	}
 
@@ -74,7 +78,10 @@ class Response {
 	 * @return array<mixed>
 	 */
 	public function getResult(): array {
-		return $this->data;
+		if (!isset($this->result)) {
+			throw new ManticoreSearchResponseError('Trying to access result with no response created');
+		}
+		return $this->result;
 	}
 
 	/**
@@ -111,7 +118,7 @@ class Response {
 	 */
 	public function postprocess(callable $processor, array $args = []): void {
 		try {
-			$this->body = $processor($this->body, $this->data, $this->columns, ...$args);
+			$this->body = $processor($this->body, $this->result, $this->columns, ...$args);
 		} catch (Throwable $e) {
 			throw new ManticoreSearchResponseError("Postprocessing function failed to run: {$e->getMessage()}");
 		}
@@ -124,34 +131,32 @@ class Response {
 	 * @throws ManticoreSearchResponseError
 	 */
 	protected function parse(): void {
-		if (!isset($this->body)) {
-			return;
+		if (!$this->body) {
+			throw new ManticoreSearchResponseError('Trying to parse empty response');
 		}
 
-		$data = (array)json_decode($this->body, true);
-		if (!is_array($data)) {
+		$result = json_decode($this->body, true);
+		if (!is_array($result)) {
 			throw new ManticoreSearchResponseError('Invalid JSON found');
 		}
-		if (empty($data)) {
-			return;
-		}
-		if (array_is_list($data)) {
+
+		$this->result = $result;
+		if ($result && array_is_list($result)) {
 			/** @var array<string,string> */
-			$data = $data[0];
+			$result = $result[0];
 		}
-		if (array_key_exists('error', $data) && is_string($data['error']) && $data['error'] !== '') {
-			$this->error = $data['error'];
+
+		if (array_key_exists('error', $result) && is_string($result['error']) && $result['error'] !== '') {
+			$this->error = $result['error'];
 		} else {
 			$this->error = null;
 		}
 		foreach (['columns', 'data'] as $prop) {
-			if (!array_key_exists($prop, $data) || !is_array($data[$prop])) {
+			if (!array_key_exists($prop, $result) || !is_array($result[$prop])) {
 				continue;
 			}
-			$this->$prop = $data[$prop];
+			$this->$prop = $result[$prop];
 		}
-
-		$this->data = $data;
 	}
 
 	/**

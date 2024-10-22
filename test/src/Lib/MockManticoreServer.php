@@ -94,7 +94,19 @@ final class MockManticoreServer {
 	];
 	const SHOW_META_RESPONSE = [
 		'fail' => '',
-		'ok' => '[]',
+		'ok' => "[{\n"
+		. '"columns":[{"Variable_name":{"type":"string"}},{"Value":{"type":"string"}}],'
+		. "\n"
+		. '"data":['
+		. '{"Variable_name":"time","Value":"0"}'
+		. "\n"
+		. "\n],\n"
+		. '"total":5,'
+		. "\n"
+		. '"error":"",'
+		. "\n"
+		. '"warning":""'
+		. "\n}]",
 	];
 
 	/**
