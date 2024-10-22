@@ -18,6 +18,7 @@ use Manticoresearch\Buddy\Core\ManticoreSearch\Endpoint as ManticoreEndpoint;
 use Manticoresearch\Buddy\Core\ManticoreSearch\MySQLTool;
 use Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Settings as ManticoreSettings;
+use Manticoresearch\Buddy\Core\Tool\Buddy;
 
 final class Request {
 	const PAYLOAD_FIELDS = [
@@ -67,7 +68,7 @@ final class Request {
 		$self->error = '';
 		$self->errorBody = [];
 		$self->payload = '{}';
-		$self->version = 1;
+		$self->version = Buddy::PROTOCOL_VERSION;
 		return $self;
 	}
 
@@ -231,7 +232,12 @@ final class Request {
 			: static::removeComments($payload['message']['body']);
 		$this->error = $payload['error']['message'];
 		$this->errorBody = $payload['error']['body'] ?? [];
-		$this->version = $payload['version'];
+		$this->version = match ($payload['version']) {
+			Buddy::PROTOCOL_VERSION => $payload['version'],
+			default => throw new InvalidNetworkRequestError(
+				"Buddy protocol version expects '" . Buddy::PROTOCOL_VERSION . "' but got '{$payload['version']}'"
+			),
+		};
 		return $this;
 	}
 
