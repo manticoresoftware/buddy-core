@@ -51,7 +51,7 @@ final class MockManticoreServer {
 		. "\n"
 		. '"warning":"",'
 		. "\n"
-		. '"meta":[]'
+		. '"meta":{"time":"0"}'
 		. "\n}]",
 	];
 	const SHOW_VARIABLES_RESPONSE = [

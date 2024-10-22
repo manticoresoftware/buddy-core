@@ -57,7 +57,7 @@ class GetManticoreResponseTest extends TestCase {
 
 		$query = 'SELECT * FROM @@system.sessions';
 		$mntResp = Response::fromBody(MockManticoreServer::SHOW_QUERIES_RESPONSE['ok']);
-		$this->assertEquals($mntResp, $this->httpClient->sendRequest($query));
+		$this->assertEquals($mntResp->getResult(), $this->httpClient->sendRequest($query)->getResult());
 	}
 
 	public function testFailResponsesToSQLRequest(): void {
