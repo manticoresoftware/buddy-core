@@ -38,6 +38,11 @@ class Response {
 	protected ?string $error;
 
 	/**
+	 * @var ?string $warning
+	 */
+	protected ?string $warning;
+
+	/**
 	 * @var array<string,string> $meta
 	 */
 	protected array $meta = [];
@@ -55,8 +60,15 @@ class Response {
 	/**
 	 * @return ?string
 	 */
-	public function getError(): string|null {
+	public function getError(): ?string {
 		return $this->error;
+	}
+
+	/**
+	 * @return ?string
+	 */
+	public function getWarning(): ?string {
+		return $this->warning;
 	}
 
 	/**
@@ -70,8 +82,36 @@ class Response {
 	 * @param callable $fn
 	 * @return static
 	 */
-	public function filterResult(callable $fn): static {
-		$this->result->map($fn);
+	public function mapData(callable $fn): static {
+		$this->data = array_map($fn, $this->data);
+		return $this;
+	}
+
+	/**
+	 * @param callable $fn
+	 * @return static
+	 */
+	public function filterData(callable $fn): static {
+		$this->data = array_filter($this->data, $fn);
+		return $this;
+	}
+
+	/**
+	 * @param array<string,mixed> $data
+	 * @return static
+	 */
+	public function extendData(array $data): static {
+		$this->data = array_merge($this->data, $data);
+		return $this;
+	}
+
+	/**
+	 * Apply some function to the whole result
+	 * @param callable $fn
+	 * @return static
+	 */
+	public function apply(callable $fn): static {
+		$this->result = $fn($this->result);
 		return $this;
 	}
 
@@ -83,7 +123,30 @@ class Response {
 		if (!isset($this->result)) {
 			throw new ManticoreSearchResponseError('Trying to access result with no response created');
 		}
+		// We should replace data as result of applying modifier functions
+		// like filter, map or whatever
+		// @phpstan-ignore-next-line
+		if (isset($this->result[0]['data'])) {
+			$this->result[0]['data'] = $this->data;
+		} else {
+			$this->result['data'] = $this->data;
+		}
+
 		return $this->result;
+	}
+
+	/**
+	 * @return array<string,mixed>
+	 */
+	public function getData(): array {
+		return $this->data;
+	}
+
+	/**
+	 * @return array<string,mixed>
+	 */
+	public function getColumns(): array {
+		return $this->columns;
 	}
 
 	/**
@@ -109,6 +172,14 @@ class Response {
 	 */
 	public function hasError(): bool {
 		return isset($this->error);
+	}
+
+	/**
+	 * Check if we had warning on performing our request
+	 * @return bool
+	 */
+	public function hasWarning(): bool {
+		return isset($this->warning);
 	}
 
 	/**
@@ -148,16 +219,28 @@ class Response {
 			$data = $struct[0];
 			$struct = Struct::fromData($data, $struct->getBigIntFields());
 		}
-		if ($struct->hasKey('error') && is_string($struct['error']) && $struct['error'] !== '') {
-			$this->error = $struct['error'];
-		} else {
-			$this->error = null;
-		}
+
+		$this->assign($struct, 'error');
+		$this->assign($struct, 'warning');
+
 		foreach (['columns', 'data'] as $prop) {
 			if (!$struct->hasKey($prop) || !is_array($struct[$prop])) {
 				continue;
 			}
 			$this->$prop = $struct[$prop];
+		}
+	}
+
+	/**
+	 * @param Struct<int|string, mixed> $struct
+	 * @param string $key
+	 * @return void
+	 */
+	public function assign(Struct $struct, string $key): void {
+		if ($struct->hasKey($key) && is_string($struct[$key]) && $struct[$key] !== '') {
+			$this->$key = $struct[$key];
+		} else {
+			$this->$key = null;
 		}
 	}
 

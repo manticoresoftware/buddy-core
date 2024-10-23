@@ -46,13 +46,13 @@ final class TableFormatter {
 	}
 
 	/**
-	 * @param float $startTime
+	 * @param int $startTime
 	 * @param array<mixed> $origData
 	 * @param int $total
 	 * @return string
 	 */
 	public function getTable(
-		float $startTime,
+		int $startTime,
 		?array $origData = [],
 		int $total = -1,
 		string $error = ''
