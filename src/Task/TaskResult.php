@@ -12,6 +12,7 @@
 namespace Manticoresearch\Buddy\Core\Task;
 
 use Manticoresearch\Buddy\Core\ManticoreSearch\Response;
+use Manticoresearch\Buddy\Core\Plugin\TableFormatter;
 
 /**
  * Simple struct for task result data
@@ -37,7 +38,7 @@ final class TaskResult {
 	 *  It must contain HTTP error code that will be returned to client
 	 * @return void
 	 */
-	public function __construct(
+	private function __construct(
 		protected array $data,
 		protected string $error,
 		protected string $warning
@@ -64,7 +65,13 @@ final class TaskResult {
 	 * @return static
 	 */
 	public static function fromResponse(Response $response): static {
-		$obj = static::raw($response->getResult());
+		if ($response->hasError()) {
+			return new static([], $response->getError() ?? '', $response->getWarning() ?? '');
+		}
+
+		// No error
+		$obj = new static($response->getData(), '', '');
+		$obj->columns = $response->getColumns();
 		$obj->meta = $response->getMeta();
 		return $obj;
 	}
@@ -234,5 +241,15 @@ final class TaskResult {
 				'error' => $this->error,
 			] : [$struct]
 		;
+	}
+
+	/**
+	 * Get struct but in the way of formatted output
+	 * @param int $startTime
+	 * @return string
+	 */
+	public function getTableFormatted(int $startTime): string {
+		$tableFormatter = new TableFormatter();
+		return $tableFormatter->getTable($startTime, $this->data, $this->total, $this->error);
 	}
 }
