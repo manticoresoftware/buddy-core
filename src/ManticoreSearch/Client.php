@@ -251,9 +251,8 @@ class Client {
 		/** @var array<array{data:array<array{Type:string,Index:string}>}> $res */
 		$res = $this->sendRequest('SHOW TABLES')->getResult();
 
-		// TODO: still not changed to Table in manticore?
 		$typesMap = array_flip($types);
-		foreach ($res[0]['data'] as ['Type' => $type, 'Index' => $table]) {
+		foreach ($res[0]['data'] as ['Type' => $type, 'Table' => $table]) {
 			if ($typesMap && !isset($typesMap[$type])) {
 				continue;
 			}
