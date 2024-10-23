@@ -15,11 +15,12 @@ use Manticoresearch\Buddy\Core\Error\ManticoreSearchResponseError;
 use Manticoresearch\Buddy\Core\Network\Struct;
 use Throwable;
 
+/** @package Manticoresearch\Buddy\Core\ManticoreSearch */
 class Response {
 	/**
-	 * @var array<string,mixed>
+	 * @var Struct<int|string, mixed>
 	 */
-	protected array $result;
+	protected Struct $result;
 
 	/**
 	 * @var array<string,mixed> $columns
@@ -70,15 +71,15 @@ class Response {
 	 * @return static
 	 */
 	public function filterResult(callable $fn): static {
-		$this->result = array_map($fn, $this->result);
+		$this->result->map($fn);
 		return $this;
 	}
 
 	/**
 	 * Get parsed and json decoded reply from the Manticore daemon
-	 * @return array<mixed>
+	 * @return Struct<int|string, mixed>
 	 */
-	public function getResult(): array {
+	public function getResult(): Struct {
 		if (!isset($this->result)) {
 			throw new ManticoreSearchResponseError('Trying to access result with no response created');
 		}
@@ -141,6 +142,7 @@ class Response {
 		}
 
 		$struct = Struct::fromJson($this->body);
+		$this->result = $struct;
 		if ($struct->isList()) {
 			/** @var array<string,mixed> */
 			$data = $struct[0];
