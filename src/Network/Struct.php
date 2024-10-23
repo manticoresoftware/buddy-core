@@ -81,6 +81,15 @@ final class Struct implements JsonSerializable, ArrayAccess {
 	}
 
 	/**
+	 * @param callable $fn
+	 * @return Struct<TKey, TValue>
+	 */
+	public function map(callable $fn): self {
+		$this->data = array_map($fn, $this->data);
+		return $this;
+	}
+
+	/**
 	 * @return array<string>
 	 */
 	public function getBigIntFields(): array {
@@ -234,7 +243,7 @@ final class Struct implements JsonSerializable, ArrayAccess {
 		}
 
 		foreach ($data as $key => &$value) {
-			$currentPath = $path ? "$path.$key" : $key;
+			$currentPath = $path ? "$path.$key" : "$key";
 			if (!isset($originalData[$key])) {
 				continue;
 			}
