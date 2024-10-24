@@ -11,7 +11,6 @@
 
 namespace Manticoresearch\Buddy\Core\Plugin;
 
-use Manticoresearch\Buddy\Core\ManticoreSearch\Endpoint;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Settings;
 use Manticoresearch\Buddy\Core\Network\Request;
 use Manticoresearch\Buddy\Core\Process\BaseProcessor;
@@ -58,17 +57,6 @@ abstract class BasePayload {
 	 */
 	public function getSettings(): Settings {
 		return $this->manticoreSettings;
-	}
-
-	/**
-	 * Redirect all /cli requests to /sql endpoint
-	 *
-	 * @param Request $request
-	 * @return array{0:string,1:boolean}
-	 */
-	public static function getEndpointInfo(Request $request): array {
-		return ($request->endpointBundle === Endpoint::Cli)
-			? [Endpoint::Sql->value, true] : [$request->path, false];
 	}
 
 	/**
