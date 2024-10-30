@@ -32,6 +32,9 @@ class Response {
 	 */
 	protected array $data = [];
 
+	/** @var bool */
+	protected bool $hasData = false;
+
 	/**
 	 * @var string $error
 	 */
@@ -195,6 +198,13 @@ class Response {
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function hasData(): bool {
+		return $this->hasData;
+	}
+
+	/**
 	 * Run callable function on results and postprocess it with custom logic
 	 * @param callable $processor
 	 * @param array<mixed> $args
@@ -237,6 +247,10 @@ class Response {
 		$this->assign($struct, 'total');
 		$this->assign($struct, 'data');
 		$this->assign($struct, 'columns');
+
+		// A bit tricky but we need to know if we have data or not
+		// For table formatter in current architecture
+		$this->hasData = $struct->hasKey('data');
 	}
 
 	/**

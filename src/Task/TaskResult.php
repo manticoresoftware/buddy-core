@@ -32,18 +32,18 @@ final class TaskResult {
 
 	/**
 	 * Initialize the empty result
-	 * @param array<mixed> $data
+	 * @param ?array<mixed> $data
 	 * @param string $error
 	 * @param string $warning
 	 *  It must contain HTTP error code that will be returned to client
 	 * @return void
 	 */
 	private function __construct(
-		protected array $data,
+		protected ?array $data,
 		protected string $error,
 		protected string $warning
 	) {
-		$this->total = sizeof($data);
+		$this->total = $data ? sizeof($data) : 0;
 	}
 
 	/**
@@ -66,11 +66,12 @@ final class TaskResult {
 	 */
 	public static function fromResponse(Response $response): static {
 		if ($response->hasError()) {
-			return new static([], $response->getError() ?? '', $response->getWarning() ?? '');
+			return new static(null, $response->getError() ?? '', $response->getWarning() ?? '');
 		}
 
 		// No error
-		$obj = new static($response->getData(), '', '');
+		$data = $response->hasData() ? $response->getData() : null;
+		$obj = new static($data, '', '');
 		$obj->columns = $response->getColumns();
 		$obj->meta = $response->getMeta();
 		$obj->total = $response->getTotal();
@@ -260,6 +261,8 @@ final class TaskResult {
 	 */
 	public function getTableFormatted(int $startTime): string {
 		$tableFormatter = new TableFormatter();
+		// We have logic inside table formatter that check null or not
+		// and reply with Query OK or inserted 1 row etc
 		return $tableFormatter->getTable($startTime, $this->data, $this->total, $this->error);
 	}
 }
