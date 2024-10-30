@@ -22,6 +22,9 @@ class Response {
 	 */
 	protected Struct $result;
 
+	/** @var bool */
+	protected bool $isRaw = false;
+
 	/**
 	 * @var array<string,mixed> $columns
 	 */
@@ -242,27 +245,40 @@ class Response {
 			$struct = Struct::fromData($data, $struct->getBigIntFields());
 		}
 
-		$this->assign($struct, 'error');
-		$this->assign($struct, 'warning');
-		$this->assign($struct, 'total');
-		$this->assign($struct, 'data');
-		$this->assign($struct, 'columns');
+		$this->assign($struct, 'error')
+			->assign($struct, 'warning')
+			->assign($struct, 'total')
+			->assign($struct, 'data')
+			->assign($struct, 'columns');
 
 		// A bit tricky but we need to know if we have data or not
 		// For table formatter in current architecture
 		$this->hasData = $struct->hasKey('data');
+
+		// Check if this is type of response that is not our scheme
+		// in this case we just may proxy it as is without any extra
+		$this->isRaw = !$struct->hasKey('warning') &&
+			!$struct->hasKey('error') &&
+			!$struct->hasKey('total');
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isRaw(): bool {
+		return $this->isRaw;
 	}
 
 	/**
 	 * @param Struct<int|string, mixed> $struct
 	 * @param string $key
-	 * @return void
+	 * @return static
 	 */
-	public function assign(Struct $struct, string $key): void {
-		if (!$struct->hasKey($key)) {
-			return;
+	public function assign(Struct $struct, string $key): static {
+		if ($struct->hasKey($key)) {
+			$this->$key = $struct[$key];
 		}
-		$this->$key = $struct[$key];
+		return $this;
 	}
 
 	/**

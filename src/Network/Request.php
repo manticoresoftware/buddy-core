@@ -17,8 +17,8 @@ use Manticoresearch\Buddy\Core\Error\QueryParseError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Endpoint;
 use Manticoresearch\Buddy\Core\ManticoreSearch\MySQLTool;
 use Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat;
-use Manticoresearch\Buddy\Core\Tool\Buddy;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Settings;
+use Manticoresearch\Buddy\Core\Tool\Buddy;
 
 final class Request {
 	const PAYLOAD_FIELDS = [
