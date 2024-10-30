@@ -16,24 +16,40 @@ use Throwable;
 
 class Response {
 	/**
-	 * @var array<string,mixed>
+	 * @var array<int|string,mixed>
 	 */
 	protected array $result;
+
+	/** @var bool */
+	protected bool $isRaw = false;
 
 	/**
 	 * @var array<string,mixed> $columns
 	 */
-	protected array $columns;
+	protected array $columns = [];
 
 	/**
 	 * @var array<string,mixed> $data
 	 */
-	protected array $data;
+	protected array $data = [];
+
+	/** @var bool */
+	protected bool $hasData = false;
 
 	/**
-	 * @var ?string $error
+	 * @var string $error
 	 */
-	protected ?string $error;
+	protected string $error = '';
+
+	/**
+	 * @var string $warning
+	 */
+	protected string $warning = '';
+
+	/**
+	 * @var int $total
+	 */
+	protected int $total = 0;
 
 	/**
 	 * @var array<string,string> $meta
@@ -53,8 +69,15 @@ class Response {
 	/**
 	 * @return ?string
 	 */
-	public function getError(): string|null {
+	public function getError(): ?string {
 		return $this->error;
+	}
+
+	/**
+	 * @return ?string
+	 */
+	public function getWarning(): ?string {
+		return $this->warning;
 	}
 
 	/**
@@ -68,8 +91,36 @@ class Response {
 	 * @param callable $fn
 	 * @return static
 	 */
-	public function filterResult(callable $fn): static {
-		$this->result = array_map($fn, $this->result);
+	public function mapData(callable $fn): static {
+		$this->data = array_map($fn, $this->data);
+		return $this;
+	}
+
+	/**
+	 * @param callable $fn
+	 * @return static
+	 */
+	public function filterData(callable $fn): static {
+		$this->data = array_filter($this->data, $fn);
+		return $this;
+	}
+
+	/**
+	 * @param array<string,mixed> $data
+	 * @return static
+	 */
+	public function extendData(array $data): static {
+		$this->data = array_merge($this->data, $data);
+		return $this;
+	}
+
+	/**
+	 * Apply some function to the whole result
+	 * @param callable $fn
+	 * @return static
+	 */
+	public function apply(callable $fn): static {
+		$this->result = $fn($this->result);
 		return $this;
 	}
 
@@ -81,7 +132,37 @@ class Response {
 		if (!isset($this->result)) {
 			throw new ManticoreSearchResponseError('Trying to access result with no response created');
 		}
+		// We should replace data as result of applying modifier functions
+		// like filter, map or whatever
+		// @phpstan-ignore-next-line
+		if (isset($this->result[0]['data'])) {
+			$this->result[0]['data'] = $this->data;
+		} else {
+			$this->result['data'] = $this->data;
+		}
+
 		return $this->result;
+	}
+
+	/**
+	 * @return array<string,mixed>
+	 */
+	public function getData(): array {
+		return $this->data;
+	}
+
+	/**
+	 * @return array<string,mixed>
+	 */
+	public function getColumns(): array {
+		return $this->columns;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getTotal(): int {
+		return $this->total;
 	}
 
 	/**
@@ -106,7 +187,22 @@ class Response {
 	 * @return bool
 	 */
 	public function hasError(): bool {
-		return isset($this->error);
+		return !!$this->error;
+	}
+
+	/**
+	 * Check if we had warning on performing our request
+	 * @return bool
+	 */
+	public function hasWarning(): bool {
+		return !!$this->warning;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasData(): bool {
+		return $this->hasData;
 	}
 
 	/**
@@ -146,17 +242,41 @@ class Response {
 			$result = $result[0];
 		}
 
-		if (array_key_exists('error', $result) && is_string($result['error']) && $result['error'] !== '') {
-			$this->error = $result['error'];
-		} else {
-			$this->error = null;
+		$this
+			->assign($result, 'error')
+			->assign($result, 'warning')
+			->assign($result, 'total')
+			->assign($result, 'data')
+			->assign($result, 'columns');
+
+		// A bit tricky but we need to know if we have data or not
+		// For table formatter in current architecture
+		$this->hasData = array_key_exists('data', $result);
+
+		// Check if this is type of response that is not our scheme
+		// in this case we just may proxy it as is without any extra
+		$this->isRaw = !array_key_exists('warning', $result) &&
+			!array_key_exists('error', $result) &&
+			!array_key_exists('total', $result);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isRaw(): bool {
+		return $this->isRaw;
+	}
+
+	/**
+	 * @param array<string,mixed> $result
+	 * @param string $key
+	 * @return static
+	 */
+	protected function assign(array $result, string $key): static {
+		if (array_key_exists($key, $result)) {
+			$this->$key = $result[$key];
 		}
-		foreach (['columns', 'data'] as $prop) {
-			if (!array_key_exists($prop, $result) || !is_array($result[$prop])) {
-				continue;
-			}
-			$this->$prop = $result[$prop];
-		}
+		return $this;
 	}
 
 	/**
