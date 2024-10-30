@@ -25,22 +25,27 @@ class Response {
 	/**
 	 * @var array<string,mixed> $columns
 	 */
-	protected array $columns;
+	protected array $columns = [];
 
 	/**
 	 * @var array<string,mixed> $data
 	 */
-	protected array $data;
+	protected array $data = [];
 
 	/**
-	 * @var ?string $error
+	 * @var string $error
 	 */
-	protected ?string $error;
+	protected string $error = '';
 
 	/**
-	 * @var ?string $warning
+	 * @var string $warning
 	 */
-	protected ?string $warning;
+	protected string $warning = '';
+
+	/**
+	 * @var int $total
+	 */
+	protected int $total = 0;
 
 	/**
 	 * @var array<string,string> $meta
@@ -139,14 +144,21 @@ class Response {
 	 * @return array<string,mixed>
 	 */
 	public function getData(): array {
-		return $this->data ?? [];
+		return $this->data;
 	}
 
 	/**
 	 * @return array<string,mixed>
 	 */
 	public function getColumns(): array {
-		return $this->columns ?? [];
+		return $this->columns;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getTotal(): int {
+		return $this->total;
 	}
 
 	/**
@@ -171,7 +183,7 @@ class Response {
 	 * @return bool
 	 */
 	public function hasError(): bool {
-		return isset($this->error);
+		return !!$this->error;
 	}
 
 	/**
@@ -179,7 +191,7 @@ class Response {
 	 * @return bool
 	 */
 	public function hasWarning(): bool {
-		return isset($this->warning);
+		return !!$this->warning;
 	}
 
 	/**
@@ -222,13 +234,9 @@ class Response {
 
 		$this->assign($struct, 'error');
 		$this->assign($struct, 'warning');
-
-		foreach (['columns', 'data'] as $prop) {
-			if (!$struct->hasKey($prop) || !is_array($struct[$prop])) {
-				continue;
-			}
-			$this->$prop = $struct[$prop];
-		}
+		$this->assign($struct, 'total');
+		$this->assign($struct, 'data');
+		$this->assign($struct, 'columns');
 	}
 
 	/**
@@ -237,11 +245,10 @@ class Response {
 	 * @return void
 	 */
 	public function assign(Struct $struct, string $key): void {
-		if ($struct->hasKey($key) && is_string($struct[$key]) && $struct[$key] !== '') {
-			$this->$key = $struct[$key];
-		} else {
-			$this->$key = null;
+		if (!$struct->hasKey($key)) {
+			return;
 		}
+		$this->$key = $struct[$key];
 	}
 
 	/**

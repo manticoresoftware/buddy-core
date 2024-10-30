@@ -73,6 +73,7 @@ final class TaskResult {
 		$obj = new static($response->getData(), '', '');
 		$obj->columns = $response->getColumns();
 		$obj->meta = $response->getMeta();
+		$obj->total = $response->getTotal();
 		return $obj;
 	}
 
@@ -169,6 +170,15 @@ final class TaskResult {
 	public function data(array $data): static {
 		$this->data = $data;
 		$this->total = sizeof($data);
+		return $this;
+	}
+
+	/**
+	 * @param int $total
+	 * @return static
+	 */
+	public function total(int $total): static {
+		$this->total = $total;
 		return $this;
 	}
 
