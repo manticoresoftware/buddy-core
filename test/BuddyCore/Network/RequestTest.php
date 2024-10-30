@@ -151,12 +151,12 @@ class RequestTest extends TestCase {
 			[
 				'{"error":{"message":"some error","body":{"error":"some_error"}},"type":"unknown json request",'
 				.'"message":{"path_query":"/cli","body":"some query"},'
-				.'"version":1}',
+				.'"version":' . Buddy::PROTOCOL_VERSION . '}',
 			],
 			[
 				'{"error":{"message":"' . $errorUtf8Text . '","body":{"error":"' . $errorUtf8Text . '"}},'
 				.'"type": "unknown json request","message": {"path_query": "/cli","body": "' . $errorUtf8Text . '"},'
-				.'"version":1}',
+				.'"version":' . Buddy::PROTOCOL_VERSION . '}',
 			],
 		];
 	}
