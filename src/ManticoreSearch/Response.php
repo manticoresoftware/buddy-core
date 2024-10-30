@@ -23,22 +23,27 @@ class Response {
 	/**
 	 * @var array<string,mixed> $columns
 	 */
-	protected array $columns;
+	protected array $columns = [];
 
 	/**
 	 * @var array<string,mixed> $data
 	 */
-	protected array $data;
+	protected array $data = [];
 
 	/**
-	 * @var ?string $error
+	 * @var string $error
 	 */
-	protected ?string $error;
+	protected string $error = '';
 
 	/**
-	 * @var ?string $warning
+	 * @var string $warning
 	 */
-	protected ?string $warning;
+	protected string $warning = '';
+
+	/**
+	 * @var int $total
+	 */
+	protected int $total = 0;
 
 	/**
 	 * @var array<string,string> $meta
@@ -137,14 +142,21 @@ class Response {
 	 * @return array<string,mixed>
 	 */
 	public function getData(): array {
-		return $this->data ?? [];
+		return $this->data;
 	}
 
 	/**
 	 * @return array<string,mixed>
 	 */
 	public function getColumns(): array {
-		return $this->columns ?? [];
+		return $this->columns;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getTotal(): int {
+		return $this->total;
 	}
 
 	/**
@@ -169,7 +181,7 @@ class Response {
 	 * @return bool
 	 */
 	public function hasError(): bool {
-		return isset($this->error);
+		return !!$this->error;
 	}
 
 	/**
@@ -177,7 +189,7 @@ class Response {
 	 * @return bool
 	 */
 	public function hasWarning(): bool {
-		return isset($this->warning);
+		return !!$this->warning;
 	}
 
 	/**
@@ -219,13 +231,9 @@ class Response {
 
 		$this->assign($result, 'error');
 		$this->assign($result, 'warning');
-
-		foreach (['columns', 'data'] as $prop) {
-			if (!array_key_exists($prop, $result) || !is_array($result[$prop])) {
-				continue;
-			}
-			$this->$prop = $result[$prop];
-		}
+		$this->assign($result, 'total');
+		$this->assign($result, 'data');
+		$this->assign($result, 'columns');
 	}
 
 	/**
@@ -234,11 +242,11 @@ class Response {
 	 * @return void
 	 */
 	public function assign(array $result, string $key): void {
-		if (array_key_exists($key, $result) && is_string($result[$key]) && $result[$key] !== '') {
-			$this->$key = $result[$key];
-		} else {
-			$this->$key = null;
+		if (!array_key_exists($key, $result)) {
+			return;
 		}
+
+		$this->$key = $result[$key];
 	}
 
 	/**
