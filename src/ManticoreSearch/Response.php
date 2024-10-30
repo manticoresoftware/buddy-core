@@ -139,14 +139,14 @@ class Response {
 	 * @return array<string,mixed>
 	 */
 	public function getData(): array {
-		return $this->data;
+		return $this->data ?? [];
 	}
 
 	/**
 	 * @return array<string,mixed>
 	 */
 	public function getColumns(): array {
-		return $this->columns;
+		return $this->columns ?? [];
 	}
 
 	/**
