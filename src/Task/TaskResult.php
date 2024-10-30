@@ -65,6 +65,10 @@ final class TaskResult {
 	 * @return static
 	 */
 	public static function fromResponse(Response $response): static {
+		if ($response->isRaw()) {
+			return static::raw($response->getBody());
+		}
+
 		if ($response->hasError()) {
 			return new static(null, $response->getError() ?? '', $response->getWarning() ?? '');
 		}

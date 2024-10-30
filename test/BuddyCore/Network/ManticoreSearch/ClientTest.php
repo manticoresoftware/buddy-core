@@ -9,7 +9,6 @@
  program; if you did not, you can find it at http://www.gnu.org/
  */
 
-//use Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Client as HTTPClient;
 use Manticoresearch\Buddy\CoreTest\Trait\TestInEnvironmentTrait;
 use Manticoresearch\Buddy\CoreTest\Trait\TestProtectedTrait;

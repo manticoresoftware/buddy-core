@@ -20,6 +20,9 @@ class Response {
 	 */
 	protected array $result;
 
+	/** @var bool */
+	protected bool $isRaw = false;
+
 	/**
 	 * @var array<string,mixed> $columns
 	 */
@@ -239,28 +242,41 @@ class Response {
 			$result = $result[0];
 		}
 
-		$this->assign($result, 'error');
-		$this->assign($result, 'warning');
-		$this->assign($result, 'total');
-		$this->assign($result, 'data');
-		$this->assign($result, 'columns');
+		$this
+			->assign($result, 'error')
+			->assign($result, 'warning')
+			->assign($result, 'total')
+			->assign($result, 'data')
+			->assign($result, 'columns');
 
 		// A bit tricky but we need to know if we have data or not
 		// For table formatter in current architecture
 		$this->hasData = array_key_exists('data', $result);
+
+		// Check if this is type of response that is not our scheme
+		// in this case we just may proxy it as is without any extra
+		$this->isRaw = !array_key_exists('warning', $result) &&
+			!array_key_exists('error', $result) &&
+			!array_key_exists('total', $result);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isRaw(): bool {
+		return $this->isRaw;
 	}
 
 	/**
 	 * @param array<string,mixed> $result
 	 * @param string $key
-	 * @return void
+	 * @return static
 	 */
-	public function assign(array $result, string $key): void {
-		if (!array_key_exists($key, $result)) {
-			return;
+	protected function assign(array $result, string $key): static {
+		if (array_key_exists($key, $result)) {
+			$this->$key = $result[$key];
 		}
-
-		$this->$key = $result[$key];
+		return $this;
 	}
 
 	/**
