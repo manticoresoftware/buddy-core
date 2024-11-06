@@ -17,6 +17,7 @@ use Manticoresearch\Buddy\Core\Plugin\TableFormatter;
 use Manticoresearch\Buddy\Core\Task\TaskResult;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
 
+/** @package Manticoresearch\Buddy\Core\Network */
 final class Response {
   /**
 	 * Initialize response with string message to be returned (json encoded) and bool flag setting if response has error
@@ -134,18 +135,23 @@ final class Response {
 				$message['error'] = $responseError;
 			}
 		}
-		$payload = [
-			'version' => Buddy::PROTOCOL_VERSION,
-			'type' => "{$format->value} response",
-			'message' => $message,
-			'meta' => $meta ?: null,
-			'error_code' => $error?->getResponseErrorCode() ?? 200,
-		];
+		$json = '{'
+			. '"version":' . Buddy::PROTOCOL_VERSION . ','
+			. '"type":"' . $format->value . ' response",'
+			. '"message":%s,'
+			. '"meta":' . ($meta ? json_encode($meta) : 'null') . ','
+			. '"error_code":' . ($error?->getResponseErrorCode() ?? 200)
+			. '}';
+		if ($message instanceof Struct) {
+			$json = sprintf($json, $message->toJson());
+		} else {
+			$json = sprintf(
+				$json,
+				json_encode($message, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_IGNORE),
+			);
+		}
 
-		return new static(
-			json_encode($payload, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_IGNORE),
-			self::checkForError($message)
-		);
+		return new static($json, self::checkForError($message));
 	}
 
   /**
