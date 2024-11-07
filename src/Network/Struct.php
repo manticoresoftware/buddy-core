@@ -123,7 +123,7 @@ final class Struct implements JsonSerializable, ArrayAccess {
 	 */
 	public static function fromJson(string $json): self {
 		/** @var array<TKey, TValue> */
-		$result = json_decode($json, true, static::JSON_DEPTH, static::JSON_FLAGS);
+		$result = (array)json_decode($json, true, static::JSON_DEPTH, static::JSON_FLAGS);
 		$bigIntFields = [];
 		if (static::hasBigInt($json)) {
 			/** @var array<TKey, TValue> */
