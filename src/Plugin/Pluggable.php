@@ -523,12 +523,16 @@ final class Pluggable {
 			. 'buddy-plugins'
 		;
 
-		if (!is_dir($pluginDir) && !mkdir($pluginDir, 0755, true)) {
-			throw new Exception(
-				$this->settings->commonPluginDir
-				. 'is not writable.'
-				. ' Ensure the user running searchd has proper permissions to access it.'
-			);
+		if (!is_dir($pluginDir)) {
+			try {
+				mkdir($pluginDir, 0755, true);
+			} catch (\Throwable) {
+				Buddy::info(
+					$this->settings->commonPluginDir
+						. ' is not writable.'
+						. ' Ensure the user running searchd has proper permissions to access it.'
+				);
+			}
 		}
 
 		return $pluginDir;
