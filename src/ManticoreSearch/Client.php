@@ -55,14 +55,10 @@ class Client {
 
 	/**
 	 * Initialize the Client that will use provided
-	 * @param ?Response $responseBuilder
 	 * @param ?string $url
 	 * @return void
 	 */
-	public function __construct(
-		protected ?Response $responseBuilder = null,
-		?string $url = null
-	) {
+	public function __construct(?string $url = null) {
 		// If no url passed, set default one
 		if (!$url) {
 			$url = static::DEFAULT_URL;
@@ -76,16 +72,6 @@ class Client {
 			}
 		);
 		$this->buddyVersion = Buddy::getVersion();
-	}
-
-	/**
-	 * Set Response Builder
-	 * @param Response $responseBuilder
-	 * @return static
-	 */
-	public function setResponseBuilder(Response $responseBuilder): static {
-		$this->responseBuilder = $responseBuilder;
-		return $this;
 	}
 
 	/**
@@ -115,9 +101,6 @@ class Client {
 		bool $disableAgentHeader = false
 	): Response {
 		$t = microtime(true);
-		if (!isset($this->responseBuilder)) {
-			throw new RuntimeException("'responseBuilder' property of ManticoreHTTPClient class is not instantiated");
-		}
 		if ($request === '') {
 			throw new ManticoreSearchClientError('Empty request passed');
 		}
@@ -131,8 +114,10 @@ class Client {
 		} else {
 			$contentTypeHeader = 'application/x-www-form-urlencoded';
 		}
+		$showMeta = false;
 		// We urlencode all the requests to the /sql endpoint
 		if (str_starts_with($path, 'sql')) {
+			$showMeta = stripos(trim($request), 'SELECT') === 0;
 			$request = 'query=' . urlencode($request);
 		}
 		$userAgentHeader = $disableAgentHeader ? '' : "Manticore Buddy/{$this->buddyVersion}";
@@ -143,7 +128,19 @@ class Client {
 		$isAsync = Coroutine::getCid() > 0;
 		$method = !$this->forceSync && $isAsync ? 'runAsyncRequest' : 'runSyncRequest';
 		$this->response = $this->$method($path, $request, $headers);
-		$result = $this->responseBuilder->fromBody($this->response);
+		$result = Response::fromBody($this->response);
+		if ($showMeta) {
+			$metaResponse = $this->$method($path, 'SHOW META', $headers);
+			/** @var array<array{data?:array<array{Variable_name:string,Value:string}>}> */
+			$metaResult = Response::fromBody($metaResponse)->getResult();
+			$metaVars = $metaResult[0]['data'] ?? [];
+			$meta = [];
+			foreach ($metaVars as ['Variable_name' => $name, 'Value' => $value]) {
+				$meta[$name] = $value;
+			}
+			$result->setMeta($meta);
+		}
+
 		$time = (int)((microtime(true) - $t) * 1000000);
 		Buddy::debugv("[{$time}µs] manticore request: $request");
 		return $result;
@@ -254,9 +251,8 @@ class Client {
 		/** @var array<array{data:array<array{Type:string,Index:string}>}> $res */
 		$res = $this->sendRequest('SHOW TABLES')->getResult();
 
-		// TODO: still not changed to Table in manticore?
 		$typesMap = array_flip($types);
-		foreach ($res[0]['data'] as ['Type' => $type, 'Index' => $table]) {
+		foreach ($res[0]['data'] as ['Type' => $type, 'Table' => $table]) {
 			if ($typesMap && !isset($typesMap[$type])) {
 				continue;
 			}
@@ -377,6 +373,7 @@ class Client {
 	 * Helper to build combinations of words with typo and fuzzy correction to next combine in searches
 	 * @param string $query The query to be tokenized
 	 * @param string $table The table to be used in the suggest function
+	 * @param bool $preserve If we should keep words that are not in the table
 	 * @param int $distance The maximum distance between the query word and the suggestion
 	 * @param int $limit The maximum number of suggestions for each tokenized word
 	 * @return array{array<array<string>>,array<string,float>}
@@ -384,7 +381,13 @@ class Client {
 	 * @throws RuntimeException
 	 * @throws ManticoreSearchClientError
 	 */
-	public function fetchFuzzyVariations(string $query, string $table, int $distance = 2, int $limit = 3): array {
+	public function fetchFuzzyVariations(
+		string $query,
+		string $table,
+		bool $preserve = false,
+		int $distance = 2,
+		int $limit = 3
+	): array {
 		// 1. Tokenize the query first with the keywords function
 		$q = "CALL KEYWORDS('{$query}', '{$table}')";
 		/** @var array<array{data:array<array{normalized:string,tokenized:string}>}> $keywordsResult */
@@ -416,7 +419,13 @@ class Client {
 				$docMap[$word] = $suggestion['docs'];
 			}
 
+			// Special case for empty suggestions
 			if (!$choices) {
+				if ($preserve) {
+					$words[] = [$word];
+					$distanceMap[$word] = 999;
+					$docMap[$word] = 0;
+				}
 				continue;
 			}
 

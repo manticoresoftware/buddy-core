@@ -14,6 +14,9 @@ namespace Manticoresearch\Buddy\Core\Tool;
 use Throwable;
 
 final class Buddy {
+
+	const PROTOCOL_VERSION = 3;
+
 	/** @var string */
 	protected static string $versionFile;
 

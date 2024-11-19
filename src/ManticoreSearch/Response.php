@@ -12,14 +12,15 @@
 namespace Manticoresearch\Buddy\Core\ManticoreSearch;
 
 use Manticoresearch\Buddy\Core\Error\ManticoreSearchResponseError;
+use Manticoresearch\Buddy\Core\Network\Struct;
 use Throwable;
 
+/** @package Manticoresearch\Buddy\Core\ManticoreSearch */
 class Response {
-
 	/**
-	 * @var array<string,mixed> $data
+	 * @var Struct<int|string, mixed>
 	 */
-	protected array $data;
+	protected Struct $result;
 
 	/**
 	 * @var array<string,mixed> $columns
@@ -27,16 +28,26 @@ class Response {
 	protected array $columns;
 
 	/**
+	 * @var array<string,mixed> $data
+	 */
+	protected array $data;
+
+	/**
 	 * @var ?string $error
 	 */
 	protected ?string $error;
 
 	/**
-	 * @param ?string $body
+	 * @var array<string,string> $meta
+	 */
+	protected array $meta = [];
+
+	/**
+	 * @param string $body
 	 * @return void
 	 */
-	public function __construct(
-		protected ?string $body = null
+	private function __construct(
+		protected string $body
 	) {
 		$this->parse();
 	}
@@ -52,15 +63,44 @@ class Response {
 	 * @return string
 	 */
 	public function getBody(): string {
-		return (string)$this->body;
+		return $this->body;
+	}
+
+	/**
+	 * @param callable $fn
+	 * @return static
+	 */
+	public function filterResult(callable $fn): static {
+		$this->result->map($fn);
+		return $this;
 	}
 
 	/**
 	 * Get parsed and json decoded reply from the Manticore daemon
-	 * @return array<mixed>
+	 * @return Struct<int|string, mixed>
 	 */
-	public function getResult(): array {
-		return (array)json_decode($this->getBody(), true);
+	public function getResult(): Struct {
+		if (!isset($this->result)) {
+			throw new ManticoreSearchResponseError('Trying to access result with no response created');
+		}
+		return $this->result;
+	}
+
+	/**
+	 * @param array<string,string> $meta
+	 * @return static
+	 */
+	public function setMeta(array $meta): static {
+		$this->meta = $meta;
+		return $this;
+	}
+
+	/**
+	 * Return the meta data from the request
+	 * @return array<string,string>
+	 */
+	public function getMeta(): array {
+		return $this->meta;
 	}
 
 	/**
@@ -80,7 +120,7 @@ class Response {
 	 */
 	public function postprocess(callable $processor, array $args = []): void {
 		try {
-			$this->body = $processor($this->body, $this->data, $this->columns, ...$args);
+			$this->body = $processor($this->body, $this->result, $this->columns, ...$args);
 		} catch (Throwable $e) {
 			throw new ManticoreSearchResponseError("Postprocessing function failed to run: {$e->getMessage()}");
 		}
@@ -93,30 +133,31 @@ class Response {
 	 * @throws ManticoreSearchResponseError
 	 */
 	protected function parse(): void {
-		if (!isset($this->body)) {
-			return;
+		if (!$this->body) {
+			throw new ManticoreSearchResponseError('Trying to parse empty response');
 		}
-		$data = json_decode($this->body, true);
-		if (!is_array($data)) {
+		$isValid = Struct::isValid($this->body);
+		if (!$isValid) {
 			throw new ManticoreSearchResponseError('Invalid JSON found');
 		}
-		if (empty($data)) {
-			return;
+
+		$struct = Struct::fromJson($this->body);
+		$this->result = $struct;
+		if ($struct->isList()) {
+			/** @var array<string,mixed> */
+			$data = $struct[0];
+			$struct = Struct::fromData($data, $struct->getBigIntFields());
 		}
-		if (array_is_list($data)) {
-			/** @var array<string,string> */
-			$data = $data[0];
-		}
-		if (array_key_exists('error', $data) && is_string($data['error']) && $data['error'] !== '') {
-			$this->error = $data['error'];
+		if ($struct->hasKey('error') && is_string($struct['error']) && $struct['error'] !== '') {
+			$this->error = $struct['error'];
 		} else {
 			$this->error = null;
 		}
 		foreach (['columns', 'data'] as $prop) {
-			if (!array_key_exists($prop, $data) || !is_array($data[$prop])) {
+			if (!$struct->hasKey($prop) || !is_array($struct[$prop])) {
 				continue;
 			}
-			$this->$prop = $data[$prop];
+			$this->$prop = $struct[$prop];
 		}
 	}
 
