@@ -209,7 +209,10 @@ final class Request {
 				'cli_json' => Endpoint::CliJson,
 				'search' => Endpoint::Search,
 				'sql?mode=raw', 'sql', '' => Endpoint::Sql,
-				'insert', 'replace' => Endpoint::Insert,
+				'insert' => Endpoint::Insert,
+				'replace' => Endpoint::Replace,
+				'update' => Endpoint::Update,
+				'delete' => Endpoint::Delete,
 				'_license' => Endpoint::Elastic,
 				'autocomplete' => Endpoint::Autocomplete,
 				default => throw new InvalidNetworkRequestError(
