@@ -22,6 +22,7 @@ use Manticoresearch\Buddy\Core\Tool\Buddy;
 use RuntimeException;
 use Swoole\ConnectionPool;
 use Swoole\Coroutine;
+use Swoole\Coroutine\Channel;
 use Swoole\Coroutine\Http\Client as HttpClient;
 
 class Client {
@@ -89,6 +90,14 @@ class Client {
 	}
 
 	/**
+	 * Get current server url
+	 * @return string
+	 */
+	public function getServerUrl(): string {
+		return static::URL_PREFIX . $this->host . ':' . $this->port;
+	}
+
+	/**
 	 * Send the request where request represents the SQL query to be send
 	 * @param string $request
 	 * @param ?string $path
@@ -147,6 +156,39 @@ class Client {
 	}
 
 	/**
+	 * Send multiple requests with async and get all responses in single run
+	 * @param array<string,array{request:string,path?:string,disableAgentHeader?:bool}> $requests
+	 * @return array<Response>
+	 */
+	public function sendMultiRequest(array $requests): array {
+		$requestCount = sizeof($requests);
+		$channel = new Channel($requestCount);
+		foreach ($requests as $url => $request) {
+			Coroutine::create(
+				function () use ($channel, $request, $url) {
+					if ($url) {
+						$origServerUrl = $this->getServerUrl();
+						$this->setServerUrl($url);
+					}
+					$response = $this->sendRequest(...$request);
+					if ($url) {
+						$this->setServerUrl($origServerUrl);
+					}
+					$channel->push($response);
+				}
+			);
+		}
+
+		$responses = [];
+		do {
+			/** @var Response $response */
+			$response = $channel->pop();
+			$responses[] = $response;
+		} while (sizeof($responses) < $requestCount);
+		return $responses;
+	}
+
+	/**
 	 * Force to use sync client instead of async detection
 	 * @param bool $value
 	 * @return static
@@ -168,8 +210,10 @@ class Client {
 		request: $client = $this->connectionPool->get();
 		/** @var HttpClient $client */
 		$headers['Connection'] = 'keep-alive';
+		$client->setMethod('POST');
 		$client->setHeaders($headers);
-		$client->post("/$path", $request);
+		$client->setData($request);
+		$client->execute("/$path");
 		if ($client->errCode) {
 			/** @phpstan-ignore-next-line */
 			if ($client->errCode !== 104 || $try >= 3) {
