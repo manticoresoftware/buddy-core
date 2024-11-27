@@ -157,23 +157,20 @@ class Client {
 
 	/**
 	 * Send multiple requests with async and get all responses in single run
-	 * @param array<string,array{request:string,path?:string,disableAgentHeader?:bool}> $requests
+	 * @param array<array{url:string,request:string,path?:string,disableAgentHeader?:bool}> $requests
 	 * @return array<Response>
 	 */
 	public function sendMultiRequest(array $requests): array {
+		if (sizeof($requests) === 0) {
+			$request = array_pop($requests);
+			return $this->sendRequestToUrl(...$request);
+		}
 		$requestCount = sizeof($requests);
 		$channel = new Channel($requestCount);
-		foreach ($requests as $url => $request) {
+		foreach ($requests as $request) {
 			Coroutine::create(
-				function () use ($channel, $request, $url) {
-					if ($url) {
-						$origServerUrl = $this->getServerUrl();
-						$this->setServerUrl($url);
-					}
-					$response = $this->sendRequest(...$request);
-					if ($url) {
-						$this->setServerUrl($origServerUrl);
-					}
+				function () use ($channel, $request) {
+					$response = $this->sendRequestToUrl(...$request);
 					$channel->push($response);
 				}
 			);
@@ -186,6 +183,31 @@ class Client {
 			$responses[] = $response;
 		} while (sizeof($responses) < $requestCount);
 		return $responses;
+	}
+
+	/**
+	 * Helper function that let us to send request to the specified url and setit back to original
+	 * @param string $url
+	 * @param string $request
+	 * @param ?string $path
+	 * @param bool $disableAgentHeader
+	 * @return Response
+	 */
+	public function sendRequestToUrl(
+		string $url,
+		string $request,
+		?string $path = null,
+		bool $disableAgentHeader = false
+	): Response {
+		if ($url) {
+			$origServerUrl = $this->getServerUrl();
+			$this->setServerUrl($url);
+		}
+		$response = $this->sendRequest($request, $path, $disableAgentHeader);
+		if ($url) {
+			$this->setServerUrl($origServerUrl);
+		}
+		return $response;
 	}
 
 	/**
