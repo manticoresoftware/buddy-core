@@ -208,7 +208,10 @@ final class Request {
 				'cli_json' => ManticoreEndpoint::CliJson,
 				'search' => ManticoreEndpoint::Search,
 				'sql?mode=raw', 'sql', '' => ManticoreEndpoint::Sql,
-				'insert', 'replace' => ManticoreEndpoint::Insert,
+				'insert' => ManticoreEndpoint::Insert,
+				'replace' => ManticoreEndpoint::Replace,
+				'update' => ManticoreEndpoint::Update,
+				'delete' => ManticoreEndpoint::Delete,
 				'_license' => ManticoreEndpoint::Elastic,
 				'autocomplete' => ManticoreEndpoint::Autocomplete,
 				default => throw new InvalidNetworkRequestError(

@@ -22,6 +22,7 @@ use Manticoresearch\Buddy\Core\Tool\Buddy;
 use RuntimeException;
 use Swoole\ConnectionPool;
 use Swoole\Coroutine;
+use Swoole\Coroutine\Channel;
 use Swoole\Coroutine\Http\Client as HttpClient;
 
 class Client {
@@ -89,6 +90,14 @@ class Client {
 	}
 
 	/**
+	 * Get current server url
+	 * @return string
+	 */
+	public function getServerUrl(): string {
+		return static::URL_PREFIX . $this->host . ':' . $this->port;
+	}
+
+	/**
 	 * Send the request where request represents the SQL query to be send
 	 * @param string $request
 	 * @param ?string $path
@@ -147,6 +156,61 @@ class Client {
 	}
 
 	/**
+	 * Send multiple requests with async and get all responses in single run
+	 * @param array<array{url:string,request:string,path?:string,disableAgentHeader?:bool}> $requests
+	 * @return array<Response>
+	 */
+	public function sendMultiRequest(array $requests): array {
+		if (sizeof($requests) === 0) {
+			$request = array_pop($requests);
+			return $this->sendRequestToUrl(...$request);
+		}
+		$requestCount = sizeof($requests);
+		$channel = new Channel($requestCount);
+		foreach ($requests as $request) {
+			Coroutine::create(
+				function () use ($channel, $request) {
+					$response = $this->sendRequestToUrl(...$request);
+					$channel->push($response);
+				}
+			);
+		}
+
+		$responses = [];
+		do {
+			/** @var Response $response */
+			$response = $channel->pop();
+			$responses[] = $response;
+		} while (sizeof($responses) < $requestCount);
+		return $responses;
+	}
+
+	/**
+	 * Helper function that let us to send request to the specified url and setit back to original
+	 * @param string $url
+	 * @param string $request
+	 * @param ?string $path
+	 * @param bool $disableAgentHeader
+	 * @return Response
+	 */
+	public function sendRequestToUrl(
+		string $url,
+		string $request,
+		?string $path = null,
+		bool $disableAgentHeader = false
+	): Response {
+		if ($url) {
+			$origServerUrl = $this->getServerUrl();
+			$this->setServerUrl($url);
+		}
+		$response = $this->sendRequest($request, $path, $disableAgentHeader);
+		if ($url) {
+			$this->setServerUrl($origServerUrl);
+		}
+		return $response;
+	}
+
+	/**
 	 * Force to use sync client instead of async detection
 	 * @param bool $value
 	 * @return static
@@ -168,8 +232,10 @@ class Client {
 		request: $client = $this->connectionPool->get();
 		/** @var HttpClient $client */
 		$headers['Connection'] = 'keep-alive';
+		$client->setMethod('POST');
 		$client->setHeaders($headers);
-		$client->post("/$path", $request);
+		$client->setData($request);
+		$client->execute("/$path");
 		if ($client->errCode) {
 			/** @phpstan-ignore-next-line */
 			if ($client->errCode !== 104 || $try >= 3) {

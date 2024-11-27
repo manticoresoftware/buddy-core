@@ -168,7 +168,7 @@ final class Struct implements JsonSerializable, ArrayAccess {
 	 * @return string
 	 */
 	public function jsonSerialize(): string {
-		throw new Exception('Use toJson method instead');
+		return $this->toJson();
 	}
 
 	/**

@@ -15,10 +15,12 @@ enum Endpoint: string {
 	case Cli = 'cli';
 	case CliJson = 'cli_json';
 	case Insert = 'insert';
+	case Update = 'update';
+	case Replace = 'replace';
+	case Delete = 'delete';
 	case Sql = 'sql?mode=raw';
 	case Bulk = 'bulk';
 	case Elastic = 'elastic';
 	case Search = 'search';
-	case Update = 'update';
 	case Autocomplete = 'autocomplete';
 }
