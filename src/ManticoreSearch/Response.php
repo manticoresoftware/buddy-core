@@ -138,7 +138,10 @@ class Response {
 		// like filter, map or whatever
 		// @phpstan-ignore-next-line
 		if (isset($this->result[0]['data'])) {
-			$this->result[0]['data'] = $this->data;
+			$item = $this->result[0];
+			// @phpstan-ignore-next-line
+			$item['data'] = $this->data;
+			$result[0] = $item;
 		} else {
 			$this->result['data'] = $this->data;
 		}
