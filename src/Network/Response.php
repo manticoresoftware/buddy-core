@@ -14,7 +14,6 @@ namespace Manticoresearch\Buddy\Core\Network;
 use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat;
 use Manticoresearch\Buddy\Core\Plugin\TableFormatter;
-use Manticoresearch\Buddy\Core\Task\TaskResult;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
 
 /** @package Manticoresearch\Buddy\Core\Network */
@@ -52,15 +51,6 @@ final class Response {
 	private static function checkForError(mixed $message): bool {
 		return (is_array($message) && !(empty($message['error']) && empty($message[0]['error'])))
 		|| (is_string($message) && str_starts_with($message, TableFormatter::ERROR_PREFIX));
-	}
-
-	/**
-	 * @param TaskResult $result
-	 * @param RequestFormat $format
-	 * @return static
-	 */
-	public static function fromResult(TaskResult $result, RequestFormat $format = RequestFormat::JSON): static {
-		return static::fromMessageAndMeta($result->getStruct(), $result->getMeta(), $format);
 	}
 
   /**

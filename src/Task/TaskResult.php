@@ -12,6 +12,7 @@
 namespace Manticoresearch\Buddy\Core\Task;
 
 use Manticoresearch\Buddy\Core\ManticoreSearch\Response;
+use Manticoresearch\Buddy\Core\Plugin\TableFormatter;
 
 /**
  * Simple struct for task result data
@@ -31,18 +32,18 @@ final class TaskResult {
 
 	/**
 	 * Initialize the empty result
-	 * @param array<mixed> $data
+	 * @param ?array<mixed> $data
 	 * @param string $error
 	 * @param string $warning
 	 *  It must contain HTTP error code that will be returned to client
 	 * @return void
 	 */
-	public function __construct(
-		protected array $data,
+	private function __construct(
+		protected ?array $data,
 		protected string $error,
 		protected string $warning
 	) {
-		$this->total = sizeof($data);
+		$this->total = $data ? sizeof($data) : 0;
 	}
 
 	/**
@@ -64,8 +65,20 @@ final class TaskResult {
 	 * @return static
 	 */
 	public static function fromResponse(Response $response): static {
-		$obj = static::raw($response->getResult());
+		if ($response->isRaw()) {
+			return static::raw($response->getBody());
+		}
+
+		if ($response->hasError()) {
+			return new static(null, $response->getError() ?? '', $response->getWarning() ?? '');
+		}
+
+		// No error
+		$data = $response->hasData() ? $response->getData() : null;
+		$obj = new static($data, '', '');
+		$obj->columns = $response->getColumns();
 		$obj->meta = $response->getMeta();
+		$obj->total = $response->getTotal();
 		return $obj;
 	}
 
@@ -166,6 +179,15 @@ final class TaskResult {
 	}
 
 	/**
+	 * @param int $total
+	 * @return static
+	 */
+	public function total(int $total): static {
+		$this->total = $total;
+		return $this;
+	}
+
+	/**
 	 * Add single row to the final data structure
 	 * @param array<mixed> $row
 	 * @return static
@@ -234,5 +256,17 @@ final class TaskResult {
 				'error' => $this->error,
 			] : [$struct]
 		;
+	}
+
+	/**
+	 * Get struct but in the way of formatted output
+	 * @param int $startTime
+	 * @return string
+	 */
+	public function getTableFormatted(int $startTime): string {
+		$tableFormatter = new TableFormatter();
+		// We have logic inside table formatter that check null or not
+		// and reply with Query OK or inserted 1 row etc
+		return $tableFormatter->getTable($startTime, $this->data, $this->total, $this->error);
 	}
 }
