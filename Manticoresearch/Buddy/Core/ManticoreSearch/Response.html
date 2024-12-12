@@ -110,6 +110,15 @@
                 <td></td>
             </tr>
                     <tr>
+                <td class="type" id="property_isRaw">
+                                        protected                                        bool
+                                                                                
+                                    </td>
+                <td>$isRaw</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
+                    <tr>
                 <td class="type" id="property_columns">
                                         protected                                        <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\array&lt;string,mixed&gt;">array&lt;string,mixed&gt;</abbr>
                                                                                 
@@ -128,11 +137,38 @@
                 <td></td>
             </tr>
                     <tr>
+                <td class="type" id="property_hasData">
+                                        protected                                        bool
+                                                                                
+                                    </td>
+                <td>$hasData</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
+                    <tr>
                 <td class="type" id="property_error">
-                                        protected                                        <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\?string">?string</abbr>
+                                        protected                                        string
                                                                                 
                                     </td>
                 <td>$error</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_warning">
+                                        protected                                        string
+                                                                                
+                                    </td>
+                <td>$warning</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_total">
+                                        protected                                        int
+                                                                                
+                                    </td>
+                <td>$total</td>
                 <td class="last"></td>
                 <td></td>
             </tr>
@@ -153,10 +189,21 @@
             <div class="container-fluid underlined">
                     <div class="row">
                 <div class="col-md-2 type">
-                    <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\string|null">string|null</abbr>
+                    string|null
                 </div>
                 <div class="col-md-8">
                     <a href="#method_getError">getError</a>()
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    string|null
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_getWarning">getWarning</a>()
         
                                             <p class="no-description">No description</p>
                                     </div>
@@ -178,10 +225,42 @@
                     <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_filterResult">filterResult</a>(callable $fn)
+                    <a href="#method_mapData">mapData</a>(callable $fn)
         
                                             <p class="no-description">No description</p>
                                     </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_filterData">filterData</a>(callable $fn)
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_extendData">extendData</a>(array $data)
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_apply">apply</a>(callable $fn)
+        
+                                            <p><p>Apply some function to the whole result</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -192,6 +271,39 @@
                     <a href="#method_getResult">getResult</a>()
         
                                             <p><p>Get parsed and json decoded reply from the Manticore daemon</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    array
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_getData">getData</a>()
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    array
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_getColumns">getColumns</a>()
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    int
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_getTotal">getTotal</a>()
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -227,6 +339,27 @@
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_hasWarning">hasWarning</a>()
+        
+                                            <p><p>Check if we had warning on performing our request</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_hasData">hasData</a>()
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
                     void
                 </div>
                 <div class="col-md-8">
@@ -243,6 +376,28 @@
                     <a href="#method_parse">parse</a>()
         
                                             <p><p>Parse the response into the struct</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_isRaw">isRaw</a>()
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_assign">assign</a>(<a href="../../../../Manticoresearch/Buddy/Core/Network/Struct.html"><abbr title="Manticoresearch\Buddy\Core\Network\Struct">Struct</abbr></a> $struct, string $key)
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -264,8 +419,8 @@
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method_getError">
-        <div class="location">at line 58</div>
-        <code>                    <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\string|null">string|null</abbr>
+        <div class="location">at line 74</div>
+        <code>                    string|null
     <strong>getError</strong>()
         </code>
     </h3>
@@ -284,7 +439,41 @@
 
                     <table class="table table-condensed">
         <tr>
-            <td><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\string|null">string|null</abbr></td>
+            <td>string|null</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getWarning">
+        <div class="location">at line 81</div>
+        <code>                    string|null
+    <strong>getWarning</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string|null</td>
             <td></td>
         </tr>
     </table>
@@ -298,7 +487,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getBody">
-        <div class="location">at line 65</div>
+        <div class="location">at line 88</div>
         <code>                    string
     <strong>getBody</strong>()
         </code>
@@ -331,10 +520,10 @@
 
             </div>
                     <div class="method-item">
-                    <h3 id="method_filterResult">
-        <div class="location">at line 73</div>
+                    <h3 id="method_mapData">
+        <div class="location">at line 96</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
-    <strong>filterResult</strong>(callable $fn)
+    <strong>mapData</strong>(callable $fn)
         </code>
     </h3>
     <div class="details">    
@@ -375,8 +564,139 @@
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_filterData">
+        <div class="location">at line 105</div>
+        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
+    <strong>filterData</strong>(callable $fn)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>callable</td>
+                <td>$fn</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_extendData">
+        <div class="location">at line 114</div>
+        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
+    <strong>extendData</strong>(array $data)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$data</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_apply">
+        <div class="location">at line 124</div>
+        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
+    <strong>apply</strong>(callable $fn)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Apply some function to the whole result</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>callable</td>
+                <td>$fn</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_getResult">
-        <div class="location">at line 82</div>
+        <div class="location">at line 133</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Network/Struct.html"><abbr title="Manticoresearch\Buddy\Core\Network\Struct">Struct</abbr></a>
     <strong>getResult</strong>()
         </code>
@@ -408,8 +728,110 @@
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_getData">
+        <div class="location">at line 155</div>
+        <code>                    array
+    <strong>getData</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getColumns">
+        <div class="location">at line 162</div>
+        <code>                    array
+    <strong>getColumns</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getTotal">
+        <div class="location">at line 169</div>
+        <code>                    int
+    <strong>getTotal</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>int</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_setMeta">
-        <div class="location">at line 93</div>
+        <div class="location">at line 177</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
     <strong>setMeta</strong>(array $meta)
         </code>
@@ -453,7 +875,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getMeta">
-        <div class="location">at line 102</div>
+        <div class="location">at line 186</div>
         <code>                    array
     <strong>getMeta</strong>()
         </code>
@@ -486,7 +908,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_hasError">
-        <div class="location">at line 110</div>
+        <div class="location">at line 194</div>
         <code>                    bool
     <strong>hasError</strong>()
         </code>
@@ -518,8 +940,75 @@
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_hasWarning">
+        <div class="location">at line 202</div>
+        <code>                    bool
+    <strong>hasWarning</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Check if we had warning on performing our request</p></p>                        
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_hasData">
+        <div class="location">at line 209</div>
+        <code>                    bool
+    <strong>hasData</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_postprocess">
-        <div class="location">at line 121</div>
+        <div class="location">at line 220</div>
         <code>                    void
     <strong>postprocess</strong>(callable $processor, array $args = [])
         </code>
@@ -576,7 +1065,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_parse">
-        <div class="location">at line 135</div>
+        <div class="location">at line 234</div>
         <code>            protected        void
     <strong>parse</strong>()
         </code>
@@ -617,8 +1106,91 @@
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_isRaw">
+        <div class="location">at line 271</div>
+        <code>                    bool
+    <strong>isRaw</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_assign">
+        <div class="location">at line 280</div>
+        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
+    <strong>assign</strong>(<a href="../../../../Manticoresearch/Buddy/Core/Network/Struct.html"><abbr title="Manticoresearch\Buddy\Core\Network\Struct">Struct</abbr></a> $struct, string $key)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a href="../../../../Manticoresearch/Buddy/Core/Network/Struct.html"><abbr title="Manticoresearch\Buddy\Core\Network\Struct">Struct</abbr></a></td>
+                <td>$struct</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$key</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_fromBody">
-        <div class="location">at line 168</div>
+        <div class="location">at line 291</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
     <strong>fromBody</strong>(string $body)
         </code>
