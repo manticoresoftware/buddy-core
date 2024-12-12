@@ -39,7 +39,7 @@ class Response {
 	protected bool $hasData = false;
 
 	/**
-	 * @var string|array{type:string,index:string} $error
+	 * @var string|array<string,string> $error
 	 */
 	protected string|array $error = '';
 
@@ -69,7 +69,7 @@ class Response {
 	}
 
 	/**
-	 * @return null|string|array{type:string,index:string}
+	 * @return null|string|array<string,string>
 	 */
 	public function getError(): null|string|array {
 		return $this->error;
