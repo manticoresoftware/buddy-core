@@ -136,6 +136,17 @@
                     static&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a>
                 </div>
                 <div class="col-md-8">
+                    <a href="#method_fromResult">fromResult</a>(<a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a> $result, <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat">RequestFormat</abbr> $format = RequestFormat::JSON)
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a>
+                </div>
+                <div class="col-md-8">
                     <a href="#method_fromMessage">fromMessage</a>(mixed $message, <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat">RequestFormat</abbr> $format = RequestFormat::JSON)
         
                                             <p><p>Create response from the message when we have no error and success in respond</p></p>                </div>
@@ -200,7 +211,7 @@
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line 27</div>
+        <div class="location">at line 28</div>
         <code>                    void
     <strong>__construct</strong>(string $data = &#039;&#039;, bool $hasError = false)
         </code>
@@ -248,7 +259,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_isEmpty">
-        <div class="location">at line 34</div>
+        <div class="location">at line 35</div>
         <code>                    bool
     <strong>isEmpty</strong>()
         </code>
@@ -281,7 +292,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_hasError">
-        <div class="location">at line 42</div>
+        <div class="location">at line 43</div>
         <code>                    bool
     <strong>hasError</strong>()
         </code>
@@ -313,8 +324,57 @@
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_fromResult">
+        <div class="location">at line 62</div>
+        <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a>
+    <strong>fromResult</strong>(<a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a> $result, <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat">RequestFormat</abbr> $format = RequestFormat::JSON)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></td>
+                <td>$result</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat">RequestFormat</abbr></td>
+                <td>$format</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_fromMessage">
-        <div class="location">at line 63</div>
+        <div class="location">at line 73</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a>
     <strong>fromMessage</strong>(mixed $message, <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat">RequestFormat</abbr> $format = RequestFormat::JSON)
         </code>
@@ -373,7 +433,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_fromMessageAndMeta">
-        <div class="location">at line 73</div>
+        <div class="location">at line 83</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a>
     <strong>fromMessageAndMeta</strong>(mixed $message = [], array $meta = [], <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat">RequestFormat</abbr> $format = RequestFormat::JSON)
         </code>
@@ -427,7 +487,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_fromError">
-        <div class="location">at line 88</div>
+        <div class="location">at line 98</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a>
     <strong>fromError</strong>(<a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a> $error, <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat">RequestFormat</abbr> $format = RequestFormat::JSON)
         </code>
@@ -486,7 +546,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_none">
-        <div class="location">at line 99</div>
+        <div class="location">at line 109</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a>
     <strong>none</strong>()
         </code>
@@ -519,7 +579,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_fromMessageAndError">
-        <div class="location">at line 111</div>
+        <div class="location">at line 121</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Network/Response.html"><abbr title="Manticoresearch\Buddy\Core\Network\Response">Response</abbr></a>
     <strong>fromMessageAndError</strong>(mixed $message = [], array $meta = [], <abbr title="Manticoresearch\Buddy\Core\Network\Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>|null $error = null, <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat">RequestFormat</abbr> $format = RequestFormat::JSON)
         </code>
@@ -577,7 +637,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method___toString">
-        <div class="location">at line 152</div>
+        <div class="location">at line 162</div>
         <code>                    string
     <strong>__toString</strong>()
         </code>

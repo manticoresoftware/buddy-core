@@ -146,6 +146,16 @@
             <div class="container-fluid underlined">
                     <div class="row">
                 <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8">
+                    <a href="#method___construct">__construct</a>(array $data, string $error, string $warning)
+        
+                                            <p><p>Initialize the empty result</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
                     static&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
                 </div>
                 <div class="col-md-8">
@@ -271,17 +281,6 @@ Prefer to not use raw when you return standard structure to the client response<
                     <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_total">total</a>(int $total)
-        
-                                            <p class="no-description">No description</p>
-                                    </div>
-                <div class="col-md-2"></div>
-            </div>
-                    <div class="row">
-                <div class="col-md-2 type">
-                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
-                </div>
-                <div class="col-md-8">
                     <a href="#method_row">row</a>(array $row)
         
                                             <p><p>Add single row to the final data structure</p></p>                </div>
@@ -327,16 +326,6 @@ Prefer to not use raw when you return standard structure to the client response<
                                             <p><p>Get resulting struct without JSON encoding</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
-                    <div class="row">
-                <div class="col-md-2 type">
-                    string
-                </div>
-                <div class="col-md-8">
-                    <a href="#method_getTableFormatted">getTableFormatted</a>(int $startTime)
-        
-                                            <p><p>Get struct but in the way of formatted output</p></p>                </div>
-                <div class="col-md-2"></div>
-            </div>
             </div>
 
 
@@ -344,8 +333,61 @@ Prefer to not use raw when you return standard structure to the client response<
 
             <div id="method-details">
                     <div class="method-item">
+                    <h3 id="method___construct">
+        <div class="location">at line 40</div>
+        <code>                    void
+    <strong>__construct</strong>(array $data, string $error, string $warning)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Initialize the empty result</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$data</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$error</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$warning</td>
+                <td><p>It must contain HTTP error code that will be returned to client</p></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_raw">
-        <div class="location">at line 56</div>
+        <div class="location">at line 55</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>raw</strong>(mixed $raw)
         </code>
@@ -390,7 +432,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_fromResponse">
-        <div class="location">at line 67</div>
+        <div class="location">at line 66</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>fromResponse</strong>(<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a> $response)
         </code>
@@ -433,7 +475,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_none">
-        <div class="location">at line 89</div>
+        <div class="location">at line 76</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>none</strong>()
         </code>
@@ -466,7 +508,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_withData">
-        <div class="location">at line 98</div>
+        <div class="location">at line 85</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>withData</strong>(array $data)
         </code>
@@ -509,7 +551,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_withRow">
-        <div class="location">at line 107</div>
+        <div class="location">at line 94</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>withRow</strong>(array $row)
         </code>
@@ -552,7 +594,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_withTotal">
-        <div class="location">at line 116</div>
+        <div class="location">at line 103</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>withTotal</strong>(int $total)
         </code>
@@ -595,7 +637,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_withError">
-        <div class="location">at line 127</div>
+        <div class="location">at line 114</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>withError</strong>(string $error)
         </code>
@@ -638,7 +680,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_withWarning">
-        <div class="location">at line 136</div>
+        <div class="location">at line 123</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>withWarning</strong>(string $warning)
         </code>
@@ -681,7 +723,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_meta">
-        <div class="location">at line 145</div>
+        <div class="location">at line 132</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>meta</strong>(array $meta)
         </code>
@@ -724,7 +766,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_error">
-        <div class="location">at line 155</div>
+        <div class="location">at line 142</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>error</strong>(string $error)
         </code>
@@ -767,7 +809,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_warning">
-        <div class="location">at line 165</div>
+        <div class="location">at line 152</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>warning</strong>(string $warning)
         </code>
@@ -810,7 +852,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_data">
-        <div class="location">at line 175</div>
+        <div class="location">at line 162</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>data</strong>(array $data)
         </code>
@@ -852,52 +894,8 @@ Prefer to not use raw when you return standard structure to the client response<
 
             </div>
                     <div class="method-item">
-                    <h3 id="method_total">
-        <div class="location">at line 185</div>
-        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
-    <strong>total</strong>(int $total)
-        </code>
-    </h3>
-    <div class="details">    
-            
-    
-            
-
-        <div class="method-description">
-                            <p class="no-description">No description</p>
-                    
-        </div>
-        <div class="tags">
-                            <h4>Parameters</h4>
-
-                    <table class="table table-condensed">
-                    <tr>
-                <td>int</td>
-                <td>$total</td>
-                <td></td>
-            </tr>
-            </table>
-
-            
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td><a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></td>
-            <td></td>
-        </tr>
-    </table>
-
-            
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
                     <h3 id="method_row">
-        <div class="location">at line 195</div>
+        <div class="location">at line 173</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>row</strong>(array $row)
         </code>
@@ -940,7 +938,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_column">
-        <div class="location">at line 207</div>
+        <div class="location">at line 185</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>column</strong>(string $name, <abbr title="Manticoresearch\Buddy\Core\Task\Column">Column</abbr> $type)
         </code>
@@ -988,7 +986,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_toString">
-        <div class="location">at line 220</div>
+        <div class="location">at line 198</div>
         <code>                    string
     <strong>toString</strong>()
         </code>
@@ -1021,7 +1019,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_getMeta">
-        <div class="location">at line 229</div>
+        <div class="location">at line 207</div>
         <code>                    array
     <strong>getMeta</strong>()
         </code>
@@ -1054,7 +1052,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_getStruct">
-        <div class="location">at line 237</div>
+        <div class="location">at line 215</div>
         <code>                    mixed
     <strong>getStruct</strong>()
         </code>
@@ -1074,49 +1072,6 @@ Prefer to not use raw when you return standard structure to the client response<
                     <table class="table table-condensed">
         <tr>
             <td>mixed</td>
-            <td></td>
-        </tr>
-    </table>
-
-            
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
-                    <h3 id="method_getTableFormatted">
-        <div class="location">at line 266</div>
-        <code>                    string
-    <strong>getTableFormatted</strong>(int $startTime)
-        </code>
-    </h3>
-    <div class="details">    
-            
-    
-            
-
-        <div class="method-description">
-                            <p><p>Get struct but in the way of formatted output</p></p>                        
-        </div>
-        <div class="tags">
-                            <h4>Parameters</h4>
-
-                    <table class="table table-condensed">
-                    <tr>
-                <td>int</td>
-                <td>$startTime</td>
-                <td></td>
-            </tr>
-            </table>
-
-            
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td>string</td>
             <td></td>
         </tr>
     </table>
