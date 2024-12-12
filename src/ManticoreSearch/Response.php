@@ -248,12 +248,6 @@ class Response {
 			$struct = Struct::fromData($data, $struct->getBigIntFields());
 		}
 
-		$this->assign($struct, 'error')
-			->assign($struct, 'warning')
-			->assign($struct, 'total')
-			->assign($struct, 'data')
-			->assign($struct, 'columns');
-
 		// A bit tricky but we need to know if we have data or not
 		// For table formatter in current architecture
 		$this->hasData = $struct->hasKey('data');
@@ -261,8 +255,19 @@ class Response {
 		// Check if this is type of response that is not our scheme
 		// in this case we just may proxy it as is without any extra
 		$this->isRaw = !$struct->hasKey('warning') &&
-			!$struct->hasKey('error') &&
+			(!$struct->hasKey('error') || !is_string($struct['error'])) &&
 			!$struct->hasKey('total');
+
+		// Assign only if not raw
+		if ($this->isRaw) {
+			return;
+		}
+
+		$this->assign($struct, 'error')
+			->assign($struct, 'warning')
+			->assign($struct, 'total')
+			->assign($struct, 'data')
+			->assign($struct, 'columns');
 	}
 
 	/**

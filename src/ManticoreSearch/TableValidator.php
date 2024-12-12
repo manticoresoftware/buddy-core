@@ -37,7 +37,7 @@ final class TableValidator {
 		/** @var array{error?:string} */
 		$result = $this->client->sendRequest("SHOW TABLE $table SETTINGS")->getResult();
 		if (isset($result['error'])) {
-			TableValidationError::throw($result['error']);
+			TableValidationError::throw("no such table '{$table}'");
 		}
 
 		/** @var array{0:array{data:array<array{'Variable_name':string,'Value':string}>}} $result */

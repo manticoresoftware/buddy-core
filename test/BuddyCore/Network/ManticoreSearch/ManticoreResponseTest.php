@@ -30,6 +30,12 @@ class ManticoreResponseTest extends TestCase {
 
 	protected function setUp(): void {
 		$responseBody = "[\n{\n"
+			. '"total": 1,'
+			. "\n"
+			. '"warning": "",'
+			. "\n"
+			. '"error": "",'
+			. "\n"
 			. '"columns": ['
 			. "\n{\n"
 			. '"id": {'
@@ -65,7 +71,7 @@ class ManticoreResponseTest extends TestCase {
 		];
 
 		$this->assertInstanceOf(Response::class, $this->response);
-		$this->assertNull($this->refCls->getProperty('error')->getValue($this->response));
+		$this->assertEquals('', $this->refCls->getProperty('error')->getValue($this->response));
 		$this->assertEquals($data, $this->refCls->getProperty('data')->getValue($this->response));
 		$this->assertEquals($columns, $this->refCls->getProperty('columns')->getValue($this->response));
 	}
