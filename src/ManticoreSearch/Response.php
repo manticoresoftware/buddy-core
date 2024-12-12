@@ -39,9 +39,9 @@ class Response {
 	protected bool $hasData = false;
 
 	/**
-	 * @var string|array<string,string> $error
+	 * @var string $error
 	 */
-	protected string|array $error = '';
+	protected string $error = '';
 
 	/**
 	 * @var string $warning
@@ -69,9 +69,9 @@ class Response {
 	}
 
 	/**
-	 * @return null|string|array<string,string>
+	 * @return ?string
 	 */
-	public function getError(): null|string|array {
+	public function getError(): ?string {
 		return $this->error;
 	}
 

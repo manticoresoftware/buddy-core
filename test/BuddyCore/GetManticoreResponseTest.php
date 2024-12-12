@@ -94,7 +94,6 @@ class GetManticoreResponseTest extends TestCase {
 		$this->setUpServer(true);
 		$query = '{"index":"test","id":1,"doc":{"col1" : 1}}';
 		$mntResp = Response::fromBody(MockManticoreServer::JSON_INSERT_RESPONSE['fail']);
-
 		$this->assertEquals(
 			$mntResp,
 			$this->httpClient->sendRequest($query, ManticoreEndpoint::Insert->value)

@@ -70,10 +70,7 @@ final class TaskResult {
 		}
 
 		if ($response->hasError()) {
-			// In this case error only string and may not be array, cuz array is only for raw (non manticore)
-			/** @var string $error */
-			$error = $response->getError() ?? '';
-			return new static(null, $error, $response->getWarning() ?? '');
+			return new static(null, $response->getError() ?? '', $response->getWarning() ?? '');
 		}
 
 		// No error
