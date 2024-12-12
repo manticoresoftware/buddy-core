@@ -122,7 +122,8 @@ class Response {
 	 * @return static
 	 */
 	public function apply(callable $fn): static {
-		$this->result = $fn($this->result);
+		// We restruct it due to we unable to do unset and idirect modifications
+		$this->result = Struct::fromData($fn($this->result->toArray()));
 		return $this;
 	}
 
