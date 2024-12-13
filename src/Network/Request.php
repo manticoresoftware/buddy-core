@@ -337,7 +337,7 @@ final class Request {
 			);
 		}
 		/** @var string $query */
-		return trim($query);
+		return trim($query, '; ');
 	}
 
 	/**
