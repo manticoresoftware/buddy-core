@@ -17,6 +17,7 @@ use Manticoresearch\Buddy\Core\Tool\Buddy;
 use Manticoresearch\Buddy\Core\Tool\Strings;
 use Swoole\Process as SwooleProcess;
 
+/** @package Manticoresearch\Buddy\Core\Process */
 final class Process {
 	/** @var array<string,Worker> $workers */
 	protected array $workers = [];
@@ -141,13 +142,18 @@ final class Process {
 				$name = Buddy::getProcessName(Strings::classNameToIdentifier($processor::class));
 				swoole_set_process_name($name);
 				chdir(sys_get_temp_dir());
-				while ($msg = $worker->read()) {
-					/** @var string $msg */
-					$fn = $processor->parseMessage($msg);
-					if (!$fn) {
-						continue;
+				/** @phpstan-ignore-next-line */
+				while (true) {
+					$reader = ProcessReader::read($worker);
+					foreach ($reader as $msg) {
+						/** @var string $msg */
+						$fn = $processor->parseMessage($msg);
+						if (!$fn) {
+							continue;
+						}
+						$fn();
 					}
-					$fn();
+					usleep(100);
 				}
 			}, true, 2
 		);
@@ -184,7 +190,8 @@ final class Process {
 	 */
 	public function execute(string $method, array $args = []): static {
 		Buddy::debugv("[process] execute: $method " . json_encode($args));
-		$this->process->write(serialize([$method, $args]));
+		$message = ProcessReader::packMessage([$method, $args]);
+		$this->process->write($message);
 		return $this;
 	}
 }
