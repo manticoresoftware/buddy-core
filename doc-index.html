@@ -397,7 +397,9 @@ we have all vendor packages installed with CREATE PLUGIN command</p></dd><dt><a 
 <abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr>::getWorker</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></em></dt>
                     <dd><p>Fetch worker from the pool</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_getWorkers">
 <abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr>::getWorkers</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></em></dt>
-                    <dd><p>Get all workers we set</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_getId">
+                    <dd><p>Get all workers we set</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/ProcessReader.html#method_getMessageLen">
+<abbr title="Manticoresearch\Buddy\Core\Process\ProcessReader">ProcessReader</abbr>::getMessageLen</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/ProcessReader.html"><abbr title="Manticoresearch\Buddy\Core\Process\ProcessReader">ProcessReader</abbr></a></em></dt>
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_getId">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::getId</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
                     <dd><p>Get current task ID</p></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_getStatus">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::getStatus</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
@@ -493,7 +495,10 @@ Normally it's done on initialization stage of the Buddy base</p></dd><dt><a href
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::iterateProcessors</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html#property_isPaused">
 <abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>#isPaused</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
-                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Worker.html#method_isRunning">
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/ProcessReader.html#method_isMessageComplete">
+<abbr title="Manticoresearch\Buddy\Core\Process\ProcessReader">ProcessReader</abbr>::isMessageComplete</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/ProcessReader.html"><abbr title="Manticoresearch\Buddy\Core\Process\ProcessReader">ProcessReader</abbr></a></em></dt>
+                    <dd><p>Validate if the message is complete or not
+cuz sometimes Swoole may send it in the different packages</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Worker.html#method_isRunning">
 <abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>::isRunning</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
                     <dd><p>Get the current state of the worker if it's running</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/WorkerRunnerInterface.html#method_init">
 <abbr title="Manticoresearch\Buddy\Core\Process\WorkerRunnerInterface">WorkerRunnerInterface</abbr>::init</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/WorkerRunnerInterface.html"><abbr title="Manticoresearch\Buddy\Core\Process\WorkerRunnerInterface">WorkerRunnerInterface</abbr></a></em></dt>
@@ -602,7 +607,10 @@ This is a method to be used with execute only</p></dd><dt><a href="Manticoresear
 <abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>::parseMessage</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
                     <dd><p>Parse and return callable function to run in case we are able to do so
 and the process is not yet paused. When paused, do nothing.</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Process.html">Manticoresearch\Buddy\Core\Process</a></em></dt>
-                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Process/Worker.html#property_process">
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/ProcessReader.html"><abbr title="Manticoresearch\Buddy\Core\Process\ProcessReader">ProcessReader</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Process.html">Manticoresearch\Buddy\Core\Process</a></em></dt>
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Process/ProcessReader.html#method_packMessage">
+<abbr title="Manticoresearch\Buddy\Core\Process\ProcessReader">ProcessReader</abbr>::packMessage</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/ProcessReader.html"><abbr title="Manticoresearch\Buddy\Core\Process\ProcessReader">ProcessReader</abbr></a></em></dt>
+                    <dd><p>Serialize and pack message</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/Process/Worker.html#property_process">
 <abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr>#process</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Process/Worker.html"><abbr title="Manticoresearch\Buddy\Core\Process\Worker">Worker</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Task/Task.html#method_processCallbacks">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>::processCallbacks</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
@@ -655,7 +663,9 @@ and the process is not yet paused. When paused, do nothing.</p></dd><dt><a href=
 <abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr>::resume</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/BaseProcessor.html"><abbr title="Manticoresearch\Buddy\Core\Process\BaseProcessor">BaseProcessor</abbr></a></em></dt>
                     <dd><p>This is method to use with execute only</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/Process.html#method_removeWorker">
 <abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr>::removeWorker</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/Process.html"><abbr title="Manticoresearch\Buddy\Core\Process\Process">Process</abbr></a></em></dt>
-                    <dd><p>Remove the given worker from the pool and stop it</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/WorkerRunnerInterface.html#method_run">
+                    <dd><p>Remove the given worker from the pool and stop it</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/ProcessReader.html#method_read">
+<abbr title="Manticoresearch\Buddy\Core\Process\ProcessReader">ProcessReader</abbr>::read</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/ProcessReader.html"><abbr title="Manticoresearch\Buddy\Core\Process\ProcessReader">ProcessReader</abbr></a></em></dt>
+                    <dd><p>Wrapper to read chunked message from the worker</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/WorkerRunnerInterface.html#method_run">
 <abbr title="Manticoresearch\Buddy\Core\Process\WorkerRunnerInterface">WorkerRunnerInterface</abbr>::run</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/WorkerRunnerInterface.html"><abbr title="Manticoresearch\Buddy\Core\Process\WorkerRunnerInterface">WorkerRunnerInterface</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/Task/Task.html#property_result">
 <abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr>#result</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Task/Task.html"><abbr title="Manticoresearch\Buddy\Core\Task\Task">Task</abbr></a></em></dt>
@@ -814,7 +824,9 @@ Task::setSettings() with passed settings before you can use anything [main.php]<
                     <dd><p>Convert the initialized data into the final response encoded with JSON</p></dd>        </dl><h2 id="letterU">U</h2>
         <dl id="indexU"><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_unregisterAutoload">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::unregisterAutoload</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
-                    <dd><p>Remove old composer autoloader just to register new one</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/Strings.html#method_underscoreToCamelcase">
+                    <dd><p>Remove old composer autoloader just to register new one</p></dd><dt><a href="Manticoresearch/Buddy/Core/Process/ProcessReader.html#method_unpackMessage">
+<abbr title="Manticoresearch\Buddy\Core\Process\ProcessReader">ProcessReader</abbr>::unpackMessage</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Process/ProcessReader.html"><abbr title="Manticoresearch\Buddy\Core\Process\ProcessReader">ProcessReader</abbr></a></em></dt>
+                    <dd><p>Unpack the message and returns message to unserialize and rest of it in case have we have incomplete</p></dd><dt><a href="Manticoresearch/Buddy/Core/Tool/Strings.html#method_underscoreToCamelcase">
 <abbr title="Manticoresearch\Buddy\Core\Tool\Strings">Strings</abbr>::underscoreToCamelcase</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/Strings.html"><abbr title="Manticoresearch\Buddy\Core\Tool\Strings">Strings</abbr></a></em></dt>
                     <dd><p>Underscore to camelcase</p></dd>        </dl><h2 id="letterV">V</h2>
         <dl id="indexV"><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_validateTables">
