@@ -22,20 +22,36 @@ class Response {
 	 */
 	protected Struct $result;
 
+	/** @var bool */
+	protected bool $isRaw = false;
+
 	/**
 	 * @var array<string,mixed> $columns
 	 */
-	protected array $columns;
+	protected array $columns = [];
 
 	/**
 	 * @var array<string,mixed> $data
 	 */
-	protected array $data;
+	protected array $data = [];
+
+	/** @var bool */
+	protected bool $hasData = false;
 
 	/**
-	 * @var ?string $error
+	 * @var string $error
 	 */
-	protected ?string $error;
+	protected string $error = '';
+
+	/**
+	 * @var string $warning
+	 */
+	protected string $warning = '';
+
+	/**
+	 * @var int $total
+	 */
+	protected int $total = 0;
 
 	/**
 	 * @var array<string,string> $meta
@@ -55,8 +71,15 @@ class Response {
 	/**
 	 * @return ?string
 	 */
-	public function getError(): string|null {
+	public function getError(): ?string {
 		return $this->error;
+	}
+
+	/**
+	 * @return ?string
+	 */
+	public function getWarning(): ?string {
+		return $this->warning;
 	}
 
 	/**
@@ -70,8 +93,37 @@ class Response {
 	 * @param callable $fn
 	 * @return static
 	 */
-	public function filterResult(callable $fn): static {
-		$this->result->map($fn);
+	public function mapData(callable $fn): static {
+		$this->data = array_map($fn, $this->data);
+		return $this;
+	}
+
+	/**
+	 * @param callable $fn
+	 * @return static
+	 */
+	public function filterData(callable $fn): static {
+		$this->data = array_filter($this->data, $fn);
+		return $this;
+	}
+
+	/**
+	 * @param array<string,mixed> $data
+	 * @return static
+	 */
+	public function extendData(array $data): static {
+		$this->data = array_merge($this->data, $data);
+		return $this;
+	}
+
+	/**
+	 * Apply some function to the whole result
+	 * @param callable $fn
+	 * @return static
+	 */
+	public function apply(callable $fn): static {
+		// We restruct it due to we unable to do unset and idirect modifications
+		$this->result = Struct::fromData($fn($this->result->toArray()));
 		return $this;
 	}
 
@@ -83,7 +135,40 @@ class Response {
 		if (!isset($this->result)) {
 			throw new ManticoreSearchResponseError('Trying to access result with no response created');
 		}
+		// We should replace data as result of applying modifier functions
+		// like filter, map or whatever
+		// @phpstan-ignore-next-line
+		if (isset($this->result[0]['data'])) {
+			$item = $this->result[0];
+			// @phpstan-ignore-next-line
+			$item['data'] = $this->data;
+			$result[0] = $item;
+		} else {
+			$this->result['data'] = $this->data;
+		}
+
 		return $this->result;
+	}
+
+	/**
+	 * @return array<string,mixed>
+	 */
+	public function getData(): array {
+		return $this->data;
+	}
+
+	/**
+	 * @return array<string,mixed>
+	 */
+	public function getColumns(): array {
+		return $this->columns;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getTotal(): int {
+		return $this->total;
 	}
 
 	/**
@@ -108,7 +193,22 @@ class Response {
 	 * @return bool
 	 */
 	public function hasError(): bool {
-		return isset($this->error);
+		return !!$this->error;
+	}
+
+	/**
+	 * Check if we had warning on performing our request
+	 * @return bool
+	 */
+	public function hasWarning(): bool {
+		return !!$this->warning;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasData(): bool {
+		return $this->hasData;
 	}
 
 	/**
@@ -148,17 +248,46 @@ class Response {
 			$data = $struct[0];
 			$struct = Struct::fromData($data, $struct->getBigIntFields());
 		}
-		if ($struct->hasKey('error') && is_string($struct['error']) && $struct['error'] !== '') {
-			$this->error = $struct['error'];
-		} else {
-			$this->error = null;
+
+		// A bit tricky but we need to know if we have data or not
+		// For table formatter in current architecture
+		$this->hasData = $struct->hasKey('data');
+
+		// Check if this is type of response that is not our scheme
+		// in this case we just may proxy it as is without any extra
+		$this->isRaw = !$struct->hasKey('warning') &&
+			(!$struct->hasKey('error') || !is_string($struct['error'])) &&
+			!$struct->hasKey('total');
+
+		// Assign only if not raw
+		if ($this->isRaw) {
+			return;
 		}
-		foreach (['columns', 'data'] as $prop) {
-			if (!$struct->hasKey($prop) || !is_array($struct[$prop])) {
-				continue;
-			}
-			$this->$prop = $struct[$prop];
+
+		$this->assign($struct, 'error')
+			->assign($struct, 'warning')
+			->assign($struct, 'total')
+			->assign($struct, 'data')
+			->assign($struct, 'columns');
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isRaw(): bool {
+		return $this->isRaw;
+	}
+
+	/**
+	 * @param Struct<int|string, mixed> $struct
+	 * @param string $key
+	 * @return static
+	 */
+	public function assign(Struct $struct, string $key): static {
+		if ($struct->hasKey($key)) {
+			$this->$key = $struct[$key];
 		}
+		return $this;
 	}
 
 	/**
