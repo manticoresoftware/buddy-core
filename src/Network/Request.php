@@ -188,10 +188,11 @@ final class Request {
 			// We need to keep the query parameters part in the sql queries
 			// as it's required for the following requests to Manticore
 			$path .= '?' . $urlInfo['query'];
-		} elseif (str_ends_with($path, '/_bulk')) {
+		} elseif (str_ends_with($path, '/_bulk') && !str_starts_with($path, '.kibana/')) {
 			// Convert the elastic bulk request path to the Manticore one
 			$path = '_bulk';
 		}
+		Buddy::debug('TEST ' . $path);
 		if (static::isElasticPath($path)) {
 			$endpointBundle = Endpoint::Elastic;
 		} elseif (str_contains($path, '/_doc/') || str_contains($path, '/_create/')
@@ -248,11 +249,37 @@ final class Request {
 	 * @return bool
 	 */
 	protected function isElasticPath(string $path): bool {
-		return str_starts_with($path, '_index_template/') || str_ends_with($path, '_nodes')
-			|| str_starts_with($path, '_xpack') || str_starts_with($path, '.kibana/')
-			|| str_starts_with($path, '_cluster')
-			|| str_ends_with($path, '/_mapping') || str_ends_with($path, '/_search')
-			|| str_ends_with($path, '.kibana') || str_starts_with($path, '.kibana_task_manager');
+		$elasticPathPrefixes = [
+			'_index_template/',
+			'_xpack',
+			'.kibana/',
+			'_cluster',
+			'_mget',
+			'.kibana_task_manager',
+			'_aliases',
+			'_alias/',
+			'_template/',
+			'_cat/',
+			'_field_caps',
+		];
+		$elasticPathSuffixes = [
+			'_nodes',
+			'/_mapping',
+			'/_search',
+			'.kibana',
+			'/_field_caps',
+		];
+		foreach ($elasticPathPrefixes as $prefix) {
+			if (str_starts_with($path, $prefix)) {
+				return true;
+			}
+		}
+		foreach ($elasticPathSuffixes as $suffix) {
+			if (str_ends_with($path, $suffix)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
