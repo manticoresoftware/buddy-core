@@ -14,10 +14,10 @@ namespace Manticoresearch\Buddy\Core\Network;
 use Ds\Vector;
 use Manticoresearch\Buddy\Core\Error\InvalidNetworkRequestError;
 use Manticoresearch\Buddy\Core\Error\QueryParseError;
-use Manticoresearch\Buddy\Core\ManticoreSearch\Endpoint as ManticoreEndpoint;
+use Manticoresearch\Buddy\Core\ManticoreSearch\Endpoint;
 use Manticoresearch\Buddy\Core\ManticoreSearch\MySQLTool;
 use Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat;
-use Manticoresearch\Buddy\Core\ManticoreSearch\Settings as ManticoreSettings;
+use Manticoresearch\Buddy\Core\ManticoreSearch\Settings;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
 
 final class Request {
@@ -33,9 +33,9 @@ final class Request {
 	public string $id;
 	public float $time;
 
-	public ManticoreEndpoint $endpointBundle;
+	public Endpoint $endpointBundle;
 	public RequestFormat $format;
-	public ManticoreSettings $settings;
+	public Settings $settings;
 	public string $path;
 	public string $error;
 	/** @var array<mixed> $errorBody */
@@ -61,9 +61,9 @@ final class Request {
 		$self = new static;
 		$self->id = $id;
 		$self->time = microtime(true);
-		$self->endpointBundle = ManticoreEndpoint::Sql;
-		$self->settings = ManticoreSettings::fromVector(new Vector());
-		$self->path = ManticoreEndpoint::Sql->value;
+		$self->endpointBundle = Endpoint::Sql;
+		$self->settings = Settings::fromVector(new Vector());
+		$self->path = Endpoint::Sql->value;
 		$self->format = RequestFormat::JSON;
 		$self->error = '';
 		$self->errorBody = [];
@@ -96,7 +96,7 @@ final class Request {
 	 * 	payload:string,
 	 * 	version:int,
 	 * 	format:RequestFormat,
-	 * 	endpointBundle:ManticoreEndpoint,
+	 * 	endpointBundle:Endpoint,
 	 *  path:string
 	 * } $data
 	 * @param string $id
@@ -188,29 +188,30 @@ final class Request {
 			// We need to keep the query parameters part in the sql queries
 			// as it's required for the following requests to Manticore
 			$path .= '?' . $urlInfo['query'];
-		} elseif (str_ends_with($path, '/_bulk')) {
+		} elseif (str_ends_with($path, '/_bulk') && !str_starts_with($path, '.kibana/')) {
 			// Convert the elastic bulk request path to the Manticore one
 			$path = '_bulk';
 		}
+		Buddy::debug('TEST ' . $path);
 		if (static::isElasticPath($path)) {
-			$endpointBundle = ManticoreEndpoint::Elastic;
+			$endpointBundle = Endpoint::Elastic;
 		} elseif (str_contains($path, '/_doc/') || str_contains($path, '/_create/')
 			|| str_ends_with($path, '/_doc')) {
 			// We don't differentiate elastic-like insert and replace queries here
 			// since this is irrelevant for the following Buddy processing logic
-			$endpointBundle = ManticoreEndpoint::Insert;
+			$endpointBundle = Endpoint::Insert;
 		} elseif (str_contains($path, '/_update/')) {
-			$endpointBundle = ManticoreEndpoint::Update;
+			$endpointBundle = Endpoint::Update;
 		} else {
 			$endpointBundle = match ($path) {
-				'bulk', '_bulk' => ManticoreEndpoint::Bulk,
-				'cli' => ManticoreEndpoint::Cli,
-				'cli_json' => ManticoreEndpoint::CliJson,
-				'search' => ManticoreEndpoint::Search,
-				'sql?mode=raw', 'sql', '' => ManticoreEndpoint::Sql,
-				'insert', 'replace' => ManticoreEndpoint::Insert,
-				'_license' => ManticoreEndpoint::Elastic,
-				'autocomplete' => ManticoreEndpoint::Autocomplete,
+				'bulk', '_bulk' => Endpoint::Bulk,
+				'cli' => Endpoint::Cli,
+				'cli_json' => Endpoint::CliJson,
+				'search' => Endpoint::Search,
+				'sql?mode=raw', 'sql', '' => Endpoint::Sql,
+				'insert', 'replace' => Endpoint::Insert,
+				'_license' => Endpoint::Elastic,
+				'autocomplete' => Endpoint::Autocomplete,
 				default => throw new InvalidNetworkRequestError(
 					"Do not know how to handle '{$payload['message']['path_query']}' path_query"
 				),
@@ -227,7 +228,7 @@ final class Request {
 		$this->format = $format;
 		$this->endpointBundle = $endpointBundle;
 		$this->mySQLTool = static::detectMySQLTool($payload['message']['body']);
-		$this->payload = (in_array($endpointBundle, [ManticoreEndpoint::Elastic, ManticoreEndpoint::Bulk]))
+		$this->payload = (in_array($endpointBundle, [Endpoint::Elastic, Endpoint::Bulk]))
 			? trim($payload['message']['body'])
 			: static::removeComments($payload['message']['body']);
 		$this->error = $payload['error']['message'];
@@ -248,14 +249,37 @@ final class Request {
 	 * @return bool
 	 */
 	protected function isElasticPath(string $path): bool {
-		return str_starts_with($path, '_index_template/') || str_ends_with($path, '_nodes')
-			|| str_starts_with($path, '_xpack') || str_starts_with($path, '.kibana/')
-			|| str_starts_with($path, '_cluster')
-			|| str_ends_with($path, '/_mapping') || str_ends_with($path, '/_search')
-			|| str_ends_with($path, '.kibana') || str_starts_with($path, '.kibana_task_manager')
-			|| str_starts_with($path, '_aliases') || str_starts_with($path, '_alias/')
-			|| str_starts_with($path, '_template/') || str_starts_with($path, '_cat/')
-			|| str_ends_with($path, '/_field_caps') || str_starts_with($path, '_field_caps');
+		$elasticPathPrefixes = [
+			'_index_template/',
+			'_xpack',
+			'.kibana/',
+			'_cluster',
+			'_mget',
+			'.kibana_task_manager',
+			'_aliases',
+			'_alias/',
+			'_template/',
+			'_cat/',
+			'_field_caps',
+		];
+		$elasticPathSuffixes = [
+			'_nodes',
+			'/_mapping',
+			'/_search',
+			'.kibana',
+			'/_field_caps',
+		];
+		foreach ($elasticPathPrefixes as $prefix) {
+			if (str_starts_with($path, $prefix)) {
+				return true;
+			}
+		}
+		foreach ($elasticPathSuffixes as $suffix) {
+			if (str_ends_with($path, $suffix)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -340,6 +364,17 @@ final class Request {
 			);
 		}
 		/** @var string $query */
-		return trim($query);
+		return trim($query, '; ');
+	}
+
+	/**
+	 * Validate if we should format the output in the Table way
+	 * @return OutputFormat
+	 */
+	public function getOutputFormat(): OutputFormat {
+		return match ($this->endpointBundle) {
+			Endpoint::Cli => OutputFormat::Table,
+			default => OutputFormat::Raw,
+		};
 	}
 }
