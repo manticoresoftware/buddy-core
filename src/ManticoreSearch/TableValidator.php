@@ -33,18 +33,23 @@ final class TableValidator {
 		if ($this->cache->has($cacheKey)) {
 			return true;
 		}
+
 		/** @var array{error?:string} */
-		$result = $this->client->sendRequest('SHOW CREATE TABLE ' . $table)->getResult();
+		$result = $this->client->sendRequest("SHOW TABLE $table SETTINGS")->getResult();
 		if (isset($result['error'])) {
-			TableValidationError::throw($result['error']);
+			TableValidationError::throw("no such table '{$table}'");
 		}
 
-		/** @var array{0:array{data:array<array{'Create Table':string}>}} $result */
-		$schema  = $result[0]['data'][0]['Create Table'];
-		if (false === str_contains($schema, 'min_infix_len')) {
-			return false;
+		/** @var array{0:array{data:array<array{'Variable_name':string,'Value':string}>}} $result */
+		$variables  = $result[0]['data'];
+		foreach ($variables as $variable) {
+			$name = $variable['Variable_name'];
+			$value = $variable['Value'];
+			if ($name === 'settings' && str_contains($value, 'min_infix_len')) {
+				$this->cache->set($cacheKey, true, $this->ttl);
+				return true;
+			}
 		}
-		$this->cache->set($cacheKey, true, $this->ttl);
-		return true;
+		return false;
 	}
 }
