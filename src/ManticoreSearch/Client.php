@@ -161,9 +161,10 @@ class Client {
 	 * @return array<Response>
 	 */
 	public function sendMultiRequest(array $requests): array {
-		if (sizeof($requests) === 0) {
+		if (sizeof($requests) === 1) {
 			$request = array_pop($requests);
-			return $this->sendRequestToUrl(...$request);
+			$response = $this->sendRequestToUrl(...$request);
+			return [$response];
 		}
 		$requestCount = sizeof($requests);
 		$channel = new Channel($requestCount);
