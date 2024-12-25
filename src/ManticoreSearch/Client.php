@@ -302,9 +302,9 @@ class Client {
 	 * @return bool
 	 */
 	public function hasTable(string $table): bool {
-		/** @var array<array{total:int}>}> $res */
-		$res = $this->sendRequest("SHOW TABLES LIKE '$table'")->getResult();
-		return !!$res[0]['total'];
+		/** @var array{error:string}> $res */
+		$res = $this->sendRequest("DESC $table")->getResult();
+		return !$res['error'];
 	}
 
 	/**
