@@ -17,6 +17,7 @@ use Ds\Vector;
 use Exception;
 use Generator;
 use Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError;
+use Manticoresearch\Buddy\Core\Network\Struct;
 use Manticoresearch\Buddy\Core\Tool\Arrays;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
 use RuntimeException;
@@ -25,6 +26,7 @@ use Swoole\Coroutine;
 use Swoole\Coroutine\Channel;
 use Swoole\Coroutine\Http\Client as HttpClient;
 
+/** @package Manticoresearch\Buddy\Core\ManticoreSearch */
 class Client {
 	const CONTENT_TYPE_HEADER = "Content-Type: application/x-www-form-urlencoded\n";
 	const URL_PREFIX = 'http://';
@@ -104,6 +106,7 @@ class Client {
 	 * @param bool $disableAgentHeader
 	 * @return Response
 	 */
+	// @phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 	public function sendRequest(
 		string $request,
 		?string $path = null,
@@ -127,7 +130,10 @@ class Client {
 		// We urlencode all the requests to the /sql endpoint
 		if (str_starts_with($path, 'sql')) {
 			$showMeta = stripos(trim($request), 'SELECT') === 0;
-			$request = 'query=' . urlencode($request);
+			if ($showMeta) {
+				$request .= ';SHOW META';
+			}
+			$request = 'query=' . rawurlencode($request);
 		}
 		$userAgentHeader = $disableAgentHeader ? '' : "Manticore Buddy/{$this->buddyVersion}";
 		$headers = [
@@ -136,13 +142,22 @@ class Client {
 		];
 		$isAsync = Coroutine::getCid() > 0;
 		$method = !$this->forceSync && $isAsync ? 'runAsyncRequest' : 'runSyncRequest';
-		$this->response = $this->$method($path, $request, $headers);
-		$result = Response::fromBody($this->response);
+		$response = $this->$method($path, $request, $headers);
+
+		// TODO: rethink and make it better without double json_encode
+		$result = Response::fromBody($response);
 		if ($showMeta) {
-			$metaResponse = $this->$method($path, 'SHOW META', $headers);
-			/** @var array<array{data?:array<array{Variable_name:string,Value:string}>}> */
-			$metaResult = Response::fromBody($metaResponse)->getResult();
-			$metaVars = $metaResult[0]['data'] ?? [];
+			$struct = $result->getResult();
+			$array = $struct->toArray();
+			// TODO: Not sure what reason, but in sync request we have only one response
+			// But this is should not be blocker for meta, we just will not have it
+			if (sizeof($array) > 1) {
+				/** @var array{data?:array<array{Variable_name:string,Value:string}>} */
+				$metaRow = array_pop($array);
+				$response = Struct::fromData($array, $struct->getBigIntFields())->toJson();
+				$result = Response::fromBody($response);
+			}
+			$metaVars = $metaRow['data'] ?? [];
 			$meta = [];
 			foreach ($metaVars as ['Variable_name' => $name, 'Value' => $value]) {
 				$meta[$name] = $value;
@@ -150,6 +165,7 @@ class Client {
 			$result->setMeta($meta);
 		}
 
+		$this->response = $response;
 		$time = (int)((microtime(true) - $t) * 1000000);
 		Buddy::debugv("[{$time}µs] manticore request: $request");
 		return $result;
