@@ -143,7 +143,7 @@ class Response {
 			// @phpstan-ignore-next-line
 			$item['data'] = $this->data;
 			$result[0] = $item;
-		} else {
+		} elseif (isset($this->result['data'])) {
 			$this->result['data'] = $this->data;
 		}
 
