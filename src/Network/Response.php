@@ -128,16 +128,17 @@ final class Response {
 		$json = '{'
 			. '"version":' . Buddy::PROTOCOL_VERSION . ','
 			. '"type":"' . $format->value . ' response",'
-			. '"message":%s,'
+			. '"message":%message%,'
 			. '"meta":' . ($meta ? json_encode($meta) : 'null') . ','
 			. '"error_code":' . ($error?->getResponseErrorCode() ?? 200)
 			. '}';
 		if ($message instanceof Struct) {
-			$json = sprintf($json, $message->toJson());
+			$json = str_replace('%message%', $message->toJson(), $json);
 		} else {
-			$json = sprintf(
-				$json,
+			$json = str_replace(
+				'%message%',
 				json_encode($message, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_IGNORE),
+				$json
 			);
 		}
 
