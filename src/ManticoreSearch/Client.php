@@ -23,8 +23,9 @@ use Manticoresearch\Buddy\Core\Tool\Buddy;
 use RuntimeException;
 use Swoole\ConnectionPool;
 use Swoole\Coroutine;
-use Swoole\Coroutine\Channel;
 use Swoole\Coroutine\Http\Client as HttpClient;
+use Swoole\Coroutine\WaitGroup;
+use Swoole\Lock;
 
 /** @package Manticoresearch\Buddy\Core\ManticoreSearch */
 class Client {
@@ -182,23 +183,28 @@ class Client {
 			$response = $this->sendRequestToUrl(...$request);
 			return [$response];
 		}
-		$requestCount = sizeof($requests);
-		$channel = new Channel($requestCount);
+
+		$wg = new WaitGroup();
+		$responses = [];
+		$mutex = new Lock();
+
 		foreach ($requests as $request) {
+			$wg->add();
 			Coroutine::create(
-				function () use ($channel, $request) {
-					$response = $this->sendRequestToUrl(...$request);
-					$channel->push($response);
+				function () use ($wg, &$responses, $mutex, $request) {
+					try {
+						$response = $this->sendRequestToUrl(...$request);
+						$mutex->lock();
+						$responses[] = $response;
+						$mutex->unlock();
+					} finally {
+						$wg->done();
+					}
 				}
 			);
 		}
 
-		$responses = [];
-		do {
-			/** @var Response $response */
-			$response = $channel->pop();
-			$responses[] = $response;
-		} while (sizeof($responses) < $requestCount);
+		$wg->wait();
 		return $responses;
 	}
 
