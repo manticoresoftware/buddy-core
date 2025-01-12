@@ -41,6 +41,7 @@ final class Request {
 	/** @var array<mixed> $errorBody */
 	public array $errorBody;
 	public string $payload;
+	public string $command;
 	public string $httpMethod;
 	public int $version;
 	public ?MySQLTool $mySQLTool;
@@ -68,6 +69,7 @@ final class Request {
 		$self->error = '';
 		$self->errorBody = [];
 		$self->payload = '{}';
+		$self->command = '';
 		$self->version = Buddy::PROTOCOL_VERSION;
 		return $self;
 	}
@@ -234,6 +236,7 @@ final class Request {
 		$this->payload = (in_array($endpointBundle, [Endpoint::Elastic, Endpoint::Bulk]))
 			? trim($payload['message']['body'])
 			: static::removeComments($payload['message']['body']);
+		$this->command = strtok(strtolower($this->payload), ' ') ?: '';
 		$this->error = $payload['error']['message'];
 		$this->errorBody = $payload['error']['body'] ?? [];
 		$this->version = match ($payload['version']) {
