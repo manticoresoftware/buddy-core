@@ -111,6 +111,8 @@ final class Request {
 		foreach ($data as $k => $v) {
 			$self->$k = $v;
 		}
+
+		$self->command = strtok(strtolower($self->payload), ' ') ?: '';
 		return $self;
 	}
 
