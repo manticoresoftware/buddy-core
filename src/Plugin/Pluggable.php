@@ -219,7 +219,7 @@ final class Pluggable {
 			return [];
 		}
 		/** @var array{require?:array<string,string>} $composerJson */
-		$composerJson = json_decode($composerContent, true);
+		$composerJson = simdjson_decode($composerContent, true);
 		if (!isset($composerJson['require'])) {
 			return [];
 		}
@@ -274,7 +274,7 @@ final class Pluggable {
 			throw new Exception("Failed to get contents of composer.json for plugin: $name");
 		}
 
-		$composerJson = json_decode($composerContent, true);
+		$composerJson = simdjson_decode($composerContent, true);
 		if (!$composerJson) {
 			throw new Exception("Failed to decode contents of composer.json file for plugin: $name");
 		}
@@ -465,7 +465,7 @@ final class Pluggable {
 				throw new Exception("Failed to read composer file for plugin: $shortName");
 			}
 			/** @var array{name:?string} */
-			$composer = json_decode($composerContent, true);
+			$composer = simdjson_decode($composerContent, true);
 			if (!isset($composer['name'])) {
 				throw new Exception("Failed to detect local plugin name from file: $composerFile");
 			}

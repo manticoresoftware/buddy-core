@@ -81,6 +81,7 @@ final class Request {
 	 * @param string $id
 	 * @return static
 	 */
+
 	public static function fromString(string $data, string $id = '0'): static {
 		$self = new static;
 		$self->id = $id;
@@ -155,7 +156,7 @@ final class Request {
 		 * message:array{path_query:string,body:string},
 		 * version:int} $result
 		 */
-		$result = json_decode($data, true, 512, JSON_INVALID_UTF8_SUBSTITUTE);
+		$result = simdjson_decode($data, true, 512);
 		if (!is_array($result)) {
 			throw new InvalidNetworkRequestError('Invalid request payload is passed');
 		}
@@ -234,11 +235,11 @@ final class Request {
 		$this->path = $path;
 		$this->format = $format;
 		$this->endpointBundle = $endpointBundle;
-		$this->mySQLTool = static::detectMySQLTool($payload['message']['body']);
+		$this->mySQLTool = $format === RequestFormat::SQL ? static::detectMySQLTool($payload['message']['body']) : null;
 		$this->payload = (in_array($endpointBundle, [Endpoint::Elastic, Endpoint::Bulk]))
 			? trim($payload['message']['body'])
 			: static::removeComments($payload['message']['body']);
-		$this->command = strtok(strtolower($this->payload), ' ') ?: '';
+		$this->command = strtolower(strtok($this->payload, ' ') ?: '');
 		$this->error = $payload['error']['message'];
 		$this->errorBody = $payload['error']['body'] ?? [];
 		$this->version = match ($payload['version']) {

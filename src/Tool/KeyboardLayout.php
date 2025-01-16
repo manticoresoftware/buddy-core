@@ -156,7 +156,7 @@ final class KeyboardLayout {
 			}
 
 			/** @var array<string,array<string>> $langMap */
-			$langMap = json_decode($configContent, true);
+			$langMap = simdjson_decode($configContent, true);
 			if (!is_array($langMap)) {
 				throw new Exception("Invalid keyboard layout config file at '$configPath'");
 			}
