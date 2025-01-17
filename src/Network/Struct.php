@@ -111,9 +111,7 @@ final class Struct implements JsonSerializable, ArrayAccess {
 	 * @return bool
 	 */
 	public static function isValid(string $json): bool {
-		// TODO: replace with json_validate once we more to 8.3
-		$result = json_decode($json, true, static::JSON_DEPTH, static::JSON_FLAGS);
-		return !!$result;
+		return simdjson_is_valid($json, static::JSON_DEPTH);
 	}
 
 	/**
@@ -123,9 +121,10 @@ final class Struct implements JsonSerializable, ArrayAccess {
 	 */
 	public static function fromJson(string $json): self {
 		/** @var array<TKey, TValue> */
-		$result = (array)json_decode($json, true, static::JSON_DEPTH, static::JSON_FLAGS);
+		$result = (array)simdjson_decode($json, true, static::JSON_DEPTH);
 		$bigIntFields = [];
 		if (static::hasBigInt($json)) {
+			// We need here to keep original json decode cuzit has bigIntFields
 			/** @var array<TKey, TValue> */
 			$modified = json_decode($json, true, static::JSON_DEPTH, static::JSON_FLAGS | JSON_BIGINT_AS_STRING);
 			static::traverseAndTrack($modified, $result, $bigIntFields);

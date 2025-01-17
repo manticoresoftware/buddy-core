@@ -82,7 +82,6 @@ final class SqlQueryParser
 	 * @throws GenericError
 	 */
 	public static function parse(string $payload, Closure $preProcessorCallback, mixed $args): ?array {
-
 		$result = (bool)call_user_func($preProcessorCallback, $args);
 		if ($result === false) {
 			return null;

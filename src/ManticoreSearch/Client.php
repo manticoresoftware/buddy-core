@@ -414,7 +414,7 @@ class Client {
 	protected function fetchSettings(): Settings {
 		$resp = $this->sendRequest('SHOW SETTINGS');
 		/** @var array{0:array{columns:array<mixed>,data:array{Setting_name:string,Value:string}}} */
-		$data = (array)json_decode($resp->getBody(), true);
+		$data = (array)simdjson_decode($resp->getBody(), true);
 		$settings = new Vector();
 		foreach ($data[0]['data'] as ['Setting_name' => $key, 'Value' => $value]) {
 			// If the key is plugin_dir check env first and after choose
@@ -442,7 +442,7 @@ class Client {
 		// Gather variables also
 		$resp = $this->sendRequest('SHOW VARIABLES');
 		/** @var array{0:array{columns:array<mixed>,data:array{Setting_name:string,Value:string}}} */
-		$data = (array)json_decode($resp->getBody(), true);
+		$data = (array)simdjson_decode($resp->getBody(), true);
 		foreach ($data[0]['data'] as ['Variable_name' => $key, 'Value' => $value]) {
 			$settings->push(
 				new Map(

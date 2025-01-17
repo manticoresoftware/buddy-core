@@ -19,6 +19,7 @@ use Manticoresearch\Buddy\Core\ManticoreSearch\MySQLTool;
 use Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Settings;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
+use SimdJsonException;
 
 final class Request {
 	const PAYLOAD_FIELDS = [
@@ -81,6 +82,7 @@ final class Request {
 	 * @param string $id
 	 * @return static
 	 */
+
 	public static function fromString(string $data, string $id = '0'): static {
 		$self = new static;
 		$self->id = $id;
@@ -149,17 +151,21 @@ final class Request {
 		if ($data === '') {
 			throw new InvalidNetworkRequestError('The payload is missing');
 		}
+		try {
+			$result = simdjson_decode($data, true, 512);
+			if (!is_array($result)) {
+				throw new InvalidNetworkRequestError('Invalid request payload is passed');
+			}
+		} catch (SimdJsonException) {
+			throw new InvalidNetworkRequestError('Failed to parse request payload');
+		}
+
 		/** @var array{
 		 * type:string,
 		 * error:array{message:string,body?:array{error:string}},
 		 * message:array{path_query:string,body:string},
 		 * version:int} $result
 		 */
-		$result = json_decode($data, true, 512, JSON_INVALID_UTF8_SUBSTITUTE);
-		if (!is_array($result)) {
-			throw new InvalidNetworkRequestError('Invalid request payload is passed');
-		}
-
 		return $result;
 	}
 
@@ -234,11 +240,11 @@ final class Request {
 		$this->path = $path;
 		$this->format = $format;
 		$this->endpointBundle = $endpointBundle;
-		$this->mySQLTool = static::detectMySQLTool($payload['message']['body']);
+		$this->mySQLTool = $format === RequestFormat::SQL ? static::detectMySQLTool($payload['message']['body']) : null;
 		$this->payload = (in_array($endpointBundle, [Endpoint::Elastic, Endpoint::Bulk]))
 			? trim($payload['message']['body'])
 			: static::removeComments($payload['message']['body']);
-		$this->command = strtok(strtolower($this->payload), ' ') ?: '';
+		$this->command = strtolower(strtok($this->payload, ' ') ?: '');
 		$this->error = $payload['error']['message'];
 		$this->errorBody = $payload['error']['body'] ?? [];
 		$this->version = match ($payload['version']) {
