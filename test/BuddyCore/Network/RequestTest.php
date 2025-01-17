@@ -169,14 +169,19 @@ class RequestTest extends TestCase {
 		$this->assertEquals(InvalidNetworkRequestError::class, $exCls);
 		$this->assertEquals('The payload is missing', $exMsg);
 
-		$query = "Invalid query\nis passed\nagain";
+		$query = '"payload as a string"';
 		[$exCls, $exMsg] = self::getExceptionInfo(Request::class, 'fromString', [$query]);
 		$this->assertEquals(InvalidNetworkRequestError::class, $exCls);
 		$this->assertEquals('Invalid request payload is passed', $exMsg);
 
+		$query = "Invalid query\nis passed\nagain";
+		[$exCls, $exMsg] = self::getExceptionInfo(Request::class, 'fromString', [$query]);
+		$this->assertEquals(InvalidNetworkRequestError::class, $exCls);
+		$this->assertEquals('Failed to parse request payload', $exMsg);
+
 		$query = 'Query\nwith unvalid\n\n{"request_body"}';
 		[$exCls, $exMsg] = self::getExceptionInfo(Request::class, 'fromString', [$query]);
 		$this->assertEquals(InvalidNetworkRequestError::class, $exCls);
-		$this->assertEquals('Invalid request payload is passed', $exMsg);
+		$this->assertEquals('Failed to parse request payload', $exMsg);
 	}
 }

@@ -19,6 +19,7 @@ use Manticoresearch\Buddy\Core\ManticoreSearch\MySQLTool;
 use Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat;
 use Manticoresearch\Buddy\Core\ManticoreSearch\Settings;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
+use SimdJsonException;
 
 final class Request {
 	const PAYLOAD_FIELDS = [
@@ -150,17 +151,21 @@ final class Request {
 		if ($data === '') {
 			throw new InvalidNetworkRequestError('The payload is missing');
 		}
+		try {
+			$result = simdjson_decode($data, true, 512);
+			if (!is_array($result)) {
+				throw new InvalidNetworkRequestError('Invalid request payload is passed');
+			}
+		} catch (SimdJsonException) {
+			throw new InvalidNetworkRequestError('Failed to parse request payload');
+		}
+
 		/** @var array{
 		 * type:string,
 		 * error:array{message:string,body?:array{error:string}},
 		 * message:array{path_query:string,body:string},
 		 * version:int} $result
 		 */
-		$result = simdjson_decode($data, true, 512);
-		if (!is_array($result)) {
-			throw new InvalidNetworkRequestError('Invalid request payload is passed');
-		}
-
 		return $result;
 	}
 
