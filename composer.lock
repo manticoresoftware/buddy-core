@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f22f66cc35b50d5555d74f98633bb792",
+    "content-hash": "98d83c7f15306a20b87a14703c96f3ad",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -718,16 +718,16 @@
         },
         {
             "name": "manticoresoftware/php-sql-parser",
-            "version": "v4.6.0-patch10",
+            "version": "v4.6.0-patch11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/manticoresoftware/PHP-SQL-Parser.git",
-                "reference": "3739fefd47fd0262b99a8da3864743041dead9d2"
+                "reference": "47f2abf2d12599a3769f81ea323b0bf0139aff81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/manticoresoftware/PHP-SQL-Parser/zipball/3739fefd47fd0262b99a8da3864743041dead9d2",
-                "reference": "3739fefd47fd0262b99a8da3864743041dead9d2",
+                "url": "https://api.github.com/repos/manticoresoftware/PHP-SQL-Parser/zipball/47f2abf2d12599a3769f81ea323b0bf0139aff81",
+                "reference": "47f2abf2d12599a3769f81ea323b0bf0139aff81",
                 "shasum": ""
             },
             "require": {
@@ -774,7 +774,7 @@
                 "issues": "https://github.com/greenlion/PHP-SQL-Parser/issues",
                 "source": "https://github.com/greenlion/PHP-SQL-Parser"
             },
-            "time": "2024-05-09T14:09:13+00:00"
+            "time": "2025-01-16T02:01:23+00:00"
         },
         {
             "name": "php-ds/php-ds",
@@ -4502,10 +4502,10 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "platform": {},
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
 }
