@@ -111,7 +111,7 @@ final class Struct implements JsonSerializable, ArrayAccess {
 	 * @return bool
 	 */
 	public static function isValid(string $json): bool {
-		return simdjson_is_valid($json);
+		return simdjson_is_valid($json, static::JSON_DEPTH);
 	}
 
 	/**
