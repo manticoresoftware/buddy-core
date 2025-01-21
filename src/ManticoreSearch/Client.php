@@ -45,6 +45,9 @@ class Client {
 	/** @var int $port */
 	protected int $port;
 
+	/** @var ?string $authToken */
+	protected ?string $authToken = null;
+
 	/** @var string $buddyVersion */
 	protected string $buddyVersion;
 
@@ -60,14 +63,16 @@ class Client {
 	/**
 	 * Initialize the Client that will use provided
 	 * @param ?string $url
+	 * @param ?string $authToken
 	 * @return void
 	 */
-	public function __construct(?string $url = null) {
+	public function __construct(?string $url = null, ?string $authToken = null) {
 		// If no url passed, set default one
 		if (!$url) {
 			$url = static::DEFAULT_URL;
 		}
 		$this->setServerUrl($url);
+		$this->setAuthToken($authToken);
 		$this->connectionPool = new ConnectionPool(
 			function () {
 				$client = new HttpClient($this->host, $this->port);
@@ -89,6 +94,15 @@ class Client {
 		}
 		$this->host = (string)strtok($url, ':');
 		$this->port = (int)strtok(':');
+		return $this;
+	}
+
+	/**
+	 * @param ?string $authToken
+	 * @return static
+	 */
+	public function setAuthToken(?string $authToken): static {
+		$this->authToken = $authToken;
 		return $this;
 	}
 
@@ -141,6 +155,10 @@ class Client {
 			'Content-Type' => $contentTypeHeader,
 			'User-Agent' => $userAgentHeader,
 		];
+		// Add authorization header if we have token
+		if (isset($this->authToken)) {
+			$headers['Authorization'] = "Bearer {$this->authToken}";
+		}
 		$isAsync = Coroutine::getCid() > 0;
 		$method = !$this->forceSync && $isAsync ? 'runAsyncRequest' : 'runSyncRequest';
 		$response = $this->$method($path, $request, $headers);
