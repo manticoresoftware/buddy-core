@@ -111,6 +111,25 @@ final class Buddy {
 		static $version;
 		if (!isset($version)) {
 			$version = trim((string)file_get_contents(static::$versionFile));
+			// If this is template, detect
+			if ($version[0] === '$') {
+				$gitDir = dirname(static::$versionFile);
+				try {
+					$gitHead = trim(
+						(string)shell_exec(
+							'cd ' . escapeshellarg($gitDir) .
+							' && git rev-parse --short=6 HEAD 2>/dev/null'
+						)
+					);
+					if ($gitHead) {
+						$version = 'x.x.x-' . $gitHead;
+					} else {
+						$version = 'x.x.x';
+					}
+				} catch (Throwable) {
+					$version = 'x.x.x';
+				}
+			}
 		}
 		return $version;
 	}
