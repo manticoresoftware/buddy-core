@@ -153,7 +153,7 @@ final class Buddy {
 		);
 
 		$version = $latestTag ?: 'x.x.x';
-		if ($commitsAfterTag !== '0') {
+		if ($commitsAfterTag && $commitsAfterTag !== '0') {
 			$version .= '-' . $commitsAfterTag;
 		}
 		if ($gitHead) {
