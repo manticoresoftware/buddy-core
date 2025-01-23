@@ -1,18 +1,19 @@
 <?php declare(strict_types=1);
 
 /*
-  Copyright (c) 2024, Manticore Software LTD (https://manticoresearch.com)
+	Copyright (c) 2024, Manticore Software LTD (https://manticoresearch.com)
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 3 or any later
-  version. You should have received a copy of the GPL license along with this
-  program; if you did not, you can find it at http://www.gnu.org/
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License version 3 or any later
+	version. You should have received a copy of the GPL license along with this
+	program; if you did not, you can find it at http://www.gnu.org/
 */
 
 namespace Manticoresearch\Buddy\Core\Tool;
 
 use Throwable;
 
+/** @package Manticoresearch\Buddy\Core\Tool */
 final class Buddy {
 
 	const PROTOCOL_VERSION = 3;
@@ -115,21 +116,48 @@ final class Buddy {
 			if ($version[0] === '$') {
 				$gitDir = dirname(static::$versionFile);
 				try {
-					$gitHead = trim(
-						(string)shell_exec(
-							'cd ' . escapeshellarg($gitDir) .
-							' && git rev-parse --short=6 HEAD 2>/dev/null'
-						)
-					);
-					if ($gitHead) {
-						$version = 'x.x.x-' . $gitHead;
-					} else {
-						$version = 'x.x.x';
-					}
+					$version = static::getVersionFromGit($gitDir);
 				} catch (Throwable) {
 					$version = 'x.x.x';
 				}
 			}
+		}
+		return $version;
+	}
+
+	/**
+	 * @param string $gitDir
+	 * @return string
+	 */
+	protected static function getVersionFromGit(string $gitDir): string {
+
+		$latestTag = trim(
+			(string)shell_exec(
+				'cd ' . escapeshellarg($gitDir) .
+					' && git describe --tags --abbrev=0 2>/dev/null'
+			)
+		);
+
+		$commitsAfterTag = trim(
+			(string)shell_exec(
+				'cd ' . escapeshellarg($gitDir) .
+					' && git rev-list ' . escapeshellarg($latestTag) . '..HEAD --count 2>/dev/null'
+			)
+		);
+
+		$gitHead = trim(
+			(string)shell_exec(
+				'cd ' . escapeshellarg($gitDir) .
+					' && git rev-parse --short=6 HEAD 2>/dev/null'
+			)
+		);
+
+		$version = $latestTag ?: 'x.x.x';
+		if ($commitsAfterTag !== '0') {
+			$version .= '-' . $commitsAfterTag;
+		}
+		if ($gitHead) {
+			$version .= '-g' . $gitHead;
 		}
 		return $version;
 	}
