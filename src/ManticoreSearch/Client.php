@@ -125,7 +125,8 @@ class Client {
 	public function sendRequest(
 		string $request,
 		?string $path = null,
-		bool $disableAgentHeader = false
+		bool $disableAgentHeader = false,
+		bool $disableShowMeta = false,
 	): Response {
 		$t = microtime(true);
 		if ($request === '') {
@@ -144,7 +145,9 @@ class Client {
 		$showMeta = false;
 		// We urlencode all the requests to the /sql endpoint
 		if (str_starts_with($path, 'sql')) {
-			$showMeta = stripos(trim($request), 'SELECT') === 0;
+			// Disabling show meta is a temporary workaround to be able to use 'sql' instead of 'sql?mode=raw'
+			// for getting correct values of JSON nested fields until that's fixed in daemon
+			$showMeta = !$disableShowMeta && stripos(trim($request), 'SELECT') === 0;
 			if ($showMeta) {
 				$request .= ';SHOW META';
 			}
