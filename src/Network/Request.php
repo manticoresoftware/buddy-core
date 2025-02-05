@@ -191,18 +191,7 @@ final class Request {
 		static::validateInputFields($payload, static::PAYLOAD_FIELDS);
 
 		// Checking if request format and endpoint are supported
-		/** @var array{path:string,query?:string} $urlInfo */
-		$urlInfo = parse_url($payload['message']['path_query']);
-		$path = ltrim($urlInfo['path'], '/');
-		if ($path === 'sql' && isset($urlInfo['query'])) {
-			// We need to keep the query parameters part in the sql queries
-			// as it's required for the following requests to Manticore
-			$path .= '?' . $urlInfo['query'];
-		} elseif (str_ends_with($path, '/_bulk') && !str_starts_with($path, '.kibana/')) {
-			// Convert the elastic bulk request path to the Manticore one
-			$path = '_bulk';
-		}
-		Buddy::debug('TEST ' . $path);
+		$path = static::detectPath($payload['message']['path_query']);
 		if (static::isElasticPath($path)) {
 			$endpointBundle = Endpoint::Elastic;
 		} elseif (str_contains($path, '/_doc/') || str_contains($path, '/_create/')
@@ -257,43 +246,69 @@ final class Request {
 	}
 
 	/**
+	 * @param string $pathQuery
+	 * @return string
+	 */
+	protected static function detectPath(string $pathQuery): string {
+		/** @var array{path:string,query?:string} $urlInfo */
+		$urlInfo = parse_url($pathQuery);
+		$path = ltrim($urlInfo['path'], '/');
+		if ($path === 'sql' && isset($urlInfo['query'])) {
+			// We need to keep the query parameters part in the sql queries
+			// as it's required for the following requests to Manticore
+			// We should unset query parameter cuz we have it body and do not need to send in future
+			parse_str($urlInfo['query'], $queryParams);
+			unset($queryParams['query']);
+
+			if ($queryParams) {
+				$path .= '?' . http_build_query($queryParams);
+			}
+		} elseif (str_ends_with($path, '/_bulk') && !str_starts_with($path, '.kibana/')) {
+			// Convert the elastic bulk request path to the Manticore one
+			$path = '_bulk';
+		}
+		return $path;
+	}
+
+
+	/**
 	 * Helper function to detect if request path refers to Elastic-like request
 	 *
 	 * @param string $path
 	 * @return bool
 	 */
 	protected function isElasticPath(string $path): bool {
-		$elasticPathPrefixes = [
-			'_index_template/',
-			'_xpack',
-			'.kibana/',
-			'_cluster',
-			'_mget',
-			'.kibana_task_manager',
-			'_aliases',
-			'_alias/',
-			'_template/',
-			'_cat/',
-			'_field_caps',
-		];
-		$elasticPathSuffixes = [
-			'_nodes',
-			'/_mapping',
-			'/_search',
-			'.kibana',
-			'/_field_caps',
-		];
-		foreach ($elasticPathPrefixes as $prefix) {
-			if (str_starts_with($path, $prefix)) {
-				return true;
+			$elasticPathPrefixes = [
+				'_index_template/',
+				'_xpack',
+				'.kibana/',
+				'_cluster',
+				'_mget',
+				'.kibana_task_manager',
+				'_aliases',
+				'_alias/',
+				'_template/',
+				'_cat/',
+				'_field_caps',
+			];
+			$elasticPathSuffixes = [
+				'_nodes',
+				'/_mapping',
+				'/_search',
+				'.kibana',
+				'/_field_caps',
+			];
+			foreach ($elasticPathPrefixes as $prefix) {
+				if (str_starts_with($path, $prefix)) {
+					return true;
+				}
 			}
-		}
-		foreach ($elasticPathSuffixes as $suffix) {
-			if (str_ends_with($path, $suffix)) {
-				return true;
+			foreach ($elasticPathSuffixes as $suffix) {
+				if (str_ends_with($path, $suffix)) {
+					return true;
+				}
 			}
-		}
-		return false;
+			return false;
 	}
 
 	/**
