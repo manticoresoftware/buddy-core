@@ -254,7 +254,7 @@ final class Request {
 	 * @param string $pathQuery
 	 * @return array{0:string,1:string}
 	 */
-	protected static function parsePathQuery(string $pathQuery): string {
+	protected static function parsePathQuery(string $pathQuery): array {
 		/** @var array{path:string,query?:string} $urlInfo */
 		$urlInfo = parse_url($pathQuery);
 		$path = ltrim($urlInfo['path'], '/');
