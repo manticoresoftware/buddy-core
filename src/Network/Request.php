@@ -191,7 +191,7 @@ final class Request {
 		static::validateInputFields($payload, static::PAYLOAD_FIELDS);
 
 		// Checking if request format and endpoint are supported
-		$path = static::detectPath($payload['message']['path_query']);
+		[$path, $queryString] = static::parsePathQuery($payload['message']['path_query']);
 		if (static::isElasticPath($path)) {
 			$endpointBundle = Endpoint::Elastic;
 		} elseif (str_contains($path, '/_doc/') || str_contains($path, '/_create/')
@@ -207,7 +207,7 @@ final class Request {
 				'cli' => Endpoint::Cli,
 				'cli_json' => Endpoint::CliJson,
 				'search' => Endpoint::Search,
-				'sql?mode=raw', 'sql', '' => Endpoint::Sql,
+				'sql', '' => Endpoint::Sql,
 				'insert' => Endpoint::Insert,
 				'replace' => Endpoint::Replace,
 				'update' => Endpoint::Update,
@@ -218,6 +218,11 @@ final class Request {
 					"Do not know how to handle '{$payload['message']['path_query']}' path_query"
 				),
 			};
+		}
+
+		// We need to append extra argument for sql endpoint to make it transparent
+		if ($endpointBundle === Endpoint::Sql && $queryString) {
+			$path .= '?' . $queryString;
 		}
 
 		$format = match ($payload['type']) {
@@ -247,27 +252,27 @@ final class Request {
 
 	/**
 	 * @param string $pathQuery
-	 * @return string
+	 * @return array{0:string,1:string}
 	 */
-	protected static function detectPath(string $pathQuery): string {
+	protected static function parsePathQuery(string $pathQuery): string {
 		/** @var array{path:string,query?:string} $urlInfo */
 		$urlInfo = parse_url($pathQuery);
 		$path = ltrim($urlInfo['path'], '/');
+		$queryString = '';
 		if ($path === 'sql' && isset($urlInfo['query'])) {
 			// We need to keep the query parameters part in the sql queries
 			// as it's required for the following requests to Manticore
 			// We should unset query parameter cuz we have it body and do not need to send in future
 			parse_str($urlInfo['query'], $queryParams);
 			unset($queryParams['query']);
-
 			if ($queryParams) {
-				$path .= '?' . http_build_query($queryParams);
+				$queryString = http_build_query($queryParams);
 			}
 		} elseif (str_ends_with($path, '/_bulk') && !str_starts_with($path, '.kibana/')) {
 			// Convert the elastic bulk request path to the Manticore one
 			$path = '_bulk';
 		}
-		return $path;
+		return [$path, $queryString];
 	}
 
 
