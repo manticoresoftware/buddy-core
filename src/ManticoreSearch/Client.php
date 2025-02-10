@@ -498,6 +498,8 @@ class Client {
 		int $distance = 2,
 		int $limit = 3
 	): array {
+		// First, escape the given query
+		$query = addcslashes($query, '*%?\'');
 		// 1. Tokenize the query first with the keywords function
 		$q = "CALL KEYWORDS('{$query}', '{$table}')";
 		/** @var array<array{data:array<array{normalized:string,tokenized:string}>}> $keywordsResult */
