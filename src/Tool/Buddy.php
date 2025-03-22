@@ -71,6 +71,15 @@ final class Buddy {
 	}
 
 	/**
+	 * @param string $message
+	 * @param string $eol
+	 * @return void
+	 */
+	public static function debugvv(string $message, string $eol = PHP_EOL): void {
+		static::debug($message, $eol, 3);
+	}
+
+	/**
 	 * Warning that means you need to take a care about it but still continue
 	 * @param string $message
 	 * @param string $eol
