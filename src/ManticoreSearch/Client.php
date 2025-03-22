@@ -57,6 +57,9 @@ class Client {
 	/** @var ConnectionPool $connectionPool */
 	protected ConnectionPool $connectionPool;
 
+	/** @var Map<string,Client> */
+	protected Map $clientMap;
+
 	/** @var bool $forceSync */
 	protected bool $forceSync = false;
 
@@ -81,6 +84,7 @@ class Client {
 			}
 		);
 		$this->buddyVersion = Buddy::getVersion();
+		$this->clientMap = new Map;
 	}
 
 	/**
@@ -189,7 +193,7 @@ class Client {
 
 		$this->response = $response;
 		$time = (int)((microtime(true) - $t) * 1000000);
-		Buddy::debugv("[{$time}µs] manticore request: $request");
+		Buddy::debugvv("[{$time}µs] manticore request: $request");
 		return $result;
 	}
 
@@ -243,15 +247,25 @@ class Client {
 		?string $path = null,
 		bool $disableAgentHeader = false
 	): Response {
-		if ($url) {
-			$origServerUrl = $this->getServerUrl();
-			$this->setServerUrl($url);
+		$client = $this->getClientForUrl($url);
+		return $client->sendRequest($request, $path, $disableAgentHeader);
+	}
+
+	/**
+	 * @param string $url
+	 * @return Client
+	 */
+	protected function getClientForUrl(string $url): Client {
+		if (!$url) {
+			return $this;
 		}
-		$response = $this->sendRequest($request, $path, $disableAgentHeader);
-		if ($url) {
-			$this->setServerUrl($origServerUrl);
+
+		if (!isset($this->clientMap[$url])) {
+			$this->clientMap[$url] = new Client($url);
 		}
-		return $response;
+
+		/** @var Client */
+		return $this->clientMap[$url];
 	}
 
 	/**

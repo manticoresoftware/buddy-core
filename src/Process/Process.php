@@ -189,7 +189,7 @@ final class Process {
 	 * @return static
 	 */
 	public function execute(string $method, array $args = []): static {
-		Buddy::debugv("[process] execute: $method " . json_encode($args));
+		Buddy::debugvv("[process] execute: $method " . json_encode($args));
 		$message = ProcessReader::packMessage([$method, $args]);
 		$this->process->write($message);
 		return $this;
