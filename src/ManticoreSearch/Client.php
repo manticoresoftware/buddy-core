@@ -479,17 +479,15 @@ class Client {
 		return Settings::fromVector($settings);
 	}
 
-		/**
-	 * Helper to build combinations of words with typo and fuzzy correction to next combine in searches
-	 * @param string $query The query to be tokenized
-	 * @param string $table The table to be used in the suggest function
-	 * @param bool $preserve If we should keep words that are not in the table
-	 * @param int $distance The maximum distance between the query word and the suggestion
-	 * @param int $limit The maximum number of suggestions for each tokenized word
-	 * @return array{array<array<string>>,array<string,float>}
-	 * The list of variations for each word presented in query phrase and scoreMap for each word
-	 * @throws RuntimeException
-	 * @throws ManticoreSearchClientError
+	/**
+	 * Fetches fuzzy variations for a given query.
+	 *
+	 * @param string $query The search query to find variations for
+	 * @param string $table The table to search in
+	 * @param bool $preserve Whether to preserve original words when no suggestions found
+	 * @param int $distance Maximum edit distance for suggestions
+	 * @param int $limit Maximum number of suggestions per word
+	 * @return array{0: array<array<string>>, 1: array<string, float>} Words and score map
 	 */
 	public function fetchFuzzyVariations(
 		string $query,
@@ -514,34 +512,20 @@ class Client {
 		$docMap = [];
 
 		// 2. For each tokenized word, we get the suggestions from the suggest function
-		foreach ($normalized as $word) {
-			/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $suggestResult */
-			$suggestResult = $this
-				->sendRequest(
-					"CALL SUGGEST('{$word}', '{$table}', {$limit} as limit, {$distance} as max_edits)"
-				)
-				->getResult();
-			/** @var array{suggest:string,distance:int,docs:int} $suggestion */
-			$suggestions = $suggestResult[0]['data'] ?? [];
-			$choices = [];
-			foreach ($suggestions as $suggestion) {
-				$word = $suggestion['suggest'];
-				$choices[] = $word;
-				$distanceMap[$word] = $suggestion['distance'];
-				$docMap[$word] = $suggestion['docs'];
-			}
-
-			// Special case for empty suggestions
-			if (!$choices) {
-				if ($preserve) {
-					$words[] = [$word];
-					$distanceMap[$word] = 999;
-					$docMap[$word] = 0;
-				}
-				continue;
-			}
-
-			$words[] = $choices;
+		foreach ($normalized as $i => $word) {
+			// Split into multiple lines for better readability
+			$this->processSuggestion(
+				$word,
+				$table,
+				$limit,
+				$distance,
+				$i,
+				$normalized,
+				$words,
+				$distanceMap,
+				$docMap,
+				$preserve
+			);
 		}
 
 		// 3. Normalize the distance and docs values
@@ -551,6 +535,109 @@ class Client {
 		$distanceMapNormalized = Arrays::normalizeValues($distanceMap);
 		// Discard the original values
 		unset($docMap, $distanceMap);
+
+		$scoreMap = $this->calculateScoreMap($docMapNormalized, $distanceMapNormalized);
+
+		return [$words, $scoreMap];
+	}
+
+	/**
+	 * Processes suggestions for a word and adds them to the words, distanceMap and docMap arrays.
+	 *
+	 * @param string $word The word to get suggestions for
+	 * @param string $table The table to search in
+	 * @param int $limit Maximum number of suggestions per word
+	 * @param int $distance Maximum edit distance for suggestions
+	 * @param int $i Current word index
+	 * @param array<string> $normalized Array of normalized words
+	 * @param array<array<string>> $words Reference to words array to be populated
+	 * @param array<string,int> $distanceMap Reference to distance map to be populated
+	 * @param array<string,int> $docMap Reference to document map to be populated
+	 * @param bool $preserve Whether to preserve original words when no suggestions found
+	 * @return void
+	 */
+	private function processSuggestion(
+		string $word,
+		string $table,
+		int $limit,
+		int $distance,
+		int $i,
+		array $normalized,
+		array &$words,
+		array &$distanceMap,
+		array &$docMap,
+		bool $preserve
+	): void {
+		/**
+		 * @var array<array{
+		 *     data: array<array{
+		 *         suggest: string,
+		 *         distance: int,
+		 *         docs: int
+		 *     }>
+		 * }> $suggestResult
+		 */
+		$suggestResult = $this
+			->sendRequest(
+				"CALL SUGGEST('{$word}', '{$table}', {$limit} as limit, {$distance} as max_edits)"
+			)
+			->getResult();
+		$suggestions = $suggestResult[0]['data'] ?? [];
+		$choices = [];
+
+		/** @var array{suggest:string,distance:int,docs:int} $suggestion */
+		foreach ($suggestions as $suggestion) {
+			$suggestWord = $suggestion['suggest'];
+			$choices[] = $suggestWord;
+			$distanceMap[$suggestWord] = $suggestion['distance'];
+			$docMap[$suggestWord] = $suggestion['docs'];
+		}
+
+		// Try to merge with next word if it exists
+		if (isset($normalized[$i + 1])) {
+			$nextWord = $normalized[$i + 1];
+			$combinedWord = $word . $nextWord;
+
+			/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $combinedSuggestResult */
+			$combinedSuggestResult = $this
+				->sendRequest(
+					"CALL SUGGEST('{$combinedWord}', '{$table}', {$limit} as limit, {$distance} as max_edits)"
+				)
+				->getResult();
+
+			/** @var array{suggest:string,distance:int,docs:int} $suggestion */
+			$combinedSuggestions = $combinedSuggestResult[0]['data'] ?? [];
+
+			foreach ($combinedSuggestions as $suggestion) {
+				$combinedSuggest = $suggestion['suggest'];
+				$choices[] = $combinedSuggest;
+				// We add 1 here cuz we already merge with space, so the distance is the same
+				$distanceMap[$combinedSuggest] = $suggestion['distance'] + 1;
+				$docMap[$combinedSuggest] = $suggestion['docs'];
+			}
+		}
+
+		// Special case for empty suggestions
+		if (!$choices) {
+			if ($preserve) {
+				$words[] = [$word];
+				$distanceMap[$word] = 999;
+				$docMap[$word] = 0;
+			}
+			return;
+		}
+
+		$words[] = $choices;
+	}
+
+	/**
+	 * Calculates the score map based on normalized distance and document scores.
+	 *
+	 * @param array<string,float> $docMapNormalized Normalized document scores
+	 * @param array<string,float> $distanceMapNormalized Normalized distance scores
+	 * @return array<string,float> Score map with calculated scores
+	 */
+	private function calculateScoreMap(array $docMapNormalized, array $distanceMapNormalized): array {
 		// We are use minimum distance to avoid siutation when less docs affect relevance
 		$scoreFn = static function (float $distance, float $docs): float {
 			return (float)max($distance + 1, sqrt($docs)) / ($distance + 1);
@@ -567,6 +654,6 @@ class Client {
 			$scoreMap[$word] = $scoreFn($docScore, $distanceScore);
 		}
 
-		return [$words, $scoreMap];
+		return $scoreMap;
 	}
 }
