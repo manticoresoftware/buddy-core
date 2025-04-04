@@ -34,7 +34,22 @@ final class TableValidator {
 			return true;
 		}
 
-		/** @var array{error?:string} */
+		/** @var array{0:array{data:array<array<string,string>>},error?:string} $result */
+		$result = $this->client->sendRequest("DESC $table")->getResult();
+		if (isset($result['error'])) {
+			TableValidationError::throw("no such table '{$table}'");
+		}
+		$isDistributed = array_key_first($result[0]['data'][0]) === 'Agent';
+
+		// Skip validation for distributed tables
+		// Maybe we should think about iterating over ALL tables, but looks like
+		// it is not a perofmrance friendly so for now do not check min_infix_len set
+		if ($isDistributed) {
+			$this->cache->set($cacheKey, true, $this->ttl);
+			return true;
+		}
+
+		/** @var array{data:array<array<string,string>>,error?:string} $result */
 		$result = $this->client->sendRequest("SHOW TABLE $table SETTINGS")->getResult();
 		if (isset($result['error'])) {
 			TableValidationError::throw("no such table '{$table}'");
