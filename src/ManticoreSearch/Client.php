@@ -432,6 +432,63 @@ class Client {
 	}
 
 	/**
+	 * Get all shards for current distributed table from the schema
+	 * @param string $table
+	 * @return array<array{name:string,url:string}>
+	 * @throws RuntimeException
+	 */
+	public function getTableShards(string $table): array {
+		[$locals, $agents] = $this->parseTableShards($table);
+
+		$shards = [];
+		// Add locals first
+		foreach ($locals as $t) {
+			$shards[] = [
+				'name' => $t,
+				'url' => '',
+			];
+		}
+		// Add agents after
+		foreach ($agents as $agent) {
+			$ex = explode('|', $agent);
+			$host = strtok($ex[0], ':');
+			$port = (int)strtok(':');
+			$t = strtok(':');
+			$shards[] = [
+				'name' => (string)$t,
+				'url' => "$host:$port",
+			];
+		}
+		$map[$table] = $shards;
+		return $shards;
+	}
+
+	/**
+	 * Helper to parse shards and return local and remote agents for current table
+	 * @param string $table
+	 * @return array{0:array<string>,1:array<string>}
+	 */
+	protected function parseTableShards($table): array {
+		/** @var array{0:array{data:array<array{"Create Table":string}>}} */
+		$res = $this->sendRequest("SHOW CREATE TABLE $table OPTION force=1")->getResult();
+		$tableSchema = $res[0]['data'][0]['Create Table'] ?? '';
+		if (!$tableSchema) {
+			throw new RuntimeException("There is no such table: {$table}");
+		}
+		if (!str_contains($tableSchema, "type='distributed'")) {
+			throw new RuntimeException('The table is not distributed');
+		}
+
+		if (!preg_match_all("/local='(?P<local>[^']+)'|agent='(?P<agent>[^']+)'/ius", $tableSchema, $m)) {
+			throw new RuntimeException('Failed to match tables from the schema');
+		}
+		return [
+			array_filter($m['local']),
+			array_filter($m['agent']),
+		];
+	}
+
+	/**
 	 * Get cached settings or fetch if not
 	 * @return Settings
 	 */
