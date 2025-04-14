@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
 /*
- Copyright (c) 2024, Manticore Software LTD (https://manticoresearch.com)
+ Copyright (c) 2024-present, Manticore Software LTD (https://manticoresearch.com)
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License version 3 or any later
+ it under the terms of the GNU General Public License version 2 or any later
  version. You should have received a copy of the GPL license along with this
  program; if you did not, you can find it at http://www.gnu.org/
  */
@@ -22,23 +22,29 @@ use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @phpstan-type PluginItem array{full:string,short:string,version:string}
+ * @phpstan-type PluginItem array{full:string,short:string,version:string,version?:int}
  */
 final class Pluggable {
 	const PLUGIN_PREFIX = 'buddy-plugin-';
 	const CORE_NS_PREFIX = 'Manticoresearch\\Buddy\\Base\\Plugin\\';
 	const EXTRA_NS_PREFIX = 'Manticoresearch\\Buddy\\Plugin\\';
 
+	/**
+	 * Version of the pluggable system
+	 * Increment this number when making breaking changes to the pluggable interfaces
+	 */
+	const VERSION = 1;
+
 	/** @var array<mixed> */
 	protected array $autoloadMap = [];
 
-	/** @var array<PluginItem> */
+	/** @var array<array{full:string,short:string,version:string,version?:int}> */
 	protected static array $corePlugins;
 
-	/** @var array<PluginItem> */
+	/** @var array<array{full:string,short:string,version:string,version?:int}> */
 	protected static array $localPlugins;
 
-	/** @var array<PluginItem> */
+	/** @var array<array{full:string,short:string,version:string,version?:int}> */
 	protected static array $extraPlugins;
 
 	/** @var array<string,true> Here we keep disabled plugins map */
@@ -70,11 +76,20 @@ final class Pluggable {
 		static::$corePlugins = [];
 		$version = Buddy::getVersion();
 		foreach ($plugins as $fullName) {
-			static::$corePlugins[] = [
+			$item = [
 				'full' => $fullName,
 				'short' => static::getShortName($fullName),
 				'version' => $version,
 			];
+
+			// Try to get the required version from the plugin
+			$pluginPrefix = static::CORE_NS_PREFIX . ucfirst(Strings::camelcaseBySeparator($item['short'], '-'));
+			$pluginPayloadClass = "$pluginPrefix\\Payload";
+			if (class_exists($pluginPayloadClass) && method_exists($pluginPayloadClass, 'getRequiredVersion')) {
+				$item['pluggable_version'] = $pluginPayloadClass::getRequiredVersion();
+			}
+
+			static::$corePlugins[] = $item;
 		}
 	}
 
@@ -88,7 +103,7 @@ final class Pluggable {
 
 	/**
 	 * The cacheable method for getting core plugins
-	 * @return array<PluginItem>
+	 * @return array<array{full:string,short:string,version:string,version?:int}>
 	 */
 	public function getCorePlugins(): array {
 		return static::$corePlugins;
@@ -97,7 +112,7 @@ final class Pluggable {
 	/**
 	 * The cacheable method for getting local plugins
 	 * @param bool $refresh
-	 * @return array<PluginItem>
+	 * @return array<array{full:string,short:string,version:string,version?:int}>
 	 */
 	public function getLocalPlugins(bool $refresh = false): array {
 		if (!isset(static::$localPlugins) || $refresh) {
@@ -109,7 +124,7 @@ final class Pluggable {
 	/**
 	 * The cacheable method for getting extra plugins
 	 * @param bool $refresh
-	 * @return array<PluginItem>
+	 * @return array<array{full:string,short:string,version:string,version?:int}>
 	 */
 	public function getExtraPlugins(bool $refresh = false): array {
 		if (!isset(static::$extraPlugins) || $refresh) {
@@ -203,44 +218,86 @@ final class Pluggable {
 
 	/**
 	 * Get list of all packages that are installed in a plugin directory
-	 * @return array<array{full:string,short:string,version:string}>
+	 * @return array<array{full:string,short:string,version:string,version?:int}>
 	 * @throws Exception
 	 */
 	public function getList(): array {
-		$pluginPrefixLen = strlen(static::PLUGIN_PREFIX);
-		$composerFile = $this->getPluginComposerFile();
-		$composerContent = file_exists($composerFile) && is_writable($this->getPluginDir())
-			? file_get_contents($composerFile)
-			: false;
+		$composerContent = $this->readComposerContent();
 		if ($composerContent === false) {
-			$message = "Pluggable system is disabled. Unable to read composer file from plugin dir: $composerFile, ";
-			$message .= 'make sure that you have correct permissions on plugin dir';
-			Buddy::warning($message);
 			return [];
 		}
+
 		/** @var array{require?:array<string,string>} $composerJson */
 		$composerJson = simdjson_decode($composerContent, true);
 		if (!isset($composerJson['require'])) {
 			return [];
 		}
 
-		$reduceFn = static function ($carry, $v) use ($composerJson, $pluginPrefixLen) {
-			$pos = strpos($v, static::PLUGIN_PREFIX, strpos($v, '/') ?: 0);
-			if ($pos !== false) {
-				$carry[] = [
-					'full' => $v,
-					'short' => substr($v, $pos + $pluginPrefixLen),
-					'version' => $composerJson['require'][$v],
-				];
-			}
-			return $carry;
-		};
-
 		return array_reduce(
 			array_keys($composerJson['require']),
-			$reduceFn,
+			function ($carry, $v) use ($composerJson) {
+				return $this->processPluginEntry($carry, $v, $composerJson);
+			},
 			[]
 		);
+	}
+
+	/**
+	 * Process a single plugin entry from composer.json
+	 * @param array<array{full:string,short:string,version:string,version?:int}> $carry Accumulated result
+	 * @param string $v Package name
+	 * @param array{require:array<string,string>} $composerJson
+	 * @return array<array{full:string,short:string,version:string,version?:int}> Updated accumulated result
+	 */
+	private function processPluginEntry(array $carry, string $v, array $composerJson): array {
+		$pluginPrefixLen = strlen(static::PLUGIN_PREFIX);
+		$pos = strpos($v, static::PLUGIN_PREFIX, strpos($v, '/') ?: 0);
+		if ($pos !== false) {
+			$item = [
+				'full' => $v,
+				'short' => substr($v, $pos + $pluginPrefixLen),
+				'version' => $composerJson['require'][$v],
+			];
+
+			// Try to get the required version from the plugin
+			$pluginPrefix = static::EXTRA_NS_PREFIX . ucfirst(Strings::camelcaseBySeparator($item['short'], '-'));
+			$pluginPayloadClass = "$pluginPrefix\Payload";
+			if (class_exists($pluginPayloadClass) && method_exists($pluginPayloadClass, 'getRequiredVersion')) {
+				$item['pluggable_version'] = $pluginPayloadClass::getRequiredVersion();
+
+				$requiredVersion = static::VERSION;
+				if ($item['pluggable_version'] < $requiredVersion) {
+					Buddy::warning(
+						"Plugin {$v} has version {$item['pluggable_version']}, "
+							. 'but current pluggable version is ' . static::VERSION . '. Plugin will be skipped.'
+					);
+					// Skip this plugin from activating
+					return $carry;
+				}
+			}
+
+			$carry[] = $item;
+		}
+		return $carry;
+	}
+
+	/**
+	 * Read the composer.json content from the plugin directory
+	 * @return string|false The file content or false on failure
+	 */
+	private function readComposerContent() {
+		$composerFile = $this->getPluginComposerFile();
+		$composerContent = file_exists($composerFile) && is_writable($this->getPluginDir())
+		? file_get_contents($composerFile)
+		: false;
+
+		if ($composerContent === false) {
+			$message = "Pluggable system is disabled. Unable to read composer file from plugin dir: $composerFile, ";
+			$message .= 'make sure that you have correct permissions on plugin dir';
+			Buddy::warning($message);
+		}
+
+		return $composerContent;
 	}
 
 	/**
@@ -439,7 +496,7 @@ final class Pluggable {
 
 	/**
 	 * Helper to fetch local plugins
-	 * @return array<array{full:string,short:string,version:string}>
+	 * @return array<array{full:string,short:string,version:string,version?:int}>
 	 * @throws Exception
 	 */
 	public function fetchLocalPlugins(): array {
@@ -469,11 +526,21 @@ final class Pluggable {
 			if (!isset($composer['name'])) {
 				throw new Exception("Failed to detect local plugin name from file: $composerFile");
 			}
-			$plugins[] = [
+
+			$item = [
 				'full' => $composer['name'],
 				'short' => $shortName,
 				'version' => 'dev-main',
 			];
+
+			// Try to get the required version from the plugin
+			$pluginPrefix = static::EXTRA_NS_PREFIX . ucfirst(Strings::camelcaseBySeparator($shortName, '-'));
+			$pluginPayloadClass = "$pluginPrefix\\Payload";
+			if (class_exists($pluginPayloadClass) && method_exists($pluginPayloadClass, 'getRequiredVersion')) {
+				$item['pluggable_version'] = $pluginPayloadClass::getRequiredVersion();
+			}
+
+			$plugins[] = $item;
 		}
 
 		return $plugins;
@@ -481,13 +548,21 @@ final class Pluggable {
 
 	/**
 	 * Get list of external plugin names
-	 * @return array<array{full:string,short:string,version:string}>
+	 * @return array<array{full:string,short:string,version:string,version?:int}>
 	 * @throws Exception
 	 */
 	public function fetchExtraPlugins(): array {
 		$this->reload();
 
 		return $this->getList();
+	}
+
+	/**
+	 * Get the current version of the pluggable system
+	 * @return int
+	 */
+	public static function getVersion(): int {
+		return static::VERSION;
 	}
 
 	/**
@@ -631,6 +706,11 @@ final class Pluggable {
 				}
 				$pluginPrefix = $prefix . ucfirst(Strings::camelcaseBySeparator($plugin['short'], '-'));
 				$pluginPayloadClass = "$pluginPrefix\\Payload";
+
+				if (!class_exists($pluginPayloadClass)) {
+					continue;
+				}
+
 				array_map($fn, $pluginPayloadClass::getProcessors());
 			}
 		}
