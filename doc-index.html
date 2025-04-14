@@ -336,9 +336,7 @@ It can be useful for tests</p></dd><dt><a href="Manticoresearch/Buddy/Core/Netwo
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_getAllTables">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>::getAllTables</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
                     <dd><p>Get all tables for this instance by running SHOW TABLES
-And filter only required types or any if not specified</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_getTableShards">
-<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>::getTableShards</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
-                    <dd><p>Get all shards for current distributed table from the schema</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_getSettings">
+And filter only required types or any if not specified</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_getSettings">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>::getSettings</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
                     <dd><p>Get cached settings or fetch if not</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#method_getError">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>::getError</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
@@ -368,7 +366,10 @@ And filter only required types or any if not specified</p></dd><dt><a href="Mant
 <abbr title="Manticoresearch\Buddy\Core\Plugin\BaseHandlerWithClient">BaseHandlerWithClient</abbr>::getProps</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/BaseHandlerWithClient.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\BaseHandlerWithClient">BaseHandlerWithClient</abbr></a></em></dt>
                     <dd><p>Get props for the handler that we will set on initializeation in QueryProcessor</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/BaseHandlerWithFlagCache.html#method_getProps">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\BaseHandlerWithFlagCache">BaseHandlerWithFlagCache</abbr>::getProps</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/BaseHandlerWithFlagCache.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\BaseHandlerWithFlagCache">BaseHandlerWithFlagCache</abbr></a></em></dt>
-                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/BasePayload.html#method_getProcessors">
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/BasePayload.html#method_getRequiredVersion">
+<abbr title="Manticoresearch\Buddy\Core\Plugin\BasePayload">BasePayload</abbr>::getRequiredVersion</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/BasePayload.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\BasePayload">BasePayload</abbr></a></em></dt>
+                    <dd><p>Minimum required version of the pluggable system
+Override this in child classes if they require a newer version</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/BasePayload.html#method_getProcessors">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\BasePayload">BasePayload</abbr>::getProcessors</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/BasePayload.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\BasePayload">BasePayload</abbr></a></em></dt>
                     <dd><p>Get processors that plugin supports, list of classes</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/BasePayload.html#method_getInfo">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\BasePayload">BasePayload</abbr>::getInfo</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/BasePayload.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\BasePayload">BasePayload</abbr></a></em></dt>
@@ -391,7 +392,9 @@ And filter only required types or any if not specified</p></dd><dt><a href="Mant
                     <dd><p>Get list of all packages that are installed in a plugin directory</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_getClassNamespaceByFullName">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::getClassNamespaceByFullName</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
                     <dd><p>This is helper function to get fully qualified class name for plugin
-by using fully qualified composer name of it</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_getPluginDir">
+by using fully qualified composer name of it</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_getVersion">
+<abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::getVersion</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
+                    <dd><p>Get the current version of the pluggable system</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_getPluginDir">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::getPluginDir</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
                     <dd><p>Get current plugin dir</p></dd><dt><a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html#method_getPluginComposerFile">
 <abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr>::getPluginComposerFile</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Plugin/Pluggable.html"><abbr title="Manticoresearch\Buddy\Core\Plugin\Pluggable">Pluggable</abbr></a></em></dt>
@@ -597,9 +600,7 @@ Useful to run hooks or something like this</p></dd>        </dl><h2 id="letterP"
 <abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr>#proxyOriginalError</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#property_port">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>#port</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
-                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_parseTableShards">
-<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>::parseTableShards</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
-                    <dd><p>Helper to parse shards and return local and remote agents for current table</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#method_postprocess">
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#method_postprocess">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>::postprocess</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
                     <dd><p>Run callable function on results and postprocess it with custom logic</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#method_parse">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>::parse</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
