@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
 /*
-  Copyright (c) 2024, Manticore Software LTD (https://manticoresearch.com)
+ Copyright (c) 2024-present, Manticore Software LTD (https://manticoresearch.com)
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 3 or any later
-  version. You should have received a copy of the GPL license along with this
-  program; if you did not, you can find it at http://www.gnu.org/
-*/
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License version 2 or any later
+ version. You should have received a copy of the GPL license along with this
+ program; if you did not, you can find it at http://www.gnu.org/
+ */
 
 namespace Manticoresearch\Buddy\Core\Plugin;
 
@@ -21,6 +21,15 @@ use Manticoresearch\Buddy\Core\Tool\SqlQueryParser;
  */
 abstract class BasePayload {
 	protected Settings $manticoreSettings;
+
+	/**
+	 * Minimum required version of the pluggable system
+	 * Override this in child classes if they require a newer version
+	 * @return int
+	 */
+	public static function getRequiredVersion(): int {
+		return 1;
+	}
 
 	/** @var SqlQueryParser<T> */
 	public static SqlQueryParser $sqlQueryParser;
