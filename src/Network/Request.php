@@ -285,6 +285,7 @@ final class Request {
 	protected function isElasticPath(string $path): bool {
 			$elasticPathPrefixes = [
 				'_index_template/',
+				'_data_stream/',
 				'_xpack',
 				'.kibana/',
 				'_cluster',
