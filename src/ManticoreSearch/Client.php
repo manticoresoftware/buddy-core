@@ -27,7 +27,9 @@ use Swoole\Coroutine\Http\Client as HttpClient;
 use Swoole\Coroutine\WaitGroup;
 use Swoole\Lock;
 
-/** @package Manticoresearch\Buddy\Core\ManticoreSearch */
+/**
+ * @phpstan-type Variation array{original:string,keywords:array<string>}
+ */
 class Client {
 	const CONTENT_TYPE_HEADER = "Content-Type: application/x-www-form-urlencoded\n";
 	const URL_PREFIX = 'http://';
@@ -555,15 +557,13 @@ class Client {
 	 *
 	 * @param string $query The search query to find variations for
 	 * @param string $table The table to search in
-	 * @param bool $preserve Whether to preserve original words when no suggestions found
 	 * @param int $distance Maximum edit distance for suggestions
 	 * @param int $limit Maximum number of suggestions per word
-	 * @return array{0: array<array<string>>, 1: array<string, float>} Words and score map
+	 * @return array{0: array<Variation>, 1: array<string, float>} Words and score map
 	 */
 	public function fetchFuzzyVariations(
 		string $query,
 		string $table,
-		bool $preserve = false,
 		int $distance = 2,
 		int $limit = 3
 	): array {
@@ -575,7 +575,7 @@ class Client {
 		$keywordsResult = $this->sendRequest($q)->getResult();
 		$normalized = array_column($keywordsResult[0]['data'] ?? [], 'normalized');
 
-		/** @var array<array<string>> $words */
+		/** @var array<Variation> $words */
 		$words = [];
 		/** @var array<string,int> $distanceMap */
 		$distanceMap = [];
@@ -595,7 +595,6 @@ class Client {
 				$words,
 				$distanceMap,
 				$docMap,
-				$preserve
 			);
 		}
 
@@ -621,10 +620,9 @@ class Client {
 	 * @param int $distance Maximum edit distance for suggestions
 	 * @param int $i Current word index
 	 * @param array<string> $normalized Array of normalized words
-	 * @param array<array<string>> $words Reference to words array to be populated
+	 * @param array<Variation> $words Reference to words array to be populated
 	 * @param array<string,int> $distanceMap Reference to distance map to be populated
 	 * @param array<string,int> $docMap Reference to document map to be populated
-	 * @param bool $preserve Whether to preserve original words when no suggestions found
 	 * @return void
 	 */
 	private function processSuggestion(
@@ -637,7 +635,6 @@ class Client {
 		array &$words,
 		array &$distanceMap,
 		array &$docMap,
-		bool $preserve
 	): void {
 		/**
 		 * @var array<array{
@@ -690,15 +687,14 @@ class Client {
 
 		// Special case for empty suggestions
 		if (!$choices) {
-			if ($preserve) {
-				$words[] = [$word];
-				$distanceMap[$word] = 999;
-				$docMap[$word] = 0;
-			}
-			return;
+			$distanceMap[$word] = 999;
+			$docMap[$word] = 0;
 		}
 
-		$words[] = $choices;
+		$words[] = [
+			'original' => $word,
+			'keywords' => $choices,
+		];
 	}
 
 	/**
