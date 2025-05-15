@@ -1,18 +1,20 @@
 <?php declare(strict_types=1);
 
 /*
-  Copyright (c) 2024, Manticore Software LTD (https://manticoresearch.com)
+	Copyright (c) 2024, Manticore Software LTD (https://manticoresearch.com)
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 3 or any later
-  version. You should have received a copy of the GPL license along with this
-  program; if you did not, you can find it at http://www.gnu.org/
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License version 3 or any later
+	version. You should have received a copy of the GPL license along with this
+	program; if you did not, you can find it at http://www.gnu.org/
 */
 
 namespace Manticoresearch\Buddy\Core\Network;
 
 use ArrayAccess;
+use Countable;
 use Exception;
+use Iterator;
 use JsonSerializable;
 
 /**
@@ -20,11 +22,22 @@ use JsonSerializable;
  * @template TKey of string|int
  * @template TValue
  * @implements ArrayAccess<TKey, TValue>
+ * @implements Iterator<TKey, TValue>
  */
 
-final class Struct implements JsonSerializable, ArrayAccess {
+final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator {
 	const JSON_DEPTH = 512;
 	const JSON_FLAGS = JSON_INVALID_UTF8_SUBSTITUTE;
+
+	/**
+	 * @var int Iterator position
+	 */
+	private int $position = 0;
+
+	/**
+	 * @var array<TKey> Array of keys for iterator
+	 */
+	private array $keys = [];
 
 	/**
 	 * @param array<TKey, TValue> $data
@@ -35,6 +48,7 @@ final class Struct implements JsonSerializable, ArrayAccess {
 		private array $data,
 		private array $bigIntFields = []
 	) {
+		$this->keys = array_keys($this->data);
 	}
 
 	/**
@@ -52,6 +66,7 @@ final class Struct implements JsonSerializable, ArrayAccess {
 	 */
 	public function offsetSet(mixed $name, mixed $value): void {
 		$this->data[$name] = $value;
+		$this->keys = array_keys($this->data);
 	}
 
 	/**
@@ -68,6 +83,7 @@ final class Struct implements JsonSerializable, ArrayAccess {
 	 */
 	public function offsetUnset(mixed $name): void {
 		unset($this->data[$name]);
+		$this->keys = array_keys($this->data);
 	}
 
 	/**
@@ -220,7 +236,7 @@ final class Struct implements JsonSerializable, ArrayAccess {
 			}
 		}
 
-		return $pattern . '("?)([^"{}[\\],]+)\1/';
+		return $pattern . '("?)([^"{}[\],]+)\1/';
 	}
 
 	/**
@@ -262,6 +278,61 @@ final class Struct implements JsonSerializable, ArrayAccess {
 	 * @return bool
 	 */
 	private static function hasBigInt(string $json): bool {
-		return !!preg_match('/(?<!")\b[1-9]\d{18,}\b(?!")/', $json);
+		return !!preg_match('/(?<!")[1-9]\d{18,}(?!")/', $json);
+	}
+
+	/**
+	 * Count elements of an object
+	 * @link https://php.net/manual/en/countable.count.php
+	 * @return int The custom count as an integer.
+	 */
+	public function count(): int {
+		return sizeof($this->data);
+	}
+
+	/**
+	 * Return the current element
+	 * @link https://php.net/manual/en/iterator.current.php
+	 * @return TValue|null Can return any type.
+	 */
+	public function current(): mixed {
+		$key = $this->keys[$this->position] ?? null;
+		return $key !== null ? $this->data[$key] : null;
+	}
+
+	/**
+	 * Move forward to next element
+	 * @link https://php.net/manual/en/iterator.next.php
+	 * @return void Any returned value is ignored.
+	 */
+	public function next(): void {
+		++$this->position;
+	}
+
+	/**
+	 * Return the key of the current element
+	 * @link https://php.net/manual/en/iterator.key.php
+	 * @return TKey|null Scalar on success, or null on failure.
+	 */
+	public function key(): mixed {
+		return $this->keys[$this->position] ?? null;
+	}
+
+	/**
+	 * Checks if current position is valid
+	 * @link https://php.net/manual/en/iterator.valid.php
+	 * @return bool The return value will be casted to boolean and then evaluated.
+	 */
+	public function valid(): bool {
+		return isset($this->keys[$this->position]);
+	}
+
+	/**
+	 * Rewind the Iterator to the first element
+	 * @link https://php.net/manual/en/iterator.rewind.php
+	 * @return void Any returned value is ignored.
+	 */
+	public function rewind(): void {
+		$this->position = 0;
 	}
 }

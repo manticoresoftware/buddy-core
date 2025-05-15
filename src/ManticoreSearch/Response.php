@@ -26,12 +26,12 @@ class Response {
 	protected bool $isRaw = false;
 
 	/**
-	 * @var array<string,mixed> $columns
+	 * @var array<int,array<string,mixed>> $columnsPerRow
 	 */
-	protected array $columns = [];
+	protected array $columnsPerRow = [];
 
 	/**
-	 * @var array<string,mixed> $data
+	 * @var array<int|string,mixed|array<int|string,mixed>> $data
 	 */
 	protected array $data = [];
 
@@ -57,6 +57,11 @@ class Response {
 	 * @var array<string,string> $meta
 	 */
 	protected array $meta = [];
+
+	/**
+	 * @var bool $isMultipleRows
+	 */
+	protected bool $isMultipleRows = false;
 
 	/**
 	 * @param string $body
@@ -94,7 +99,16 @@ class Response {
 	 * @return static
 	 */
 	public function mapData(callable $fn): static {
-		$this->data = array_map($fn, $this->data);
+		if ($this->isMultipleRows) {
+			$this->data = array_map(
+				function ($rowData) use ($fn) {
+					/** @var array<mixed> $rowData */
+					return array_map($fn, $rowData);
+				}, $this->data
+			);
+		} else {
+			$this->data = array_map($fn, $this->data);
+		}
 		return $this;
 	}
 
@@ -103,7 +117,16 @@ class Response {
 	 * @return static
 	 */
 	public function filterData(callable $fn): static {
-		$this->data = array_filter($this->data, $fn);
+		if ($this->isMultipleRows) {
+			$this->data = array_map(
+				function ($rowData) use ($fn) {
+					/** @var array<mixed> $rowData */
+					return array_filter($rowData, $fn);
+				}, $this->data
+			);
+		} else {
+			$this->data = array_filter($this->data, $fn);
+		}
 		return $this;
 	}
 
@@ -112,7 +135,18 @@ class Response {
 	 * @return static
 	 */
 	public function extendData(array $data): static {
-		$this->data = array_merge($this->data, $data);
+		if ($this->isMultipleRows) {
+			// If multiple rows, extend the first row by default
+			if (!empty($this->data)) {
+				/** @var array<string,mixed> $row */
+				$row = $this->data[0];
+				$this->data[0] = array_merge($row, $data);
+			} else {
+				$this->data[] = $data;
+			}
+		} else {
+			$this->data = array_merge($this->data, $data);
+		}
 		return $this;
 	}
 
@@ -122,46 +156,111 @@ class Response {
 	 * @return static
 	 */
 	public function apply(callable $fn): static {
-		// We restruct it due to we unable to do unset and idirect modifications
+		// We restruct it due to we unable to do unset and indirect modifications
 		$this->result = Struct::fromData($fn($this->result->toArray()));
 		return $this;
 	}
 
 	/**
-	 * Get parsed and json decoded reply from the Manticore daemon
-	 * @return Struct<int|string, mixed>
-	 */
+ * Get parsed and json decoded reply from the Manticore daemon
+ * @return Struct<int|string, mixed>
+ */
 	public function getResult(): Struct {
 		if (!isset($this->result)) {
 			throw new ManticoreSearchResponseError('Trying to access result with no response created');
 		}
-		// We should replace data as result of applying modifier functions
-		// like filter, map or whatever
-		// @phpstan-ignore-next-line
-		if (isset($this->result[0]['data'])) {
-			$item = $this->result[0];
-			// @phpstan-ignore-next-line
-			$item['data'] = $this->data;
-			$result[0] = $item;
-		} elseif (isset($this->result['data'])) {
-			$this->result['data'] = $this->data;
+
+		// Update the result with any modified data
+		if ($this->isMultipleRows) {
+			$this->updateMultipleRowsResult();
+		} else {
+			$this->updateSingleRowResult();
 		}
 
 		return $this->result;
 	}
 
 	/**
-	 * @return array<string,mixed>
+ * Update result for multiple rows case
+ */
+	private function updateMultipleRowsResult(): void {
+		foreach ($this->result as $key => $row) {
+			if (!is_array($row)) {
+				continue;
+			}
+
+			/** @var array<string,mixed> $row */
+			if (!isset($row['data']) || !isset($this->data[$key])) {
+				continue;
+			}
+
+			$item = $row;
+			$item['data'] = $this->data[$key];
+			$this->result[$key] = $item;
+		}
+	}
+
+	/**
+ * Update result for single row case
+ */
+	private function updateSingleRowResult(): void {
+		$resultArray = $this->result->toArray();
+
+		if (is_array($resultArray)
+			&& isset($resultArray[0])
+			&& is_array($resultArray[0])
+			&& isset($resultArray[0]['data'])) {
+			// Handle single row in array
+			$item = $resultArray[0];
+			$item['data'] = $this->data;
+			$this->result[0] = $item;
+		} elseif (is_array($resultArray) && isset($resultArray['data'])) {
+			// Handle single response without array wrapper
+			$this->result['data'] = $this->data;
+		}
+	}
+
+	/**
+	 * @return array<int|string,mixed>
 	 */
 	public function getData(): array {
 		return $this->data;
 	}
 
 	/**
+	 * Returns data row at specific index or the first/only row if no index specified
+	 * @param int|null $rowIndex
 	 * @return array<string,mixed>
 	 */
-	public function getColumns(): array {
-		return $this->columns;
+	public function getDataRow(?int $rowIndex = null): array {
+		if ($this->isMultipleRows) {
+			if ($rowIndex !== null && isset($this->data[$rowIndex])) {
+				/** @var array<string,mixed> */
+				return $this->data[$rowIndex];
+			}
+
+			/** @var array<string,mixed> */
+			return $this->data[0] ?? [];
+		}
+		/** @var array<string,mixed> */
+		return $this->data[0] ?? [];
+	}
+
+	/**
+	 * Get columns for a specific row
+	 * @param int $idx Row index (defaults to 0 for backward compatibility)
+	 * @return array<string,mixed>
+	 */
+	public function getColumns(int $idx = 0): array {
+		return $this->columnsPerRow[$idx] ?? $this->columnsPerRow[0] ?? [];
+	}
+
+	/**
+	 * Get all columns for all rows
+	 * @return array<int,array<string,mixed>>
+	 */
+	public function getAllColumns(): array {
+		return $this->columnsPerRow;
 	}
 
 	/**
@@ -212,6 +311,13 @@ class Response {
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function hasMultipleRows(): bool {
+		return $this->isMultipleRows;
+	}
+
+	/**
 	 * Run callable function on results and postprocess it with custom logic
 	 * @param callable $processor
 	 * @param array<mixed> $args
@@ -220,7 +326,7 @@ class Response {
 	 */
 	public function postprocess(callable $processor, array $args = []): void {
 		try {
-			$this->body = $processor($this->body, $this->result, $this->columns, ...$args);
+			$this->body = $processor($this->body, $this->result, $this->getColumns(), ...$args);
 		} catch (Throwable $e) {
 			throw new ManticoreSearchResponseError("Postprocessing function failed to run: {$e->getMessage()}");
 		}
@@ -243,32 +349,185 @@ class Response {
 
 		$struct = Struct::fromJson($this->body);
 		$this->result = $struct;
+
+		// Reset data collection
+		/** @var array<int|string,mixed> $emptyData */
+		$emptyData = [];
+		$this->data = $emptyData;
+		$this->columnsPerRow = [];
+		$this->isMultipleRows = false;
+
+		$this->parseStructure($struct);
+	}
+
+	/**
+	 * @param Struct<int|string, mixed> $struct
+	 * @return void
+	 */
+	protected function parseStructure(Struct $struct): void {
+		// Detect if we have multiple rows
 		if ($struct->isList()) {
-			/** @var array<string,mixed> */
-			$data = $struct[0];
-			$struct = Struct::fromData($data, $struct->getBigIntFields());
+			$this->isMultipleRows = sizeof($struct) > 1;
+
+			if ($this->isMultipleRows) {
+				$this->parseMultipleRows($struct);
+			} else {
+				$this->parseSingleRowList($struct);
+			}
+		} else {
+			$this->parseDirectObject($struct);
+		}
+	}
+
+	/**
+	 * @param Struct<int|string, mixed> $struct
+	 * @return void
+	 */
+	protected function parseSingleRowList(Struct $struct): void {
+		// Single row in an array - original behavior
+		$structArray = $struct->toArray();
+		/** @var array<string,mixed> $data */
+		$data = isset($structArray[0]) && is_array($structArray[0]) ? $structArray[0] : [];
+		$this->parseRowData($data, 0);
+
+		// For backward compatibility - assign data from the first row
+		if (!isset($data['data']) || !is_array($data['data'])) {
+			return;
 		}
 
-		// A bit tricky but we need to know if we have data or not
-		// For table formatter in current architecture
-		$this->hasData = $struct->hasKey('data');
+		/** @var array<string,mixed> $dataRow */
+		$dataRow = $data['data'];
+		$this->data[0] = $dataRow;
+	}
 
+	/**
+	 * @param Struct<int|string, mixed> $struct
+	 * @return void
+	 */
+	protected function parseDirectObject(Struct $struct): void {
+		// Handle direct object response (not in an array)
+		/** @var array<string,mixed> $structArray */
+		$structArray = $struct->toArray();
+		$this->parseRowData($structArray, 0);
+
+		// For backward compatibility
+		if (!isset($structArray['data']) || !is_array($structArray['data'])) {
+			return;
+		}
+
+		/** @var array<string,mixed> $dataRow */
+		$dataRow = $structArray['data'];
+		$this->data[0] = $dataRow;
+	}
+
+	/**
+	 * @param Struct<int|string, mixed> $struct
+	 * @return void
+	 */
+	protected function parseMultipleRows(Struct $struct): void {
+		// Extract data from each row
+		foreach ($struct as $index => $rowData) {
+			/** @var int $index */
+			/** @var array<string,mixed> $rowData */
+			$this->processRowData($rowData, $index);
+
+			// Get error, warning, and total from the first row for backward compatibility
+			if ($index !== 0) {
+				continue;
+			}
+
+			$this->extractMetadata($rowData);
+		}
+	}
+
+	/**
+	 * @param array<string,mixed> $rowData
+	 * @param int $index
+	 * @return void
+	 */
+	protected function processRowData(array $rowData, int $index): void {
+		if (isset($rowData['data']) && is_array($rowData['data'])) {
+			/** @var array<string,mixed> $dataRow */
+			$dataRow = $rowData['data'];
+			$this->data[$index] = $dataRow;
+			// Set hasData if any row has data
+			$this->hasData = true;
+		} else {
+			$this->data[$index] = [];
+		}
+
+		// Parse columns for each row
+		$this->parseRowData($rowData, $index);
+	}
+
+	/**
+	 * @param array<string,mixed> $rowData
+	 * @return void
+	 */
+	protected function extractMetadata(array $rowData): void {
+		if (isset($rowData['error']) && is_string($rowData['error'])) {
+			$this->error = $rowData['error'];
+		}
+		if (isset($rowData['warning']) && is_string($rowData['warning'])) {
+			$this->warning = $rowData['warning'];
+		}
+		if (!isset($rowData['total'])) {
+			return;
+		}
+
+		/** @var array{total:int|string} $rowData */
+		$this->total = (int)$rowData['total'];
+	}
+
+	/**
+	 * Parse metadata from a row
+	 * @param array<string,mixed> $rowData
+	 * @param int $rowIndex
+	 * @return void
+	 */
+	protected function parseRowData(array $rowData, int $rowIndex): void {
 		// Check if this is type of response that is not our scheme
-		// in this case we just may proxy it as is without any extra
-		$this->isRaw = !$struct->hasKey('warning') &&
-			(!$struct->hasKey('error') || !is_string($struct['error'])) &&
-			!$struct->hasKey('total');
+		$this->isRaw = !isset($rowData['warning']) &&
+			(!isset($rowData['error'])) &&
+			!isset($rowData['total']);
 
 		// Assign only if not raw
 		if ($this->isRaw) {
 			return;
 		}
 
-		$this->assign($struct, 'error')
-			->assign($struct, 'warning')
-			->assign($struct, 'total')
-			->assign($struct, 'data')
-			->assign($struct, 'columns');
+		// Store row specific data
+		if (isset($rowData['columns']) && is_array($rowData['columns'])) {
+			/** @var array<string,mixed> $columns */
+			$columns = $rowData['columns'];
+			$this->columnsPerRow[$rowIndex] = $columns;
+		}
+
+		// Set global data for the first row or single row case
+		if ($rowIndex !== 0) {
+			return;
+		}
+
+		$struct = Struct::fromData($rowData);
+		$structArray = $struct->toArray();
+
+		// Handle error
+		if (isset($structArray['error']) && is_string($structArray['error'])) {
+			$this->error = $structArray['error'];
+		}
+
+		// Handle warning
+		if (isset($structArray['warning']) && is_string($structArray['warning'])) {
+			$this->warning = $structArray['warning'];
+		}
+
+		// Handle total
+		if (isset($structArray['total']) && is_numeric($structArray['total'])) {
+			$this->total = (int)$structArray['total'];
+		}
+
+		// Set hasData flag
+		$this->hasData = $this->hasData || isset($rowData['data']);
 	}
 
 	/**
@@ -284,8 +543,14 @@ class Response {
 	 * @return static
 	 */
 	public function assign(Struct $struct, string $key): static {
-		if ($struct->hasKey($key)) {
-			$this->$key = $struct[$key];
+		$structArray = $struct->toArray();
+		if (isset($structArray[$key])) {
+			// Type check and conversion
+			if ($key === 'error' || $key === 'warning') {
+				$this->$key = is_string($structArray[$key]) ? $structArray[$key] : '';
+			} elseif ($key === 'total') {
+				$this->$key = is_numeric($structArray[$key]) ? (int)$structArray[$key] : 0;
+			}
 		}
 		return $this;
 	}
