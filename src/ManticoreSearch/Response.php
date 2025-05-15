@@ -26,12 +26,12 @@ class Response {
 	protected bool $isRaw = false;
 
 	/**
-	 * @var array<string,mixed> $columns
+	 * @var array<int,array<string,mixed>> $columnsPerRow
 	 */
-	protected array $columns = [];
+	protected array $columnsPerRow = [];
 
 	/**
-	 * @var array<string,mixed> $data
+	 * @var array<array<string,mixed>> $data
 	 */
 	protected array $data = [];
 
@@ -57,6 +57,11 @@ class Response {
 	 * @var array<string,string> $meta
 	 */
 	protected array $meta = [];
+
+	/**
+	 * @var bool $isMultipleRows
+	 */
+	protected bool $isMultipleRows = false;
 
 	/**
 	 * @param string $body
@@ -94,7 +99,13 @@ class Response {
 	 * @return static
 	 */
 	public function mapData(callable $fn): static {
-		$this->data = array_map($fn, $this->data);
+		if ($this->isMultipleRows) {
+			$this->data = array_map(function($rowData) use ($fn) {
+				return array_map($fn, $rowData);
+			}, $this->data);
+		} else {
+			$this->data = array_map($fn, $this->data);
+		}
 		return $this;
 	}
 
@@ -103,7 +114,13 @@ class Response {
 	 * @return static
 	 */
 	public function filterData(callable $fn): static {
-		$this->data = array_filter($this->data, $fn);
+		if ($this->isMultipleRows) {
+			$this->data = array_map(function($rowData) use ($fn) {
+				return array_filter($rowData, $fn);
+			}, $this->data);
+		} else {
+			$this->data = array_filter($this->data, $fn);
+		}
 		return $this;
 	}
 
@@ -112,7 +129,16 @@ class Response {
 	 * @return static
 	 */
 	public function extendData(array $data): static {
-		$this->data = array_merge($this->data, $data);
+		if ($this->isMultipleRows) {
+			// If multiple rows, extend the first row by default
+			if (!empty($this->data)) {
+				$this->data[0] = array_merge($this->data[0], $data);
+			} else {
+				$this->data[] = $data;
+			}
+		} else {
+			$this->data = array_merge($this->data, $data);
+		}
 		return $this;
 	}
 
@@ -122,7 +148,7 @@ class Response {
 	 * @return static
 	 */
 	public function apply(callable $fn): static {
-		// We restruct it due to we unable to do unset and idirect modifications
+		// We restruct it due to we unable to do unset and indirect modifications
 		$this->result = Struct::fromData($fn($this->result->toArray()));
 		return $this;
 	}
@@ -135,33 +161,69 @@ class Response {
 		if (!isset($this->result)) {
 			throw new ManticoreSearchResponseError('Trying to access result with no response created');
 		}
-		// We should replace data as result of applying modifier functions
-		// like filter, map or whatever
-		// @phpstan-ignore-next-line
-		if (isset($this->result[0]['data'])) {
-			$item = $this->result[0];
-			// @phpstan-ignore-next-line
-			$item['data'] = $this->data;
-			$result[0] = $item;
-		} elseif (isset($this->result['data'])) {
-			$this->result['data'] = $this->data;
+
+		// Update the result with any modified data
+		if ($this->isMultipleRows) {
+			// Handle multiple rows
+			foreach ($this->result as $key => $row) {
+				if (is_array($row) && isset($row['data']) && isset($this->data[$key])) {
+					$item = $row;
+					$item['data'] = $this->data[$key];
+					$this->result[$key] = $item;
+				}
+			}
+		} else {
+			// Handle single row in array (original behavior)
+			if (isset($this->result[0]['data'])) {
+				$item = $this->result[0];
+				$item['data'] = $this->data;
+				$this->result[0] = $item;
+			} elseif (isset($this->result['data'])) {
+				// Handle single response without array wrapper
+				$this->result['data'] = $this->data;
+			}
 		}
 
 		return $this->result;
 	}
 
 	/**
-	 * @return array<string,mixed>
+	 * @return array<string,mixed>|array<array<string,mixed>>
 	 */
 	public function getData(): array {
 		return $this->data;
 	}
 
 	/**
+	 * Returns data row at specific index or the first/only row if no index specified
+	 * @param int|null $rowIndex
 	 * @return array<string,mixed>
 	 */
-	public function getColumns(): array {
-		return $this->columns;
+	public function getDataRow(?int $rowIndex = null): array {
+		if ($this->isMultipleRows) {
+			if ($rowIndex !== null && isset($this->data[$rowIndex])) {
+				return $this->data[$rowIndex];
+			}
+			return $this->data[0] ?? [];
+		}
+		return $this->data;
+	}
+
+	/**
+	 * Get columns for a specific row
+	 * @param int $idx Row index (defaults to 0 for backward compatibility)
+	 * @return array<string,mixed>
+	 */
+	public function getColumns(int $idx = 0): array {
+		return $this->columnsPerRow[$idx] ?? $this->columnsPerRow[0] ?? [];
+	}
+
+	/**
+	 * Get all columns for all rows
+	 * @return array<int,array<string,mixed>>
+	 */
+	public function getAllColumns(): array {
+		return $this->columnsPerRow;
 	}
 
 	/**
@@ -212,6 +274,13 @@ class Response {
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function hasMultipleRows(): bool {
+		return $this->isMultipleRows;
+	}
+
+	/**
 	 * Run callable function on results and postprocess it with custom logic
 	 * @param callable $processor
 	 * @param array<mixed> $args
@@ -220,7 +289,7 @@ class Response {
 	 */
 	public function postprocess(callable $processor, array $args = []): void {
 		try {
-			$this->body = $processor($this->body, $this->result, $this->columns, ...$args);
+			$this->body = $processor($this->body, $this->result, $this->getColumns(), ...$args);
 		} catch (Throwable $e) {
 			throw new ManticoreSearchResponseError("Postprocessing function failed to run: {$e->getMessage()}");
 		}
@@ -243,32 +312,99 @@ class Response {
 
 		$struct = Struct::fromJson($this->body);
 		$this->result = $struct;
+
+		// Reset data collection
+		$this->data = [];
+		$this->columnsPerRow = [];
+		$this->isMultipleRows = false;
+
+		// Detect if we have multiple rows
 		if ($struct->isList()) {
-			/** @var array<string,mixed> */
-			$data = $struct[0];
-			$struct = Struct::fromData($data, $struct->getBigIntFields());
+			$this->isMultipleRows = count($struct) > 1;
+
+			if ($this->isMultipleRows) {
+				// Extract data from each row
+				foreach ($struct as $index => $rowData) {
+					if (isset($rowData['data'])) {
+						$this->data[$index] = $rowData['data'];
+						// Set hasData if any row has data
+						$this->hasData = true;
+					} else {
+						$this->data[$index] = [];
+					}
+
+					// Parse columns for each row
+					$this->parseRowData($rowData, $index);
+
+					// Get error and warning from the first row for backward compatibility
+					if ($index === 0) {
+						if (isset($rowData['error'])) {
+							$this->error = $rowData['error'];
+						}
+						if (isset($rowData['warning'])) {
+							$this->warning = $rowData['warning'];
+						}
+						if (isset($rowData['total'])) {
+							$this->total = $rowData['total'];
+						}
+					}
+				}
+			} else {
+				// Single row in an array - original behavior
+				/** @var array<string,mixed> */
+				$data = $struct[0];
+				$this->parseRowData($data, 0);
+				$structForBackwardCompatibility = Struct::fromData($data, $struct->getBigIntFields());
+
+				// For backward compatibility - assign data from the first row
+				if (isset($data['data'])) {
+					$this->data = $data['data'];
+				}
+			}
+		} else {
+			// Handle direct object response (not in an array)
+			$this->parseRowData($struct->toArray(), 0);
+
+			// For backward compatibility
+			if (isset($struct['data'])) {
+				$this->data = $struct['data'];
+			}
 		}
+	}
 
-		// A bit tricky but we need to know if we have data or not
-		// For table formatter in current architecture
-		$this->hasData = $struct->hasKey('data');
-
+	/**
+	 * Parse metadata from a row
+	 * @param array<string,mixed> $rowData
+	 * @param int $rowIndex
+	 * @return void
+	 */
+	protected function parseRowData(array $rowData, int $rowIndex): void {
 		// Check if this is type of response that is not our scheme
-		// in this case we just may proxy it as is without any extra
-		$this->isRaw = !$struct->hasKey('warning') &&
-			(!$struct->hasKey('error') || !is_string($struct['error'])) &&
-			!$struct->hasKey('total');
+		$this->isRaw = !isset($rowData['warning']) &&
+			(!isset($rowData['error']) || !is_string($rowData['error'] ?? null)) &&
+			!isset($rowData['total']);
 
 		// Assign only if not raw
 		if ($this->isRaw) {
 			return;
 		}
 
-		$this->assign($struct, 'error')
-			->assign($struct, 'warning')
-			->assign($struct, 'total')
-			->assign($struct, 'data')
-			->assign($struct, 'columns');
+		// Store row specific data
+		if (isset($rowData['columns'])) {
+			$this->columnsPerRow[$rowIndex] = $rowData['columns'];
+		}
+
+		// Set global data for the first row or single row case
+		if ($rowIndex === 0) {
+			$struct = Struct::fromData($rowData);
+			$this->assign($struct, 'error')
+				->assign($struct, 'warning')
+				->assign($struct, 'total');
+
+			// Set hasData flag
+			$this->hasData = $this->hasData || isset($rowData['data']);
+		}
+
 	}
 
 	/**
@@ -298,3 +434,4 @@ class Response {
 		return new self($body);
 	}
 }
+

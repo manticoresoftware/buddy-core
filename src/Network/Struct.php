@@ -12,6 +12,7 @@
 namespace Manticoresearch\Buddy\Core\Network;
 
 use ArrayAccess;
+use Countable;
 use Exception;
 use JsonSerializable;
 
@@ -22,7 +23,7 @@ use JsonSerializable;
  * @implements ArrayAccess<TKey, TValue>
  */
 
-final class Struct implements JsonSerializable, ArrayAccess {
+final class Struct implements JsonSerializable, ArrayAccess, Countable {
 	const JSON_DEPTH = 512;
 	const JSON_FLAGS = JSON_INVALID_UTF8_SUBSTITUTE;
 
@@ -263,5 +264,14 @@ final class Struct implements JsonSerializable, ArrayAccess {
 	 */
 	private static function hasBigInt(string $json): bool {
 		return !!preg_match('/(?<!")\b[1-9]\d{18,}\b(?!")/', $json);
+	}
+
+	/**
+	 * Count elements of an object
+	 * @link https://php.net/manual/en/countable.count.php
+	 * @return int The custom count as an integer.
+	 */
+	public function count(): int {
+		return count($this->data);
 	}
 }
