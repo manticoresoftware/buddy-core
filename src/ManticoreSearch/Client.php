@@ -653,7 +653,6 @@ class Client {
 		$suggestions = $suggestResult[0]['data'] ?? [];
 		$choices = [];
 
-		/** @var array{suggest:string,distance:int,docs:int} $suggestion */
 		foreach ($suggestions as $suggestion) {
 			$suggestWord = $suggestion['suggest'];
 			$choices[] = $suggestWord;
@@ -662,7 +661,8 @@ class Client {
 		}
 
 		// Try to merge with next word if it exists
-		if (isset($normalized[$i + 1])) {
+		// Only do it when we have any choices
+		if ($choices && isset($normalized[$i + 1])) {
 			$nextWord = $normalized[$i + 1];
 			$combinedWord = $word . $nextWord;
 
