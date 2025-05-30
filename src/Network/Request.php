@@ -213,6 +213,7 @@ final class Request {
 				'update' => Endpoint::Update,
 				'delete' => Endpoint::Delete,
 				'_license' => Endpoint::Elastic,
+				'metrics' => Endpoint::Metrics,
 				'autocomplete' => Endpoint::Autocomplete,
 				default => throw new InvalidNetworkRequestError(
 					"Do not know how to handle '{$payload['message']['path_query']}' path_query"
