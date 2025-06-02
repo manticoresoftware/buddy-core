@@ -14,4 +14,5 @@ namespace Manticoresearch\Buddy\Core\Network;
 enum OutputFormat {
 	case Table;
 	case Raw;
+	case Plain;
 }

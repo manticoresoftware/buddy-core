@@ -410,6 +410,7 @@ final class Request {
 	public function getOutputFormat(): OutputFormat {
 		return match ($this->endpointBundle) {
 			Endpoint::Cli => OutputFormat::Table,
+			Endpoint::Metrics => OutputFormat::Plain,
 			default => OutputFormat::Raw,
 		};
 	}
