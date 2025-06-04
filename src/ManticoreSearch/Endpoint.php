@@ -22,5 +22,6 @@ enum Endpoint: string {
 	case Bulk = 'bulk';
 	case Elastic = 'elastic';
 	case Search = 'search';
+	case Metrics = 'metrics';
 	case Autocomplete = 'autocomplete';
 }
