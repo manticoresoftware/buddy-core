@@ -83,7 +83,9 @@ final class KeyboardLayout {
 	 * @throws Exception
 	 */
 	public static function combineMany(string $input, array $langs): array {
-		$result = [];
+		// Add original phrase as first result to cover case
+		// when we do not have original language and we make sure we keep it
+		$result = [$input];
 		$pairs = static::getPairs($langs);
 		foreach ($pairs as $target => $sources) {
 			$self = new static($target);
