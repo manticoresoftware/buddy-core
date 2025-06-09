@@ -26,6 +26,11 @@ class Response {
 	protected bool $isRaw = false;
 
 	/**
+	 * @var array<string,mixed> $columns
+	 */
+	protected array $columns = [];
+
+	/**
 	 * @var array<int,array<string,mixed>> $columnsPerRow
 	 */
 	protected array $columnsPerRow = [];
@@ -357,7 +362,50 @@ class Response {
 		$this->columnsPerRow = [];
 		$this->isMultipleRows = false;
 
-		$this->parseStructure($struct);
+		// Detect if we have multiple rows
+		if ($struct->isList()) {
+			$this->isMultipleRows = sizeof($struct) > 1;
+
+			if ($this->isMultipleRows) {
+				$this->parseMultipleRows($struct);
+			} else {
+				// Original single row logic - take first element and work with it directly
+				/** @var array<string,mixed> */
+				$data = $struct[0];
+				$struct = Struct::fromData($data, $struct->getBigIntFields());
+				$this->parseSingleRow($struct);
+			}
+		} else {
+			$this->parseSingleRow($struct);
+		}
+	}
+
+	/**
+	 * Parse single row using original logic
+	 * @param Struct<int|string, mixed> $struct
+	 * @return void
+	 */
+	protected function parseSingleRow(Struct $struct): void {
+		// A bit tricky but we need to know if we have data or not
+		// For table formatter in current architecture
+		$this->hasData = $struct->hasKey('data');
+
+		// Check if this is type of response that is not our scheme
+		// in this case we just may proxy it as is without any extra
+		$this->isRaw = !$struct->hasKey('warning') &&
+			(!$struct->hasKey('error') || !is_string($struct['error'])) &&
+			!$struct->hasKey('total');
+
+		// Assign only if not raw
+		if ($this->isRaw) {
+			return;
+		}
+
+		$this->assign($struct, 'error')
+			->assign($struct, 'warning')
+			->assign($struct, 'total')
+			->assign($struct, 'data')
+			->assign($struct, 'columns');
 	}
 
 	/**
@@ -543,13 +591,32 @@ class Response {
 	 * @return static
 	 */
 	public function assign(Struct $struct, string $key): static {
-		$structArray = $struct->toArray();
-		if (isset($structArray[$key])) {
-			// Type check and conversion
-			if ($key === 'error' || $key === 'warning') {
-				$this->$key = is_string($structArray[$key]) ? $structArray[$key] : '';
+		if ($struct->hasKey($key)) {
+			$value = $struct[$key];
+			
+			if ($key === 'columns') {
+				// Type check for columns
+				if (is_array($value)) {
+					/** @var array<string,mixed> $value */
+					$this->columnsPerRow[0] = $value;
+					$this->columns = $value;
+				}
+			} elseif ($key === 'data') {
+				// Type check for data
+				if (is_array($value)) {
+					/** @var array<string,mixed> $value */
+					$this->data = $value;
+				}
+			} elseif ($key === 'error' || $key === 'warning') {
+				// Type check for string properties
+				if (is_string($value)) {
+					$this->$key = $value;
+				}
 			} elseif ($key === 'total') {
-				$this->$key = is_numeric($structArray[$key]) ? (int)$structArray[$key] : 0;
+				// Type check for total
+				if (is_numeric($value)) {
+					$this->total = (int)$value;
+				}
 			}
 		}
 		return $this;

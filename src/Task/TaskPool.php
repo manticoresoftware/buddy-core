@@ -88,7 +88,7 @@ final class TaskPool {
 	 *
 	 * @return int
 	 */
-	public static function getCoun(): int {
+	public static function getCount(): int {
 		return static::pool()->count();
 	}
 }
