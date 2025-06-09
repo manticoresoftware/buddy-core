@@ -33,6 +33,9 @@ final class TaskResult {
 	/** @var bool */
 	protected bool $isMultipleRows = false;
 
+	/** @var bool */
+	protected bool $shouldHaveData = false;
+
 	/**
 	 * Initialize the empty result
 	 * @param ?array<mixed> $data
@@ -80,6 +83,7 @@ final class TaskResult {
 		$data = $response->hasData() ? $response->getData() : null;
 		$obj = new static($data, '', '');
 		$obj->isMultipleRows = $response->hasMultipleRows();
+		$obj->shouldHaveData = $response->hasData();
 
 		// Handle columns based on whether we have multiple rows or not
 		if ($obj->isMultipleRows) {
@@ -336,8 +340,8 @@ final class TaskResult {
 			$struct['columns'] = $this->columnsPerRow[0];
 		}
 
-		if ($this->data) {
-			$struct['data'] = $this->data;
+		if ($this->data || $this->shouldHaveData) {
+			$struct['data'] = $this->data ?? [];
 		}
 
 		return [$struct];
@@ -357,9 +361,15 @@ final class TaskResult {
 		foreach ($rows as $row) {
 			// We have logic inside table formatter that check null or not
 			// and reply with Query OK or inserted 1 row etc
+			$data = null;
+			if (isset($row['data'])) {
+				// If data field exists, pass it (even if empty array for SELECT)
+				$data = $row['data'];
+			}
+
 			$tables[] = $tableFormatter->getTable(
 				$startTime,
-				$row['data'] ?? [],
+				$data,
 				$row['total'] ?? 0,
 				$row['error'] ?? ''
 			);
