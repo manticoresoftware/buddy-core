@@ -119,6 +119,15 @@
                 <td></td>
             </tr>
                     <tr>
+                <td class="type" id="property_columns">
+                                        protected                                        <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\array&lt;string,mixed&gt;">array&lt;string,mixed&gt;</abbr>
+                                                                                
+                                    </td>
+                <td>$columns</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
+                    <tr>
                 <td class="type" id="property_columnsPerRow">
                                         protected                                        <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\array&lt;int,array&lt;string,mixed&gt;&gt;">array&lt;int,array&lt;string,mixed&gt;&gt;</abbr>
                                                                                 
@@ -422,6 +431,16 @@
                     void
                 </div>
                 <div class="col-md-8">
+                    <a href="#method_parseSingleRow">parseSingleRow</a>(<a href="../../../../Manticoresearch/Buddy/Core/Network/Struct.html"><abbr title="Manticoresearch\Buddy\Core\Network\Struct">Struct</abbr></a> $struct)
+        
+                                            <p><p>Parse single row using original logic</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8">
                     <a href="#method_parseStructure">parseStructure</a>(<a href="../../../../Manticoresearch/Buddy/Core/Network/Struct.html"><abbr title="Manticoresearch\Buddy\Core\Network\Struct">Struct</abbr></a> $struct)
         
                                             <p class="no-description">No description</p>
@@ -534,7 +553,7 @@
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method_getError">
-        <div class="location">at line 79</div>
+        <div class="location">at line 84</div>
         <code>                    string|null
     <strong>getError</strong>()
         </code>
@@ -568,7 +587,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getWarning">
-        <div class="location">at line 86</div>
+        <div class="location">at line 91</div>
         <code>                    string|null
     <strong>getWarning</strong>()
         </code>
@@ -602,7 +621,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getBody">
-        <div class="location">at line 93</div>
+        <div class="location">at line 98</div>
         <code>                    string
     <strong>getBody</strong>()
         </code>
@@ -636,7 +655,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_mapData">
-        <div class="location">at line 101</div>
+        <div class="location">at line 106</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
     <strong>mapData</strong>(callable $fn)
         </code>
@@ -680,7 +699,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_filterData">
-        <div class="location">at line 119</div>
+        <div class="location">at line 124</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
     <strong>filterData</strong>(callable $fn)
         </code>
@@ -724,7 +743,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_extendData">
-        <div class="location">at line 137</div>
+        <div class="location">at line 142</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
     <strong>extendData</strong>(array $data)
         </code>
@@ -768,7 +787,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_apply">
-        <div class="location">at line 158</div>
+        <div class="location">at line 163</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
     <strong>apply</strong>(callable $fn)
         </code>
@@ -811,7 +830,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getResult">
-        <div class="location">at line 168</div>
+        <div class="location">at line 173</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Network/Struct.html"><abbr title="Manticoresearch\Buddy\Core\Network\Struct">Struct</abbr></a>
     <strong>getResult</strong>()
         </code>
@@ -844,7 +863,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getData">
-        <div class="location">at line 226</div>
+        <div class="location">at line 231</div>
         <code>                    array
     <strong>getData</strong>()
         </code>
@@ -878,7 +897,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getDataRow">
-        <div class="location">at line 235</div>
+        <div class="location">at line 240</div>
         <code>                    array
     <strong>getDataRow</strong>(int|null $rowIndex = null)
         </code>
@@ -921,7 +940,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getColumns">
-        <div class="location">at line 254</div>
+        <div class="location">at line 259</div>
         <code>                    array
     <strong>getColumns</strong>(int $idx = 0)
         </code>
@@ -964,7 +983,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getAllColumns">
-        <div class="location">at line 262</div>
+        <div class="location">at line 267</div>
         <code>                    array
     <strong>getAllColumns</strong>()
         </code>
@@ -997,7 +1016,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getTotal">
-        <div class="location">at line 269</div>
+        <div class="location">at line 274</div>
         <code>                    int
     <strong>getTotal</strong>()
         </code>
@@ -1031,7 +1050,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_setMeta">
-        <div class="location">at line 277</div>
+        <div class="location">at line 282</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
     <strong>setMeta</strong>(array $meta)
         </code>
@@ -1075,7 +1094,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getMeta">
-        <div class="location">at line 286</div>
+        <div class="location">at line 291</div>
         <code>                    array
     <strong>getMeta</strong>()
         </code>
@@ -1108,7 +1127,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_hasError">
-        <div class="location">at line 294</div>
+        <div class="location">at line 299</div>
         <code>                    bool
     <strong>hasError</strong>()
         </code>
@@ -1141,7 +1160,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_hasWarning">
-        <div class="location">at line 302</div>
+        <div class="location">at line 307</div>
         <code>                    bool
     <strong>hasWarning</strong>()
         </code>
@@ -1174,7 +1193,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_hasData">
-        <div class="location">at line 309</div>
+        <div class="location">at line 314</div>
         <code>                    bool
     <strong>hasData</strong>()
         </code>
@@ -1208,7 +1227,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_hasMultipleRows">
-        <div class="location">at line 316</div>
+        <div class="location">at line 321</div>
         <code>                    bool
     <strong>hasMultipleRows</strong>()
         </code>
@@ -1242,7 +1261,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_postprocess">
-        <div class="location">at line 327</div>
+        <div class="location">at line 332</div>
         <code>                    void
     <strong>postprocess</strong>(callable $processor, array $args = [])
         </code>
@@ -1299,7 +1318,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_parse">
-        <div class="location">at line 341</div>
+        <div class="location">at line 346</div>
         <code>            protected        void
     <strong>parse</strong>()
         </code>
@@ -1340,8 +1359,51 @@
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_parseSingleRow">
+        <div class="location">at line 388</div>
+        <code>            protected        void
+    <strong>parseSingleRow</strong>(<a href="../../../../Manticoresearch/Buddy/Core/Network/Struct.html"><abbr title="Manticoresearch\Buddy\Core\Network\Struct">Struct</abbr></a> $struct)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Parse single row using original logic</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a href="../../../../Manticoresearch/Buddy/Core/Network/Struct.html"><abbr title="Manticoresearch\Buddy\Core\Network\Struct">Struct</abbr></a></td>
+                <td>$struct</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_parseStructure">
-        <div class="location">at line 367</div>
+        <div class="location">at line 415</div>
         <code>            protected        void
     <strong>parseStructure</strong>(<a href="../../../../Manticoresearch/Buddy/Core/Network/Struct.html"><abbr title="Manticoresearch\Buddy\Core\Network\Struct">Struct</abbr></a> $struct)
         </code>
@@ -1385,7 +1447,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_parseSingleRowList">
-        <div class="location">at line 386</div>
+        <div class="location">at line 434</div>
         <code>            protected        void
     <strong>parseSingleRowList</strong>(<a href="../../../../Manticoresearch/Buddy/Core/Network/Struct.html"><abbr title="Manticoresearch\Buddy\Core\Network\Struct">Struct</abbr></a> $struct)
         </code>
@@ -1429,7 +1491,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_parseDirectObject">
-        <div class="location">at line 407</div>
+        <div class="location">at line 455</div>
         <code>            protected        void
     <strong>parseDirectObject</strong>(<a href="../../../../Manticoresearch/Buddy/Core/Network/Struct.html"><abbr title="Manticoresearch\Buddy\Core\Network\Struct">Struct</abbr></a> $struct)
         </code>
@@ -1473,7 +1535,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_parseMultipleRows">
-        <div class="location">at line 427</div>
+        <div class="location">at line 475</div>
         <code>            protected        void
     <strong>parseMultipleRows</strong>(<a href="../../../../Manticoresearch/Buddy/Core/Network/Struct.html"><abbr title="Manticoresearch\Buddy\Core\Network\Struct">Struct</abbr></a> $struct)
         </code>
@@ -1517,7 +1579,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_processRowData">
-        <div class="location">at line 448</div>
+        <div class="location">at line 496</div>
         <code>            protected        void
     <strong>processRowData</strong>(array $rowData, int $index)
         </code>
@@ -1566,7 +1628,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_extractMetadata">
-        <div class="location">at line 467</div>
+        <div class="location">at line 515</div>
         <code>            protected        void
     <strong>extractMetadata</strong>(array $rowData)
         </code>
@@ -1610,7 +1672,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_parseRowData">
-        <div class="location">at line 488</div>
+        <div class="location">at line 536</div>
         <code>            protected        void
     <strong>parseRowData</strong>(array $rowData, int $rowIndex)
         </code>
@@ -1658,7 +1720,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_isRaw">
-        <div class="location">at line 536</div>
+        <div class="location">at line 584</div>
         <code>                    bool
     <strong>isRaw</strong>()
         </code>
@@ -1692,7 +1754,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_assign">
-        <div class="location">at line 545</div>
+        <div class="location">at line 593</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
     <strong>assign</strong>(<a href="../../../../Manticoresearch/Buddy/Core/Network/Struct.html"><abbr title="Manticoresearch\Buddy\Core\Network\Struct">Struct</abbr></a> $struct, string $key)
         </code>
@@ -1741,7 +1803,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_fromBody">
-        <div class="location">at line 562</div>
+        <div class="location">at line 629</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
     <strong>fromBody</strong>(string $body)
         </code>
