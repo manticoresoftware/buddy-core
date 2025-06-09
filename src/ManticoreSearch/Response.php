@@ -509,35 +509,81 @@ class Response {
 	 * @return static
 	 */
 	public function assign(Struct $struct, string $key): static {
-		if ($struct->hasKey($key)) {
-			$value = $struct[$key];
-
-			if ($key === 'columns') {
-				// Type check for columns
-				if (is_array($value)) {
-					/** @var array<string,mixed> $value */
-					$this->columnsPerRow[0] = $value;
-					$this->columns = $value;
-				}
-			} elseif ($key === 'data') {
-				// Type check for data
-				if (is_array($value)) {
-					/** @var array<string,mixed> $value */
-					$this->data = $value;
-				}
-			} elseif ($key === 'error' || $key === 'warning') {
-				// Type check for string properties
-				if (is_string($value)) {
-					$this->$key = $value;
-				}
-			} elseif ($key === 'total') {
-				// Type check for total
-				if (is_numeric($value)) {
-					$this->total = (int)$value;
-				}
-			}
+		if (!$struct->hasKey($key)) {
+			return $this;
 		}
+
+		$value = $struct[$key];
+
+		switch ($key) {
+			case 'columns':
+				$this->assignColumns($value);
+				break;
+			case 'data':
+				$this->assignData($value);
+				break;
+			case 'error':
+			case 'warning':
+				$this->assignStringProperty($key, $value);
+				break;
+			case 'total':
+				$this->assignTotal($value);
+				break;
+		}
+
 		return $this;
+	}
+
+	/**
+	 * @param mixed $value
+	 * @return void
+	 */
+	private function assignColumns(mixed $value): void {
+		if (!is_array($value)) {
+			return;
+		}
+
+		/** @var array<string,mixed> $value */
+		$this->columnsPerRow[0] = $value;
+		$this->columns = $value;
+	}
+
+	/**
+	 * @param mixed $value
+	 * @return void
+	 */
+	private function assignData(mixed $value): void {
+		if (!is_array($value)) {
+			return;
+		}
+
+		/** @var array<string,mixed> $value */
+		$this->data = $value;
+	}
+
+	/**
+	 * @param string $key
+	 * @param mixed $value
+	 * @return void
+	 */
+	private function assignStringProperty(string $key, mixed $value): void {
+		if (!is_string($value)) {
+			return;
+		}
+
+		$this->$key = $value;
+	}
+
+	/**
+	 * @param mixed $value
+	 * @return void
+	 */
+	private function assignTotal(mixed $value): void {
+		if (!is_numeric($value)) {
+			return;
+		}
+
+		$this->total = (int)$value;
 	}
 
 	/**
