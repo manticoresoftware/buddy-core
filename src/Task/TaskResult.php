@@ -351,7 +351,7 @@ final class TaskResult {
 	public function getTableFormatted(int $startTime): string {
 		$tables = [];
 		$tableFormatter = new TableFormatter();
-		$rows = $this->isMultipleRows ? $this->getStruct() : [$this->getStruct()];
+		$rows = $this->getStruct();
 
 		/** @var array<array{data?:array<mixed>,total?:int,error?:string}> $rows */
 		foreach ($rows as $row) {
