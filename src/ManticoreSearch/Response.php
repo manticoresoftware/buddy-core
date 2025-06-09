@@ -511,7 +511,7 @@ class Response {
 	public function assign(Struct $struct, string $key): static {
 		if ($struct->hasKey($key)) {
 			$value = $struct[$key];
-			
+
 			if ($key === 'columns') {
 				// Type check for columns
 				if (is_array($value)) {
