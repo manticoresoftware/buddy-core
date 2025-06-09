@@ -408,65 +408,7 @@ class Response {
 			->assign($struct, 'columns');
 	}
 
-	/**
-	 * @param Struct<int|string, mixed> $struct
-	 * @return void
-	 */
-	protected function parseStructure(Struct $struct): void {
-		// Detect if we have multiple rows
-		if ($struct->isList()) {
-			$this->isMultipleRows = sizeof($struct) > 1;
 
-			if ($this->isMultipleRows) {
-				$this->parseMultipleRows($struct);
-			} else {
-				$this->parseSingleRowList($struct);
-			}
-		} else {
-			$this->parseDirectObject($struct);
-		}
-	}
-
-	/**
-	 * @param Struct<int|string, mixed> $struct
-	 * @return void
-	 */
-	protected function parseSingleRowList(Struct $struct): void {
-		// Single row in an array - original behavior
-		$structArray = $struct->toArray();
-		/** @var array<string,mixed> $data */
-		$data = isset($structArray[0]) && is_array($structArray[0]) ? $structArray[0] : [];
-		$this->parseRowData($data, 0);
-
-		// For backward compatibility - assign data from the first row
-		if (!isset($data['data']) || !is_array($data['data'])) {
-			return;
-		}
-
-		/** @var array<string,mixed> $dataRow */
-		$dataRow = $data['data'];
-		$this->data[0] = $dataRow;
-	}
-
-	/**
-	 * @param Struct<int|string, mixed> $struct
-	 * @return void
-	 */
-	protected function parseDirectObject(Struct $struct): void {
-		// Handle direct object response (not in an array)
-		/** @var array<string,mixed> $structArray */
-		$structArray = $struct->toArray();
-		$this->parseRowData($structArray, 0);
-
-		// For backward compatibility
-		if (!isset($structArray['data']) || !is_array($structArray['data'])) {
-			return;
-		}
-
-		/** @var array<string,mixed> $dataRow */
-		$dataRow = $structArray['data'];
-		$this->data[0] = $dataRow;
-	}
 
 	/**
 	 * @param Struct<int|string, mixed> $struct
@@ -478,13 +420,6 @@ class Response {
 			/** @var int $index */
 			/** @var array<string,mixed> $rowData */
 			$this->processRowData($rowData, $index);
-
-			// Get error, warning, and total from the first row for backward compatibility
-			if ($index !== 0) {
-				continue;
-			}
-
-			$this->extractMetadata($rowData);
 		}
 	}
 
@@ -508,24 +443,7 @@ class Response {
 		$this->parseRowData($rowData, $index);
 	}
 
-	/**
-	 * @param array<string,mixed> $rowData
-	 * @return void
-	 */
-	protected function extractMetadata(array $rowData): void {
-		if (isset($rowData['error']) && is_string($rowData['error'])) {
-			$this->error = $rowData['error'];
-		}
-		if (isset($rowData['warning']) && is_string($rowData['warning'])) {
-			$this->warning = $rowData['warning'];
-		}
-		if (!isset($rowData['total'])) {
-			return;
-		}
 
-		/** @var array{total:int|string} $rowData */
-		$this->total = (int)$rowData['total'];
-	}
 
 	/**
 	 * Parse metadata from a row
