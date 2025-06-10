@@ -86,7 +86,7 @@
 
     
     <p>final         class
-    <strong>Struct</strong>        implements        <a target="_blank" rel="noopener" href="https://www.php.net/JsonSerializable">JsonSerializable</a>, <a target="_blank" rel="noopener" href="https://www.php.net/ArrayAccess">ArrayAccess</a>
+    <strong>Struct</strong>        implements        <a target="_blank" rel="noopener" href="https://www.php.net/JsonSerializable">JsonSerializable</a>, <a target="_blank" rel="noopener" href="https://www.php.net/ArrayAccess">ArrayAccess</a>, <a target="_blank" rel="noopener" href="https://www.php.net/Countable">Countable</a>, <a target="_blank" rel="noopener" href="https://www.php.net/Iterator">Iterator</a>
 </p>
 
         
@@ -291,6 +291,66 @@
                                             <p><p>Encode the data to JSON string</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    int
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_count">count</a>()
+        
+                                            <p><p>Count elements of an object</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    mixed
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_current">current</a>()
+        
+                                            <p><p>Return the current element</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_next">next</a>()
+        
+                                            <p><p>Move forward to next element</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    mixed
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_key">key</a>()
+        
+                                            <p><p>Return the key of the current element</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_valid">valid</a>()
+        
+                                            <p><p>Checks if current position is valid</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_rewind">rewind</a>()
+        
+                                            <p><p>Rewind the Iterator to the first element</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
             </div>
 
 
@@ -299,7 +359,7 @@
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line 34</div>
+        <div class="location">at line 47</div>
         <code>                    
     <strong>__construct</strong>(array $data, array $bigIntFields = [])
         </code>
@@ -339,7 +399,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_offsetGet">
-        <div class="location">at line 44</div>
+        <div class="location">at line 58</div>
         <code>                    mixed
     <strong>offsetGet</strong>(mixed $name)
         </code>
@@ -383,7 +443,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_offsetSet">
-        <div class="location">at line 53</div>
+        <div class="location">at line 67</div>
         <code>                    void
     <strong>offsetSet</strong>(mixed $name, mixed $value)
         </code>
@@ -432,7 +492,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_offsetExists">
-        <div class="location">at line 61</div>
+        <div class="location">at line 76</div>
         <code>                    bool
     <strong>offsetExists</strong>(mixed $name)
         </code>
@@ -476,7 +536,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_offsetUnset">
-        <div class="location">at line 69</div>
+        <div class="location">at line 84</div>
         <code>                    void
     <strong>offsetUnset</strong>(mixed $name)
         </code>
@@ -520,7 +580,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_toArray">
-        <div class="location">at line 78</div>
+        <div class="location">at line 94</div>
         <code>                    array
     <strong>toArray</strong>()
         </code>
@@ -554,7 +614,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_map">
-        <div class="location">at line 87</div>
+        <div class="location">at line 103</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Network/Struct.html"><abbr title="Manticoresearch\Buddy\Core\Network\Struct">Struct</abbr></a>
     <strong>map</strong>(callable $fn)
         </code>
@@ -598,7 +658,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_getBigIntFields">
-        <div class="location">at line 95</div>
+        <div class="location">at line 111</div>
         <code>                    array
     <strong>getBigIntFields</strong>()
         </code>
@@ -632,7 +692,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_addBigIntField">
-        <div class="location">at line 104</div>
+        <div class="location">at line 120</div>
         <code>                    void
     <strong>addBigIntField</strong>(string $field)
         </code>
@@ -675,7 +735,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_isValid">
-        <div class="location">at line 113</div>
+        <div class="location">at line 129</div>
         <code>        static            bool
     <strong>isValid</strong>(string $json)
         </code>
@@ -718,7 +778,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_fromJson">
-        <div class="location">at line 122</div>
+        <div class="location">at line 138</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Network/Struct.html"><abbr title="Manticoresearch\Buddy\Core\Network\Struct">Struct</abbr></a>
     <strong>fromJson</strong>(string $json)
         </code>
@@ -761,7 +821,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_fromData">
-        <div class="location">at line 143</div>
+        <div class="location">at line 159</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Network/Struct.html"><abbr title="Manticoresearch\Buddy\Core\Network\Struct">Struct</abbr></a>
     <strong>fromData</strong>(array $data, array $bigIntFields = [])
         </code>
@@ -810,7 +870,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_isList">
-        <div class="location">at line 151</div>
+        <div class="location">at line 167</div>
         <code>                    bool
     <strong>isList</strong>()
         </code>
@@ -843,7 +903,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_hasKey">
-        <div class="location">at line 160</div>
+        <div class="location">at line 176</div>
         <code>                    bool
     <strong>hasKey</strong>(string $key)
         </code>
@@ -886,7 +946,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_jsonSerialize">
-        <div class="location">at line 169</div>
+        <div class="location">at line 185</div>
         <code>                    string
     <strong>jsonSerialize</strong>()
         </code>
@@ -919,7 +979,7 @@
             </div>
                     <div class="method-item">
                     <h3 id="method_toJson">
-        <div class="location">at line 177</div>
+        <div class="location">at line 193</div>
         <code>                    string
     <strong>toJson</strong>()
         </code>
@@ -940,6 +1000,204 @@
         <tr>
             <td>string</td>
             <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_count">
+        <div class="location">at line 289</div>
+        <code>                    int
+    <strong>count</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Count elements of an object</p></p>                        
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>int</td>
+            <td><p>The custom count as an integer.</p></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_current">
+        <div class="location">at line 298</div>
+        <code>                    mixed
+    <strong>current</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Return the current element</p></p>                        
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>mixed</td>
+            <td><p>Can return any type.</p></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_next">
+        <div class="location">at line 308</div>
+        <code>                    void
+    <strong>next</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Move forward to next element</p></p>                        
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td><p>Any returned value is ignored.</p></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_key">
+        <div class="location">at line 317</div>
+        <code>                    mixed
+    <strong>key</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Return the key of the current element</p></p>                        
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>mixed</td>
+            <td><p>Scalar on success, or null on failure.</p></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_valid">
+        <div class="location">at line 326</div>
+        <code>                    bool
+    <strong>valid</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Checks if current position is valid</p></p>                        
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td><p>The return value will be casted to boolean and then evaluated.</p></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_rewind">
+        <div class="location">at line 335</div>
+        <code>                    void
+    <strong>rewind</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Rewind the Iterator to the first element</p></p>                        
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td><p>Any returned value is ignored.</p></td>
         </tr>
     </table>
 
