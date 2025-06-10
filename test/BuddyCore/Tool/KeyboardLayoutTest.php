@@ -78,6 +78,6 @@ class KeyboardLayoutTest extends TestCase {
 		$input = 'руддщ world';
 		$result = KeyboardLayout::combineMany($input, $langs);
 		// We get unique combinations as output, but real combinatinos are 6
-		$this->assertEquals(['hello world','руддщ world','руддщ цщкдв'], $result);
+		$this->assertEquals(['руддщ world','hello world', 'руддщ цщкдв'], $result);
 	}
 }
