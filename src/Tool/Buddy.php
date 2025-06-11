@@ -51,7 +51,7 @@ final class Buddy {
 	 * @return void
 	 */
 	public static function debug(string $message, string $eol = PHP_EOL, int $verbosity = 1): void {
-		$debug = (int)getenv('DEBUG');
+		$debug = ConfigManager::getInt('DEBUG');
 		if ($debug < $verbosity) {
 			return;
 		}

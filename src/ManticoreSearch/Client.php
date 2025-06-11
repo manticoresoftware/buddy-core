@@ -20,6 +20,7 @@ use Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError;
 use Manticoresearch\Buddy\Core\Network\Struct;
 use Manticoresearch\Buddy\Core\Tool\Arrays;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
+use Manticoresearch\Buddy\Core\Tool\ConfigManager;
 use RuntimeException;
 use Swoole\ConnectionPool;
 use Swoole\Coroutine;
@@ -514,7 +515,7 @@ class Client {
 			// If the key is plugin_dir check env first and after choose
 			// most priority
 			if ($key === 'common.plugin_dir') {
-				$value = getenv('PLUGIN_DIR') ?: $value;
+				$value = ConfigManager::get('PLUGIN_DIR') ?: $value;
 			}
 			$settings->push(
 				new Map(
