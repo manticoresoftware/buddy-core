@@ -1,7 +1,5 @@
 <?php declare(strict_types=1);
 
-use Manticoresearch\Buddy\Core\Tool\ConfigManager;
-
 /*
   Copyright (c) 2023, Manticore Software LTD (https://manticoresearch.com)
 
@@ -23,4 +21,3 @@ include_once __DIR__ . DIRECTORY_SEPARATOR
 const MOCK_BUDDY_VERSION = '1.0.0';
 
 Manticoresearch\Buddy\Core\Tool\Buddy::setVersionFile(MOCK_BUDDY_VERSION);
-

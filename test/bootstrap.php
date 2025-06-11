@@ -12,4 +12,3 @@
 use Manticoresearch\Buddy\Core\Tool\ConfigManager;
 
 ConfigManager::init();
-
