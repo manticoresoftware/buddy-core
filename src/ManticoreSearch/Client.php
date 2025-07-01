@@ -648,7 +648,7 @@ class Client {
 		 */
 		$suggestResult = $this
 			->sendRequest(
-				"CALL SUGGEST('{$word}', '{$table}', {$limit} as limit, {$distance} as max_edits)"
+				"CALL SUGGEST('{$word}', '{$table}', {$limit} as limit, {$distance} as max_edits, 1 as non_char)"
 			)
 			->getResult();
 		$suggestions = $suggestResult[0]['data'] ?? [];
@@ -670,7 +670,7 @@ class Client {
 			/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $combinedSuggestResult */
 			$combinedSuggestResult = $this
 				->sendRequest(
-					"CALL SUGGEST('{$combinedWord}', '{$table}', {$limit} as limit, {$distance} as max_edits)"
+					"CALL SUGGEST('{$combinedWord}', '{$table}', {$limit} as limit, {$distance} as max_edits, 1 as non_char)"
 				)
 				->getResult();
 
