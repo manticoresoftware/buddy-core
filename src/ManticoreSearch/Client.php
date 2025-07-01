@@ -667,11 +667,14 @@ class Client {
 			$nextWord = $normalized[$i + 1];
 			$combinedWord = $word . $nextWord;
 
+			$query = 'CALL SUGGEST('
+				. "'{$combinedWord}', '{$table}',"
+				. "{$limit} as limit,"
+				. "{$distance} as max_edits,"
+				. '1 as non_char)';
 			/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $combinedSuggestResult */
 			$combinedSuggestResult = $this
-				->sendRequest(
-					"CALL SUGGEST('{$combinedWord}', '{$table}', {$limit} as limit, {$distance} as max_edits, 1 as non_char)"
-				)
+				->sendRequest($query)
 				->getResult();
 
 			/** @var array{suggest:string,distance:int,docs:int} $suggestion */
