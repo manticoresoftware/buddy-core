@@ -584,10 +584,18 @@ class Client {
 		$docMap = [];
 
 		// 2. For each tokenized word, we get the suggestions from the suggest function
-		foreach ($normalized as $i => $word) {
-			// Split into multiple lines for better readability
-			$this->processSuggestion(
-				$word,
+		// Track processed tokens to avoid double processing after merges
+		$processedTokens = [];
+		$i = 0;
+		while ($i < sizeof($normalized)) {
+			if (isset($processedTokens[$i])) {
+				$i++;
+				continue;
+			}
+
+			// Process suggestion with smart merging
+			$consumed = $this->processSuggestion(
+				$normalized[$i],
 				$table,
 				$limit,
 				$distance,
@@ -596,7 +604,10 @@ class Client {
 				$words,
 				$distanceMap,
 				$docMap,
+				$processedTokens
 			);
+
+			$i += max(1, $consumed);
 		}
 
 		// 3. Normalize the distance and docs values
@@ -613,7 +624,8 @@ class Client {
 	}
 
 	/**
-	 * Processes suggestions for a word and adds them to the words, distanceMap and docMap arrays.
+	 * Smart suggestion processing with greedy merge and backtracking.
+	 * Prevents double processing and compares merge quality vs individual results.
 	 *
 	 * @param string $word The word to get suggestions for
 	 * @param string $table The table to search in
@@ -624,7 +636,25 @@ class Client {
 	 * @param array<Variation> $words Reference to words array to be populated
 	 * @param array<string,int> $distanceMap Reference to distance map to be populated
 	 * @param array<string,int> $docMap Reference to document map to be populated
-	 * @return void
+	 * @param array<int,bool> $processedTokens Reference to processed tokens tracking
+	 * @return int Number of tokens consumed (1 for individual, 2+ for merged)
+	 */
+
+	/**
+	 * Processes suggestions for a word and adds them to the words, distanceMap and docMap arrays.
+	 * Now with smart merge logic to prevent double processing and improve merge quality.
+	 *
+	 * @param string $word The word to get suggestions for
+	 * @param string $table The table to search in
+	 * @param int $limit Maximum number of suggestions per word
+	 * @param int $distance Maximum edit distance for suggestions
+	 * @param int $i Current word index
+	 * @param array<string> $normalized Array of normalized words
+	 * @param array<Variation> $words Reference to words array to be populated
+	 * @param array<string,int> $distanceMap Reference to distance map to be populated
+	 * @param array<string,int> $docMap Reference to document map to be populated
+	 * @param array<int,bool> $processedTokens Reference to processed tokens tracking
+	 * @return int Number of tokens consumed (1 for individual, 2+ for merged)
 	 */
 	private function processSuggestion(
 		string $word,
@@ -636,7 +666,8 @@ class Client {
 		array &$words,
 		array &$distanceMap,
 		array &$docMap,
-	): void {
+		array &$processedTokens
+	): int {
 		/**
 		 * @var array<array{
 		 *     data: array<array{
@@ -661,46 +692,193 @@ class Client {
 			$docMap[$suggestWord] = $suggestion['docs'];
 		}
 
-		// Try to merge with next word if it exists
-		// Only do it when we have any choices
-		if ($choices && isset($normalized[$i + 1])) {
-			$nextWord = $normalized[$i + 1];
-			$combinedWord = $word . $nextWord;
+		// Smart merge logic - try to merge with next word if conditions are met
+		$mergeResult = $this->tryMergeWithNext(
+			$word,
+			$i,
+			$normalized,
+			$table,
+			$limit,
+			$distance,
+			$choices,
+			$distanceMap
+		);
+		$tokenCount = $mergeResult ? 2 : 1;
 
-			$query = 'CALL SUGGEST('
-				. "'{$combinedWord}', '{$table}',"
-				. "{$limit} as limit,"
-				. "{$distance} as max_edits,"
-				. '1 as non_char)';
-			/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $combinedSuggestResult */
-			$combinedSuggestResult = $this
-				->sendRequest($query)
-				->getResult();
+		// Use merged result if it's better, otherwise use individual
+		if ($mergeResult) {
+			$finalOriginal = $mergeResult['original'];
+			$finalChoices = $mergeResult['choices'];
 
-			/** @var array{suggest:string,distance:int,docs:int} $suggestion */
-			$combinedSuggestions = $combinedSuggestResult[0]['data'] ?? [];
-
-			foreach ($combinedSuggestions as $suggestion) {
-				$combinedSuggest = $suggestion['suggest'];
-				$choices[] = $combinedSuggest;
-				// We add 1 here cuz we already merge with space, so the distance is the same
-				$distanceMap[$combinedSuggest] = $suggestion['distance'] + 1;
-				$docMap[$combinedSuggest] = $suggestion['docs'];
+			// Add merged distance and doc mappings
+			foreach ($mergeResult['distanceMap'] as $suggWord => $dist) {
+				$distanceMap[$suggWord] = $dist;
 			}
+			foreach ($mergeResult['docMap'] as $suggWord => $docs) {
+				$docMap[$suggWord] = $docs;
+			}
+
+			// Mark next token as processed
+			$processedTokens[$i + 1] = true;
+		} else {
+			$finalOriginal = $word;
+			$finalChoices = $choices;
 		}
 
 		// Special case for empty suggestions
-		if (!$choices) {
-			$distanceMap[$word] = 999;
-			$docMap[$word] = 0;
+		if (!$finalChoices) {
+			$distanceMap[$finalOriginal] = 999;
+			$docMap[$finalOriginal] = 0;
 		}
 
 		$words[] = [
-			'original' => $word,
-			'keywords' => $choices,
+			'original' => $finalOriginal,
+			'keywords' => $finalChoices,
+		];
+
+		return $tokenCount;
+	}
+
+	/**
+	 * Quick heuristics to decide if merge should be attempted
+	 */
+	private function shouldAttemptMerge(string $word, string $nextWord): bool {
+		// Performance limits
+		$totalLength = strlen($word) + strlen($nextWord);
+		if ($totalLength > 15) {
+			return false;
+		}
+
+		// Don't merge if both words are already long
+		if (strlen($word) > 6 && strlen($nextWord) > 6) {
+			return false;
+		}
+
+		// Always merge single characters
+		if (strlen($nextWord) === 1 || strlen($word) === 1) {
+			return true;
+		}
+
+		// Merge if current word is short
+		if (strlen($word) <= 3) {
+			return true;
+		}
+
+		// More conservative for longer words
+		return strlen($word) <= 5 && strlen($nextWord) <= 3;
+	}
+
+	/**
+	 * Try to merge current word with next word if conditions are met
+	 *
+	 * @param string $word
+	 * @param int $i
+	 * @param array<string> $normalized
+	 * @param string $table
+	 * @param int $limit
+	 * @param int $distance
+	 * @param array<string> $choices
+	 * @param array<string,int> $distanceMap
+	 * @return array{original:string,choices:array<string>,distanceMap:array<string,int>,docMap:array<string,int>}|null
+	 */
+	private function tryMergeWithNext(
+		string $word,
+		int $i,
+		array $normalized,
+		string $table,
+		int $limit,
+		int $distance,
+		array $choices,
+		array $distanceMap
+	): ?array {
+		if (!isset($normalized[$i + 1]) || !$this->shouldAttemptMerge($word, $normalized[$i + 1])) {
+			return null;
+		}
+
+		$nextWord = $normalized[$i + 1];
+		$combinedWord = $word . $nextWord;
+
+		$query = 'CALL SUGGEST('
+			. "'{$combinedWord}', '{$table}',"
+			. "{$limit} as limit,"
+			. "{$distance} as max_edits,"
+			. '1 as non_char)';
+		/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $combinedSuggestResult */
+		$combinedSuggestResult = $this
+			->sendRequest($query)
+			->getResult();
+
+		$combinedSuggestions = $combinedSuggestResult[0]['data'] ?? [];
+
+		if (empty($combinedSuggestions)) {
+			return null;
+		}
+
+		$mergedChoices = [];
+		$mergedDistanceMap = [];
+		$mergedDocMap = [];
+
+		foreach ($combinedSuggestions as $suggestion) {
+			$combinedSuggest = $suggestion['suggest'];
+			$mergedChoices[] = $combinedSuggest;
+			// We add 1 here cuz we already merge with space, so the distance is the same
+			$mergedDistanceMap[$combinedSuggest] = $suggestion['distance'] + 1;
+			$mergedDocMap[$combinedSuggest] = $suggestion['docs'];
+		}
+
+		// Compare merged vs individual quality
+		if (!$this->shouldUseMergedResult($choices, $mergedChoices, $distanceMap, $mergedDistanceMap)) {
+			return null;
+		}
+
+		return [
+			'original' => $combinedWord,
+			'choices' => $mergedChoices,
+			'distanceMap' => $mergedDistanceMap,
+			'docMap' => $mergedDocMap,
 		];
 	}
 
+	/**
+	 * Compare merged vs individual results quality
+	 *
+	 * @param array<string> $individualChoices
+	 * @param array<string> $mergedChoices
+	 * @param array<string,int> $individualDistanceMap
+	 * @param array<string,int> $mergedDistanceMap
+	 * @return bool
+	 */
+	private function shouldUseMergedResult(
+		array $individualChoices,
+		array $mergedChoices,
+		array $individualDistanceMap,
+		array $mergedDistanceMap
+	): bool {
+		// If no individual suggestions but merged has suggestions, use merged
+		if (empty($individualChoices) && !empty($mergedChoices)) {
+			return true;
+		}
+
+		// If individual has suggestions but merged doesn't, use individual
+		if (!empty($individualChoices) && empty($mergedChoices)) {
+			return false;
+		}
+
+		// Both have suggestions - compare quality
+		if (!empty($mergedChoices)) {
+			// Simple heuristic: prefer merged if it has reasonable quality
+			$avgMergedDistance = array_sum($mergedDistanceMap) / sizeof($mergedDistanceMap);
+			$avgIndividualDistance = empty($individualDistanceMap)
+				? 999
+				: array_sum($individualDistanceMap) / sizeof($individualDistanceMap);
+
+			// Prefer merged if distance is not significantly worse
+			// (allow +1.5 penalty for merging)
+			return $avgMergedDistance <= $avgIndividualDistance + 1.5;
+		}
+
+		return false;
+	}
 	/**
 	 * Calculates the score map based on normalized distance and document scores.
 	 *
