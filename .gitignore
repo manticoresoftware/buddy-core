@@ -2,3 +2,4 @@ vendor
 cache
 docs
 .phpunit.result.cache
+.env
