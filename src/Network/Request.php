@@ -44,7 +44,7 @@ final class Request {
 	public string $payload;
 	public string $command;
 	public string $httpMethod;
-	public static $user;
+	public string $user;
 	public int $version;
 	public ?MySQLTool $mySQLTool;
 
