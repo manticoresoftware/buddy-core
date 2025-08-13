@@ -44,6 +44,7 @@ final class Request {
 	public string $payload;
 	public string $command;
 	public string $httpMethod;
+	public static $user;
 	public int $version;
 	public ?MySQLTool $mySQLTool;
 
@@ -234,6 +235,7 @@ final class Request {
 		$this->httpMethod = $payload['message']['http_method'] ?? '';
 		$this->path = $path;
 		$this->format = $format;
+		$this->user = $payload['user'] ?? '';
 		$this->endpointBundle = $endpointBundle;
 		$this->mySQLTool = $format === RequestFormat::SQL ? static::detectMySQLTool($payload['message']['body']) : null;
 		$this->payload = (in_array($endpointBundle, [Endpoint::Elastic, Endpoint::Bulk]))
