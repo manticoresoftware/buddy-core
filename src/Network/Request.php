@@ -126,7 +126,8 @@ final class Request {
 	 *  type:string,
 	 *  error:array{message:string,body?:array{error:string}},
 	 *  message:array{path_query:string,body:string},
-	 *  version:int} $payload
+	 *  version:int,
+	 *  user?:string} $payload
 	 * @param string $id
 	 * @return static
 	 */
@@ -145,7 +146,8 @@ final class Request {
 	 *  type:string,
 	 *  error:array{message:string,body?:array{error:string}},
 	 *  message:array{path_query:string,body:string},
-	 *  version:int}
+	 *  version:int,
+	 *  user?:string}
 	 * @throws InvalidNetworkRequestError
 	 */
 	public static function validateOrFail(string $data): array {
@@ -183,7 +185,8 @@ final class Request {
 	 *  path_query:string,
 	 *  body:string,
 	 *  http_method?:string},
-	 * version:int
+	 * version:int,
+	 * user?:string
 	 * } $payload
 	 * @return static
 	 * @throws InvalidNetworkRequestError
