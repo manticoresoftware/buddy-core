@@ -416,7 +416,7 @@ or validate and throw error if we have missing table in the list</p></p>        
                     array
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_fetchFuzzyVariations">fetchFuzzyVariations</a>(string $query, string $table, int $distance = 2, int $limit = 3)
+                    <a href="#method_fetchFuzzyVariations">fetchFuzzyVariations</a>(string $query, string $table, int $distance = 2, int $limit = 3, int $forceBigrams = 0)
         
                                             <p><p>Fetches fuzzy variations for a given query.</p></p>                </div>
                 <div class="col-md-2"></div>
@@ -1277,9 +1277,9 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fetchFuzzyVariations">
-        <div class="location">at line 565</div>
+        <div class="location">at line 566</div>
         <code>                    array
-    <strong>fetchFuzzyVariations</strong>(string $query, string $table, int $distance = 2, int $limit = 3)
+    <strong>fetchFuzzyVariations</strong>(string $query, string $table, int $distance = 2, int $limit = 3, int $forceBigrams = 0)
         </code>
     </h3>
     <div class="details">    
@@ -1313,6 +1313,11 @@ or validate and throw error if we have missing table in the list</p></p>
                 <td>int</td>
                 <td>$limit</td>
                 <td><p>Maximum number of suggestions per word</p></td>
+            </tr>
+                    <tr>
+                <td>int</td>
+                <td>$forceBigrams</td>
+                <td><p>When set to 1, passes "1 as force_bigrams" to all CALL SUGGEST requests</p></td>
             </tr>
             </table>
 
