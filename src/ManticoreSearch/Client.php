@@ -36,6 +36,7 @@ class Client {
 	const URL_PREFIX = 'http://';
 	const HTTP_REQUEST_TIMEOUT = 300;
 	const DEFAULT_URL = 'http://127.0.0.1:9308';
+	const DEFAULT_FUZZY_LIMIT = 3;
 
 	/**
 	 * @var string $response
@@ -560,13 +561,15 @@ class Client {
 	 * @param string $table The table to search in
 	 * @param int $distance Maximum edit distance for suggestions
 	 * @param int $limit Maximum number of suggestions per word
+	 * @param bool $forceBigrams When set to true, passes "1 as force_bigrams" to all CALL SUGGEST requests
 	 * @return array{0: array<Variation>, 1: array<string, float>} Words and score map
 	 */
 	public function fetchFuzzyVariations(
 		string $query,
 		string $table,
 		int $distance = 2,
-		int $limit = 3
+		int $limit = self::DEFAULT_FUZZY_LIMIT,
+		bool $forceBigrams = false
 	): array {
 		// First, escape the given query
 		$query = addcslashes($query, '*%?\'');
@@ -604,7 +607,8 @@ class Client {
 				$words,
 				$distanceMap,
 				$docMap,
-				$processedTokens
+				$processedTokens,
+				$forceBigrams
 			);
 
 			$i += max(1, $consumed);
@@ -654,6 +658,7 @@ class Client {
 	 * @param array<string,int> $distanceMap Reference to distance map to be populated
 	 * @param array<string,int> $docMap Reference to document map to be populated
 	 * @param array<int,bool> $processedTokens Reference to processed tokens tracking
+	 * @param bool $forceBigrams When set to true, passes "1 as force_bigrams" to all CALL SUGGEST requests
 	 * @return int Number of tokens consumed (1 for individual, 2+ for merged)
 	 */
 	private function processSuggestion(
@@ -666,8 +671,10 @@ class Client {
 		array &$words,
 		array &$distanceMap,
 		array &$docMap,
-		array &$processedTokens
+		array &$processedTokens,
+		bool $forceBigrams = false
 	): int {
+		$forceBigramsParam = $forceBigrams ? ', 1 as force_bigrams' : '';
 		/**
 		 * @var array<array{
 		 *     data: array<array{
@@ -679,10 +686,13 @@ class Client {
 		 */
 		$suggestResult = $this
 			->sendRequest(
-				"CALL SUGGEST('{$word}', '{$table}', {$limit} as limit, {$distance} as max_edits, 1 as non_char)"
+				"CALL SUGGEST('{$word}', '{$table}', {$limit} as limit, "
+				. "{$distance} as max_edits, 1 as non_char{$forceBigramsParam})"
 			)
 			->getResult();
+		/** @var array<array{suggest:string,distance:int,docs:int}> $suggestions */
 		$suggestions = $suggestResult[0]['data'] ?? [];
+		/** @var array<string> $choices */
 		$choices = [];
 
 		foreach ($suggestions as $suggestion) {
@@ -693,6 +703,7 @@ class Client {
 		}
 
 		// Smart merge logic - try to merge with next word if conditions are met
+		/** @var array<string> $choices */
 		$mergeResult = $this->tryMergeWithNext(
 			$word,
 			$i,
@@ -701,7 +712,8 @@ class Client {
 			$limit,
 			$distance,
 			$choices,
-			$distanceMap
+			$distanceMap,
+			$forceBigrams
 		);
 		$tokenCount = $mergeResult ? 2 : 1;
 
@@ -779,6 +791,7 @@ class Client {
 	 * @param int $distance
 	 * @param array<string> $choices
 	 * @param array<string,int> $distanceMap
+	 * @param bool $forceBigrams When set to true, passes "1 as force_bigrams" to all CALL SUGGEST requests
 	 * @return array{original:string,choices:array<string>,distanceMap:array<string,int>,docMap:array<string,int>}|null
 	 */
 	private function tryMergeWithNext(
@@ -789,7 +802,8 @@ class Client {
 		int $limit,
 		int $distance,
 		array $choices,
-		array $distanceMap
+		array $distanceMap,
+		bool $forceBigrams = false
 	): ?array {
 		if (!isset($normalized[$i + 1]) || !$this->shouldAttemptMerge($word, $normalized[$i + 1])) {
 			return null;
@@ -798,11 +812,12 @@ class Client {
 		$nextWord = $normalized[$i + 1];
 		$combinedWord = $word . $nextWord;
 
+		$forceBigramsParam = $forceBigrams ? ', 1 as force_bigrams' : '';
 		$query = 'CALL SUGGEST('
 			. "'{$combinedWord}', '{$table}',"
 			. "{$limit} as limit,"
 			. "{$distance} as max_edits,"
-			. '1 as non_char)';
+			. "1 as non_char{$forceBigramsParam})";
 		/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $combinedSuggestResult */
 		$combinedSuggestResult = $this
 			->sendRequest($query)
