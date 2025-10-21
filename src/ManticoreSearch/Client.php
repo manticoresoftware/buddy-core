@@ -657,7 +657,14 @@ class Client {
 		bool $forceBigrams
 	): int {
 		$forceBigramsOption = $forceBigrams ? ', 1 as force_bigrams' : '';
-		$query = "CALL SUGGEST('{$word}', '{$table}', {$limit} as limit, {$distance} as max_edits, 1 as non_char{$forceBigramsOption})";
+		$query = "CALL SUGGEST(
+		'{$word}',
+		'{$table}',
+		{$limit} as limit,
+		{$distance} as max_edits,
+		1 as non_char
+		{$forceBigramsOption}
+		)";
 
 		/**
 		 * @var array<array{
@@ -791,7 +798,14 @@ class Client {
 		$combinedWord = $word . $nextWord;
 
 		$forceBigramsOption = $forceBigrams ? ', 1 as force_bigrams' : '';
-		$query = "CALL SUGGEST('{$combinedWord}', '{$table}', {$limit} as limit, {$distance} as max_edits, 1 as non_char{$forceBigramsOption})";
+		$query = "CALL SUGGEST(
+		'{$combinedWord}',
+		'{$table}',
+		{$limit} as limit,
+		{$distance} as max_edits,
+		1 as non_char
+		{$forceBigramsOption}
+		)";
 
 		/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $combinedSuggestResult */
 		$combinedSuggestResult = $this->sendRequest($query)->getResult();
