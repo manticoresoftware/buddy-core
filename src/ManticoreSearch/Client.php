@@ -558,6 +558,7 @@ class Client {
 	 *
 	 * @param string $query The search query to find variations for
 	 * @param string $table The table to search in
+	 * @param bool $forceBigrams When set to true, passes "1 as force_bigrams" to all CALL SUGGEST requests
 	 * @param int $distance Maximum edit distance for suggestions
 	 * @param int $limit Maximum number of suggestions per word
 	 * @return array{0: array<Variation>, 1: array<string, float>} Words and score map
@@ -565,6 +566,7 @@ class Client {
 	public function fetchFuzzyVariations(
 		string $query,
 		string $table,
+		bool $forceBigrams = false,
 		int $distance = 2,
 		int $limit = 3
 	): array {
@@ -604,7 +606,8 @@ class Client {
 				$words,
 				$distanceMap,
 				$docMap,
-				$processedTokens
+				$processedTokens,
+				$forceBigrams
 			);
 
 			$i += max(1, $consumed);
@@ -624,25 +627,8 @@ class Client {
 	}
 
 	/**
-	 * Smart suggestion processing with greedy merge and backtracking.
-	 * Prevents double processing and compares merge quality vs individual results.
-	 *
-	 * @param string $word The word to get suggestions for
-	 * @param string $table The table to search in
-	 * @param int $limit Maximum number of suggestions per word
-	 * @param int $distance Maximum edit distance for suggestions
-	 * @param int $i Current word index
-	 * @param array<string> $normalized Array of normalized words
-	 * @param array<Variation> $words Reference to words array to be populated
-	 * @param array<string,int> $distanceMap Reference to distance map to be populated
-	 * @param array<string,int> $docMap Reference to document map to be populated
-	 * @param array<int,bool> $processedTokens Reference to processed tokens tracking
-	 * @return int Number of tokens consumed (1 for individual, 2+ for merged)
-	 */
-
-	/**
 	 * Processes suggestions for a word and adds them to the words, distanceMap and docMap arrays.
-	 * Now with smart merge logic to prevent double processing and improve merge quality.
+	 * Implements smart merge logic to prevent double processing and improve merge quality.
 	 *
 	 * @param string $word The word to get suggestions for
 	 * @param string $table The table to search in
@@ -654,6 +640,7 @@ class Client {
 	 * @param array<string,int> $distanceMap Reference to distance map to be populated
 	 * @param array<string,int> $docMap Reference to document map to be populated
 	 * @param array<int,bool> $processedTokens Reference to processed tokens tracking
+	 * @param bool $forceBigrams When set to true, passes "1 as force_bigrams" to all CALL SUGGEST requests
 	 * @return int Number of tokens consumed (1 for individual, 2+ for merged)
 	 */
 	private function processSuggestion(
@@ -666,8 +653,19 @@ class Client {
 		array &$words,
 		array &$distanceMap,
 		array &$docMap,
-		array &$processedTokens
+		array &$processedTokens,
+		bool $forceBigrams
 	): int {
+		$forceBigramsOption = $forceBigrams ? ', 1 as force_bigrams' : '';
+		$query = "CALL SUGGEST(
+		'{$word}',
+		'{$table}',
+		{$limit} as limit,
+		{$distance} as max_edits,
+		1 as non_char
+		{$forceBigramsOption}
+		)";
+
 		/**
 		 * @var array<array{
 		 *     data: array<array{
@@ -677,11 +675,9 @@ class Client {
 		 *     }>
 		 * }> $suggestResult
 		 */
-		$suggestResult = $this
-			->sendRequest(
-				"CALL SUGGEST('{$word}', '{$table}', {$limit} as limit, {$distance} as max_edits, 1 as non_char)"
-			)
-			->getResult();
+		$suggestResult = $this->sendRequest($query)->getResult();
+
+		/** @var array<array{suggest:string,distance:int,docs:int}> $suggestions */
 		$suggestions = $suggestResult[0]['data'] ?? [];
 		$choices = [];
 
@@ -701,7 +697,8 @@ class Client {
 			$limit,
 			$distance,
 			$choices,
-			$distanceMap
+			$distanceMap,
+			$forceBigrams
 		);
 		$tokenCount = $mergeResult ? 2 : 1;
 
@@ -779,6 +776,7 @@ class Client {
 	 * @param int $distance
 	 * @param array<string> $choices
 	 * @param array<string,int> $distanceMap
+	 * @param bool $forceBigrams When set to true, passes "1 as force_bigrams" to all CALL SUGGEST requests
 	 * @return array{original:string,choices:array<string>,distanceMap:array<string,int>,docMap:array<string,int>}|null
 	 */
 	private function tryMergeWithNext(
@@ -789,7 +787,8 @@ class Client {
 		int $limit,
 		int $distance,
 		array $choices,
-		array $distanceMap
+		array $distanceMap,
+		bool $forceBigrams
 	): ?array {
 		if (!isset($normalized[$i + 1]) || !$this->shouldAttemptMerge($word, $normalized[$i + 1])) {
 			return null;
@@ -798,15 +797,18 @@ class Client {
 		$nextWord = $normalized[$i + 1];
 		$combinedWord = $word . $nextWord;
 
-		$query = 'CALL SUGGEST('
-			. "'{$combinedWord}', '{$table}',"
-			. "{$limit} as limit,"
-			. "{$distance} as max_edits,"
-			. '1 as non_char)';
+		$forceBigramsOption = $forceBigrams ? ', 1 as force_bigrams' : '';
+		$query = "CALL SUGGEST(
+		'{$combinedWord}',
+		'{$table}',
+		{$limit} as limit,
+		{$distance} as max_edits,
+		1 as non_char
+		{$forceBigramsOption}
+		)";
+
 		/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $combinedSuggestResult */
-		$combinedSuggestResult = $this
-			->sendRequest($query)
-			->getResult();
+		$combinedSuggestResult = $this->sendRequest($query)->getResult();
 
 		$combinedSuggestions = $combinedSuggestResult[0]['data'] ?? [];
 
