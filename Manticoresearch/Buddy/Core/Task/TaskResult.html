@@ -95,7 +95,8 @@
         
 
             <div class="description">
-            <p><p>Simple struct for task result data</p></p>                    </div>
+            <p><p>Simple struct for task result data</p>
+</p>                    </div>
             
         
     
@@ -156,6 +157,15 @@
                 <td class="last"></td>
                 <td></td>
             </tr>
+                    <tr>
+                <td class="type" id="property_contentType">
+                                        protected                                        string|null
+                                                                                
+                                    </td>
+                <td>$contentType</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
             </table>
 
     
@@ -171,7 +181,8 @@
         
                                             <p><p>Entrypoint to create raw result, that we probably need in some cases
 For example, elastic like responses, cli tables and so on
-Prefer to not use raw when you return standard structure to the client response</p></p>                </div>
+Prefer to not use raw when you return standard structure to the client response</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -181,7 +192,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_fromResponse">fromResponse</a>(<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a> $response)
         
-                                            <p><p>Create new struct from a raw response of the Manticore to include meta in it also</p></p>                </div>
+                                            <p><p>Create new struct from a raw response of the Manticore to include meta in it also</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -191,7 +203,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_none">none</a>()
         
-                                            <p><p>Entrypoint to the object creation with none of data</p></p>                </div>
+                                            <p><p>Entrypoint to the object creation with none of data</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -201,7 +214,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_withData">withData</a>(array $data, bool $isMultipleRows = false)
         
-                                            <p><p>Entrypoint to the object creation with data</p></p>                </div>
+                                            <p><p>Entrypoint to the object creation with data</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -211,7 +225,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_withRow">withRow</a>(array $row)
         
-                                            <p><p>Entrypoint to the object creation with a single row in the data</p></p>                </div>
+                                            <p><p>Entrypoint to the object creation with a single row in the data</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -221,7 +236,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_withMultipleRows">withMultipleRows</a>(array $dataRows)
         
-                                            <p><p>Entrypoint to create result with multiple data rows, each with their own columns</p></p>                </div>
+                                            <p><p>Entrypoint to create result with multiple data rows, each with their own columns</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -231,7 +247,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_withTotal">withTotal</a>(int $total)
         
-                                            <p><p>Entrypoint to the object creation with total only, may be useful with affected rows only</p></p>                </div>
+                                            <p><p>Entrypoint to the object creation with total only, may be useful with affected rows only</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -241,7 +258,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_withError">withError</a>(string $error)
         
-                                            <p><p>Entrypoint to the object creation with error occurred</p></p>                </div>
+                                            <p><p>Entrypoint to the object creation with error occurred</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -251,7 +269,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_withWarning">withWarning</a>(string $warning)
         
-                                            <p><p>Entrypoint to the object creation with error occurred</p></p>                </div>
+                                            <p><p>Entrypoint to the object creation with error occurred</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -261,7 +280,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_meta">meta</a>(array $meta)
         
-                                            <p><p>Set meta data for the current result</p></p>                </div>
+                                            <p><p>Set meta data for the current result</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -271,7 +291,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_error">error</a>(string $error)
         
-                                            <p><p>Set error for the current result</p></p>                </div>
+                                            <p><p>Set error for the current result</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -281,7 +302,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_warning">warning</a>(string $warning)
         
-                                            <p><p>Set warning for the current result</p></p>                </div>
+                                            <p><p>Set warning for the current result</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -291,7 +313,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_data">data</a>(array $data, bool $isMultipleRows = false)
         
-                                            <p><p>Set data for the current result</p></p>                </div>
+                                            <p><p>Set data for the current result</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -312,7 +335,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_row">row</a>(array $row)
         
-                                            <p><p>Add single row to the final data structure</p></p>                </div>
+                                            <p><p>Add single row to the final data structure</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -322,7 +346,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_column">column</a>(string $name, <abbr title="Manticoresearch\Buddy\Core\Task\Column">Column</abbr> $type, int $rowIndex = 0)
         
-                                            <p><p>Add new column to the current result for a specific row</p></p>                </div>
+                                            <p><p>Add new column to the current result for a specific row</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -332,7 +357,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_setColumnsForRow">setColumnsForRow</a>(array $columns, int $rowIndex = 0)
         
-                                            <p><p>Set columns for a specific row</p></p>                </div>
+                                            <p><p>Set columns for a specific row</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -342,7 +368,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_setMultipleRows">setMultipleRows</a>(bool $value = true)
         
-                                            <p><p>Enable multiple rows mode</p></p>                </div>
+                                            <p><p>Enable multiple rows mode</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -352,7 +379,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_toString">toString</a>()
         
-                                            <p><p>Convert the initialized data into the final response encoded with JSON</p></p>                </div>
+                                            <p><p>Convert the initialized data into the final response encoded with JSON</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -362,7 +390,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_getMeta">getMeta</a>()
         
-                                            <p><p>Get current meta for this result</p></p>                </div>
+                                            <p><p>Get current meta for this result</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -372,7 +401,8 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_getStruct">getStruct</a>()
         
-                                            <p><p>Get resulting struct without JSON encoding</p></p>                </div>
+                                            <p><p>Get resulting struct without JSON encoding</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -382,7 +412,30 @@ Prefer to not use raw when you return standard structure to the client response<
                 <div class="col-md-8">
                     <a href="#method_getTableFormatted">getTableFormatted</a>(int $startTime)
         
-                                            <p><p>Get struct but in the way of formatted output</p></p>                </div>
+                                            <p><p>Get struct but in the way of formatted output</p>
+</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    string|null
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_getContentType">getContentType</a>()
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_setContentType">setContentType</a>(string|null $contentType)
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
                 <div class="col-md-2"></div>
             </div>
             </div>
@@ -393,7 +446,7 @@ Prefer to not use raw when you return standard structure to the client response<
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method_raw">
-        <div class="location">at line 62</div>
+        <div class="location">at line 64</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>raw</strong>(mixed $raw)
         </code>
@@ -406,7 +459,8 @@ Prefer to not use raw when you return standard structure to the client response<
         <div class="method-description">
                             <p><p>Entrypoint to create raw result, that we probably need in some cases
 For example, elastic like responses, cli tables and so on
-Prefer to not use raw when you return standard structure to the client response</p></p>                        
+Prefer to not use raw when you return standard structure to the client response</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -438,7 +492,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_fromResponse">
-        <div class="location">at line 73</div>
+        <div class="location">at line 75</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>fromResponse</strong>(<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a> $response)
         </code>
@@ -449,7 +503,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Create new struct from a raw response of the Manticore to include meta in it also</p></p>                        
+                            <p><p>Create new struct from a raw response of the Manticore to include meta in it also</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -481,7 +536,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_none">
-        <div class="location">at line 104</div>
+        <div class="location">at line 106</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>none</strong>()
         </code>
@@ -492,7 +547,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Entrypoint to the object creation with none of data</p></p>                        
+                            <p><p>Entrypoint to the object creation with none of data</p>
+</p>                        
         </div>
         <div class="tags">
             
@@ -514,7 +570,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_withData">
-        <div class="location">at line 114</div>
+        <div class="location">at line 116</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>withData</strong>(array $data, bool $isMultipleRows = false)
         </code>
@@ -525,7 +581,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Entrypoint to the object creation with data</p></p>                        
+                            <p><p>Entrypoint to the object creation with data</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -562,7 +619,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_withRow">
-        <div class="location">at line 125</div>
+        <div class="location">at line 127</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>withRow</strong>(array $row)
         </code>
@@ -573,7 +630,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Entrypoint to the object creation with a single row in the data</p></p>                        
+                            <p><p>Entrypoint to the object creation with a single row in the data</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -605,7 +663,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_withMultipleRows">
-        <div class="location">at line 134</div>
+        <div class="location">at line 136</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>withMultipleRows</strong>(array $dataRows)
         </code>
@@ -616,7 +674,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Entrypoint to create result with multiple data rows, each with their own columns</p></p>                        
+                            <p><p>Entrypoint to create result with multiple data rows, each with their own columns</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -648,7 +707,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_withTotal">
-        <div class="location">at line 145</div>
+        <div class="location">at line 147</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>withTotal</strong>(int $total)
         </code>
@@ -659,7 +718,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Entrypoint to the object creation with total only, may be useful with affected rows only</p></p>                        
+                            <p><p>Entrypoint to the object creation with total only, may be useful with affected rows only</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -691,7 +751,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_withError">
-        <div class="location">at line 156</div>
+        <div class="location">at line 158</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>withError</strong>(string $error)
         </code>
@@ -702,7 +762,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Entrypoint to the object creation with error occurred</p></p>                        
+                            <p><p>Entrypoint to the object creation with error occurred</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -734,7 +795,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_withWarning">
-        <div class="location">at line 165</div>
+        <div class="location">at line 167</div>
         <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>withWarning</strong>(string $warning)
         </code>
@@ -745,7 +806,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Entrypoint to the object creation with error occurred</p></p>                        
+                            <p><p>Entrypoint to the object creation with error occurred</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -777,7 +839,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_meta">
-        <div class="location">at line 174</div>
+        <div class="location">at line 176</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>meta</strong>(array $meta)
         </code>
@@ -788,7 +850,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Set meta data for the current result</p></p>                        
+                            <p><p>Set meta data for the current result</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -820,7 +883,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_error">
-        <div class="location">at line 184</div>
+        <div class="location">at line 186</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>error</strong>(string $error)
         </code>
@@ -831,7 +894,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Set error for the current result</p></p>                        
+                            <p><p>Set error for the current result</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -863,7 +927,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_warning">
-        <div class="location">at line 194</div>
+        <div class="location">at line 196</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>warning</strong>(string $warning)
         </code>
@@ -874,7 +938,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Set warning for the current result</p></p>                        
+                            <p><p>Set warning for the current result</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -906,7 +971,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_data">
-        <div class="location">at line 205</div>
+        <div class="location">at line 207</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>data</strong>(array $data, bool $isMultipleRows = false)
         </code>
@@ -917,7 +982,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Set data for the current result</p></p>                        
+                            <p><p>Set data for the current result</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -954,7 +1020,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_total">
-        <div class="location">at line 216</div>
+        <div class="location">at line 218</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>total</strong>(int $total)
         </code>
@@ -998,7 +1064,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_row">
-        <div class="location">at line 226</div>
+        <div class="location">at line 228</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>row</strong>(array $row)
         </code>
@@ -1009,7 +1075,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Add single row to the final data structure</p></p>                        
+                            <p><p>Add single row to the final data structure</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -1041,7 +1108,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_column">
-        <div class="location">at line 243</div>
+        <div class="location">at line 245</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>column</strong>(string $name, <abbr title="Manticoresearch\Buddy\Core\Task\Column">Column</abbr> $type, int $rowIndex = 0)
         </code>
@@ -1052,7 +1119,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Add new column to the current result for a specific row</p></p>                        
+                            <p><p>Add new column to the current result for a specific row</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -1094,7 +1162,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_setColumnsForRow">
-        <div class="location">at line 262</div>
+        <div class="location">at line 264</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>setColumnsForRow</strong>(array $columns, int $rowIndex = 0)
         </code>
@@ -1105,7 +1173,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Set columns for a specific row</p></p>                        
+                            <p><p>Set columns for a specific row</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -1142,7 +1211,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_setMultipleRows">
-        <div class="location">at line 272</div>
+        <div class="location">at line 274</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
     <strong>setMultipleRows</strong>(bool $value = true)
         </code>
@@ -1153,7 +1222,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Enable multiple rows mode</p></p>                        
+                            <p><p>Enable multiple rows mode</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -1185,7 +1255,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_toString">
-        <div class="location">at line 281</div>
+        <div class="location">at line 283</div>
         <code>                    string
     <strong>toString</strong>()
         </code>
@@ -1196,7 +1266,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Convert the initialized data into the final response encoded with JSON</p></p>                        
+                            <p><p>Convert the initialized data into the final response encoded with JSON</p>
+</p>                        
         </div>
         <div class="tags">
             
@@ -1218,7 +1289,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_getMeta">
-        <div class="location">at line 290</div>
+        <div class="location">at line 292</div>
         <code>                    array
     <strong>getMeta</strong>()
         </code>
@@ -1229,7 +1300,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Get current meta for this result</p></p>                        
+                            <p><p>Get current meta for this result</p>
+</p>                        
         </div>
         <div class="tags">
             
@@ -1251,7 +1323,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_getStruct">
-        <div class="location">at line 298</div>
+        <div class="location">at line 300</div>
         <code>                    mixed
     <strong>getStruct</strong>()
         </code>
@@ -1262,7 +1334,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Get resulting struct without JSON encoding</p></p>                        
+                            <p><p>Get resulting struct without JSON encoding</p>
+</p>                        
         </div>
         <div class="tags">
             
@@ -1284,7 +1357,7 @@ Prefer to not use raw when you return standard structure to the client response<
             </div>
                     <div class="method-item">
                     <h3 id="method_getTableFormatted">
-        <div class="location">at line 355</div>
+        <div class="location">at line 357</div>
         <code>                    string
     <strong>getTableFormatted</strong>(int $startTime)
         </code>
@@ -1295,7 +1368,8 @@ Prefer to not use raw when you return standard structure to the client response<
             
 
         <div class="method-description">
-                            <p><p>Get struct but in the way of formatted output</p></p>                        
+                            <p><p>Get struct but in the way of formatted output</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -1314,6 +1388,84 @@ Prefer to not use raw when you return standard structure to the client response<
                     <table class="table table-condensed">
         <tr>
             <td>string</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getContentType">
+        <div class="location">at line 383</div>
+        <code>                    string|null
+    <strong>getContentType</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string|null</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_setContentType">
+        <div class="location">at line 388</div>
+        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a>
+    <strong>setContentType</strong>(string|null $contentType)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string|null</td>
+                <td>$contentType</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Task/TaskResult.html"><abbr title="Manticoresearch\Buddy\Core\Task\TaskResult">TaskResult</abbr></a></td>
             <td></td>
         </tr>
     </table>

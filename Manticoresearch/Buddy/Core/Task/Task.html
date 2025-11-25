@@ -97,7 +97,8 @@
             <div class="description">
             <p><p>The most important thing for this class you should call
 Task::init() first with runtime file and [init.php]
-Task::setSettings() with passed settings before you can use anything [main.php]</p></p>                    </div>
+Task::setSettings() with passed settings before you can use anything [main.php]</p>
+</p>                    </div>
             
         
     
@@ -138,7 +139,8 @@ Task::setSettings() with passed settings before you can use anything [main.php]<
                                     </td>
                 <td>$isDeferred</td>
                 <td class="last"><p>This flag shows that this task is deferred and
-we can return response to client asap</p></td>
+we can return response to client asap</p>
+</td>
                 <td></td>
             </tr>
                     <tr>
@@ -174,7 +176,8 @@ we can return response to client asap</p></td>
                                                                                 
                                     </td>
                 <td>$status</td>
-                <td class="last"><p>Current task status</p></td>
+                <td class="last"><p>Current task status</p>
+</td>
                 <td></td>
             </tr>
                     <tr>
@@ -228,7 +231,8 @@ we can return response to client asap</p></td>
                 <div class="col-md-8">
                     <a href="#method_setSettings">setSettings</a>(<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a> $settings)
         
-                                            <p><p>Set settings for usage in function run</p></p>                </div>
+                                            <p><p>Set settings for usage in function run</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -238,7 +242,8 @@ we can return response to client asap</p></td>
                 <div class="col-md-8">
                     <a href="#method_isDeferred">isDeferred</a>()
         
-                                            <p><p>Check if this task is deferred</p></p>                </div>
+                                            <p><p>Check if this task is deferred</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -248,7 +253,8 @@ we can return response to client asap</p></td>
                 <div class="col-md-8">
                     <a href="#method_getId">getId</a>()
         
-                                            <p><p>Get current task ID</p></p>                </div>
+                                            <p><p>Get current task ID</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -258,7 +264,8 @@ we can return response to client asap</p></td>
                 <div class="col-md-8">
                     <a href="#method_create">create</a>(<a target="_blank" rel="noopener" href="https://www.php.net/Closure">Closure</a> $fn, array $argv = [])
         
-                                            <p><p>Main entry point to create a task</p></p>                </div>
+                                            <p><p>Main entry point to create a task</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -268,7 +275,8 @@ we can return response to client asap</p></td>
                 <div class="col-md-8">
                     <a href="#method_defer">defer</a>()
         
-                                            <p><p>Set task to be deferred</p></p>                </div>
+                                            <p><p>Set task to be deferred</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -278,7 +286,8 @@ we can return response to client asap</p></td>
                 <div class="col-md-8">
                     <a href="#method_run">run</a>()
         
-                                            <p><p>Launch the current task</p></p>                </div>
+                                            <p><p>Launch the current task</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -288,7 +297,8 @@ we can return response to client asap</p></td>
                 <div class="col-md-8">
                     <a href="#method_wait">wait</a>(bool $exceptionOnError = false)
         
-                                            <p><p>Blocking call to wait till the task is finished</p></p>                </div>
+                                            <p><p>Blocking call to wait till the task is finished</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -298,7 +308,8 @@ we can return response to client asap</p></td>
                 <div class="col-md-8">
                     <a href="#method_getStatus">getStatus</a>()
         
-                                            <p><p>Get current status of launched task</p></p>                </div>
+                                            <p><p>Get current status of launched task</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -308,7 +319,8 @@ we can return response to client asap</p></td>
                 <div class="col-md-8">
                     <a href="#method_isRunning">isRunning</a>()
         
-                                            <p><p>Shortcut to check if the task is still running</p></p>                </div>
+                                            <p><p>Shortcut to check if the task is still running</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -330,7 +342,8 @@ we can return response to client asap</p></td>
                     <a href="#method_on">on</a>(string $ns, callable $fn)
         
                                             <p><p>Register callback that will be handled before execution
-Useful to run hooks or something like this</p></p>                </div>
+Useful to run hooks or something like this</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -340,7 +353,8 @@ Useful to run hooks or something like this</p></p>                </div>
                 <div class="col-md-8">
                     <a href="#method_processCallbacks">processCallbacks</a>(string|null $ns = null)
         
-                                            <p><p>Process all callbacks if we have any</p></p>                </div>
+                                            <p><p>Process all callbacks if we have any</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -350,7 +364,8 @@ Useful to run hooks or something like this</p></p>                </div>
                 <div class="col-md-8">
                     <a href="#method_getError">getError</a>()
         
-                                            <p><p>Just getter for current error</p></p>                </div>
+                                            <p><p>Just getter for current error</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -360,7 +375,8 @@ Useful to run hooks or something like this</p></p>                </div>
                 <div class="col-md-8">
                     <a href="#method_getResult">getResult</a>()
         
-                                            <p><p>Just getter for result of future</p></p>                </div>
+                                            <p><p>Just getter for result of future</p>
+</p>                </div>
                 <div class="col-md-2"></div>
             </div>
             </div>
@@ -426,7 +442,8 @@ Useful to run hooks or something like this</p></p>                </div>
             
 
         <div class="method-description">
-                            <p><p>Set settings for usage in function run</p></p>                        
+                            <p><p>Set settings for usage in function run</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -469,7 +486,8 @@ Useful to run hooks or something like this</p></p>                </div>
             
 
         <div class="method-description">
-                            <p><p>Check if this task is deferred</p></p>                        
+                            <p><p>Check if this task is deferred</p>
+</p>                        
         </div>
         <div class="tags">
             
@@ -502,7 +520,8 @@ Useful to run hooks or something like this</p></p>                </div>
             
 
         <div class="method-description">
-                            <p><p>Get current task ID</p></p>                        
+                            <p><p>Get current task ID</p>
+</p>                        
         </div>
         <div class="tags">
             
@@ -535,7 +554,8 @@ Useful to run hooks or something like this</p></p>                </div>
             
 
         <div class="method-description">
-                            <p><p>Main entry point to create a task</p></p>                        
+                            <p><p>Main entry point to create a task</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -583,7 +603,8 @@ Useful to run hooks or something like this</p></p>                </div>
             
 
         <div class="method-description">
-                            <p><p>Set task to be deferred</p></p>                        
+                            <p><p>Set task to be deferred</p>
+</p>                        
         </div>
         <div class="tags">
             
@@ -616,7 +637,8 @@ Useful to run hooks or something like this</p></p>                </div>
             
 
         <div class="method-description">
-                            <p><p>Launch the current task</p></p>                        
+                            <p><p>Launch the current task</p>
+</p>                        
         </div>
         <div class="tags">
             
@@ -649,7 +671,8 @@ Useful to run hooks or something like this</p></p>                </div>
             
 
         <div class="method-description">
-                            <p><p>Blocking call to wait till the task is finished</p></p>                        
+                            <p><p>Blocking call to wait till the task is finished</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -660,7 +683,8 @@ Useful to run hooks or something like this</p></p>                </div>
                 <td>$exceptionOnError</td>
                 <td><p>If we should throw exception in case of failure
 or just simply return the current status
-and give possibility to caller handle it and check</p></td>
+and give possibility to caller handle it and check</p>
+</td>
             </tr>
             </table>
 
@@ -703,7 +727,8 @@ and give possibility to caller handle it and check</p></td>
             
 
         <div class="method-description">
-                            <p><p>Get current status of launched task</p></p>                        
+                            <p><p>Get current status of launched task</p>
+</p>                        
         </div>
         <div class="tags">
             
@@ -736,7 +761,8 @@ and give possibility to caller handle it and check</p></td>
             
 
         <div class="method-description">
-                            <p><p>Shortcut to check if the task is still running</p></p>                        
+                            <p><p>Shortcut to check if the task is still running</p>
+</p>                        
         </div>
         <div class="tags">
             
@@ -804,7 +830,8 @@ and give possibility to caller handle it and check</p></td>
 
         <div class="method-description">
                             <p><p>Register callback that will be handled before execution
-Useful to run hooks or something like this</p></p>                        
+Useful to run hooks or something like this</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -813,7 +840,8 @@ Useful to run hooks or something like this</p></p>
                     <tr>
                 <td>string</td>
                 <td>$ns</td>
-                <td><p>One of success, failure or run</p></td>
+                <td><p>One of success, failure or run</p>
+</td>
             </tr>
                     <tr>
                 <td>callable</td>
@@ -852,7 +880,8 @@ Useful to run hooks or something like this</p></p>
             
 
         <div class="method-description">
-                            <p><p>Process all callbacks if we have any</p></p>                        
+                            <p><p>Process all callbacks if we have any</p>
+</p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -895,7 +924,8 @@ Useful to run hooks or something like this</p></p>
             
 
         <div class="method-description">
-                            <p><p>Just getter for current error</p></p>                        
+                            <p><p>Just getter for current error</p>
+</p>                        
         </div>
         <div class="tags">
             
@@ -937,7 +967,8 @@ Useful to run hooks or something like this</p></p>
             
 
         <div class="method-description">
-                            <p><p>Just getter for result of future</p></p>                        
+                            <p><p>Just getter for result of future</p>
+</p>                        
         </div>
         <div class="tags">
             
