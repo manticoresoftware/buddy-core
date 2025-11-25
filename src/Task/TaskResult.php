@@ -380,13 +380,11 @@ final class TaskResult {
 		return implode("\n", $tables);
 	}
 
-	public function getContentType(): ?string
-	{
+	public function getContentType(): ?string {
 		return $this->contentType;
 	}
 
-	public function setContentType(?string $contentType): static
-	{
+	public function setContentType(?string $contentType): static {
 		$this->contentType = $contentType;
 		return $this;
 	}
