@@ -36,6 +36,8 @@ final class TaskResult {
 	/** @var bool */
 	protected bool $shouldHaveData = false;
 
+	protected ?string $contentType = null;
+
 	/**
 	 * Initialize the empty result
 	 * @param ?array<mixed> $data
@@ -376,5 +378,16 @@ final class TaskResult {
 		}
 
 		return implode("\n", $tables);
+	}
+
+	public function getContentType(): ?string
+	{
+		return $this->contentType;
+	}
+
+	public function setContentType(?string $contentType): static
+	{
+		$this->contentType = $contentType;
+		return $this;
 	}
 }
