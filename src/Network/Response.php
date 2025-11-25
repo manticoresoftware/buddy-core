@@ -133,7 +133,7 @@ final class Response {
 			. '"message":%message%,'
 			. '"meta":' . ($meta ? json_encode($meta) : 'null') . ','
 			. '"error_code":' . ($error?->getResponseErrorCode() ?? 200)
-//			. (!empty($contentType) ? '"content_type":"' . $contentType . '"' : '')
+			. (!empty($contentType) ? ', "content_type":"' . $contentType . '"' : '')
 			. '}';
 		if ($message instanceof Struct) {
 			$json = str_replace('%message%', $message->toJson(), $json);
