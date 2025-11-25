@@ -73,9 +73,10 @@ final class Response {
 	public static function fromMessageAndMeta(
 		mixed $message = [],
 		array $meta = [],
-		RequestFormat $format = RequestFormat::JSON
+		RequestFormat $format = RequestFormat::JSON,
+		?string $contentType = null,
 	) {
-		return static::fromMessageAndError($message, $meta, null, $format);
+		return static::fromMessageAndError($message, $meta, null, $format, $contentType);
 	}
 
   /**
@@ -112,7 +113,8 @@ final class Response {
 		mixed $message = [],
 		array $meta = [],
 		?GenericError $error = null,
-		RequestFormat $format = RequestFormat::JSON
+		RequestFormat $format = RequestFormat::JSON,
+		?string $contentType = null
 	): static {
 		$responseError = $error?->getResponseError();
 		if ($responseError && is_array($message)) {
@@ -131,6 +133,7 @@ final class Response {
 			. '"message":%message%,'
 			. '"meta":' . ($meta ? json_encode($meta) : 'null') . ','
 			. '"error_code":' . ($error?->getResponseErrorCode() ?? 200)
+			. (!empty($contentType) ? ', "content_type":"' . $contentType . '"' : '')
 			. '}';
 		if ($message instanceof Struct) {
 			$json = str_replace('%message%', $message->toJson(), $json);
