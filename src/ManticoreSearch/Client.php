@@ -133,7 +133,6 @@ class Client {
 		string $request,
 		?string $path = null,
 		bool $disableAgentHeader = false,
-		bool $disableShowMeta = false,
 	): Response {
 		$t = microtime(true);
 		if ($request === '') {
@@ -154,7 +153,8 @@ class Client {
 		if (str_starts_with($path, 'sql') && !$disableAgentHeader) {
 			// Disabling show meta is a temporary workaround to be able to use 'sql' instead of 'sql?mode=raw'
 			// for getting correct values of JSON nested fields until that's fixed in daemon
-			$showMeta = !$disableShowMeta && stripos(trim($request), 'SELECT') === 0;
+			$showMeta = false !== strpos($path, 'mode=raw') &&
+				stripos(trim($request), 'SELECT') === 0;
 			if ($showMeta) {
 				$request .= ';SHOW META';
 			}
