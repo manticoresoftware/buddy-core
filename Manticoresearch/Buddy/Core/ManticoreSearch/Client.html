@@ -275,7 +275,7 @@
                     <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_sendRequest">sendRequest</a>(string $request, string|null $path = null, bool $disableAgentHeader = false)
+                    <a href="#method_sendRequest">sendRequest</a>(string $request, string|null $path = null, bool $disableAgentHeader = false, bool $disableShowMeta = false)
         
                                             <p><p>Send the request where request represents the SQL query to be send</p>
 </p>                </div>
@@ -619,7 +619,7 @@ or validate and throw error if we have missing table in the list</p>
                     <h3 id="method_sendRequest">
         <div class="location">at line 132</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
-    <strong>sendRequest</strong>(string $request, string|null $path = null, bool $disableAgentHeader = false)
+    <strong>sendRequest</strong>(string $request, string|null $path = null, bool $disableAgentHeader = false, bool $disableShowMeta = false)
         </code>
     </h3>
     <div class="details">    
@@ -650,6 +650,11 @@ or validate and throw error if we have missing table in the list</p>
                 <td>$disableAgentHeader</td>
                 <td></td>
             </tr>
+                    <tr>
+                <td>bool</td>
+                <td>$disableShowMeta</td>
+                <td></td>
+            </tr>
             </table>
 
             
@@ -671,7 +676,7 @@ or validate and throw error if we have missing table in the list</p>
             </div>
                     <div class="method-item">
                     <h3 id="method_sendMultiRequest">
-        <div class="location">at line 210</div>
+        <div class="location">at line 208</div>
         <code>                    array
     <strong>sendMultiRequest</strong>(array $requests)
         </code>
@@ -715,7 +720,7 @@ or validate and throw error if we have missing table in the list</p>
             </div>
                     <div class="method-item">
                     <h3 id="method_sendRequestToUrl">
-        <div class="location">at line 249</div>
+        <div class="location">at line 247</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
     <strong>sendRequestToUrl</strong>(string $url, string $request, string|null $path = null, bool $disableAgentHeader = false)
         </code>
@@ -774,7 +779,7 @@ or validate and throw error if we have missing table in the list</p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getClientForUrl">
-        <div class="location">at line 263</div>
+        <div class="location">at line 261</div>
         <code>            protected        <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
     <strong>getClientForUrl</strong>(string $url)
         </code>
@@ -818,7 +823,7 @@ or validate and throw error if we have missing table in the list</p>
             </div>
                     <div class="method-item">
                     <h3 id="method_setForceSync">
-        <div class="location">at line 281</div>
+        <div class="location">at line 279</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
     <strong>setForceSync</strong>(bool $value = true)
         </code>
@@ -862,7 +867,7 @@ or validate and throw error if we have missing table in the list</p>
             </div>
                     <div class="method-item">
                     <h3 id="method_runAsyncRequest">
-        <div class="location">at line 293</div>
+        <div class="location">at line 291</div>
         <code>            protected        string
     <strong>runAsyncRequest</strong>(string $path, string $request, array $headers)
         </code>
@@ -916,7 +921,7 @@ or validate and throw error if we have missing table in the list</p>
             </div>
                     <div class="method-item">
                     <h3 id="method_runSyncRequest">
-        <div class="location">at line 325</div>
+        <div class="location">at line 323</div>
         <code>            protected        string
     <strong>runSyncRequest</strong>(string $path, string $request, array $headers)
         </code>
@@ -970,7 +975,7 @@ or validate and throw error if we have missing table in the list</p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getAllTables">
-        <div class="location">at line 379</div>
+        <div class="location">at line 377</div>
         <code>                    <a target="_blank" rel="noopener" href="https://www.php.net/Generator">Generator</a>
     <strong>getAllTables</strong>(array $types = [])
         </code>
@@ -1029,7 +1034,7 @@ And filter only required types or any if not specified</p>
             </div>
                     <div class="method-item">
                     <h3 id="method_validateTables">
-        <div class="location">at line 403</div>
+        <div class="location">at line 401</div>
         <code>                    array
     <strong>validateTables</strong>(array $tables = [], array $types = [])
         </code>
@@ -1096,7 +1101,7 @@ or validate and throw error if we have missing table in the list</p>
             </div>
                     <div class="method-item">
                     <h3 id="method_hasTable">
-        <div class="location">at line 433</div>
+        <div class="location">at line 431</div>
         <code>                    bool
     <strong>hasTable</strong>(string $table)
         </code>
@@ -1140,7 +1145,7 @@ or validate and throw error if we have missing table in the list</p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getTableShards">
-        <div class="location">at line 445</div>
+        <div class="location">at line 443</div>
         <code>                    array
     <strong>getTableShards</strong>(string $table)
         </code>
@@ -1193,7 +1198,7 @@ or validate and throw error if we have missing table in the list</p>
             </div>
                     <div class="method-item">
                     <h3 id="method_parseTableShards">
-        <div class="location">at line 476</div>
+        <div class="location">at line 474</div>
         <code>            protected        array
     <strong>parseTableShards</strong>(string $table)
         </code>
@@ -1237,7 +1242,7 @@ or validate and throw error if we have missing table in the list</p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getSettings">
-        <div class="location">at line 500</div>
+        <div class="location">at line 498</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a>
     <strong>getSettings</strong>()
         </code>
@@ -1271,7 +1276,7 @@ or validate and throw error if we have missing table in the list</p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fetchSettings">
-        <div class="location">at line 511</div>
+        <div class="location">at line 509</div>
         <code>            protected        <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a>
     <strong>fetchSettings</strong>()
         </code>
@@ -1305,7 +1310,7 @@ or validate and throw error if we have missing table in the list</p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fetchFuzzyVariations">
-        <div class="location">at line 568</div>
+        <div class="location">at line 566</div>
         <code>                    array
     <strong>fetchFuzzyVariations</strong>(string $query, string $table, bool $forceBigrams = false, int $distance = 2, int $limit = 3)
         </code>
