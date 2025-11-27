@@ -236,7 +236,7 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 			}
 		}
 
-		return $pattern . '("?)([^"{}[\],]+)\1/';
+		return $pattern . '("?)(\-?\d+)\1/';
 	}
 
 	/**
