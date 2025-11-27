@@ -153,8 +153,9 @@ class Client {
 		if (str_starts_with($path, 'sql') && !$disableAgentHeader) {
 			// Disabling show meta is a temporary workaround to be able to use 'sql' instead of 'sql?mode=raw'
 			// for getting correct values of JSON nested fields until that's fixed in daemon
-			$showMeta = false !== strpos($path, 'mode=raw') &&
-				stripos(trim($request), 'SELECT') === 0;
+			$isSelectFrom = stripos(trim($request), 'SELECT') === 0 && preg_match('/^\s*SELECT\b.*\bFROM\b/is', $request);
+			$showMeta = false !== strpos($path, 'mode=raw') && $isSelectFrom;
+
 			if ($showMeta) {
 				$request .= ';SHOW META';
 			}
