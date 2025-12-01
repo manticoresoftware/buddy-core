@@ -83,7 +83,14 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 	 */
 	public function offsetUnset(mixed $name): void {
 		unset($this->data[$name]);
-		$this->keys = array_keys($this->data);
+		$this->keys = array_values(
+			array_filter(
+				$this->keys,
+				static function (mixed $key) use ($name): bool {
+					return $key !== $name;
+				}
+			)
+		);
 	}
 
 	/**
@@ -219,7 +226,7 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 			},
 			$serialized
 		);
-		if ($json === false) {
+		if (!is_string($json)) {
 			throw new Exception('Cannot encode data to JSON');
 		}
 		return $json;
@@ -242,7 +249,7 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 			}
 		}
 
-		return $pattern . '("?)(\-?\d+)\1/';
+		return $pattern . '("?)([^"{}[\],]+)\1/';
 	}
 
 	/**
@@ -265,6 +272,8 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 			return;
 		}
 
+		/** @var array<string, int> */
+		$bigIntFieldsLookup = array_flip($bigIntFields);
 		foreach ($data as $key => &$value) {
 			$currentPath = $path ? "$path.$key" : "$key";
 			if (!isset($originalData[$key])) {
@@ -274,10 +283,11 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 			$originalValue = $originalData[$key];
 			if (is_array($value) && is_array($originalValue)) {
 				static::traverseAndTrack($value, $originalValue, $bigIntFields, $currentPath);
+				$bigIntFieldsLookup = array_flip($bigIntFields);
 				continue;
 			}
 
-			static::trackBigIntIfNeeded($value, $originalValue, $currentPath, $bigIntFields);
+			static::trackBigIntIfNeeded($value, $originalValue, $currentPath, $bigIntFields, $bigIntFieldsLookup);
 		}
 	}
 
@@ -331,13 +341,15 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 	 * @param mixed $originalValue
 	 * @param string $currentPath
 	 * @param array<string> &$bigIntFields
+	 * @param array<string, int> $bigIntFieldsLookup Fast O(1) lookup set
 	 * @return void
 	 */
 	private static function trackBigIntIfNeeded(
 		mixed $value,
 		mixed $originalValue,
 		string $currentPath,
-		array &$bigIntFields
+		array &$bigIntFields,
+		array $bigIntFieldsLookup = []
 	): void {
 		if (!is_string($value) || !is_numeric($originalValue)) {
 			return;
@@ -349,7 +361,7 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 		}
 
 		// Skip if already identified via column metadata
-		if (in_array($currentPath, $bigIntFields, true)) {
+		if (isset($bigIntFieldsLookup[$currentPath])) {
 			return;
 		}
 

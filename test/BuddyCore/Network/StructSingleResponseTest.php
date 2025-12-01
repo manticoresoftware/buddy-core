@@ -62,7 +62,7 @@ final class StructSingleResponseTest extends TestCase {
 	/**
 	 * Data provider for KNN-specific scenarios
 	 *
-	 * @return array<string,array{array<string,mixed>,array<string>,array<string>}>
+	 * @return array<string,array{array<string,mixed>,array<string>,array<string|array{string,string}>}>
 	 */
 	public static function knnResponseProvider(): array {
 		return [
@@ -119,6 +119,104 @@ final class StructSingleResponseTest extends TestCase {
 				['data.0.id'],
 				['"id":5623974933752184833', '"code":"000123"', '"tags":"999,1000,1001"'],
 			],
+			'with_quoted_scientific_notation' => [
+				[
+					'columns' => [
+						['user_id' => ['type' => 'long long']],
+					],
+					'data' => [
+						[
+							'user_id' => 9876543210987654321,  // Becomes float in PHP, then quoted in JSON
+						],
+					],
+					'total' => 1,
+					'error' => '',
+					'warning' => '',
+				],
+				['data.0.user_id'],
+				['"user_id":9.876543210987655e+18'],  // Should be unquoted scientific notation
+			],
+			'with_unquoted_scientific_notation' => [
+				[
+					'columns' => [
+						['balance' => ['type' => 'long long']],
+					],
+					'data' => [
+						[
+							'balance' => 9223372036854775808,  // Beyond PHP_INT_MAX, becomes float
+						],
+					],
+					'total' => 1,
+					'error' => '',
+					'warning' => '',
+				],
+				['data.0.balance'],
+				[
+					// Regex pattern to match scientific notation with varying precision
+					['/balance":9\.22337203685477[0-9]e\+18/', 'Scientific notation should be unquoted'],
+				],
+			],
+			'with_float_field' => [
+				[
+					'columns' => [
+						['price' => ['type' => 'float']],
+						['id' => ['type' => 'long long']],
+					],
+					'data' => [
+						[
+							'price' => 1234567890.123,
+							'id' => 9223372036854775807,
+						],
+					],
+					'total' => 1,
+					'error' => '',
+					'warning' => '',
+				],
+				['data.0.id'],
+				['"price":1234567890.123', '"id":9223372036854775807'],
+			],
+			'with_mva_array_field' => [
+				[
+					'columns' => [
+						['tags' => ['type' => 'uint', 'multi' => true]],  // MVA - multi-value attribute
+						['id' => ['type' => 'long long']],
+					],
+					'data' => [
+						[
+							'tags' => [1, 2, 3, 9223372036854775807],
+							'id' => 5623974933752184833,
+						],
+					],
+					'total' => 1,
+					'error' => '',
+					'warning' => '',
+				],
+				['data.0.id'],
+				['"tags":[1,2,3,9223372036854775807]', '"id":5623974933752184833'],
+			],
+			'with_mixed_types' => [
+				[
+					'columns' => [
+						['id' => ['type' => 'long long']],
+						['name' => ['type' => 'string']],
+						['price' => ['type' => 'float']],
+						['tags' => ['type' => 'string']],  // JSON-serialized array
+					],
+					'data' => [
+						[
+							'id' => 9223372036854775807,
+							'name' => 'product_name',
+							'price' => 99.99,
+							'tags' => '[1,2,3]',  // JSON array as string
+						],
+					],
+					'total' => 1,
+					'error' => '',
+					'warning' => '',
+				],
+				['data.0.id'],
+				['"id":9223372036854775807', '"name":"product_name"', '"price":99.99', '"tags":"[1,2,3]"'],
+			],
 		];
 	}
 
@@ -126,7 +224,7 @@ final class StructSingleResponseTest extends TestCase {
 	 * @dataProvider knnResponseProvider
 	 * @param array<string,mixed> $data
 	 * @param array<string> $bigintFields
-	 * @param array<string> $expectedPatterns
+	 * @param array<string|array{string,string}> $expectedPatterns
 	 * @return void
 	 */
 	public function testKNNSpecificScenarios(array $data, array $bigintFields, array $expectedPatterns): void {
@@ -137,7 +235,13 @@ final class StructSingleResponseTest extends TestCase {
 
 		// Verify all expected patterns are present
 		foreach ($expectedPatterns as $pattern) {
-			$this->assertStringContainsString($pattern, $response);
+			if (is_array($pattern)) {
+				// For regex patterns (used for floating-point precision variations)
+				$this->assertMatchesRegularExpression($pattern[0], $response, $pattern[1]);
+			} else {
+				// For exact string matches
+				$this->assertStringContainsString($pattern, $response);
+			}
 		}
 	}
 
@@ -207,7 +311,7 @@ final class StructSingleResponseTest extends TestCase {
 			]
 		);
 
-		$this->assertNotNull($jsonResponse, 'JSON encoding should work');
+		$this->assertIsString($jsonResponse, 'JSON encoding should work');
 
 		// Create struct using fromJson (which should now use column-based detection)
 		$struct = Struct::fromJson($jsonResponse);
@@ -266,10 +370,7 @@ final class StructSingleResponseTest extends TestCase {
 			$testData = [$case['data']];
 			$response = Struct::fromData($testData, $case['bigint_fields'])->toJson();
 
-			if (!$case['should_be_valid']) {
-				continue;
-			}
-
+			// All test cases are expected to produce valid JSON
 			$this->assertNotNull(
 				json_decode($response),
 				"Edge case '{$caseName}' should produce valid JSON"
@@ -299,6 +400,7 @@ final class StructSingleResponseTest extends TestCase {
 			]
 		);
 
+		$this->assertIsString($jsonInput);
 		$struct = Struct::fromJson($jsonInput);
 		$response = $struct->toJson();
 
@@ -340,6 +442,7 @@ final class StructSingleResponseTest extends TestCase {
 			]
 		);
 
+		$this->assertIsString($jsonInput);
 		$struct = Struct::fromJson($jsonInput);
 		$response = $struct->toJson();
 
@@ -379,6 +482,7 @@ final class StructSingleResponseTest extends TestCase {
 			]
 		);
 
+		$this->assertIsString($jsonInput);
 		$struct = Struct::fromJson($jsonInput);
 		$response = $struct->toJson();
 
@@ -420,6 +524,7 @@ final class StructSingleResponseTest extends TestCase {
 			]
 		);
 
+		$this->assertIsString($jsonInput);
 		$struct = Struct::fromJson($jsonInput);
 		$response = $struct->toJson();
 
@@ -461,6 +566,7 @@ final class StructSingleResponseTest extends TestCase {
 			]
 		);
 
+		$this->assertIsString($jsonInput);
 		$struct = Struct::fromJson($jsonInput);
 		$response = $struct->toJson();
 
@@ -499,6 +605,7 @@ final class StructSingleResponseTest extends TestCase {
 			]
 		);
 
+		$this->assertIsString($jsonInput);
 		$struct = Struct::fromJson($jsonInput);
 		$response = $struct->toJson();
 
