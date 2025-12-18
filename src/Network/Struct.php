@@ -151,7 +151,7 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 			$modified = json_decode($json, true, static::JSON_DEPTH, static::JSON_FLAGS | JSON_BIGINT_AS_STRING);
 
 			/** @var array<string,int> $bigIntFieldsLookup */
-			$bigIntFieldsLookup = $bigIntFields ? array_fill_keys($bigIntFields, 1) : [];
+			$bigIntFieldsLookup = [];
 			static::traverseAndTrack($modified, $result, $bigIntFields, $bigIntFieldsLookup);
 
 			$result = $modified;
