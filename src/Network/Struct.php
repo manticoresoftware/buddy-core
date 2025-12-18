@@ -83,14 +83,7 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 	 */
 	public function offsetUnset(mixed $name): void {
 		unset($this->data[$name]);
-		$this->keys = array_values(
-			array_filter(
-				$this->keys,
-				static function (mixed $key) use ($name): bool {
-					return $key !== $name;
-				}
-			)
-		);
+		$this->keys = array_keys($this->data);
 	}
 
 	/**
@@ -156,7 +149,11 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 			// We need here to keep original json decode cuzit has bigIntFields
 			/** @var array<TKey, TValue> */
 			$modified = json_decode($json, true, static::JSON_DEPTH, static::JSON_FLAGS | JSON_BIGINT_AS_STRING);
-			static::traverseAndTrack($modified, $result, $bigIntFields);
+
+			/** @var array<string,int> $bigIntFieldsLookup */
+			$bigIntFieldsLookup = $bigIntFields ? array_fill_keys($bigIntFields, 1) : [];
+			static::traverseAndTrack($modified, $result, $bigIntFields, $bigIntFieldsLookup);
+
 			$result = $modified;
 		}
 
@@ -226,7 +223,7 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 			},
 			$serialized
 		);
-		if (!is_string($json)) {
+		if (!isset($json)) {
 			throw new Exception('Cannot encode data to JSON');
 		}
 		return $json;
@@ -259,6 +256,7 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 	 * @param mixed $data
 	 * @param mixed $originalData
 	 * @param array<string> $bigIntFields
+	 * @param array<string, int> $bigIntFieldsLookup
 	 * @param string $path
 	 * @return void
 	 */
@@ -266,14 +264,13 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 		mixed &$data,
 		mixed $originalData,
 		array &$bigIntFields,
+		array &$bigIntFieldsLookup,
 		string $path = ''
 	): void {
 		if (!is_array($data) || !is_array($originalData)) {
 			return;
 		}
 
-		/** @var array<string, int> */
-		$bigIntFieldsLookup = array_flip($bigIntFields);
 		foreach ($data as $key => &$value) {
 			$currentPath = $path ? "$path.$key" : "$key";
 			if (!isset($originalData[$key])) {
@@ -282,8 +279,7 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 
 			$originalValue = $originalData[$key];
 			if (is_array($value) && is_array($originalValue)) {
-				static::traverseAndTrack($value, $originalValue, $bigIntFields, $currentPath);
-				$bigIntFieldsLookup = array_flip($bigIntFields);
+				static::traverseAndTrack($value, $originalValue, $bigIntFields, $bigIntFieldsLookup, $currentPath);
 				continue;
 			}
 
@@ -341,7 +337,7 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 	 * @param mixed $originalValue
 	 * @param string $currentPath
 	 * @param array<string> &$bigIntFields
-	 * @param array<string, int> $bigIntFieldsLookup Fast O(1) lookup set
+	 * @param array<string, int> &$bigIntFieldsLookup Fast O(1) lookup set
 	 * @return void
 	 */
 	private static function trackBigIntIfNeeded(
@@ -349,7 +345,7 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 		mixed $originalValue,
 		string $currentPath,
 		array &$bigIntFields,
-		array $bigIntFieldsLookup = []
+		array &$bigIntFieldsLookup
 	): void {
 		if (!is_string($value) || !is_numeric($originalValue)) {
 			return;
@@ -360,11 +356,12 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 			return;
 		}
 
-		// Skip if already identified via column metadata
+		// Skip if already identified via column metadata or earlier traversal
 		if (isset($bigIntFieldsLookup[$currentPath])) {
 			return;
 		}
 
+		$bigIntFieldsLookup[$currentPath] = 1;
 		$bigIntFields[] = $currentPath;
 	}
 
