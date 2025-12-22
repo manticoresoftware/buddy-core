@@ -173,7 +173,7 @@ final class Response {
 				$json
 			);
 		}
-
+    Buddy::debug("---> MRE debug response: <--- ". $json);
 		return new static($json, self::checkForError($message));
 	}
 
