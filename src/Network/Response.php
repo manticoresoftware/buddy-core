@@ -63,13 +63,12 @@ final class Response {
 		$log = null;
 
 		if ($error instanceof HasDaemonLogEntity) {
-			$entity = $error->getDaemonLogEntity();
-			if (
-				isset($entity['type'], $entity['severity'], $entity['message'])
-				&& is_string($entity['type']) && $entity['type'] !== ''
-				&& is_string($entity['severity']) && $entity['severity'] !== ''
-				&& is_string($entity['message']) && $entity['message'] !== ''
-			) {
+				$entity = $error->getDaemonLogEntity();
+			if (isset($entity['type'], $entity['severity'], $entity['message'])
+					&& $entity['type'] !== ''
+					&& $entity['severity'] !== ''
+					&& $entity['message'] !== ''
+				) {
 				$log = $entity;
 			}
 		}
@@ -159,7 +158,7 @@ final class Response {
 			. '"version":' . Buddy::PROTOCOL_VERSION . ','
 			. '"type":"' . $format->value . ' response",'
 			. '"message":%message%,'
-			. ($logJson ? '"log":' . $logJson . ',' : '')
+			. ($logJson ? '"log":[' . $logJson . '],' : '')
 			. '"meta":' . ($meta ? json_encode($meta) : 'null') . ','
 			. '"error_code":' . ($error?->getResponseErrorCode() ?? 200)
 			. (!empty($contentType) ? ', "content_type":"' . $contentType . '"' : '')
@@ -173,7 +172,6 @@ final class Response {
 				$json
 			);
 		}
-    Buddy::debug("---> MRE debug response: <--- ". $json);
 		return new static($json, self::checkForError($message));
 	}
 

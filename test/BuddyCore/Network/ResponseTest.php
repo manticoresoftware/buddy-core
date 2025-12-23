@@ -149,7 +149,7 @@ class ResponseTest extends TestCase {
 			'version' => Buddy::PROTOCOL_VERSION,
 			'type' => 'json response',
 			'message' => ['error' => 'simple error #1'],
-			'log' => $log,
+			'log' => [$log],
 			'meta' => null,
 			'error_code' => 0,
 		];
