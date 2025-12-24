@@ -302,6 +302,7 @@ final class Request {
 				'_template/',
 				'_cat/',
 				'_field_caps',
+				'_plugins',
 			];
 			$elasticPathSuffixes = [
 				'_nodes',
