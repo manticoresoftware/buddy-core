@@ -12,6 +12,7 @@
 namespace Manticoresearch\Buddy\Core\Network;
 
 use Manticoresearch\Buddy\Core\Error\GenericError;
+use Manticoresearch\Buddy\Core\Error\HasDaemonLogEntity;
 use Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat;
 use Manticoresearch\Buddy\Core\Plugin\TableFormatter;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
@@ -51,6 +52,30 @@ final class Response {
 	private static function checkForError(mixed $message): bool {
 		return (is_array($message) && !(empty($message['error']) && empty($message[0]['error'])))
 		|| (is_string($message) && str_starts_with($message, TableFormatter::ERROR_PREFIX));
+	}
+
+	/**
+	 * @param ?GenericError $error
+	 * @param array<string,mixed> $meta
+	 * @return array{0:array<string,mixed>|null,1:array<string,mixed>}
+	 */
+	private static function extractLogAndMeta(?GenericError $error, array $meta): array {
+		$log = null;
+
+		if ($error instanceof HasDaemonLogEntity) {
+				$entity = $error->getDaemonLogEntity();
+			if (isset($entity['type'], $entity['severity'], $entity['message'])
+					&& $entity['type'] !== ''
+					&& $entity['severity'] !== ''
+					&& $entity['message'] !== ''
+				) {
+				$log = $entity;
+			}
+		}
+
+		unset($meta['log']);
+
+		return [$log, $meta];
 	}
 
   /**
@@ -116,6 +141,7 @@ final class Response {
 		RequestFormat $format = RequestFormat::JSON,
 		?string $contentType = null
 	): static {
+		[$log, $meta] = static::extractLogAndMeta($error, $meta);
 		$responseError = $error?->getResponseError();
 		if ($responseError && is_array($message)) {
 			if ($format === RequestFormat::JSON) {
@@ -127,10 +153,12 @@ final class Response {
 				$message['error'] = $responseError;
 			}
 		}
+		$logJson = $log ? json_encode($log, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_IGNORE) : null;
 		$json = '{'
 			. '"version":' . Buddy::PROTOCOL_VERSION . ','
 			. '"type":"' . $format->value . ' response",'
 			. '"message":%message%,'
+			. ($logJson ? '"log":[' . $logJson . '],' : '')
 			. '"meta":' . ($meta ? json_encode($meta) : 'null') . ','
 			. '"error_code":' . ($error?->getResponseErrorCode() ?? 200)
 			. (!empty($contentType) ? ', "content_type":"' . $contentType . '"' : '')
@@ -144,7 +172,6 @@ final class Response {
 				$json
 			);
 		}
-
 		return new static($json, self::checkForError($message));
 	}
 
