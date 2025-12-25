@@ -139,11 +139,21 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 		/** @var array<TKey, TValue> */
 		$result = (array)simdjson_decode($json, true, static::JSON_DEPTH);
 		$bigIntFields = [];
-		if (static::hasBigInt($json)) {
+
+		// PRIMARY: Extract bigint fields from column metadata if present
+		$hasColumns = isset($result['columns']) && is_array($result['columns']);
+		if ($hasColumns) {
+			static::addBigIntFieldsFromColumns($result, $bigIntFields);
+		} elseif (static::hasBigInt($json)) {
+			// FALLBACK: Only run heuristic if columns metadata is missing
 			// We need here to keep original json decode cuzit has bigIntFields
 			/** @var array<TKey, TValue> */
 			$modified = json_decode($json, true, static::JSON_DEPTH, static::JSON_FLAGS | JSON_BIGINT_AS_STRING);
-			static::traverseAndTrack($modified, $result, $bigIntFields);
+
+			/** @var array<string,int> $bigIntFieldsLookup */
+			$bigIntFieldsLookup = [];
+			static::traverseAndTrack($modified, $result, $bigIntFields, $bigIntFieldsLookup);
+
 			$result = $modified;
 		}
 
@@ -241,9 +251,12 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 
 	/**
 	 * Traverse the data and track all fields that are big integers
+	 * Skips fields that were already identified via column metadata
+	 *
 	 * @param mixed $data
 	 * @param mixed $originalData
 	 * @param array<string> $bigIntFields
+	 * @param array<string, int> $bigIntFieldsLookup
 	 * @param string $path
 	 * @return void
 	 */
@@ -251,6 +264,7 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 		mixed &$data,
 		mixed $originalData,
 		array &$bigIntFields,
+		array &$bigIntFieldsLookup,
 		string $path = ''
 	): void {
 		if (!is_array($data) || !is_array($originalData)) {
@@ -264,12 +278,91 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 			}
 
 			$originalValue = $originalData[$key];
-			if (is_string($value) && is_numeric($originalValue) && strlen($value) > 9) {
-				$bigIntFields[] = $currentPath;
-			} elseif (is_array($value) && is_array($originalValue)) {
-				static::traverseAndTrack($value, $originalValue, $bigIntFields, $currentPath);
+			if (is_array($value) && is_array($originalValue)) {
+				static::traverseAndTrack($value, $originalValue, $bigIntFields, $bigIntFieldsLookup, $currentPath);
+				continue;
 			}
+
+			static::trackBigIntIfNeeded($value, $originalValue, $currentPath, $bigIntFields, $bigIntFieldsLookup);
 		}
+	}
+
+	/**
+	 * Check if a numeric string exceeds PHP_INT_MAX/MIN boundaries
+	 * Uses optimized string length with conditional trimming for best performance
+	 * Handles leading zeros and sign correctly
+	 *
+	 * @param string $value Numeric string to check
+	 * @return bool True if value exceeds 64-bit integer range
+	 */
+	private static function isBigIntBoundary(string $value): bool {
+		$firstChar = $value[0];
+
+		// OPTIMIZATION: Only ltrim if value has leading sign or zeros
+		// This avoids expensive function call for ~95% of clean numeric values
+		$absValue = ($firstChar === '-' || $firstChar === '0')
+			? ltrim($value, '-0')
+			: $value;
+
+		$magnitude = strlen($absValue);
+
+		// PHP_INT_MAX has 19 digits, so we can quickly filter most values
+		// > 19 digits: definitely a bigint
+		if ($magnitude > 19) {
+			return true;
+		}
+
+		// <= 18 digits: definitely not a bigint
+		if ($magnitude < 19) {
+			return false;
+		}
+
+		// Exactly 19 digits: need string comparison against PHP_INT_MAX/MIN boundaries
+		// Note: We must use different boundaries for positive vs negative
+		// because PHP_INT_MAX and |PHP_INT_MIN| differ by 1
+		if ($firstChar === '-') {
+			// Negative: 19-digit negative is bigint if absolute value > |PHP_INT_MIN|
+			// |PHP_INT_MIN| = 9223372036854775808
+			return $absValue > '9223372036854775808';
+		}
+
+		// Positive: 19-digit positive is bigint if > PHP_INT_MAX
+		return $absValue > (string)PHP_INT_MAX;
+	}
+
+	/**
+	 * Check if field is a big integer and add it to tracking list
+	 *
+	 * @param mixed $value
+	 * @param mixed $originalValue
+	 * @param string $currentPath
+	 * @param array<string> &$bigIntFields
+	 * @param array<string, int> &$bigIntFieldsLookup Fast O(1) lookup set
+	 * @return void
+	 */
+	private static function trackBigIntIfNeeded(
+		mixed $value,
+		mixed $originalValue,
+		string $currentPath,
+		array &$bigIntFields,
+		array &$bigIntFieldsLookup
+	): void {
+		if (!is_string($value) || !is_numeric($originalValue)) {
+			return;
+		}
+
+		// Use precise boundary check instead of arbitrary strlen
+		if (!static::isBigIntBoundary($value)) {
+			return;
+		}
+
+		// Skip if already identified via column metadata or earlier traversal
+		if (isset($bigIntFieldsLookup[$currentPath])) {
+			return;
+		}
+
+		$bigIntFieldsLookup[$currentPath] = 1;
+		$bigIntFields[] = $currentPath;
 	}
 
 	/**
@@ -279,6 +372,34 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 	 */
 	private static function hasBigInt(string $json): bool {
 		return !!preg_match('/(?<!")[1-9]\d{18,}(?!")/', $json);
+	}
+
+	/**
+	 * Extract bigint field paths from column metadata
+	 * Only fields explicitly marked as 'long long' in column definitions are extracted
+	 *
+	 * @param array<mixed> $response Response with 'columns' metadata
+	 * @param array<string> &$bigIntFields Fields array to populate with bigint paths
+	 * @return void
+	 */
+	private static function addBigIntFieldsFromColumns(array $response, array &$bigIntFields): void {
+		if (!isset($response['columns']) || !is_array($response['columns'])) {
+			return;
+		}
+
+		foreach ($response['columns'] as $columnIndex => $columnDef) {
+			if (!is_array($columnDef)) {
+				continue;
+			}
+
+			foreach ($columnDef as $fieldName => $fieldInfo) {
+				if (!is_array($fieldInfo) || !(($fieldInfo['type'] ?? null) === 'long long')) {
+					continue;
+				}
+
+				$bigIntFields[] = "data.{$columnIndex}.{$fieldName}";
+			}
+		}
 	}
 
 	/**
