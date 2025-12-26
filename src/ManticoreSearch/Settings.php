@@ -20,6 +20,7 @@ final class Settings {
 	public ?string $configurationFile = null;
 	public ?int $workerPid = null;
 	public bool $searchdAutoSchema = true;
+	public ?string $searchdKibanaVersionString = null;
 	/** @var ?Vector<string> $searchdListen */
 	public ?Vector $searchdListen = null;
 	public ?string $searchdLog = null;

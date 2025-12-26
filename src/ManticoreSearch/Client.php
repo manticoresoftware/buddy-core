@@ -126,6 +126,7 @@ class Client {
 	 * @param string $request
 	 * @param ?string $path
 	 * @param bool $disableAgentHeader
+	 * @param string $requestMethod
 	 * @return Response
 	 */
 	// @phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
@@ -133,6 +134,7 @@ class Client {
 		string $request,
 		?string $path = null,
 		bool $disableAgentHeader = false,
+		string $requestMethod = 'POST'
 	): Response {
 		$t = microtime(true);
 		if ($request === '') {
@@ -172,7 +174,7 @@ class Client {
 		}
 		$isAsync = Coroutine::getCid() > 0;
 		$method = !$this->forceSync && $isAsync ? 'runAsyncRequest' : 'runSyncRequest';
-		$response = $this->$method($path, $request, $headers);
+		$response = $this->$method($path, $request, $headers, $requestMethod);
 
 		// TODO: rethink and make it better without double json_encode
 		$result = Response::fromBody($response);
@@ -287,14 +289,15 @@ class Client {
 	 * @param string $path
 	 * @param string $request
 	 * @param array<string,string> $headers
+	 * @param string $method
 	 * @return string
 	 */
-	protected function runAsyncRequest(string $path, string $request, array $headers): string {
+	protected function runAsyncRequest(string $path, string $request, array $headers, string $method): string {
 		$try = 0;
 		request: $client = $this->connectionPool->get();
 		/** @var HttpClient $client */
 		$headers['Connection'] = 'keep-alive';
-		$client->setMethod('POST');
+		$client->setMethod($method);
 		$client->setHeaders($headers);
 		$client->setData($request);
 		$client->execute("/$path");
@@ -319,13 +322,14 @@ class Client {
 	 * @param string $path
 	 * @param string $request
 	 * @param array<string,string> $headers
+	 * @param string $method
 	 * @return string
 	 */
-	protected function runSyncRequest(string $path, string $request, array $headers): string {
+	protected function runSyncRequest(string $path, string $request, array $headers, string $method): string {
 		$headers['Connection'] = 'close';
 		$contextOptions = [
 			'http' => [
-				'method' => 'POST',
+				'method' => $method,
 				'header' => implode(
 					"\r\n", array_map(
 						fn($key, $value) => "$key: $value",
