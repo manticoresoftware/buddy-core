@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="robots" content="index, follow, all" />
-    <title>Manticoresearch\Buddy\Core\Error\QueryParseError | Manticore Buddy Core Docs</title>
+    <title>Manticoresearch\Buddy\Core\Error\DaemonLogError | Manticore Buddy Core Docs</title>
 
             <link rel="stylesheet" type="text/css" href="../../../../css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="../../../../css/bootstrap-theme.min.css">
@@ -19,7 +19,7 @@
 
     </head>
 
-    <body id="class" data-name="class:Manticoresearch_Buddy_Core_Error_QueryParseError" data-root-path="../../../../" data-search-index-url="../../../../doctum-search.json">
+    <body id="class" data-name="class:Manticoresearch_Buddy_Core_Error_DaemonLogError" data-root-path="../../../../" data-search-index-url="../../../../doctum-search.json">
             <div id="content">
         <div id="left-column">
                 <div id="control-panel">
@@ -75,18 +75,18 @@
                         <div class="namespace-breadcrumbs">
             <ol class="breadcrumb">
                 <li><span class="label label-default">class</span></li>
-                        <li><a href="../../../../Manticoresearch.html">Manticoresearch</a></li><li class="backslash">\</li><li><a href="../../../../Manticoresearch/Buddy.html">Buddy</a></li><li class="backslash">\</li><li><a href="../../../../Manticoresearch/Buddy/Core.html">Core</a></li><li class="backslash">\</li><li><a href="../../../../Manticoresearch/Buddy/Core/Error.html">Error</a></li><li class="backslash">\</li><li>QueryParseError</li>
+                        <li><a href="../../../../Manticoresearch.html">Manticoresearch</a></li><li class="backslash">\</li><li><a href="../../../../Manticoresearch/Buddy.html">Buddy</a></li><li class="backslash">\</li><li><a href="../../../../Manticoresearch/Buddy/Core.html">Core</a></li><li class="backslash">\</li><li><a href="../../../../Manticoresearch/Buddy/Core/Error.html">Error</a></li><li class="backslash">\</li><li>DaemonLogError</li>
             </ol>
         </div>
                 <div id="page-content">
     <div class="page-header">
-        <h1>QueryParseError    
+        <h1>DaemonLogError    
             </h1>
     </div>
 
     
-    <p>final         class
-    <strong>QueryParseError</strong>        extends <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a>
+    <p>        class
+    <strong>DaemonLogError</strong>        extends <a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html"><abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a>        implements        <a href="../../../../Manticoresearch/Buddy/Core/Error/HasDaemonLogEntity.html"><abbr title="Manticoresearch\Buddy\Core\Error\HasDaemonLogEntity">HasDaemonLogEntity</abbr></a>
 </p>
 
         
@@ -96,6 +96,19 @@
 
             
         
+            <h2>Constants</h2>    <table class="table table-condensed">
+                    <tr>
+                <td>
+                                                            private
+                                                                                ALLOWED_SEVERITIES
+                                    </td>
+                <td class="last">
+                    <p><em></em></p>
+                    <p></p>
+                </td>
+            </tr>
+            </table>
+
     
             <h2>Properties</h2>
 
@@ -290,6 +303,39 @@
                                     </div>
                 <div class="col-md-2"><small>from&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/Error/GenericError.html#method_getProxyOriginalError">
 <abbr title="Manticoresearch\Buddy\Core\Error\GenericError">GenericError</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/Error/DaemonLogError.html"><abbr title="Manticoresearch\Buddy\Core\Error\DaemonLogError">DaemonLogError</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_createWithLog">createWithLog</a>(string $responseError, string $logMessage, string $logType, string $logSeverity = &#039;ERROR&#039;, bool $proxyOriginalError = false)
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/Error/DaemonLogError.html"><abbr title="Manticoresearch\Buddy\Core\Error\DaemonLogError">DaemonLogError</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_throwWithLog">throwWithLog</a>(string $responseError, string $logMessage, string $logType, string $logSeverity = &#039;ERROR&#039;, bool $proxyOriginalError = false)
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    array
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_getDaemonLogEntity">getDaemonLogEntity</a>()
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
             </div>
             </div>
 
@@ -830,6 +876,168 @@
                     <table class="table table-condensed">
         <tr>
             <td>bool</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_createWithLog">
+        <div class="location">at line 32</div>
+        <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Error/DaemonLogError.html"><abbr title="Manticoresearch\Buddy\Core\Error\DaemonLogError">DaemonLogError</abbr></a>
+    <strong>createWithLog</strong>(string $responseError, string $logMessage, string $logType, string $logSeverity = &#039;ERROR&#039;, bool $proxyOriginalError = false)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$responseError</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$logMessage</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$logType</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$logSeverity</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>bool</td>
+                <td>$proxyOriginalError</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Error/DaemonLogError.html"><abbr title="Manticoresearch\Buddy\Core\Error\DaemonLogError">DaemonLogError</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_throwWithLog">
+        <div class="location">at line 61</div>
+        <code>        static            <a href="../../../../Manticoresearch/Buddy/Core/Error/DaemonLogError.html"><abbr title="Manticoresearch\Buddy\Core\Error\DaemonLogError">DaemonLogError</abbr></a>
+    <strong>throwWithLog</strong>(string $responseError, string $logMessage, string $logType, string $logSeverity = &#039;ERROR&#039;, bool $proxyOriginalError = false)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$responseError</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$logMessage</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$logType</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$logSeverity</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>bool</td>
+                <td>$proxyOriginalError</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/Error/DaemonLogError.html"><abbr title="Manticoresearch\Buddy\Core\Error\DaemonLogError">DaemonLogError</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getDaemonLogEntity">
+        <div class="location">at line 74</div>
+        <code>                    array
+    <strong>getDaemonLogEntity</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
             <td></td>
         </tr>
     </table>

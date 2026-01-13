@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="robots" content="index, follow, all" />
-    <title>Manticoresearch\Buddy\Core\ManticoreSearch\TableValidator | Manticore Buddy Core Docs</title>
+    <title>Manticoresearch\Buddy\Core\Error\HasDaemonLogEntity | Manticore Buddy Core Docs</title>
 
             <link rel="stylesheet" type="text/css" href="../../../../css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="../../../../css/bootstrap-theme.min.css">
@@ -19,7 +19,7 @@
 
     </head>
 
-    <body id="class" data-name="class:Manticoresearch_Buddy_Core_ManticoreSearch_TableValidator" data-root-path="../../../../" data-search-index-url="../../../../doctum-search.json">
+    <body id="class" data-name="class:Manticoresearch_Buddy_Core_Error_HasDaemonLogEntity" data-root-path="../../../../" data-search-index-url="../../../../doctum-search.json">
             <div id="content">
         <div id="left-column">
                 <div id="control-panel">
@@ -74,19 +74,19 @@
 
                         <div class="namespace-breadcrumbs">
             <ol class="breadcrumb">
-                <li><span class="label label-default">class</span></li>
-                        <li><a href="../../../../Manticoresearch.html">Manticoresearch</a></li><li class="backslash">\</li><li><a href="../../../../Manticoresearch/Buddy.html">Buddy</a></li><li class="backslash">\</li><li><a href="../../../../Manticoresearch/Buddy/Core.html">Core</a></li><li class="backslash">\</li><li><a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch.html">ManticoreSearch</a></li><li class="backslash">\</li><li>TableValidator</li>
+                <li><span class="label label-default">interface</span></li>
+                        <li><a href="../../../../Manticoresearch.html">Manticoresearch</a></li><li class="backslash">\</li><li><a href="../../../../Manticoresearch/Buddy.html">Buddy</a></li><li class="backslash">\</li><li><a href="../../../../Manticoresearch/Buddy/Core.html">Core</a></li><li class="backslash">\</li><li><a href="../../../../Manticoresearch/Buddy/Core/Error.html">Error</a></li><li class="backslash">\</li><li>HasDaemonLogEntity</li>
             </ol>
         </div>
                 <div id="page-content">
     <div class="page-header">
-        <h1>TableValidator    
+        <h1>HasDaemonLogEntity    
             </h1>
     </div>
 
     
-    <p>final         class
-    <strong>TableValidator</strong>
+    <p>        interface
+    <strong>HasDaemonLogEntity</strong>
 </p>
 
         
@@ -94,9 +94,6 @@
     
         
 
-            <div class="description">
-            <p><p>The purpose of this class is to offer various validations for Manticore Search tables
-Currently we use it for fuzzy and autocomplete to check that in cacheable way that table has min_infix_len set</p></p>                    </div>
             
         
     
@@ -106,23 +103,13 @@ Currently we use it for fuzzy and autocomplete to check that in cacheable way th
             <div class="container-fluid underlined">
                     <div class="row">
                 <div class="col-md-2 type">
-                    
+                    array
                 </div>
                 <div class="col-md-8">
-                    <a href="#method___construct">__construct</a>(<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a> $client, <a href="../../../../Manticoresearch/Buddy/Core/Cache/Flag.html"><abbr title="Manticoresearch\Buddy\Core\Cache\Flag">Flag</abbr></a> $cache, int $ttl = 30)
+                    <a href="#method_getDaemonLogEntity">getDaemonLogEntity</a>()
         
                                             <p class="no-description">No description</p>
                                     </div>
-                <div class="col-md-2"></div>
-            </div>
-                    <div class="row">
-                <div class="col-md-2 type">
-                    bool
-                </div>
-                <div class="col-md-8">
-                    <a href="#method_hasMinInfixLen">hasMinInfixLen</a>(string $table)
-        
-                                            <p><p>Perform validation, method should be run inside coroutine</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
             </div>
@@ -132,10 +119,10 @@ Currently we use it for fuzzy and autocomplete to check that in cacheable way th
 
             <div id="method-details">
                     <div class="method-item">
-                    <h3 id="method___construct">
-        <div class="location">at line 22</div>
-        <code>                    
-    <strong>__construct</strong>(<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a> $client, <a href="../../../../Manticoresearch/Buddy/Core/Cache/Flag.html"><abbr title="Manticoresearch\Buddy\Core\Cache\Flag">Flag</abbr></a> $cache, int $ttl = 30)
+                    <h3 id="method_getDaemonLogEntity">
+        <div class="location">at line 19</div>
+        <code>                    array
+    <strong>getDaemonLogEntity</strong>()
         </code>
     </h3>
     <div class="details">    
@@ -148,80 +135,17 @@ Currently we use it for fuzzy and autocomplete to check that in cacheable way th
                     
         </div>
         <div class="tags">
-                            <h4>Parameters</h4>
-
-                    <table class="table table-condensed">
-                    <tr>
-                <td><a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></td>
-                <td>$client</td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td><a href="../../../../Manticoresearch/Buddy/Core/Cache/Flag.html"><abbr title="Manticoresearch\Buddy\Core\Cache\Flag">Flag</abbr></a></td>
-                <td>$cache</td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td>int</td>
-                <td>$ttl</td>
-                <td></td>
-            </tr>
-            </table>
-
-            
-            
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
-                    <h3 id="method_hasMinInfixLen">
-        <div class="location">at line 31</div>
-        <code>                    bool
-    <strong>hasMinInfixLen</strong>(string $table)
-        </code>
-    </h3>
-    <div class="details">    
-            
-    
-            
-
-        <div class="method-description">
-                            <p><p>Perform validation, method should be run inside coroutine</p></p>                        
-        </div>
-        <div class="tags">
-                            <h4>Parameters</h4>
-
-                    <table class="table table-condensed">
-                    <tr>
-                <td>string</td>
-                <td>$table</td>
-                <td></td>
-            </tr>
-            </table>
-
             
                             <h4>Return Value</h4>
 
                     <table class="table table-condensed">
         <tr>
-            <td>bool</td>
+            <td>array</td>
             <td></td>
         </tr>
     </table>
 
             
-                            <h4>Exceptions</h4>
-
-                    <table class="table table-condensed">
-                    <tr>
-                <td><a href="../../../../Manticoresearch/Buddy/Core/Error/TableValidationError.html"><abbr title="Manticoresearch\Buddy\Core\Error\TableValidationError">TableValidationError</abbr></a></td>
-                <td></td>
-            </tr>
-            </table>
-
             
             
                     </div>
