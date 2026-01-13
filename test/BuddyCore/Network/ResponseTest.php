@@ -9,6 +9,7 @@
  program; if you did not, you can find it at http://www.gnu.org/
  */
 
+use Manticoresearch\Buddy\Core\Error\DaemonLogError;
 use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\ManticoreSearch\RequestFormat;
 use Manticoresearch\Buddy\Core\Network\Response;
@@ -133,5 +134,54 @@ class ResponseTest extends TestCase {
 		$resp = Response::none();
 		$this->assertInstanceOf(Response::class, $resp);
 		$this->assertEquals('', (string)$resp);
+	}
+
+	public function testBuddyResponseIncludesLogFromError(): void {
+		echo "\nTesting the building of Buddy response with a log entity from exception\n";
+		$log = [
+			'type' => 'auth',
+			'severity' => 'ERROR',
+			'message' => 'simple error #1',
+		];
+		$error = DaemonLogError::createWithLog('simple error #1', 'simple error #1', 'auth', 'ERROR');
+
+		$result = [
+			'version' => Buddy::PROTOCOL_VERSION,
+			'type' => 'json response',
+			'message' => ['error' => 'simple error #1'],
+			'log' => [$log],
+			'meta' => null,
+			'error_code' => 0,
+		];
+
+		$this->assertEquals(
+			json_encode($result),
+			(string)Response::fromMessageAndError([], [], $error)
+		);
+	}
+
+	public function testBuddyResponseIgnoresMetaLog(): void {
+		echo "\nTesting Buddy response ignores meta log\n";
+		$log = [
+			'type' => 'auth',
+			'severity' => 'WARN',
+			'message' => 'something happened',
+		];
+		$meta = [
+			'log' => $log,
+			'request_id' => 'abc',
+		];
+		$result = [
+			'version' => Buddy::PROTOCOL_VERSION,
+			'type' => 'json response',
+			'message' => ['ok' => 1],
+			'meta' => ['request_id' => 'abc'],
+			'error_code' => 200,
+		];
+
+		$this->assertEquals(
+			json_encode($result),
+			(string)Response::fromMessageAndError(['ok' => 1], $meta)
+		);
 	}
 }
