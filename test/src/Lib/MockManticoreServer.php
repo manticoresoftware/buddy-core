@@ -30,10 +30,19 @@ final class MockManticoreServer {
 		'fail' => '{"error":"table \'test\' absent, or does not support INSERT"}',
 		'ok' => '[{"total":1,"error":"","warning":""}]',
 	];
+	const SQL_REPLACE_RESPONSE = [
+		'fail' => '{"error":"table \'test\' absent, or does not support REPLACE"}',
+		'ok' => '[{"total":1,"error":"","warning":""}]',
+	];
 	const JSON_INSERT_RESPONSE = [
 		'fail' => '{"error":{"type":"table \'test\' absent, or does not support INSERT"'
 		. ',"index":"test"},"status":500}',
 		'ok' => '{"_index": "test","_id": 1,"created": true,"result": "created","status": 201}',
+	];
+	const JSON_REPLACE_RESPONSE = [
+		'fail' => '{"error":{"type":"table \'test\' absent, or does not support REPLACE"'
+		. ',"index":"test"},"status":500}',
+		'ok' => '{"_index": "test","_id": 1,"created": false,"result": "updated","status": 201}',
 	];
 	const SHOW_QUERIES_RESPONSE = [
 		'fail' => '',
@@ -283,8 +292,11 @@ final class MockManticoreServer {
 		$resp = match (true) {
 			str_starts_with($request, 'CREATE') => self::CREATE_RESPONSE[$responseType],
 			str_starts_with($request, 'INSERT') => self::SQL_INSERT_RESPONSE[$responseType],
+			str_starts_with($request, 'REPLACE') => self::SQL_REPLACE_RESPONSE[$responseType],
 			(ManticoreEndpoint::from($this->reqEndpoint) === ManticoreEndpoint::Insert) =>
 				self::JSON_INSERT_RESPONSE[$responseType],
+			(ManticoreEndpoint::from($this->reqEndpoint) === ManticoreEndpoint::Replace) =>
+				self::JSON_REPLACE_RESPONSE[$responseType],
 			str_starts_with($request, 'SELECT') => self::SHOW_QUERIES_RESPONSE[$responseType],
 			str_starts_with($request, 'SHOW+VARIABLES') => self::SHOW_VARIABLES_RESPONSE[$responseType],
 			str_starts_with($request, 'SHOW+TABLES') => self::SHOW_TABLES_RESPONSE[$responseType],
