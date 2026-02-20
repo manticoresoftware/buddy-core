@@ -525,8 +525,8 @@ class Client {
 			$settings->push(
 				new Map(
 					[
-					'key' => $key,
-					'value' => $value,
+						'key' => $key,
+						'value' => $value,
 					]
 				)
 			);
@@ -547,8 +547,8 @@ class Client {
 			$settings->push(
 				new Map(
 					[
-					'key' => $key,
-					'value' => $value,
+						'key' => $key,
+						'value' => $value,
 					]
 				)
 			);
@@ -566,7 +566,7 @@ class Client {
 	 * @param bool $forceBigrams When set to true, passes "1 as force_bigrams" to all CALL SUGGEST requests
 	 * @param int $distance Maximum edit distance for suggestions
 	 * @param int $limit Maximum number of suggestions per word
-	 * @return array{0: array<Variation>, 1: array<string, float>} Words and score map
+	 * @return array{0: array<Variation>, 1: Map<string, float>} Words and score map
 	 */
 	public function fetchFuzzyVariations(
 		string $query,
@@ -585,13 +585,13 @@ class Client {
 
 		/** @var array<Variation> $words */
 		$words = [];
-		/** @var array<string,int> $distanceMap */
-		$distanceMap = [];
-		/** @var array<string,int> $docMap */
-		$docMap = [];
+		/** @var Map<string,int> $distanceMap */
+		$distanceMap = new Map();
+		/** @var Map<string,int> $docMap */
+		$docMap = new Map();
 
 		// 2. For each tokenized word, we get the suggestions from the suggest function
-	// Track processed tokens to avoid double processing after merges
+		// Track processed tokens to avoid double processing after merges
 		$processedTokens = [];
 		$i = 0;
 
@@ -621,16 +621,14 @@ class Client {
 
 
 
-	// 3. Normalize the distance and docs values
-	/** @var array<string,float> $docMapNormalized */
-		$docMapNormalized = Arrays::normalizeValues($docMap);
-	/** @var array<string,float> $distanceMapNormalized */
-		$distanceMapNormalized = Arrays::normalizeValues($distanceMap);
-	// Discard the original values
+		// 3. Normalize the distance and docs values
+		// 3. Normalize the distance and docs values using Map to preserve string keys
+		$docMapNormalized = Arrays::normalizeMapValues($docMap);
+		$distanceMapNormalized = Arrays::normalizeMapValues($distanceMap);
+		// Discard the original values
 		unset($docMap, $distanceMap);
 
-		$scoreMap = $this->calculateScoreMap($docMapNormalized, $distanceMapNormalized);
-
+		$scoreMap = $this->calculateScoreMapFromMap($docMapNormalized, $distanceMapNormalized);
 		return [$words, $scoreMap];
 	}
 
@@ -646,8 +644,8 @@ class Client {
 	 * @param int $i Current word index
 	 * @param array<string> $normalized Array of normalized words
 	 * @param array<Variation> $words Reference to words array to be populated
-	 * @param array<string,int> $distanceMap Reference to distance map to be populated
-	 * @param array<string,int> $docMap Reference to document map to be populated
+	 * @param Map<string,int> $distanceMap Reference to distance map to be populated
+	 * @param Map<string,int> $docMap Reference to document map to be populated
 	 * @param array<int,bool> $processedTokens Reference to processed tokens tracking
 	 * @param bool $forceBigrams When set to true, passes "1 as force_bigrams" to all CALL SUGGEST requests
 	 * @return int Number of tokens consumed (1 for individual, 2+ for merged)
@@ -660,22 +658,22 @@ class Client {
 		int $i,
 		array $normalized,
 		array &$words,
-		array &$distanceMap,
-		array &$docMap,
+		Map &$distanceMap,
+		Map &$docMap,
 		array &$processedTokens,
 		bool $forceBigrams
 	): int {
 		$forceBigramsOption = $forceBigrams ? ', 1 as force_bigrams' : '';
 		$query = "CALL SUGGEST(
-	'{$word}',
-	'{$table}',
-	{$limit} as limit,
-	{$distance} as max_edits,
-	1 as non_char
-	{$forceBigramsOption}
-	)";
+		'{$word}',
+		'{$table}',
+		{$limit} as limit,
+		{$distance} as max_edits,
+		1 as non_char
+		{$forceBigramsOption}
+		)";
 
-	/**
+		/**
 	 * @var array<array{
 	 *     data: array<array{
 	 *         suggest: string,
@@ -686,18 +684,18 @@ class Client {
 	 */
 		$suggestResult = $this->sendRequest($query)->getResult();
 
-	/** @var array<array{suggest:string,distance:int,docs:int}> $suggestions */
+		/** @var array<array{suggest:string,distance:int,docs:int}> $suggestions */
 		$suggestions = $suggestResult[0]['data'] ?? [];
 		$choices = [];
 
 		foreach ($suggestions as $suggestion) {
 			$suggestWord = $suggestion['suggest'];
 			$choices[] = $suggestWord;
-			$distanceMap[$suggestWord] = $suggestion['distance'];
-			$docMap[$suggestWord] = $suggestion['docs'];
+			$distanceMap->put($suggestWord, $suggestion['distance']);
+			$docMap->put($suggestWord, $suggestion['docs']);
 		}
 
-	// Smart merge logic - try to merge with next word if conditions are met
+		// Smart merge logic - try to merge with next word if conditions are met
 		$mergeResult = $this->tryMergeWithNext(
 			$word,
 			$i,
@@ -717,11 +715,13 @@ class Client {
 			$finalChoices = $mergeResult['choices'];
 
 			// Add merged distance and doc mappings
-			foreach ($mergeResult['distanceMap'] as $suggWord => $dist) {
-				$distanceMap[$suggWord] = $dist;
+			/** @var Map<string,int> $mergeDistanceMap */
+			$mergeDistanceMap = $mergeResult['distanceMap'];
+			foreach ($mergeDistanceMap as $suggWord => $dist) {
+				$distanceMap->put($suggWord, $dist);
 			}
 			foreach ($mergeResult['docMap'] as $suggWord => $docs) {
-				$docMap[$suggWord] = $docs;
+				$docMap->put($suggWord, $docs);
 			}
 
 			// Mark next token as processed
@@ -731,18 +731,18 @@ class Client {
 			$finalChoices = $choices;
 		}
 
-	// Special case for empty suggestions
+		// Special case for empty suggestions
 		if (!$finalChoices) {
 			// FIX: Preserve the original word when no suggestions found
 			// This prevents single-letter words from disappearing during combination building
 			$finalChoices = [$finalOriginal];
-			$distanceMap[$finalOriginal] = 999;
-			$docMap[$finalOriginal] = 0;
+			$distanceMap->put($finalOriginal, 999);
+			$docMap->put($finalOriginal, 0);
 		}
 
 		$words[] = [
-		'original' => $finalOriginal,
-		'keywords' => $finalChoices,
+			'original' => $finalOriginal,
+			'keywords' => $finalChoices,
 		];
 
 		return $tokenCount;
@@ -788,9 +788,8 @@ class Client {
 	 * @param int $limit
 	 * @param int $distance
 	 * @param array<string> $choices
-	 * @param array<string,int> $distanceMap
-	 * @param bool $forceBigrams When set to true, passes "1 as force_bigrams" to all CALL SUGGEST requests
-	 * @return array{original:string,choices:array<string>,distanceMap:array<string,int>,docMap:array<string,int>}|null
+	 * @param Map<string,int> $distanceMap
+	 * @return array{original:string,choices:array<string>,distanceMap:Map<string,int>,docMap:array<string,int>}|null
 	 */
 	private function tryMergeWithNext(
 		string $word,
@@ -800,7 +799,7 @@ class Client {
 		int $limit,
 		int $distance,
 		array $choices,
-		array $distanceMap,
+		Map $distanceMap,
 		bool $forceBigrams
 	): ?array {
 		if (!isset($normalized[$i + 1]) || !$this->shouldAttemptMerge($word, $normalized[$i + 1])) {
@@ -812,16 +811,16 @@ class Client {
 
 		$forceBigramsOption = $forceBigrams ? ', 1 as force_bigrams' : '';
 		$query = "CALL SUGGEST(
-	'{$combinedWord}',
-	'{$table}',
+		'{$combinedWord}',
+		'{$table}',
 
 		{$limit} as limit,
 		{$distance} as max_edits,
 		1 as non_char
 		{$forceBigramsOption}
-	)";
+		)";
 
-	/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $combinedSuggestResult */
+		/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $combinedSuggestResult */
 		$combinedSuggestResult = $this->sendRequest($query)->getResult();
 
 		$combinedSuggestions = $combinedSuggestResult[0]['data'] ?? [];
@@ -832,34 +831,34 @@ class Client {
 
 
 		$mergedChoices = [];
-		$mergedDistanceMap = [];
+		$mergedDistanceMap = new Map();
 		$mergedDocMap = [];
 
 		foreach ($combinedSuggestions as $suggestion) {
 			$combinedSuggest = $suggestion['suggest'];
 			$mergedChoices[] = $combinedSuggest;
 			// We add 1 here cuz we already merge with space, so the distance is the same
-			$mergedDistanceMap[$combinedSuggest] = $suggestion['distance'] + 1;
+			$mergedDistanceMap->put($combinedSuggest, $suggestion['distance'] + 1);
 			$mergedDocMap[$combinedSuggest] = $suggestion['docs'];
 		}
 
-	// SMART CHECK: Get suggestions for next word alone to compare
-	// If merged suggestions are same as next word alone, merge is useless
+		// SMART CHECK: Get suggestions for next word alone to compare
+		// If merged suggestions are same as next word alone, merge is useless
 		$nextWordQuery = "CALL SUGGEST(
-	'{$nextWord}',
-	'{$table}',
-	{$limit} as limit,
-	{$distance} as max_edits,
-	1 as non_char
-	{$forceBigramsOption}
-	)";
+		'{$nextWord}',
+		'{$table}',
+		{$limit} as limit,
+		{$distance} as max_edits,
+		1 as non_char
+		{$forceBigramsOption}
+		)";
 
-	/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $nextWordResult */
+		/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $nextWordResult */
 		$nextWordResult = $this->sendRequest($nextWordQuery)->getResult();
 		$nextWordSuggestions = $nextWordResult[0]['data'] ?? [];
 		$nextWordChoices = array_column($nextWordSuggestions, 'suggest');
 
-	// Compare merged vs individual quality
+		// Compare merged vs individual quality
 		if (!$this->shouldUseMergedResult(
 			$choices,
 			$mergedChoices,
@@ -873,32 +872,32 @@ class Client {
 		}
 
 		return [
-		'original' => $combinedWord,
-		'choices' => $mergedChoices,
+			'original' => $combinedWord,
+			'choices' => $mergedChoices,
 
 			'distanceMap' => $mergedDistanceMap,
 			'docMap' => $mergedDocMap,
 		];
 	}
 
-/**
- * Compare merged vs individual results quality
- * SMART LOGIC: Check if merge actually provides value or just matches the next word
- *
- * @param array<string> $individualChoices Suggestions for first word
- * @param array<string> $mergedChoices Suggestions for merged word
- * @param array<string,int> $individualDistanceMap Distance map for first word
- * @param array<string,int> $mergedDistanceMap Distance map for merged word
- * @param array<string> $nextWordChoices Suggestions for second word alone
- * @param string $word First word
- * @param string $nextWord Second word
- * @return bool
- */
+	/**
+	 * Compare merged vs individual results quality
+	 * SMART LOGIC: Check if merge actually provides value or just matches the next word
+	 *
+	 * @param array<string> $individualChoices Suggestions for first word
+	 * @param array<string> $mergedChoices Suggestions for merged word
+	 * @param Map<string,int> $individualDistanceMap Distance map for first word
+	 * @param Map<string,int> $mergedDistanceMap Distance map for merged word
+	 * @param array<string> $nextWordChoices Suggestions for second word alone
+	 * @param string $word First word
+	 * @param string $nextWord Second word
+	 * @return bool
+	 */
 	private function shouldUseMergedResult(
 		array $individualChoices,
 		array $mergedChoices,
-		array $individualDistanceMap,
-		array $mergedDistanceMap,
+		Map $individualDistanceMap,
+		Map $mergedDistanceMap,
 		array $nextWordChoices = [],
 		string $word = '',
 		string $nextWord = ''
@@ -926,10 +925,10 @@ class Client {
 
 		// Both have suggestions - compare quality
 		if (!empty($mergedChoices)) {
-			$avgMergedDistance = array_sum($mergedDistanceMap) / sizeof($mergedDistanceMap);
-			$avgIndividualDistance = empty($individualDistanceMap)
+			$avgMergedDistance = array_sum($mergedDistanceMap->values()->toArray()) / sizeof($mergedDistanceMap);
+			$avgIndividualDistance = $individualDistanceMap->isEmpty()
 			? 999
-			: array_sum($individualDistanceMap) / sizeof($individualDistanceMap);
+			: array_sum($individualDistanceMap->values()->toArray()) / $individualDistanceMap->count();
 
 			// Prefer merged if distance is not significantly worse (allow +1.5 penalty for merging)
 			return $avgMergedDistance <= $avgIndividualDistance + 1.5;
@@ -940,32 +939,28 @@ class Client {
 		return false;
 	}
 
-
-
 	/**
-	 * Calculates the score map based on normalized distance and document scores.
+	 * Calculate score map from Ds\Map - preserves string keys.
 	 *
-	 * @param array<string,float> $docMapNormalized Normalized document scores
-	 * @param array<string,float> $distanceMapNormalized Normalized distance scores
-	 * @return array<string,float> Score map with calculated scores
+	 * @param Map<string,float> $docMapNormalized
+	 * @param Map<string,float> $distanceMapNormalized
+	 * @return Map<string,float>
 	 */
-	private function calculateScoreMap(array $docMapNormalized, array $distanceMapNormalized): array {
-		// We are use minimum distance to avoid siutation when less docs affect relevance
+	private function calculateScoreMapFromMap(Map $docMapNormalized, Map $distanceMapNormalized): Map {
 		$scoreFn = static function (float $distance, float $docs): float {
 			return (float)max($distance + 1, sqrt($docs)) / ($distance + 1);
 		};
 
-		/** @var array<string,float> $scoreMap */
-		$scoreMap = [];
+		$result = new Map();
 		foreach ($docMapNormalized as $word => $docScore) {
-			if (!isset($distanceMapNormalized[$word])) {
+			if (!$distanceMapNormalized->hasKey($word)) {
 				continue;
 			}
 
-			$distanceScore = $distanceMapNormalized[$word];
-			$scoreMap[$word] = $scoreFn($docScore, $distanceScore);
+			$distanceScore = $distanceMapNormalized->get($word);
+			$result->put($word, $scoreFn($docScore, $distanceScore));
 		}
 
-		return $scoreMap;
+		return $result;
 	}
 }
