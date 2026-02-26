@@ -123,6 +123,16 @@
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
+                    static&nbsp;<abbr title="Ds\Map">Map</abbr>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_normalizeMapValues">normalizeMapValues</a>(<abbr title="Ds\Map">Map</abbr> $map)
+        
+                                            <p><p>Normalize values in a Ds\Map and return a new Ds\Map with normalized values.</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
                     static&nbsp;array
                 </div>
                 <div class="col-md-8">
@@ -147,7 +157,7 @@ In case empty array passed, return empty array</p></p>                </div>
                     static&nbsp;array
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_getMapSum">getMapSum</a>(array ...$arrays)
+                    <a href="#method_getMapSum">getMapSum</a>(array|<abbr title="Ds\Map">Map</abbr> ...$arrays)
         
                                             <p class="no-description">No description</p>
                                     </div>
@@ -280,8 +290,51 @@ In case empty array passed, return empty array</p></p>                </div>
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_normalizeMapValues">
+        <div class="location">at line 101</div>
+        <code>        static            <abbr title="Ds\Map">Map</abbr>
+    <strong>normalizeMapValues</strong>(<abbr title="Ds\Map">Map</abbr> $map)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Normalize values in a Ds\Map and return a new Ds\Map with normalized values.</p></p>                <p><p>Preserves string keys (unlike toArray() which can cause int coercion).</p></p>        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><abbr title="Ds\Map">Map</abbr></td>
+                <td>$map</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><abbr title="Ds\Map">Map</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_normalizeValues">
-        <div class="location">at line 100</div>
+        <div class="location">at line 134</div>
         <code>        static            array
     <strong>normalizeValues</strong>(array $values)
         </code>
@@ -325,7 +378,7 @@ In case empty array passed, return empty array</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_blend">
-        <div class="location">at line 125</div>
+        <div class="location">at line 159</div>
         <code>        static            array
     <strong>blend</strong>(array ...$arrays)
         </code>
@@ -368,9 +421,9 @@ In case empty array passed, return empty array</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getMapSum">
-        <div class="location">at line 146</div>
+        <div class="location">at line 180</div>
         <code>        static            array
-    <strong>getMapSum</strong>(array ...$arrays)
+    <strong>getMapSum</strong>(array|<abbr title="Ds\Map">Map</abbr> ...$arrays)
         </code>
     </h3>
     <div class="details">    
@@ -387,7 +440,7 @@ In case empty array passed, return empty array</p></p>
 
                     <table class="table table-condensed">
                     <tr>
-                <td>array</td>
+                <td>array|<abbr title="Ds\Map">Map</abbr></td>
                 <td>...$arrays</td>
                 <td></td>
             </tr>
@@ -412,7 +465,7 @@ In case empty array passed, return empty array</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_boostListValues">
-        <div class="location">at line 168</div>
+        <div class="location">at line 206</div>
         <code>        static            array
     <strong>boostListValues</strong>(array $values, mixed ...$valuesToBoost)
         </code>
