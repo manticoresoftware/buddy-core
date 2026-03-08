@@ -695,8 +695,12 @@ class Client {
 			$docMap->put($suggestWord, $suggestion['docs']);
 		}
 
+		// If the word already has an exact match (distance=0), it's a real word — never merge it.
+		// Merging "how"+"to" into "howto" just because CALL SUGGEST returns something is wrong.
+		$hasExactMatch = (bool)array_filter($suggestions, fn($s) => $s['distance'] === 0);
+
 		// Smart merge logic - try to merge with next word if conditions are met
-		$mergeResult = $this->tryMergeWithNext(
+		$mergeResult = $hasExactMatch ? null : $this->tryMergeWithNext(
 			$word,
 			$i,
 			$normalized,
