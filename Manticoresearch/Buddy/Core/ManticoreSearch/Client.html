@@ -176,6 +176,15 @@
                 <td></td>
             </tr>
                     <tr>
+                <td class="type" id="property_delegatedUser">
+                                        protected                                        <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\?string">?string</abbr>
+                                                                                
+                                    </td>
+                <td>$delegatedUser</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
+                    <tr>
                 <td class="type" id="property_buddyVersion">
                                         protected                                        string
                                                                                 
@@ -238,6 +247,16 @@
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8">
+                    <a href="#method___clone">__clone</a>()
+        
+                                            <p><p>Ensure request-scoped cloned clients do not share mutable internals.</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
                     <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
                 </div>
                 <div class="col-md-8">
@@ -269,6 +288,26 @@
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
+                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_setDelegatedUser">setDelegatedUser</a>(string|null $user)
+        
+                                            <p><p>Set delegated user context for outgoing daemon requests.</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_clearDelegatedUser">clearDelegatedUser</a>()
+        
+                                            <p><p>Clear delegated user context from current request scope.</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
                     <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
                 </div>
                 <div class="col-md-8">
@@ -295,6 +334,28 @@
                     <a href="#method_sendRequestToUrl">sendRequestToUrl</a>(string $url, string $request, string|null $path = null, bool $disableAgentHeader = false)
         
                                             <p><p>Helper function that let us to send request to the specified url and setit back to original</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    string|null
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_normalizeDelegatedUser">normalizeDelegatedUser</a>(string|null $user)
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    string|null
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_resolveDelegatedUser">resolveDelegatedUser</a>()
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -429,7 +490,7 @@ or validate and throw error if we have missing table in the list</p></p>        
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line 75</div>
+        <div class="location">at line 78</div>
         <code>                    void
     <strong>__construct</strong>(string|null $url = null, string|null $authToken = null)
         </code>
@@ -476,8 +537,41 @@ or validate and throw error if we have missing table in the list</p></p>        
 
             </div>
                     <div class="method-item">
+                    <h3 id="method___clone">
+        <div class="location">at line 100</div>
+        <code>                    void
+    <strong>__clone</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Ensure request-scoped cloned clients do not share mutable internals.</p></p>                        
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_setServerUrl">
-        <div class="location">at line 98</div>
+        <div class="location">at line 116</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
     <strong>setServerUrl</strong>(string $url)
         </code>
@@ -520,7 +614,7 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_setAuthToken">
-        <div class="location">at line 111</div>
+        <div class="location">at line 129</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
     <strong>setAuthToken</strong>(string|null $authToken)
         </code>
@@ -564,7 +658,7 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_getServerUrl">
-        <div class="location">at line 120</div>
+        <div class="location">at line 138</div>
         <code>                    string
     <strong>getServerUrl</strong>()
         </code>
@@ -596,8 +690,85 @@ or validate and throw error if we have missing table in the list</p></p>        
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_setDelegatedUser">
+        <div class="location">at line 151</div>
+        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
+    <strong>setDelegatedUser</strong>(string|null $user)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Set delegated user context for outgoing daemon requests.</p></p>                <p><p>Context is coroutine-scoped when running in coroutine mode.
+In sync mode it falls back to the instance-local value.</p></p>        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string|null</td>
+                <td>$user</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_clearDelegatedUser">
+        <div class="location">at line 162</div>
+        <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
+    <strong>clearDelegatedUser</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p><p>Clear delegated user context from current request scope.</p></p>                        
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_sendRequest">
-        <div class="location">at line 133</div>
+        <div class="location">at line 175</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
     <strong>sendRequest</strong>(string $request, string|null $path = null, bool $disableAgentHeader = false, string $requestMethod = &#039;POST&#039;)
         </code>
@@ -655,7 +826,7 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_sendMultiRequest">
-        <div class="location">at line 211</div>
+        <div class="location">at line 262</div>
         <code>                    array
     <strong>sendMultiRequest</strong>(array $requests)
         </code>
@@ -698,7 +869,7 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_sendRequestToUrl">
-        <div class="location">at line 250</div>
+        <div class="location">at line 301</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
     <strong>sendRequestToUrl</strong>(string $url, string $request, string|null $path = null, bool $disableAgentHeader = false)
         </code>
@@ -755,8 +926,86 @@ or validate and throw error if we have missing table in the list</p></p>        
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_normalizeDelegatedUser">
+        <div class="location">at line 323</div>
+        <code>            protected        string|null
+    <strong>normalizeDelegatedUser</strong>(string|null $user)
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string|null</td>
+                <td>$user</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string|null</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_resolveDelegatedUser">
+        <div class="location">at line 335</div>
+        <code>            protected        string|null
+    <strong>resolveDelegatedUser</strong>()
+        </code>
+    </h3>
+    <div class="details">    
+            
+    
+            
+
+        <div class="method-description">
+                            <p class="no-description">No description</p>
+                    
+        </div>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string|null</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_getClientForUrl">
-        <div class="location">at line 264</div>
+        <div class="location">at line 343</div>
         <code>            protected        <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
     <strong>getClientForUrl</strong>(string $url)
         </code>
@@ -800,7 +1049,7 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_setForceSync">
-        <div class="location">at line 282</div>
+        <div class="location">at line 361</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
     <strong>setForceSync</strong>(bool $value = true)
         </code>
@@ -843,7 +1092,7 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_runAsyncRequest">
-        <div class="location">at line 295</div>
+        <div class="location">at line 374</div>
         <code>            protected        string
     <strong>runAsyncRequest</strong>(string $path, string $request, array $headers, string $method)
         </code>
@@ -901,7 +1150,7 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_runSyncRequest">
-        <div class="location">at line 328</div>
+        <div class="location">at line 407</div>
         <code>            protected        string
     <strong>runSyncRequest</strong>(string $path, string $request, array $headers, string $method)
         </code>
@@ -959,7 +1208,7 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_getAllTables">
-        <div class="location">at line 382</div>
+        <div class="location">at line 461</div>
         <code>                    <a target="_blank" rel="noopener" href="https://www.php.net/Generator">Generator</a>
     <strong>getAllTables</strong>(array $types = [])
         </code>
@@ -1016,7 +1265,7 @@ And filter only required types or any if not specified</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_validateTables">
-        <div class="location">at line 406</div>
+        <div class="location">at line 485</div>
         <code>                    array
     <strong>validateTables</strong>(array $tables = [], array $types = [])
         </code>
@@ -1082,7 +1331,7 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_hasTable">
-        <div class="location">at line 436</div>
+        <div class="location">at line 515</div>
         <code>                    bool
     <strong>hasTable</strong>(string $table)
         </code>
@@ -1126,7 +1375,7 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getTableShards">
-        <div class="location">at line 448</div>
+        <div class="location">at line 527</div>
         <code>                    array
     <strong>getTableShards</strong>(string $table)
         </code>
@@ -1178,7 +1427,7 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_parseTableShards">
-        <div class="location">at line 479</div>
+        <div class="location">at line 558</div>
         <code>            protected        array
     <strong>parseTableShards</strong>(string $table)
         </code>
@@ -1221,7 +1470,7 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getSettings">
-        <div class="location">at line 503</div>
+        <div class="location">at line 582</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a>
     <strong>getSettings</strong>()
         </code>
@@ -1254,7 +1503,7 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fetchSettings">
-        <div class="location">at line 514</div>
+        <div class="location">at line 593</div>
         <code>            protected        <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a>
     <strong>fetchSettings</strong>()
         </code>
@@ -1287,7 +1536,7 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fetchFuzzyVariations">
-        <div class="location">at line 571</div>
+        <div class="location">at line 650</div>
         <code>                    array
     <strong>fetchFuzzyVariations</strong>(string $query, string $table, bool $forceBigrams = false, int $distance = 2, int $limit = 3)
         </code>
