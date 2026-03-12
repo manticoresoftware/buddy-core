@@ -149,9 +149,9 @@ class Client {
 	 * @return static
 	 */
 	public function setDelegatedUser(?string $user): static {
-		$normalizedUser = $this->normalizeDelegatedUser($user);
-		$this->delegatedUser = $normalizedUser;
-
+		$normalizedUser = $user ? trim($user) : null;
+		// Empty string or null should be null
+		$this->delegatedUser = $normalizedUser ?: null;
 		return $this;
 	}
 
@@ -314,19 +314,6 @@ class Client {
 		}
 
 		return $client->sendRequest($request, $path, $disableAgentHeader);
-	}
-
-	/**
-	 * @param ?string $user
-	 * @return ?string
-	 */
-	protected function normalizeDelegatedUser(?string $user): ?string {
-		if ($user === null) {
-			return null;
-		}
-
-		$user = trim($user);
-		return $user === '' ? null : $user;
 	}
 
 	/**
