@@ -51,6 +51,9 @@ class Client {
 	/** @var ?string $authToken */
 	protected ?string $authToken = null;
 
+	/** @var ?string $delegatedUser */
+	protected ?string $delegatedUser = null;
+
 	/** @var string $buddyVersion */
 	protected string $buddyVersion;
 
@@ -91,6 +94,21 @@ class Client {
 	}
 
 	/**
+	 * Ensure request-scoped cloned clients do not share mutable internals.
+	 * @return void
+	 */
+	public function __clone() {
+		$this->connectionPool = new ConnectionPool(
+			function () {
+				$client = new HttpClient($this->host, $this->port);
+				$client->set(['timeout' => -1]);
+				return $client;
+			}
+		);
+		$this->clientMap = new Map;
+	}
+
+	/**
 	 * Set server URL of Manticore searchd to send requests to
 	 * @param string $url it supports http:// prefixed and not
 	 * @return static
@@ -122,6 +140,30 @@ class Client {
 	}
 
 	/**
+	 * Set delegated user context for outgoing daemon requests.
+	 *
+	 * Context is coroutine-scoped when running in coroutine mode.
+	 * In sync mode it falls back to the instance-local value.
+	 *
+	 * @param ?string $user
+	 * @return static
+	 */
+	public function setDelegatedUser(?string $user): static {
+		$normalizedUser = $this->normalizeDelegatedUser($user);
+		$this->delegatedUser = $normalizedUser;
+
+		return $this;
+	}
+
+	/**
+	 * Clear delegated user context from current request scope.
+	 * @return static
+	 */
+	public function clearDelegatedUser(): static {
+		return $this->setDelegatedUser(null);
+	}
+
+	/**
 	 * Send the request where request represents the SQL query to be send
 	 * @param string $request
 	 * @param ?string $path
@@ -134,7 +176,7 @@ class Client {
 		string $request,
 		?string $path = null,
 		bool $disableAgentHeader = false,
-		string $requestMethod = 'POST'
+		string $requestMethod = 'POST',
 	): Response {
 		$t = microtime(true);
 		if ($request === '') {
@@ -168,6 +210,15 @@ class Client {
 			'Content-Type' => $contentTypeHeader,
 			'User-Agent' => $userAgentHeader,
 		];
+
+		$delegatedUser = $this->resolveDelegatedUser();
+		$delegatedUserLog = $delegatedUser ?? '<empty>';
+		Buddy::debug("delegated user for daemon request on /{$path}: {$delegatedUserLog}");
+
+		if ($delegatedUser !== null) {
+			$headers['X-Manticore-User'] = $delegatedUser;
+		}
+
 		// Add authorization header if we have token
 		if (isset($this->authToken)) {
 			$headers['Authorization'] = "Bearer {$this->authToken}";
@@ -254,7 +305,35 @@ class Client {
 		bool $disableAgentHeader = false
 	): Response {
 		$client = $this->getClientForUrl($url);
+
+		$delegatedUser = $this->resolveDelegatedUser();
+		if ($delegatedUser === null) {
+			$client->clearDelegatedUser();
+		} else {
+			$client->setDelegatedUser($delegatedUser);
+		}
+
 		return $client->sendRequest($request, $path, $disableAgentHeader);
+	}
+
+	/**
+	 * @param ?string $user
+	 * @return ?string
+	 */
+	protected function normalizeDelegatedUser(?string $user): ?string {
+		if ($user === null) {
+			return null;
+		}
+
+		$user = trim($user);
+		return $user === '' ? null : $user;
+	}
+
+	/**
+	 * @return ?string
+	 */
+	protected function resolveDelegatedUser(): ?string {
+		return $this->delegatedUser;
 	}
 
 	/**
