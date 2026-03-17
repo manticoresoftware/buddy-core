@@ -16,7 +16,9 @@ use Ds\Map;
 use Ds\Vector;
 use Exception;
 use Generator;
+use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError;
+use Manticoresearch\Buddy\Core\Error\ManticoreSearchResponseError;
 use Manticoresearch\Buddy\Core\Network\Struct;
 use Manticoresearch\Buddy\Core\Tool\Arrays;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
@@ -632,7 +634,11 @@ class Client {
 	 * @param bool $forceBigrams When set to true, passes "1 as force_bigrams" to all CALL SUGGEST requests
 	 * @param int $distance Maximum edit distance for suggestions
 	 * @param int $limit Maximum number of suggestions per word
+	 *
 	 * @return array{0: array<Variation>, 1: Map<string, float>} Words and score map
+	 * @throws ManticoreSearchResponseError
+	 * @throws ManticoreSearchClientError
+	 * @throws GenericError
 	 */
 	public function fetchFuzzyVariations(
 		string $query,
@@ -645,8 +651,12 @@ class Client {
 		$query = addcslashes($query, '*%?\'');
 		// 1. Tokenize the query first with the keywords function
 		$q = "CALL KEYWORDS('{$query}', '{$table}')";
+		$request = $this->sendRequest($q);
+		if ($request->hasError()) {
+			ManticoreSearchResponseError::throw((string)$request->getError());
+		}
 		/** @var array<array{data:array<array{normalized:string,tokenized:string}>}> $keywordsResult */
-		$keywordsResult = $this->sendRequest($q)->getResult();
+		$keywordsResult = $request->getResult();
 		$normalized = array_column($keywordsResult[0]['data'] ?? [], 'normalized');
 
 		/** @var array<Variation> $words */
@@ -714,7 +724,10 @@ class Client {
 	 * @param Map<string,int> $docMap Reference to document map to be populated
 	 * @param array<int,bool> $processedTokens Reference to processed tokens tracking
 	 * @param bool $forceBigrams When set to true, passes "1 as force_bigrams" to all CALL SUGGEST requests
+	 *
 	 * @return int Number of tokens consumed (1 for individual, 2+ for merged)
+	 * @throws ManticoreSearchClientError
+	 * @throws GenericError
 	 */
 	private function processSuggestion(
 		string $word,
@@ -739,16 +752,24 @@ class Client {
 		{$forceBigramsOption}
 		)";
 
+
+		$request = $this->sendRequest($query);
+		if ($request->hasError()) {
+			ManticoreSearchResponseError::throw((string)$request->getError());
+		}
+
 		/**
-	 * @var array<array{
-	 *     data: array<array{
-	 *         suggest: string,
-	 *         distance: int,
-	 *         docs: int
-	 *     }>
-	 * }> $suggestResult
-	 */
-		$suggestResult = $this->sendRequest($query)->getResult();
+		 * @var array<array{
+		 *     data: array<array{
+		 *         suggest: string,
+		 *         distance: int,
+		 *         docs: int
+		 *     }>
+		 * }> $suggestResult
+		 */
+
+		$suggestResult = $request->getResult();
+
 
 		/** @var array<array{suggest:string,distance:int,docs:int}> $suggestions */
 		$suggestions = $suggestResult[0]['data'] ?? [];
@@ -859,7 +880,10 @@ class Client {
 	 * @param int $distance
 	 * @param array<string> $choices
 	 * @param Map<string,int> $distanceMap
+	 *
 	 * @return array{original:string,choices:array<string>,distanceMap:Map<string,int>,docMap:array<string,int>}|null
+	 * @throws ManticoreSearchClientError
+	 * @throws GenericError
 	 */
 	private function tryMergeWithNext(
 		string $word,
@@ -890,8 +914,13 @@ class Client {
 		{$forceBigramsOption}
 		)";
 
+		$request = $this->sendRequest($query);
+		if ($request->hasError()) {
+			ManticoreSearchResponseError::throw((string)$request->getError());
+		}
+
 		/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $combinedSuggestResult */
-		$combinedSuggestResult = $this->sendRequest($query)->getResult();
+		$combinedSuggestResult = $request->getResult();
 
 		$combinedSuggestions = $combinedSuggestResult[0]['data'] ?? [];
 
@@ -923,8 +952,13 @@ class Client {
 		{$forceBigramsOption}
 		)";
 
+		$request = $this->sendRequest($nextWordQuery);
+		if ($request->hasError()) {
+			ManticoreSearchResponseError::throw((string)$request->getError());
+		}
+
 		/** @var array<array{data:array<array{suggest:string,distance:int,docs:int}>}> $nextWordResult */
-		$nextWordResult = $this->sendRequest($nextWordQuery)->getResult();
+		$nextWordResult = $request->getResult();
 		$nextWordSuggestions = $nextWordResult[0]['data'] ?? [];
 		$nextWordChoices = array_column($nextWordSuggestions, 'suggest');
 
