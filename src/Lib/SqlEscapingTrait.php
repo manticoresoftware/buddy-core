@@ -1,0 +1,45 @@
+<?php declare(strict_types=1);
+
+/*
+  Copyright (c) 2026, Manticore Software LTD (https://manticoresearch.com)
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 2 or any later
+  version. You should have received a copy of the GPL license along with this
+  program; if you did not, you can find it at http://www.gnu.org/
+*/
+
+namespace Manticoresearch\Buddy\Core\Lib;
+
+trait SqlEscapingTrait {
+	protected static function escapeSqlString(string $value): string {
+		return strtr(
+			$value,
+			[
+				'\\' => '\\\\',
+				"\0" => '\\0',
+				"\n" => '\\n',
+				"\r" => '\\r',
+				"'" => "\\'",
+				'"' => '\\"',
+				"\x1a" => '\\Z',
+			]
+		);
+	}
+
+	protected static function quoteSqlString(string $value): string {
+		return "'" . self::escapeSqlString($value) . "'";
+	}
+
+	protected function sqlEscape(string $value): string {
+		return self::escapeSqlString($value);
+	}
+
+	protected function quote(string $value): string {
+		return self::quoteSqlString($value);
+	}
+
+	protected function escapeString(string $value): string {
+		return self::escapeSqlString($value);
+	}
+}
