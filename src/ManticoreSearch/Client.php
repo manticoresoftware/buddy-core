@@ -16,6 +16,7 @@ use Ds\Map;
 use Ds\Vector;
 use Exception;
 use Generator;
+use Manticoresearch\Buddy\Core\Cache\Store;
 use Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError;
 use Manticoresearch\Buddy\Core\Network\Struct;
 use Manticoresearch\Buddy\Core\Tool\Arrays;
@@ -69,6 +70,9 @@ class Client {
 	/** @var bool $forceSync */
 	protected bool $forceSync = false;
 
+	/** @var Store TTL cache for table metadata (shards, cluster map) */
+	protected Store $metaCache;
+
 	/**
 	 * Initialize the Client that will use provided
 	 * @param ?string $url
@@ -91,6 +95,7 @@ class Client {
 		);
 		$this->buddyVersion = Buddy::getVersion();
 		$this->clientMap = new Map;
+		$this->metaCache = new Store(30); // 30s TTL for table metadata
 	}
 
 	/**
@@ -511,7 +516,23 @@ class Client {
 	 * @return array<array{name:string,url:string}>
 	 * @throws RuntimeException
 	 */
+	/**
+	 * Get the metadata cache instance
+	 * @return Store
+	 */
+	public function getMetaCache(): Store {
+		return $this->metaCache;
+	}
+
+	/** @return array<array{name:string,url:string}> */
 	public function getTableShards(string $table): array {
+		$cacheKey = "shards:{$table}";
+		/** @var array<array{name:string,url:string}>|null $cached */
+		$cached = $this->metaCache->get($cacheKey);
+		if ($cached !== null) {
+			return $cached;
+		}
+
 		[$locals, $agents] = $this->parseTableShards($table);
 
 		$shards = [];
@@ -533,7 +554,7 @@ class Client {
 				'url' => "$host:$port",
 			];
 		}
-		$map[$table] = $shards;
+		$this->metaCache->set($cacheKey, $shards);
 		return $shards;
 	}
 
