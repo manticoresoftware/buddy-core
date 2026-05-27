@@ -82,13 +82,7 @@ class Client {
 		}
 		$this->setServerUrl($url);
 		$this->setAuthToken($authToken);
-		$this->connectionPool = new ConnectionPool(
-			function () {
-				$client = new HttpClient($this->host, $this->port);
-				$client->set(['timeout' => -1]);
-				return $client;
-			}
-		);
+		$this->connectionPool = new ConnectionPool(fn() => $this->makeHttpClient());
 		$this->buddyVersion = Buddy::getVersion();
 		$this->clientMap = new Map;
 	}
@@ -98,14 +92,17 @@ class Client {
 	 * @return void
 	 */
 	public function __clone() {
-		$this->connectionPool = new ConnectionPool(
-			function () {
-				$client = new HttpClient($this->host, $this->port);
-				$client->set(['timeout' => -1]);
-				return $client;
-			}
-		);
+		$this->connectionPool = new ConnectionPool(fn() => $this->makeHttpClient());
 		$this->clientMap = new Map;
+	}
+
+	/**
+	 * @return HttpClient
+	 */
+	protected function makeHttpClient(): HttpClient {
+		$client = new HttpClient($this->host, $this->port);
+		$client->set(['timeout' => -1]);
+		return $client;
 	}
 
 	/**
@@ -368,14 +365,15 @@ class Client {
 		$client->setData($request);
 		$client->execute("/$path");
 		if ($client->errCode) {
+			$error = "Error while async request: {$client->errCode}: {$client->errMsg}";
+			$client->close();
+			$this->connectionPool->put($this->makeHttpClient());
 			/** @phpstan-ignore-next-line */
 			if ($client->errCode !== 104 || $try >= 3) {
-				$error = "Error while async request: {$client->errCode}: {$client->errMsg}";
 				throw new ManticoreSearchClientError($error);
 			}
 
 			Buddy::debug('Client: connection reset by peer, repeat: ' . (++$try));
-			$client->close();
 			goto request;
 		}
 		$result = $client->body;
