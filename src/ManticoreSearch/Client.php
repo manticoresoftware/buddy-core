@@ -37,6 +37,9 @@ class Client {
 	const HTTP_REQUEST_TIMEOUT = 300;
 	const DEFAULT_URL = 'http://127.0.0.1:9308';
 
+	/** Trusted internal user the daemon creates for Buddy itself */
+	const SYSTEM_USER = 'system.buddy';
+
 	/**
 	 * @var string $response
 	 */
@@ -158,6 +161,21 @@ class Client {
 	 */
 	public function clearDelegatedUser(): static {
 		return $this->setDelegatedUser(null);
+	}
+
+	/**
+	 * Get a client clone that runs queries as the trusted system.buddy user.
+	 *
+	 * Use it for internal plugin operations on system.* tables that must not
+	 * depend on the requesting user's permissions, while the original client
+	 * keeps the user's delegated identity.
+	 *
+	 * @return static
+	 */
+	public function getSystemClient(): static {
+		$systemClient = clone $this;
+		$systemClient->setDelegatedUser(self::SYSTEM_USER);
+		return $systemClient;
 	}
 
 	/**
