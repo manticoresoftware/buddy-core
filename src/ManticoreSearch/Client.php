@@ -59,6 +59,9 @@ class Client {
 	/** @var ?string $delegatedUser */
 	protected ?string $delegatedUser = null;
 
+	/** @var ?SystemClient $systemClient */
+	protected ?SystemClient $systemClient = null;
+
 	/** @var string $buddyVersion */
 	protected string $buddyVersion;
 
@@ -166,18 +169,18 @@ class Client {
 	}
 
 	/**
-	 * Get a client clone that runs queries as the trusted system.buddy user.
+	 * Get a client bound to the trusted system.buddy user.
 	 *
 	 * Use it for internal plugin operations on system.* tables that must not
 	 * depend on the requesting user's permissions, while the original client
-	 * keeps the user's delegated identity.
+	 * keeps the user's delegated identity. The instance is memoized, so all
+	 * privileged queries issued through this client share one SystemClient
+	 * and its connection pool.
 	 *
-	 * @return static
+	 * @return SystemClient
 	 */
-	public function getSystemClient(): static {
-		$systemClient = clone $this;
-		$systemClient->setDelegatedUser(self::SYSTEM_USER);
-		return $systemClient;
+	public function getSystemClient(): SystemClient {
+		return $this->systemClient ??= new SystemClient($this->getServerUrl(), $this->authToken);
 	}
 
 	/**
