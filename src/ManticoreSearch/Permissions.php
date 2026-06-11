@@ -58,6 +58,32 @@ final class Permissions {
 	}
 
 	/**
+	 * Get the tables visible to the client's current identity as a
+	 * name => type map. SHOW TABLES is permission-filtered by the daemon,
+	 * so running it on a user-delegated client returns only the tables
+	 * that user has grants on — use it to filter listings without any
+	 * permission evaluation in Buddy. Returns an empty map on error.
+	 *
+	 * @param Client $client
+	 * @return array<string,string>
+	 */
+	public static function getAccessibleTables(Client $client): array {
+		$resp = $client->sendRequest('SHOW TABLES');
+		if ($resp->hasError()) {
+			Buddy::debug("Permissions: SHOW TABLES failed: {$resp->getError()}");
+			return [];
+		}
+
+		/** @var array{0?:array{data?:array<array{Table:string,Type:string}>}} $result */
+		$result = $resp->getResult();
+		$tables = [];
+		foreach ($result[0]['data'] ?? [] as $row) {
+			$tables[$row['Table']] = $row['Type'];
+		}
+		return $tables;
+	}
+
+	/**
 	 * Mirror of the daemon rule evaluation: the first rule matching the
 	 * action and target (exactly or by wildcard) decides; no match denies.
 	 * Rules arrive from SHOW PERMISSIONS FOR in daemon storage order, the
