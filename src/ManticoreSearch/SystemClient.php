@@ -42,6 +42,7 @@ class SystemClient extends Client {
 	 * @return static
 	 * @throws LogicException always
 	 */
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter, SlevomatCodingStandard.Functions.UnusedParameter
 	public function setDelegatedUser(?string $user): static {
 		throw new LogicException('SystemClient always runs as ' . self::SYSTEM_USER);
 	}
