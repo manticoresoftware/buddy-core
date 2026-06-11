@@ -261,10 +261,7 @@ It works almost the same as convertMany but combine ALL possible pairs of langua
 <abbr title="Manticoresearch\Buddy\Core\Lib\SqlEscapingTrait">SqlEscapingTrait</abbr>::escapeSqlString</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Lib/SqlEscapingTrait.html"><abbr title="Manticoresearch\Buddy\Core\Lib\SqlEscapingTrait">SqlEscapingTrait</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/Lib/SqlEscapingTrait.html#method_escapeString">
 <abbr title="Manticoresearch\Buddy\Core\Lib\SqlEscapingTrait">SqlEscapingTrait</abbr>::escapeString</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Lib/SqlEscapingTrait.html"><abbr title="Manticoresearch\Buddy\Core\Lib\SqlEscapingTrait">SqlEscapingTrait</abbr></a></em></dt>
-                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Permissions.html#method_evaluateRules">
-<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Permissions">Permissions</abbr>::evaluateRules</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Permissions.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Permissions">Permissions</abbr></a></em></dt>
-                    <dd><p>Mirror of the daemon rule evaluation: the first rule matching the
-action and target (exactly or by wildcard) decides; no match denies.</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#property_error">
+                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#property_error">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>#error</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#method_extendData">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>::extendData</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
@@ -521,7 +518,14 @@ Normally it's done on initialization stage of the Buddy base</p></dd><dt><a href
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>#host</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_hasTable">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>::hasTable</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
-                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#property_hasData">
+                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Permissions.html#method_hasSchemaAccess">
+<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Permissions">Permissions</abbr>::hasSchemaAccess</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Permissions.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Permissions">Permissions</abbr></a></em></dt>
+                    <dd><p>Check that the client's current identity has schema (DDL) permission
+on the table by probing the daemon with a bare <code>ALTER TABLE t</code> (an
+option-less no-op): the daemon checks permissions before table
+existence, so a "permission denied" reply means no access, while
+success or any other error (e.g. unknown table) means the permission
+check has already passed. The probe never modifies anything.</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#property_hasData">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>#hasData</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#method_hasError">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>::hasError</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
@@ -545,9 +549,7 @@ Normally it's done on initialization stage of the Buddy base</p></dd><dt><a href
 <abbr title="Manticoresearch\Buddy\Core\Tool\ConfigManager">ConfigManager</abbr>::has</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/Tool/ConfigManager.html"><abbr title="Manticoresearch\Buddy\Core\Tool\ConfigManager">ConfigManager</abbr></a></em></dt>
                     <dd><p>Check if a configuration key exists</p></dd>        </dl><h2 id="letterI">I</h2>
         <dl id="indexI"><dt><a href="Manticoresearch/Buddy/Core/Error/InvalidNetworkRequestError.html"><abbr title="Manticoresearch\Buddy\Core\Error\InvalidNetworkRequestError">InvalidNetworkRequestError</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/Error.html">Manticoresearch\Buddy\Core\Error</a></em></dt>
-                    <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Permissions.html#method_isActionAllowed">
-<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Permissions">Permissions</abbr>::isActionAllowed</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Permissions.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Permissions">Permissions</abbr></a></em></dt>
-                    <dd><p>Check that the user is allowed to perform the action on the target.</p></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#property_isRaw">
+                    <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#property_isRaw">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>#isRaw</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
                     <dd></dd><dt>$<a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#property_isMultipleRows">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>#isMultipleRows</a> &mdash; <em>Property in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
@@ -679,7 +681,7 @@ Useful to run hooks or something like this</p></dd>        </dl><h2 id="letterP"
                     <dd></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_parseTableShards">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr>::parseTableShards</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></em></dt>
                     <dd><p>Helper to parse shards and return local and remote agents for current table</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Permissions.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Permissions">Permissions</abbr></a> &mdash; <em>Class in namespace <a href="Manticoresearch/Buddy/Core/ManticoreSearch.html">Manticoresearch\Buddy\Core\ManticoreSearch</a></em></dt>
-                    <dd><p>Client-side check of the daemon's user permissions.</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#method_postprocess">
+                    <dd><p>Daemon-evaluated permission helpers for plugins.</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#method_postprocess">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>::postprocess</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>
                     <dd><p>Run callable function on results and postprocess it with custom logic</p></dd><dt><a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html#method_parse">
 <abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr>::parse</a>() &mdash; <em>Method in class <a href="Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a></em></dt>

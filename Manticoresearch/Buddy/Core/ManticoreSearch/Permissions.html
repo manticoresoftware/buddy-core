@@ -95,38 +95,18 @@
         
 
             <div class="description">
-            <p><p>Client-side check of the daemon's user permissions.</p></p>            <p><p>The daemon enforces permissions itself for every statement it can parse,
+            <p><p>Daemon-evaluated permission helpers for plugins.</p></p>            <p><p>The daemon enforces permissions itself for every statement it can parse,
 but statements that fail to parse (e.g. cluster-prefixed sharded
-CREATE/DROP) skip that check and arrive at Buddy ungated. Plugins handling
-such statements gate them here: isActionAllowed() reads the permissions
-the daemon exposes via SHOW PERMISSIONS FOR and mirrors the daemon's rule
-evaluation (ProcessPerms in src/auth/auth_perms.cpp: the first rule
-matching the action and target — exactly or by * / ? wildcard — decides,
-no match denies).</p></p>        </div>
+CREATE/DROP) skip that check and arrive at Buddy ungated. Both helpers
+here delegate the actual permission evaluation to the daemon, so Buddy
+never duplicates the rule resolution logic.</p></p>        </div>
             
         
             <h2>Constants</h2>    <table class="table table-condensed">
                     <tr>
                 <td>
-                                                                                                                        ACTION_READ
-                                    </td>
-                <td class="last">
-                    <p><em></em></p>
-                    <p></p>
-                </td>
-            </tr>
-                    <tr>
-                <td>
-                                                                                                                        ACTION_WRITE
-                                    </td>
-                <td class="last">
-                    <p><em></em></p>
-                    <p></p>
-                </td>
-            </tr>
-                    <tr>
-                <td>
-                                                                                                                        ACTION_SCHEMA
+                                                            private
+                                                                                PERMISSION_DENIED_NEEDLE
                                     </td>
                 <td class="last">
                     <p><em></em></p>
@@ -145,9 +125,14 @@ no match denies).</p></p>        </div>
                     static&nbsp;bool
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_isActionAllowed">isActionAllowed</a>(<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a> $systemClient, string $user, string $action, string $target)
+                    <a href="#method_hasSchemaAccess">hasSchemaAccess</a>(<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a> $userClient, string $table)
         
-                                            <p><p>Check that the user is allowed to perform the action on the target.</p></p>                </div>
+                                            <p><p>Check that the client's current identity has schema (DDL) permission
+on the table by probing the daemon with a bare <code>ALTER TABLE t</code> (an
+option-less no-op): the daemon checks permissions before table
+existence, so a "permission denied" reply means no access, while
+success or any other error (e.g. unknown table) means the permission
+check has already passed. The probe never modifies anything.</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
                     <div class="row">
@@ -164,17 +149,6 @@ that user has grants on — use it to filter listings without any
 permission evaluation in Buddy. Returns an empty map on error.</p></p>                </div>
                 <div class="col-md-2"></div>
             </div>
-                    <div class="row">
-                <div class="col-md-2 type">
-                    static&nbsp;bool
-                </div>
-                <div class="col-md-8">
-                    <a href="#method_evaluateRules">evaluateRules</a>(array $rules, string $action, string $target)
-        
-                                            <p><p>Mirror of the daemon rule evaluation: the first rule matching the
-action and target (exactly or by wildcard) decides; no match denies.</p></p>                </div>
-                <div class="col-md-2"></div>
-            </div>
             </div>
 
 
@@ -182,10 +156,10 @@ action and target (exactly or by wildcard) decides; no match denies.</p></p>    
 
             <div id="method-details">
                     <div class="method-item">
-                    <h3 id="method_isActionAllowed">
-        <div class="location">at line 43</div>
+                    <h3 id="method_hasSchemaAccess">
+        <div class="location">at line 40</div>
         <code>        static            bool
-    <strong>isActionAllowed</strong>(<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a> $systemClient, string $user, string $action, string $target)
+    <strong>hasSchemaAccess</strong>(<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a> $userClient, string $table)
         </code>
     </h3>
     <div class="details">    
@@ -194,7 +168,12 @@ action and target (exactly or by wildcard) decides; no match denies.</p></p>    
             
 
         <div class="method-description">
-                            <p><p>Check that the user is allowed to perform the action on the target.</p></p>                <p><p>An empty user means auth is disabled, so everything is allowed.</p></p>        
+                            <p><p>Check that the client's current identity has schema (DDL) permission
+on the table by probing the daemon with a bare <code>ALTER TABLE t</code> (an
+option-less no-op): the daemon checks permissions before table
+existence, so a "permission denied" reply means no access, while
+success or any other error (e.g. unknown table) means the permission
+check has already passed. The probe never modifies anything.</p></p>                        
         </div>
         <div class="tags">
                             <h4>Parameters</h4>
@@ -202,22 +181,12 @@ action and target (exactly or by wildcard) decides; no match denies.</p></p>    
                     <table class="table table-condensed">
                     <tr>
                 <td><a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a></td>
-                <td>$systemClient</td>
-                <td><p>client delegated to system.buddy</p></td>
+                <td>$userClient</td>
+                <td><p>client carrying the delegated user identity</p></td>
             </tr>
                     <tr>
                 <td>string</td>
-                <td>$user</td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td>string</td>
-                <td>$action</td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td>string</td>
-                <td>$target</td>
+                <td>$table</td>
                 <td></td>
             </tr>
             </table>
@@ -241,7 +210,7 @@ action and target (exactly or by wildcard) decides; no match denies.</p></p>    
             </div>
                     <div class="method-item">
                     <h3 id="method_getAccessibleTables">
-        <div class="location">at line 70</div>
+        <div class="location">at line 59</div>
         <code>        static            array
     <strong>getAccessibleTables</strong>(<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a> $client)
         </code>
@@ -275,61 +244,6 @@ permission evaluation in Buddy. Returns an empty map on error.</p></p>
                     <table class="table table-condensed">
         <tr>
             <td>array</td>
-            <td></td>
-        </tr>
-    </table>
-
-            
-            
-            
-                    </div>
-    </div>
-
-            </div>
-                    <div class="method-item">
-                    <h3 id="method_evaluateRules">
-        <div class="location">at line 97</div>
-        <code>        static            bool
-    <strong>evaluateRules</strong>(array $rules, string $action, string $target)
-        </code>
-    </h3>
-    <div class="details">    
-            
-    
-            
-
-        <div class="method-description">
-                            <p><p>Mirror of the daemon rule evaluation: the first rule matching the
-action and target (exactly or by wildcard) decides; no match denies.</p></p>                <p><p>Rules arrive from SHOW PERMISSIONS FOR in daemon storage order, the
-same order the daemon itself evaluates them in.</p></p>        
-        </div>
-        <div class="tags">
-                            <h4>Parameters</h4>
-
-                    <table class="table table-condensed">
-                    <tr>
-                <td>array</td>
-                <td>$rules</td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td>string</td>
-                <td>$action</td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td>string</td>
-                <td>$target</td>
-                <td></td>
-            </tr>
-            </table>
-
-            
-                            <h4>Return Value</h4>
-
-                    <table class="table table-condensed">
-        <tr>
-            <td>bool</td>
             <td></td>
         </tr>
     </table>
