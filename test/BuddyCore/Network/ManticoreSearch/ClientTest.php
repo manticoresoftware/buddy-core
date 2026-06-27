@@ -149,4 +149,26 @@ PHP;
 		}
 	}
 
+	/**
+	 * Regression for the /metrics fd leak (issue #686). QueryProcessor clones the
+	 * shared client per request. If Client::__clone() builds a ConnectionPool whose
+	 * factory closure captures $this, Client and its pool form a reference cycle, so
+	 * the pooled keep-alive socket survives until the cycle collector runs -> fd leak.
+	 * A correct clone must be released by refcount the instant it goes out of scope.
+	 * @return void
+	 */
+	public function testClonedClientIsReleasedByRefcountWithoutCycleCollector(): void {
+		gc_collect_cycles();
+
+		$clone = clone $this->client;
+		$ref = WeakReference::create($clone);
+		unset($clone);
+
+		// No gc_collect_cycles() here on purpose: only refcounting may free it.
+		$this->assertNull(
+			$ref->get(),
+			'Cloned Client survived refcount drop: Client<->connectionPool reference cycle present (fd leak)'
+		);
+	}
+
 }
