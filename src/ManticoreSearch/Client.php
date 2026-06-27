@@ -90,7 +90,7 @@ class Client {
 		}
 		$this->setServerUrl($url);
 		$this->setAuthToken($authToken);
-		$this->connectionPool = new ConnectionPool(fn() => $this->makeHttpClient());
+		$this->connectionPool = $this->newConnectionPool();
 		$this->buddyVersion = Buddy::getVersion();
 		$this->clientMap = new Map;
 	}
@@ -100,17 +100,30 @@ class Client {
 	 * @return void
 	 */
 	public function __clone() {
-		$this->connectionPool = new ConnectionPool(fn() => $this->makeHttpClient());
+		$this->connectionPool = $this->newConnectionPool();
 		$this->clientMap = new Map;
 	}
 
 	/**
 	 * @return HttpClient
 	 */
-	protected function makeHttpClient(): HttpClient {
-		$client = new HttpClient($this->host, $this->port);
+	protected static function makeHttpClient(string $host, int $port): HttpClient {
+		$client = new HttpClient($host, $port);
 		$client->set(['timeout' => -1]);
 		return $client;
+	}
+
+	/**
+	 * Build a connection pool whose factory captures only scalars, so the pool
+	 * does not reference back to this Client. Without this, the Client<->pool
+	 * cycle keeps per-request cloned clients (and their keep-alive 9312 sockets)
+	 * alive until the GC cycle collector runs. See issue #686.
+	 * @return ConnectionPool
+	 */
+	private function newConnectionPool(): ConnectionPool {
+		$host = $this->host;
+		$port = $this->port;
+		return new ConnectionPool(static fn(): HttpClient => self::makeHttpClient($host, $port));
 	}
 
 	/**
@@ -124,6 +137,10 @@ class Client {
 		}
 		$this->host = (string)strtok($url, ':');
 		$this->port = (int)strtok(':');
+		// Rebuild the pool so post-construction URL changes take effect (e.g. tests).
+		if (isset($this->connectionPool)) {
+			$this->connectionPool = $this->newConnectionPool();
+		}
 		return $this;
 	}
 
@@ -390,7 +407,7 @@ class Client {
 		if ($client->errCode) {
 			$error = "Error while async request: {$client->errCode}: {$client->errMsg}";
 			$client->close();
-			$this->connectionPool->put($this->makeHttpClient());
+			$this->connectionPool->put(self::makeHttpClient($this->host, $this->port));
 			/** @phpstan-ignore-next-line */
 			if ($client->errCode !== 104 || $try >= 3) {
 				throw new ManticoreSearchClientError($error);
