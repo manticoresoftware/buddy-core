@@ -49,21 +49,19 @@ final class TableValidator {
 			return true;
 		}
 
-		/** @var array{data:array<array<string,string>>,error?:string} $result */
-		$result = $this->client->sendRequest("SHOW TABLE $table SETTINGS")->getResult();
+		// Use SHOW CREATE TABLE instead of SHOW TABLE SETTINGS to check min_infix_len.
+		// SHOW CREATE TABLE works for all table types (plain, distributed, sharded)
+		// while SHOW TABLE SETTINGS is unsupported for sharded tables.
+		/** @var array{0:array{data:array<array{"Create Table":string}>},error?:string} $result */
+		$result = $this->client->sendRequest("SHOW CREATE TABLE $table")->getResult();
 		if (isset($result['error'])) {
 			TableValidationError::throw("no such table '{$table}'");
 		}
 
-		/** @var array{0:array{data:array<array{'Variable_name':string,'Value':string}>}} $result */
-		$variables  = $result[0]['data'];
-		foreach ($variables as $variable) {
-			$name = $variable['Variable_name'];
-			$value = $variable['Value'];
-			if ($name === 'settings' && str_contains($value, 'min_infix_len')) {
-				$this->cache->set($cacheKey, true, $this->ttl);
-				return true;
-			}
+		$createSql = $result[0]['data'][0]['Create Table'] ?? '';
+		if (str_contains($createSql, 'min_infix_len')) {
+			$this->cache->set($cacheKey, true, $this->ttl);
+			return true;
 		}
 		return false;
 	}
