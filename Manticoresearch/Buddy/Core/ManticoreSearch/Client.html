@@ -90,7 +90,6 @@
 </p>
 
         
-        
     
         
 
@@ -109,6 +108,15 @@
                     <tr>
                 <td>
                                                                                                                         URL_PREFIX
+                                    </td>
+                <td class="last">
+                    <p><em></em></p>
+                    <p></p>
+                </td>
+            </tr>
+                    <tr>
+                <td>
+                                                                                                                        UNIX_SOCKET_PREFIX
                                     </td>
                 <td class="last">
                     <p><em></em></p>
@@ -231,7 +239,7 @@
             </tr>
                     <tr>
                 <td class="type" id="property_clientMap">
-                                        protected                                        <abbr title="Ds\Map&lt;string, \Manticoresearch\Buddy\Core\ManticoreSearch\Client&gt;">Client&gt;</abbr>
+                                        protected                                        <abbr title="Ds\Map&lt;string,\Manticoresearch\Buddy\Core\ManticoreSearch\Client&gt;">Client&gt;</abbr>
                                                                                 
                                     </td>
                 <td>$clientMap</td>
@@ -429,6 +437,16 @@
             </div>
                     <div class="row">
                 <div class="col-md-2 type">
+                    string
+                </div>
+                <div class="col-md-8">
+                    <a href="#method_runUnixSocketSyncRequest">runUnixSocketSyncRequest</a>(string $path, string $request, array $headers, string $method)
+        
+                                            <p><p>Run a blocking HTTP request through a Unix-domain socket.</p></p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
                     <a target="_blank" rel="noopener" href="https://www.php.net/Generator">Generator</a>
                 </div>
                 <div class="col-md-8">
@@ -518,13 +536,12 @@ or validate and throw error if we have missing table in the list</p></p>        
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line 86</div>
+        <div class="location">at line 87</div>
         <code>                    void
     <strong>__construct</strong>(string|null $url = null, string|null $authToken = null)
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -566,13 +583,12 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method___clone">
-        <div class="location">at line 102</div>
+        <div class="location">at line 103</div>
         <code>                    void
     <strong>__clone</strong>()
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -599,13 +615,12 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_makeHttpClient">
-        <div class="location">at line 110</div>
+        <div class="location">at line 111</div>
         <code>        static    protected        <abbr title="Swoole\Coroutine\Http\Client">Client</abbr>
     <strong>makeHttpClient</strong>(string $host, int $port)
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -648,13 +663,12 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_setServerUrl">
-        <div class="location">at line 134</div>
+        <div class="location">at line 135</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
     <strong>setServerUrl</strong>(string $url)
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -691,13 +705,12 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_setAuthToken">
-        <div class="location">at line 151</div>
+        <div class="location">at line 157</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
     <strong>setAuthToken</strong>(string|null $authToken)
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -735,13 +748,12 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_getServerUrl">
-        <div class="location">at line 160</div>
+        <div class="location">at line 166</div>
         <code>                    string
     <strong>getServerUrl</strong>()
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -768,13 +780,12 @@ or validate and throw error if we have missing table in the list</p></p>        
             </div>
                     <div class="method-item">
                     <h3 id="method_setDelegatedUser">
-        <div class="location">at line 173</div>
+        <div class="location">at line 182</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
     <strong>setDelegatedUser</strong>(string|null $user)
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -812,13 +823,12 @@ In sync mode it falls back to the instance-local value.</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_clearDelegatedUser">
-        <div class="location">at line 184</div>
+        <div class="location">at line 193</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
     <strong>clearDelegatedUser</strong>()
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -845,13 +855,12 @@ In sync mode it falls back to the instance-local value.</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getSystemClient">
-        <div class="location">at line 199</div>
+        <div class="location">at line 208</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/SystemClient.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\SystemClient">SystemClient</abbr></a>
     <strong>getSystemClient</strong>()
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -882,13 +891,12 @@ and its connection pool.</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_sendRequest">
-        <div class="location">at line 212</div>
+        <div class="location">at line 221</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
     <strong>sendRequest</strong>(string $request, string|null $path = null, bool $disableAgentHeader = false, string $requestMethod = &#039;POST&#039;)
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -940,13 +948,12 @@ and its connection pool.</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_sendMultiRequest">
-        <div class="location">at line 299</div>
+        <div class="location">at line 308</div>
         <code>                    array
     <strong>sendMultiRequest</strong>(array $requests)
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -983,13 +990,12 @@ and its connection pool.</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_sendRequestToUrl">
-        <div class="location">at line 338</div>
+        <div class="location">at line 347</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Response.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Response">Response</abbr></a>
     <strong>sendRequestToUrl</strong>(string $url, string $request, string|null $path = null, bool $disableAgentHeader = false)
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -1041,13 +1047,12 @@ and its connection pool.</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_resolveDelegatedUser">
-        <div class="location">at line 359</div>
+        <div class="location">at line 368</div>
         <code>            protected        string|null
     <strong>resolveDelegatedUser</strong>()
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -1075,13 +1080,12 @@ and its connection pool.</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getClientForUrl">
-        <div class="location">at line 367</div>
+        <div class="location">at line 376</div>
         <code>            protected        <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
     <strong>getClientForUrl</strong>(string $url)
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -1119,13 +1123,12 @@ and its connection pool.</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_setForceSync">
-        <div class="location">at line 385</div>
+        <div class="location">at line 394</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a>
     <strong>setForceSync</strong>(bool $value = true)
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -1162,13 +1165,12 @@ and its connection pool.</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_runAsyncRequest">
-        <div class="location">at line 398</div>
+        <div class="location">at line 407</div>
         <code>            protected        string
     <strong>runAsyncRequest</strong>(string $path, string $request, array $headers, string $method)
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -1220,13 +1222,12 @@ and its connection pool.</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_runSyncRequest">
-        <div class="location">at line 432</div>
+        <div class="location">at line 441</div>
         <code>            protected        string
     <strong>runSyncRequest</strong>(string $path, string $request, array $headers, string $method)
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -1277,14 +1278,70 @@ and its connection pool.</p></p>
 
             </div>
                     <div class="method-item">
+                    <h3 id="method_runUnixSocketSyncRequest">
+        <div class="location">at line 494</div>
+        <code>            protected        string
+    <strong>runUnixSocketSyncRequest</strong>(string $path, string $request, array $headers, string $method)
+        </code>
+    </h3>
+    <div class="details">    
+    
+            
+
+        <div class="method-description">
+                            <p><p>Run a blocking HTTP request through a Unix-domain socket.</p></p>                        
+        </div>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$path</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$request</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>array</td>
+                <td>$headers</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$method</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
                     <h3 id="method_getAllTables">
-        <div class="location">at line 486</div>
+        <div class="location">at line 563</div>
         <code>                    <a target="_blank" rel="noopener" href="https://www.php.net/Generator">Generator</a>
     <strong>getAllTables</strong>(array $types = [])
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -1309,7 +1366,7 @@ And filter only required types or any if not specified</p></p>
                     <table class="table table-condensed">
         <tr>
             <td><a target="_blank" rel="noopener" href="https://www.php.net/Generator">Generator</a></td>
-            <td><p>Contains array with table and type as [table, type]</p></td>
+            <td></td>
         </tr>
     </table>
 
@@ -1335,13 +1392,12 @@ And filter only required types or any if not specified</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_validateTables">
-        <div class="location">at line 510</div>
+        <div class="location">at line 587</div>
         <code>                    array
     <strong>validateTables</strong>(array $tables = [], array $types = [])
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -1401,13 +1457,12 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_hasTable">
-        <div class="location">at line 540</div>
+        <div class="location">at line 617</div>
         <code>                    bool
     <strong>hasTable</strong>(string $table)
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -1445,13 +1500,12 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getTableShards">
-        <div class="location">at line 552</div>
+        <div class="location">at line 629</div>
         <code>                    array
     <strong>getTableShards</strong>(string $table)
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -1497,13 +1551,12 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_parseTableShards">
-        <div class="location">at line 583</div>
+        <div class="location">at line 660</div>
         <code>            protected        array
     <strong>parseTableShards</strong>(string $table)
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -1540,13 +1593,12 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_getSettings">
-        <div class="location">at line 607</div>
+        <div class="location">at line 684</div>
         <code>                    <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a>
     <strong>getSettings</strong>()
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -1573,13 +1625,12 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fetchSettings">
-        <div class="location">at line 618</div>
+        <div class="location">at line 695</div>
         <code>            protected        <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Settings.html"><abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Settings">Settings</abbr></a>
     <strong>fetchSettings</strong>()
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -1606,13 +1657,12 @@ or validate and throw error if we have missing table in the list</p></p>
             </div>
                     <div class="method-item">
                     <h3 id="method_fetchFuzzyVariations">
-        <div class="location">at line 679</div>
+        <div class="location">at line 756</div>
         <code>                    array
     <strong>fetchFuzzyVariations</strong>(string $query, string $table, bool $forceBigrams = false, int $distance = 2, int $limit = 3)
         </code>
     </h3>
     <div class="details">    
-            
     
             
 
@@ -1656,7 +1706,7 @@ or validate and throw error if we have missing table in the list</p></p>
                     <table class="table table-condensed">
         <tr>
             <td>array</td>
-            <td><p>Words and score map</p></td>
+            <td></td>
         </tr>
     </table>
 
