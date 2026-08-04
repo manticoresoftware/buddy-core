@@ -36,6 +36,7 @@ use Swoole\Lock;
 class Client {
 	const CONTENT_TYPE_HEADER = "Content-Type: application/x-www-form-urlencoded\n";
 	const URL_PREFIX = 'http://';
+	const UNIX_SOCKET_PREFIX = 'unix:/';
 	const HTTP_REQUEST_TIMEOUT = 300;
 	const DEFAULT_URL = 'http://127.0.0.1:9308';
 
@@ -132,11 +133,16 @@ class Client {
 	 * @return static
 	 */
 	public function setServerUrl($url): static {
-		if (str_starts_with($url, static::URL_PREFIX)) {
-			$url = substr($url, strlen(static::URL_PREFIX));
+		if (str_starts_with($url, static::UNIX_SOCKET_PREFIX)) {
+			$this->host = $url;
+			$this->port = 0;
+		} else {
+			if (str_starts_with($url, static::URL_PREFIX)) {
+				$url = substr($url, strlen(static::URL_PREFIX));
+			}
+			$this->host = (string)strtok($url, ':');
+			$this->port = (int)strtok(':');
 		}
-		$this->host = (string)strtok($url, ':');
-		$this->port = (int)strtok(':');
 		// Rebuild the pool so post-construction URL changes take effect (e.g. tests).
 		if (isset($this->connectionPool)) {
 			$this->connectionPool = $this->newConnectionPool();
@@ -158,6 +164,9 @@ class Client {
 	 * @return string
 	 */
 	public function getServerUrl(): string {
+		if (str_starts_with($this->host, static::UNIX_SOCKET_PREFIX)) {
+			return $this->host;
+		}
 		return static::URL_PREFIX . $this->host . ':' . $this->port;
 	}
 
@@ -430,6 +439,10 @@ class Client {
 	 * @return string
 	 */
 	protected function runSyncRequest(string $path, string $request, array $headers, string $method): string {
+		if (str_starts_with($this->host, static::UNIX_SOCKET_PREFIX)) {
+			return $this->runUnixSocketSyncRequest($path, $request, $headers, $method);
+		}
+
 		$headers['Connection'] = 'close';
 		$contextOptions = [
 			'http' => [
@@ -468,6 +481,70 @@ class Client {
 			$errorMessage = "Error while sync request: {$httpCode}: {$errorMessage}";
 			throw new ManticoreSearchClientError($errorMessage);
 		}
+	}
+
+	/**
+	 * Run a blocking HTTP request through a Unix-domain socket.
+	 * @param string $path
+	 * @param string $request
+	 * @param array<string,string> $headers
+	 * @param string $method
+	 * @return string
+	 */
+	protected function runUnixSocketSyncRequest(
+		string $path,
+		string $request,
+		array $headers,
+		string $method
+	): string {
+		$socketPath = substr($this->host, strlen('unix:'));
+		$socket = stream_socket_client(
+			"unix://{$socketPath}",
+			$errorCode,
+			$errorMessage,
+			static::HTTP_REQUEST_TIMEOUT
+		);
+		if ($socket === false) {
+			throw new ManticoreSearchClientError(
+				"Error while sync request: {$errorCode}: {$errorMessage}"
+			);
+		}
+
+		$headers['Host'] = 'localhost';
+		$headers['Connection'] = 'close';
+		$headers['Content-Length'] = (string)strlen($request);
+		$headerLines = array_map(
+			fn($key, $value) => "$key: $value",
+			array_keys($headers),
+			$headers
+		);
+		$payload = "{$method} /{$path} HTTP/1.1\r\n" . implode("\r\n", $headerLines)
+			. "\r\n\r\n{$request}";
+
+		try {
+			$written = 0;
+			$length = strlen($payload);
+			while ($written < $length) {
+				$bytes = fwrite($socket, substr($payload, $written));
+				if ($bytes === false || $bytes === 0) {
+					throw new ManticoreSearchClientError('Error while sync request: failed to write request');
+				}
+				$written += $bytes;
+			}
+
+			$response = stream_get_contents($socket);
+			if ($response === false) {
+				throw new ManticoreSearchClientError('Error while sync request: failed to read response');
+			}
+		} finally {
+			fclose($socket);
+		}
+
+		$headerEnd = strpos($response, "\r\n\r\n");
+		if ($headerEnd === false) {
+			throw new ManticoreSearchClientError('Error while sync request: invalid HTTP response');
+		}
+		return substr($response, $headerEnd + 4);
 	}
 
 	// Bunch of methods to help us reduce copy pasting, maybe we will move it out to separate class
