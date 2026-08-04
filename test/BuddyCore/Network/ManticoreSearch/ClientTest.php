@@ -84,6 +84,7 @@ class ClientTest extends TestCase {
 		$this->runUnixSocketRequestTest(true);
 	}
 
+	/** @runInSeparateProcess */
 	public function testUnixSocketRequestInsideCoroutine(): void {
 		$this->runUnixSocketRequestTest(false);
 	}
@@ -121,12 +122,16 @@ class ClientTest extends TestCase {
 				$client->setForceSync();
 			}
 			$response = null;
-			/** @phpstan-ignore-next-line Swoole extension function is not included in the test stubs */
-			Swoole\Coroutine\run(
-				function () use ($client, &$response): void {
-					$response = $client->sendRequest('SHOW STATUS');
-				}
-			);
+			if ($forceSync) {
+				$response = $client->sendRequest('SHOW STATUS');
+			} else {
+				/** @phpstan-ignore-next-line Swoole extension function is not included in the test stubs */
+				Swoole\Coroutine\run(
+					function () use ($client, &$response): void {
+						$response = $client->sendRequest('SHOW STATUS');
+					}
+				);
+			}
 			$this->assertNotNull($response);
 			$this->assertStringContainsString('"total":1', $response->getBody());
 		} finally {

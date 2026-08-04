@@ -23,7 +23,8 @@ jobs:
           set -e
           ln -snf "$GITHUB_WORKSPACE" /workdir
           cd /workdir
-          composer require --dev code-lts/doctum -W
+          # twig-i18n-extension 4.0.1 is incompatible with Twig 3.21+.
+          composer require --dev code-lts/doctum 'twig/twig:<3.21' -W
           vendor/bin/doctum.php update config/doctum.php --ignore-parse-errors
       - name: Deploy documentation
         uses: peaceiris/actions-gh-pages@v3
