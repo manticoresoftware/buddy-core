@@ -10,6 +10,7 @@
  */
 
 use Manticoresearch\Buddy\Core\ManticoreSearch\Client as HTTPClient;
+use Manticoresearch\Buddy\Core\Tool\ConfigManager;
 use Manticoresearch\Buddy\CoreTest\Trait\TestInEnvironmentTrait;
 use Manticoresearch\Buddy\CoreTest\Trait\TestProtectedTrait;
 use PHPUnit\Framework\TestCase;
@@ -34,6 +35,7 @@ class ClientTest extends TestCase {
 	 */
 	public static function setUpBeforeClass(): void {
 		self::setBuddyVersion();
+		ConfigManager::init();
 	}
 
 	protected function setUp(): void {
@@ -64,6 +66,79 @@ class ClientTest extends TestCase {
 		$this->client->setServerUrl($url);
 		$this->assertEquals('localhost', $this->refCls->getProperty('host')->getValue($this->client));
 		$this->assertEquals(1000, $this->refCls->getProperty('port')->getValue($this->client));
+	}
+
+	public function testUnixSocketUrlSetOk(): void {
+		$url = 'unix:/tmp/manticore_data/searchd.sock';
+		$this->client->setServerUrl($url);
+
+		$this->assertEquals($url, $this->refCls->getProperty('host')->getValue($this->client));
+		$this->assertEquals(0, $this->refCls->getProperty('port')->getValue($this->client));
+		$this->assertEquals($url, $this->client->getServerUrl());
+
+		$systemClient = $this->client->getSystemClient();
+		$this->assertEquals($url, $systemClient->getServerUrl());
+	}
+
+	public function testUnixSocketSyncRequest(): void {
+		$this->runUnixSocketRequestTest(true);
+	}
+
+	/** @runInSeparateProcess */
+	public function testUnixSocketRequestInsideCoroutine(): void {
+		$this->runUnixSocketRequestTest(false);
+	}
+
+	private function runUnixSocketRequestTest(bool $forceSync): void {
+		if (!function_exists('pcntl_fork')) {
+			$this->markTestSkipped('pcntl is required for the Unix socket transport test');
+		}
+
+		$socketPath = sys_get_temp_dir() . '/buddy-core-' . getmypid() . '.sock';
+		$server = stream_socket_server("unix://{$socketPath}", $errorCode, $errorMessage);
+		$this->assertIsResource($server, $errorMessage);
+
+		$pid = pcntl_fork();
+		if ($pid === 0) {
+			$connection = stream_socket_accept($server, 5);
+			if ($connection === false) {
+				exit(1);
+			}
+			while (($line = fgets($connection)) !== false && trim($line) !== '') {
+			}
+			$body = '[{"total":1,"error":"","warning":"","columns":[],"data":[]}]';
+			fwrite(
+				$connection,
+				"HTTP/1.1 200 OK\r\nContent-Length: " . strlen($body) . "\r\nConnection: close\r\n\r\n{$body}"
+			);
+			fclose($connection);
+			fclose($server);
+			exit(0);
+		}
+
+		try {
+			$client = new HTTPClient("unix:{$socketPath}");
+			if ($forceSync) {
+				$client->setForceSync();
+			}
+			$response = null;
+			if ($forceSync) {
+				$response = $client->sendRequest('SHOW STATUS');
+			} else {
+				/** @phpstan-ignore-next-line Swoole extension function is not included in the test stubs */
+				Swoole\Coroutine\run(
+					function () use ($client, &$response): void {
+						$response = $client->sendRequest('SHOW STATUS');
+					}
+				);
+			}
+			$this->assertNotNull($response);
+			$this->assertStringContainsString('"total":1', $response->getBody());
+		} finally {
+			fclose($server);
+			pcntl_waitpid($pid, $status);
+			@unlink($socketPath);
+		}
 	}
 
 	// public function testResponseUrlSetFail(): void {
