@@ -286,6 +286,29 @@ final class StructSingleResponseTest extends TestCase {
 		);
 	}
 
+	public function testMultipleResponseBigIntFieldsUseSelectColumnMetadata(): void {
+		$jsonResponse = '[{"columns":[{"id":{"type":"long long"}},{"number_ticket_vendor":{"type":"string"}}],'
+			. '"data":[{"id":9223372036854775808,"number_ticket_vendor":"22335618161513141414"},'
+			. '{"id":9223372036854775809,"number_ticket_vendor":"22335618161513141414"}],'
+			. '"total":2,"error":"","warning":""},'
+			. '{"columns":[{"Variable_name":{"type":"string"}},{"Value":{"type":"string"}}],'
+			. '"data":[{"Variable_name":"total","Value":"2"}],"total":1,"error":"","warning":""}]';
+
+		$struct = Struct::fromJson($jsonResponse);
+
+		$this->assertSame(['data.0.id', 'data.1.id'], $struct->getBigIntFields());
+
+		$responses = $struct->toArray();
+		array_pop($responses);
+		$serialized = Struct::fromData($responses, $struct->getBigIntFields())->toJson();
+
+		$this->assertTrue(Struct::isValid($serialized));
+		$this->assertStringContainsString(
+			'"number_ticket_vendor":"22335618161513141414"',
+			$serialized
+		);
+	}
+
 	/**
 	 * Test that BigInt field detection now works correctly using column type information
 	 * This verifies the root cause fix for the production bug

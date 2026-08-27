@@ -144,6 +144,10 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 		$hasColumns = isset($result['columns']) && is_array($result['columns']);
 		if ($hasColumns) {
 			static::addBigIntFieldsFromColumns($result, $bigIntFields);
+		} elseif (isset($result[0]['columns']) && is_array($result[0]['columns'])) {
+			/** @var array<mixed> $firstResponse */
+			$firstResponse = $result[0];
+			static::addBigIntFieldsFromColumns($firstResponse, $bigIntFields);
 		} elseif (static::hasBigInt($json)) {
 			// FALLBACK: Only run heuristic if columns metadata is missing
 			// We need here to keep original json decode cuzit has bigIntFields
@@ -387,7 +391,7 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 			return;
 		}
 
-		foreach ($response['columns'] as $columnIndex => $columnDef) {
+		foreach ($response['columns'] as $columnDef) {
 			if (!is_array($columnDef)) {
 				continue;
 			}
@@ -397,8 +401,23 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 					continue;
 				}
 
-				$bigIntFields[] = "data.{$columnIndex}.{$fieldName}";
+				static::addBigIntFieldForEachRow($response['data'], $fieldName, $bigIntFields);
 			}
+		}
+	}
+
+	/**
+	 * @param array<mixed> $data
+	 * @param array<string> &$bigIntFields
+	 * @return void
+	 */
+	private static function addBigIntFieldForEachRow(array $data, string $fieldName, array &$bigIntFields): void {
+		foreach ($data as $rowIndex => $row) {
+			if (!is_array($row) || !array_key_exists($fieldName, $row)) {
+				continue;
+			}
+
+			$bigIntFields[] = "data.{$rowIndex}.{$fieldName}";
 		}
 	}
 
