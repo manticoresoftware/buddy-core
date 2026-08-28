@@ -286,6 +286,49 @@ final class StructSingleResponseTest extends TestCase {
 		);
 	}
 
+	public function testMultipleResponseBigIntFieldsUseTheirOwnColumnMetadata(): void {
+		$jsonResponse = '[{"columns":[{"id":{"type":"long long"}},'
+			. '{"number_ticket_vendor":{"type":"string"}}],'
+			. '"data":[{"id":9223372036854775808,'
+			. '"number_ticket_vendor":"22335618161513141414"},'
+			. '{"id":9223372036854775809,'
+			. '"number_ticket_vendor":"22335618161513141414"}],'
+			. '"total":2,"error":"","warning":""},'
+			. '{"columns":[{"Variable_name":{"type":"string"}},{"Value":{"type":"string"}}],'
+			. '"data":[{"Variable_name":"total","Value":"2"}],'
+			. '"total":1,"error":"","warning":""}]';
+
+		$struct = Struct::fromJson($jsonResponse);
+
+		$this->assertSame(['0.data.0.id', '0.data.1.id'], $struct->getBigIntFields());
+		$this->assertNotContains('0.data.0.number_ticket_vendor', $struct->getBigIntFields());
+		$this->assertNotContains('0.data.1.number_ticket_vendor', $struct->getBigIntFields());
+
+		$metaResponse = $struct->pop();
+		$this->assertIsArray($metaResponse);
+		/** @var array{data:array<int,array{Variable_name:string,Value:string}>} $metaResponse */
+		$this->assertSame('total', $metaResponse['data'][0]['Variable_name']);
+		$this->assertSame(['0.data.0.id', '0.data.1.id'], $struct->getBigIntFields());
+
+		/** @var array<int,array{data:array<int,array{id:string,number_ticket_vendor:string}>}> $responses */
+		$responses = $struct->toArray();
+		$this->assertSame(
+			'22335618161513141414',
+			$responses[0]['data'][0]['number_ticket_vendor']
+		);
+		$this->assertSame(
+			'22335618161513141414',
+			$responses[0]['data'][1]['number_ticket_vendor']
+		);
+
+		$serialized = $struct->toJson();
+		$this->assertTrue(Struct::isValid($serialized));
+		$this->assertStringContainsString(
+			'"number_ticket_vendor":"22335618161513141414"',
+			$serialized
+		);
+	}
+
 	/**
 	 * Test that BigInt field detection now works correctly using column type information
 	 * This verifies the root cause fix for the production bug

@@ -97,6 +97,33 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 	}
 
 	/**
+	 * Remove and return the last item while preserving metadata for the
+	 * remaining structure.
+	 *
+	 * @return TValue|null
+	 */
+	public function pop(): mixed {
+		$lastKey = array_key_last($this->data);
+		if ($lastKey === null) {
+			return null;
+		}
+
+		$value = array_pop($this->data);
+		$this->keys = array_keys($this->data);
+
+		$path = (string)$lastKey;
+		$this->bigIntFields = array_values(
+			array_filter(
+				$this->bigIntFields,
+				static fn (string $field): bool => $field !== $path && !str_starts_with($field, "{$path}.")
+			)
+		);
+
+		/** @var TValue $value */
+		return $value;
+	}
+
+	/**
 	 * @param callable $fn
 	 * @return Struct<TKey, TValue>
 	 */
@@ -140,19 +167,38 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 		$result = (array)simdjson_decode($json, true, static::JSON_DEPTH);
 		$bigIntFields = [];
 
-		// PRIMARY: Extract bigint fields from column metadata if present
-		$hasColumns = isset($result['columns']) && is_array($result['columns']);
-		if ($hasColumns) {
-			static::addBigIntFieldsFromColumns($result, $bigIntFields);
-		} elseif (static::hasBigInt($json)) {
-			// FALLBACK: Only run heuristic if columns metadata is missing
-			// We need here to keep original json decode cuzit has bigIntFields
+		// Extract bigint fields declared by response column metadata.
+		$hasColumns = false;
+		if (array_is_list($result)) {
+			foreach ($result as $responseIndex => $response) {
+				if (!is_array($response)) {
+					continue;
+				}
+
+				$responseHasColumns = static::addBigIntFieldsFromColumns(
+					$response,
+					$bigIntFields,
+					"{$responseIndex}."
+				);
+				$hasColumns = $responseHasColumns || $hasColumns;
+			}
+		} else {
+			$hasColumns = static::addBigIntFieldsFromColumns($result, $bigIntFields);
+		}
+
+		if (static::hasBigInt($json)) {
+			// Decode overflowing JSON integers as strings so their exact decimal
+			// representation is retained in the parsed data.
 			/** @var array<TKey, TValue> */
 			$modified = json_decode($json, true, static::JSON_DEPTH, static::JSON_FLAGS | JSON_BIGINT_AS_STRING);
 
-			/** @var array<string,int> $bigIntFieldsLookup */
-			$bigIntFieldsLookup = [];
-			static::traverseAndTrack($modified, $result, $bigIntFields, $bigIntFieldsLookup);
+			// Column types are authoritative for Manticore responses. Schema-less
+			// JSON falls back to comparing the native and lossless decodes.
+			if (!$hasColumns) {
+				/** @var array<string,int> $bigIntFieldsLookup */
+				$bigIntFieldsLookup = [];
+				static::traverseAndTrack($modified, $result, $bigIntFields, $bigIntFieldsLookup);
+			}
 
 			$result = $modified;
 		}
@@ -272,7 +318,7 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 		}
 
 		foreach ($data as $key => &$value) {
-			$currentPath = $path ? "$path.$key" : "$key";
+			$currentPath = $path !== '' ? "$path.$key" : "$key";
 			if (!isset($originalData[$key])) {
 				continue;
 			}
@@ -347,7 +393,7 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 		array &$bigIntFields,
 		array &$bigIntFieldsLookup
 	): void {
-		if (!is_string($value) || !is_numeric($originalValue)) {
+		if (!is_string($value) || !is_numeric($originalValue) || $value === $originalValue) {
 			return;
 		}
 
@@ -380,14 +426,33 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 	 *
 	 * @param array<mixed> $response Response with 'columns' metadata
 	 * @param array<string> &$bigIntFields Fields array to populate with bigint paths
-	 * @return void
+	 * @param string $pathPrefix Prefix for a response nested in a result list
+	 * @return bool true when column metadata is present
 	 */
-	private static function addBigIntFieldsFromColumns(array $response, array &$bigIntFields): void {
+	private static function addBigIntFieldsFromColumns(
+		array $response,
+		array &$bigIntFields,
+		string $pathPrefix = ''
+	): bool {
 		if (!isset($response['columns']) || !is_array($response['columns'])) {
-			return;
+			return false;
 		}
 
-		foreach ($response['columns'] as $columnIndex => $columnDef) {
+		$fieldNames = static::getBigIntFieldNames($response['columns']);
+		if (isset($response['data']) && is_array($response['data'])) {
+			static::addBigIntFieldsForRows($response['data'], $fieldNames, $pathPrefix, $bigIntFields);
+		}
+
+		return true;
+	}
+
+	/**
+	 * @param array<mixed> $columns
+	 * @return array<string>
+	 */
+	private static function getBigIntFieldNames(array $columns): array {
+		$fieldNames = [];
+		foreach ($columns as $columnDef) {
 			if (!is_array($columnDef)) {
 				continue;
 			}
@@ -397,7 +462,36 @@ final class Struct implements JsonSerializable, ArrayAccess, Countable, Iterator
 					continue;
 				}
 
-				$bigIntFields[] = "data.{$columnIndex}.{$fieldName}";
+				$fieldNames[] = $fieldName;
+			}
+		}
+		return $fieldNames;
+	}
+
+	/**
+	 * @param array<mixed> $rows
+	 * @param array<string> $fieldNames
+	 * @param string $pathPrefix
+	 * @param array<string> &$bigIntFields
+	 * @return void
+	 */
+	private static function addBigIntFieldsForRows(
+		array $rows,
+		array $fieldNames,
+		string $pathPrefix,
+		array &$bigIntFields
+	): void {
+		foreach ($rows as $rowIndex => $row) {
+			if (!is_array($row)) {
+				continue;
+			}
+
+			foreach ($fieldNames as $fieldName) {
+				if (!array_key_exists($fieldName, $row)) {
+					continue;
+				}
+
+				$bigIntFields[] = "{$pathPrefix}data.{$rowIndex}.{$fieldName}";
 			}
 		}
 	}

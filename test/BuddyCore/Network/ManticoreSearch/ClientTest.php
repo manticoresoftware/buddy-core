@@ -10,6 +10,7 @@
  */
 
 use Manticoresearch\Buddy\Core\ManticoreSearch\Client as HTTPClient;
+use Manticoresearch\Buddy\Core\Network\Struct;
 use Manticoresearch\Buddy\Core\Tool\ConfigManager;
 use Manticoresearch\Buddy\CoreTest\Trait\TestInEnvironmentTrait;
 use Manticoresearch\Buddy\CoreTest\Trait\TestProtectedTrait;
@@ -244,6 +245,99 @@ PHP;
 			$ref->get(),
 			'Cloned Client survived refcount drop: Client<->connectionPool reference cycle present (fd leak)'
 		);
+	}
+
+	/**
+	 * Regression test for issue #4826: SHOW META stripping must not re-encode and
+	 * re-parse the response body, which corrupted big integers and could produce
+	 * invalid JSON on large responses.
+	 * @return void
+	 */
+	public function testShowMetaStripsMetaRowWithoutReserialization(): void {
+		if (!function_exists('pcntl_fork')) {
+			$this->markTestSkipped('pcntl is required for the SHOW META strip test');
+		}
+
+		$socketPath = sys_get_temp_dir() . '/buddy-core-showmeta-' . getmypid() . '.sock';
+		$server = stream_socket_server("unix://{$socketPath}", $errorCode, $errorMessage);
+		$this->assertIsResource($server, $errorMessage);
+
+		// Body ids are built by decimal string concat; expected ids are derived
+		// independently by successively incrementing a hand-written uint64 literal,
+		// so an arithmetic error on either side diverges and fails the test.
+		// Numeric-looking strings cover the corruption that the removed
+		// serialize-and-parse round trip could introduce.
+		$expectedIds = ['9223372036854775808'];
+		$dataRows = [];
+		foreach (range(0, 899) as $i) {
+			$dataRows[] = '{"id":' . '922337203685477' . (5808 + $i)
+				. ',"code":"0000000000","number_ticket_vendor":"22335618161513141414"}';
+			if ($i <= 0) {
+				continue;
+			}
+
+			$expectedIds[] = str_increment($expectedIds[$i - 1]);
+		}
+		$body = '['
+			. '{"columns":[{"id":{"type":"long long"}}],'
+			. '"data":[' . implode(',', $dataRows) . '],'
+			. '"total":900,"error":"","warning":""},'
+			. '{"columns":[{"Variable_name":{"type":"string"}},{"Value":{"type":"string"}}],'
+			. '"data":[{"Variable_name":"total","Value":"900"}],"total":1,"error":"","warning":""}'
+			. ']';
+		$pid = pcntl_fork();
+		if ($pid === 0) {
+			$connection = stream_socket_accept($server, 5);
+			if ($connection === false) {
+				exit(1);
+			}
+			while (($line = fgets($connection)) !== false && trim($line) !== '') {
+			}
+			fwrite(
+				$connection,
+				"HTTP/1.1 200 OK\r\nContent-Length: " . strlen($body) . "\r\nConnection: close\r\n\r\n{$body}"
+			);
+			fclose($connection);
+			fclose($server);
+			exit(0);
+		}
+
+		try {
+			$client = new HTTPClient("unix:{$socketPath}");
+			$client->setForceSync();
+			$response = $client->sendRequest('SELECT id FROM t', 'sql?mode=raw');
+			$this->assertSame(['total' => '900'], $response->getMeta());
+			$this->assertFalse($response->hasMultipleRows());
+			$this->assertSame(900, $response->getTotal());
+			$resultStruct = $response->getResult();
+			/** @var array<int,array{data:array<int,array{id:string,code:string,number_ticket_vendor:string}>}> $result */
+			$result = $resultStruct->toArray();
+			// Big integers must stay lossless strings in every row, without re-serialization
+			$this->assertCount(900, $result[0]['data']);
+			// Hand-written sentinels, independent of the generator above
+			$this->assertSame('9223372036854775808', $result[0]['data'][0]['id']);
+			$this->assertSame('9223372036854776257', $result[0]['data'][449]['id']);
+			$this->assertSame('9223372036854776707', $result[0]['data'][899]['id']);
+			foreach ($result[0]['data'] as $i => $row) {
+				$this->assertSame($expectedIds[$i], $row['id']);
+				$this->assertSame('0000000000', $row['code']);
+				$this->assertSame('22335618161513141414', $row['number_ticket_vendor']);
+			}
+			$this->assertContains('0.data.0.id', $resultStruct->getBigIntFields());
+			$this->assertContains('0.data.899.id', $resultStruct->getBigIntFields());
+			$this->assertNotContains('0.data.0.code', $resultStruct->getBigIntFields());
+			$this->assertNotContains(
+				'0.data.0.number_ticket_vendor',
+				$resultStruct->getBigIntFields()
+			);
+			// The daemon body stays raw; SHOW META is removed from parsed response state only
+			$this->assertSame($body, $response->getBody());
+			$this->assertTrue(Struct::isValid($response->getBody()));
+		} finally {
+			fclose($server);
+			pcntl_waitpid($pid, $status);
+			@unlink($socketPath);
+		}
 	}
 
 }

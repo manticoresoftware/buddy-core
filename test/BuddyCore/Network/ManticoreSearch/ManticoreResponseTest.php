@@ -127,4 +127,22 @@ class ManticoreResponseTest extends TestCase {
 		$this->response->postprocess($processor);
 	}
 
+	public function testPopLastResultKeepsRemainingMultipleResponseState(): void {
+		$body = '[{"columns":[],"data":[{"id":1}],"total":1,"error":"","warning":""},'
+			. '{"columns":[],"data":[{"id":2}],"total":1,"error":"","warning":""},'
+			. '{"columns":[],"data":[{"Variable_name":"total","Value":"2"}],'
+			. '"total":1,"error":"","warning":""}]';
+		$response = Response::fromBody($body);
+
+		$removedRow = $response->popLastResult();
+
+		$this->assertIsArray($removedRow);
+		/** @var array{data:array<int,array{Variable_name:string,Value:string}>} $removedRow */
+		$this->assertSame('total', $removedRow['data'][0]['Variable_name']);
+		$this->assertTrue($response->hasMultipleRows());
+		$this->assertSame([[['id' => 1]], [['id' => 2]]], $response->getData());
+		$this->assertCount(2, $response->getResult());
+		$this->assertSame($body, $response->getBody());
+	}
+
 }
