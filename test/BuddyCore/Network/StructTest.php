@@ -179,4 +179,16 @@ final class StructTest extends TestCase {
 		$this->assertStringContainsString('"nested_id":9223372036854775806', $serialized);
 		$this->assertStringContainsString('"new_field":9223372036854775805', $serialized);
 	}
+
+	public function testPopPreservesMetadataForRemainingStructure(): void {
+		$struct = Struct::fromJson(
+			'[{"id":9223372036854775808},{"id":9223372036854775809}]'
+		);
+
+		$removed = $struct->pop();
+
+		$this->assertSame(['id' => '9223372036854775809'], $removed);
+		$this->assertSame([['id' => '9223372036854775808']], $struct->toArray());
+		$this->assertSame(['0.id'], $struct->getBigIntFields());
+	}
 }

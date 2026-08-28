@@ -19,7 +19,6 @@ use Generator;
 use Manticoresearch\Buddy\Core\Error\GenericError;
 use Manticoresearch\Buddy\Core\Error\ManticoreSearchClientError;
 use Manticoresearch\Buddy\Core\Error\ManticoreSearchResponseError;
-use Manticoresearch\Buddy\Core\Network\Struct;
 use Manticoresearch\Buddy\Core\Tool\Arrays;
 use Manticoresearch\Buddy\Core\Tool\Buddy;
 use Manticoresearch\Buddy\Core\Tool\ConfigManager;
@@ -273,19 +272,12 @@ class Client {
 		$method = !$this->forceSync && $isAsync ? 'runAsyncRequest' : 'runSyncRequest';
 		$response = $this->$method($path, $request, $headers, $requestMethod);
 
-		// TODO: rethink and make it better without double json_encode
 		$result = Response::fromBody($response);
 		if ($showMeta) {
-			$struct = $result->getResult();
-			$array = $struct->toArray();
 			// TODO: Not sure what reason, but in sync request we have only one response
 			// But this is should not be blocker for meta, we just will not have it
-			if (sizeof($array) > 1) {
-				/** @var array{data?:array<array{Variable_name:string,Value:string}>} */
-				$metaRow = array_pop($array);
-				$response = Struct::fromData($array, $struct->getBigIntFields())->toJson();
-				$result = Response::fromBody($response);
-			}
+			/** @var array{data?:array<array{Variable_name:string,Value:string}>} $metaRow */
+			$metaRow = $result->popLastResult() ?? [];
 			$metaVars = $metaRow['data'] ?? [];
 			$meta = [];
 			foreach ($metaVars as ['Variable_name' => $name, 'Value' => $value]) {

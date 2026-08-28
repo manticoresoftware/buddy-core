@@ -69,12 +69,9 @@ class Response {
 	protected bool $isMultipleRows = false;
 
 	/**
-	 * @param string $body
-	 * @return void
+	 * @param string $body raw response body to parse
 	 */
-	private function __construct(
-		protected string $body
-	) {
+	private function __construct(protected string $body) {
 		$this->parse();
 	}
 
@@ -93,6 +90,8 @@ class Response {
 	}
 
 	/**
+	 * Return the raw body exactly as received from the daemon.
+	 * Auxiliary results removed from parsed response state remain in this body.
 	 * @return string
 	 */
 	public function getBody(): string {
@@ -164,6 +163,24 @@ class Response {
 		// We restruct it due to we unable to do unset and indirect modifications
 		$this->result = Struct::fromData($fn($this->result->toArray()));
 		return $this;
+	}
+
+	/**
+	 * Strip the last row from a multi-row result and rebuild the parsed state
+	 * in place. The raw daemon body is deliberately left untouched so this
+	 * operation never serializes and re-parses bigint values.
+	 *
+	 * @return ?array<string,mixed> the removed row or null when there is no extra row
+	 */
+	public function popLastResult(): ?array {
+		if (!$this->isMultipleRows) {
+			return null;
+		}
+
+		/** @var array<string,mixed> $removedRow */
+		$removedRow = $this->result->pop();
+		$this->parseStruct($this->result);
+		return $removedRow;
 	}
 
 	/**
@@ -352,17 +369,18 @@ class Response {
 			throw new ManticoreSearchResponseError('Invalid JSON found');
 		}
 
-		$struct = Struct::fromJson($this->body);
+		$this->parseStruct(Struct::fromJson($this->body));
+	}
+
+	/**
+	 * Rebuild all response state from an already parsed structure.
+	 * @param Struct<int|string,mixed> $struct
+	 * @return void
+	 */
+	private function parseStruct(Struct $struct): void {
 		$this->result = $struct;
+		$this->resetParsedState();
 
-		// Reset data collection
-		/** @var array<int|string,mixed> $emptyData */
-		$emptyData = [];
-		$this->data = $emptyData;
-		$this->columnsPerRow = [];
-		$this->isMultipleRows = false;
-
-		// Detect if we have multiple rows
 		if ($struct->isList()) {
 			$this->isMultipleRows = sizeof($struct) > 1;
 
@@ -378,6 +396,24 @@ class Response {
 		} else {
 			$this->parseSingleRow($struct);
 		}
+	}
+
+	/**
+	 * Reset state derived from the parsed result while retaining attached meta.
+	 * @return void
+	 */
+	private function resetParsedState(): void {
+		$this->columns = [];
+		$this->columnsPerRow = [];
+		/** @var array<int|string,mixed> $emptyData */
+		$emptyData = [];
+		$this->data = $emptyData;
+		$this->hasData = false;
+		$this->isRaw = false;
+		$this->error = '';
+		$this->warning = '';
+		$this->total = 0;
+		$this->isMultipleRows = false;
 	}
 
 	/**
