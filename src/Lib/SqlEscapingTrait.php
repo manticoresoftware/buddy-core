@@ -27,6 +27,21 @@ trait SqlEscapingTrait {
 		);
 	}
 
+	protected static function unescapeSqlString(string $value): string {
+		return strtr(
+			$value,
+			[
+				'\\\\' => '\\',
+				'\\0' => "\0",
+				'\\n' => "\n",
+				'\\r' => "\r",
+				"\\'" => "'",
+				'\\"' => '"',
+				'\\Z' => "\x1a",
+			]
+		);
+	}
+
 	protected static function quoteSqlString(string $value): string {
 		return "'" . self::escapeSqlString($value) . "'";
 	}
