@@ -33,6 +33,18 @@ class SqlEscapingTraitTest extends TestCase {
 		$this->assertEquals("'O\\'Reilly'", $result);
 	}
 
+	public function testUnescapeSqlStringInvertsEscape(): void {
+		$reflection = new ReflectionClass($this->testClass);
+		$method = $reflection->getMethod('unescapeSqlString');
+		$method->setAccessible(true);
+
+		$original = "line1\nline2\r\"quoted\"\\slash\0\x1a'";
+		$escaped = addcslashes($original, "\\'\"\n\r\0\x1a\\");
+		$this->assertEquals($original, $method->invoke($this->testClass, $escaped));
+		$this->assertEquals("peter's", $method->invoke($this->testClass, 'peter\'s'));
+		$this->assertEquals('a\\b', $method->invoke($this->testClass, 'a\\\\b'));
+	}
+
 	protected function setUp(): void {
 		$this->testClass = new SqlEscapingTraitTestClass();
 	}
