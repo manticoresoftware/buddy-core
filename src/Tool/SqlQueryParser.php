@@ -97,12 +97,16 @@ final class SqlQueryParser
 	}
 
 	/**
+	 * Takes the parsed payload as an argument, so a request never has to
+	 * write its state back into this singleton to build SQL
+	 *
+	 * @param T $parsedPayload
 	 * @return string
 	 * @throws QueryParseError
 	 */
-	public static function getCompletedPayload(): string {
+	public static function getCompletedPayloadFrom(array $parsedPayload): string {
 		try {
-			return static::getInstance()::getCreator()->create(static::getParsedPayload());
+			return static::getInstance()::getCreator()->create($parsedPayload);
 		} catch (UnsupportedFeatureException $exception) {
 			throw new QueryParseError($exception->getMessage());
 		}
