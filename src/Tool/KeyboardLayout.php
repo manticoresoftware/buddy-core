@@ -55,7 +55,7 @@ final class KeyboardLayout {
 				continue;
 			}
 			$index = $indexMap[$char] ?? null;
-			$output .= static::$langMap[$this->targetLang][$index] ?? $char;
+			$output .= $index === null ? $char : (static::$langMap[$this->targetLang][$index] ?? $char);
 		}
 		return $output;
 	}

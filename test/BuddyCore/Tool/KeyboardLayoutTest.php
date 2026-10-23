@@ -50,6 +50,14 @@ class KeyboardLayoutTest extends TestCase {
 	}
 
 	/**
+	 * Characters missing from the source keyboard layout must be preserved.
+	 */
+	public function testUnmappedCharacters(): void {
+		$KL = new KeyboardLayout('ru');
+		$this->assertSame('привет 😀', $KL->convert('ghbdtn 😀', 'us'));
+	}
+
+	/**
 	 * Test that the original language is untouched in conversion
 	 */
 	public function testSameLayoutUntouched(): void {
