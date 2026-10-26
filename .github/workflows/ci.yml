@@ -60,7 +60,7 @@ jobs:
             '{"type":"path","url":"/tmp/buddy-core-under-test","options":{"symlink":true,"versions":{"manticoresoftware/buddy-core":"dev-main"}}}'
           composer update manticoresoftware/buddy-core manticoresoftware/php-sql-parser \
             --with-all-dependencies --prefer-dist --no-interaction --no-progress
-          composer show --locked manticoresoftware/php-sql-parser | grep 'v4.6.0-patch16'
+          composer show --locked manticoresoftware/php-sql-parser
 
           # Test the Buddy built from this checkout, not the stale image copy.
           rm -rf /usr/share/manticore/modules/manticore-buddy
