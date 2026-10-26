@@ -673,7 +673,6 @@ final class StructSingleResponseTest extends TestCase {
 	public function testIsBigIntBoundaryDetection(): void {
 		// Use reflection to access the private method
 		$method = new ReflectionMethod(Struct::class, 'isBigIntBoundary');
-		$method->setAccessible(true);
 
 		// Test cases: [value, expected_result]
 		$testCases = [
