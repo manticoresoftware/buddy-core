@@ -25,8 +25,15 @@ jobs:
           cd /workdir
           # twig-i18n-extension 4.0.1 is incompatible with Twig 3.21+.
           composer require --dev code-lts/doctum 'twig/twig:<3.21' -W
+          # Doctum forces error_reporting(-1) at startup, overriding PHP's -d flag.
+          # Keep real errors fatal; ignore PHP 8.5 deprecation warnings in Doctum only.
+          doctum_app=vendor/code-lts/doctum/src/Console/Application.php
+          if grep -Fq 'error_reporting(-1);' "$doctum_app"; then
+            sed -i 's/error_reporting(-1);/error_reporting(E_ALL \& ~E_DEPRECATED);/' "$doctum_app"
+          fi
           vendor/bin/doctum.php update config/doctum.php --ignore-parse-errors
       - name: Deploy documentation
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

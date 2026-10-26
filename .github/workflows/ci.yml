@@ -53,6 +53,19 @@ jobs:
           git checkout $BRANCH
           cd /workdir
 
+          # The image's bundled Buddy still uses the old parser. Resolve the
+          # checked-out buddy-core branch and run its real dependency graph.
+          cp -a "vendor/$PACKAGE" /tmp/buddy-core-under-test
+          composer config --json repositories.buddy-core \
+            '{"type":"path","url":"/tmp/buddy-core-under-test","options":{"symlink":true,"versions":{"manticoresoftware/buddy-core":"dev-main"}}}'
+          composer update manticoresoftware/buddy-core manticoresoftware/php-sql-parser \
+            --with-all-dependencies --prefer-dist --no-interaction --no-progress
+          composer show --locked manticoresoftware/php-sql-parser
+
+          # Test the Buddy built from this checkout, not the stale image copy.
+          rm -rf /usr/share/manticore/modules/manticore-buddy
+          ln -s /workdir /usr/share/manticore/modules/manticore-buddy
+
           git clone https://github.com/manticoresoftware/phar_builder.git
 
           searchd
