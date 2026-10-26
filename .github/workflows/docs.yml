@@ -28,8 +28,9 @@ jobs:
           # Doctum forces error_reporting(-1) at startup, overriding PHP's -d flag.
           # Keep real errors fatal; ignore PHP 8.5 deprecation warnings in Doctum only.
           doctum_app=vendor/code-lts/doctum/src/Console/Application.php
-          grep -Fq 'error_reporting(-1);' "$doctum_app"
-          sed -i 's/error_reporting(-1);/error_reporting(E_ALL \& ~E_DEPRECATED);/' "$doctum_app"
+          if grep -Fq 'error_reporting(-1);' "$doctum_app"; then
+            sed -i 's/error_reporting(-1);/error_reporting(E_ALL \& ~E_DEPRECATED);/' "$doctum_app"
+          fi
           vendor/bin/doctum.php update config/doctum.php --ignore-parse-errors
       - name: Deploy documentation
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
