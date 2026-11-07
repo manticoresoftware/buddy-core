@@ -762,7 +762,15 @@ class Client {
 		}
 		/** @var array<array{data:array<array{normalized:string,tokenized:string}>}> $keywordsResult */
 		$keywordsResult = $request->getResult();
-		$normalized = array_column($keywordsResult[0]['data'] ?? [], 'normalized');
+		// CALL KEYWORDS may also return an exact-form token (=word) for the
+		// same query position. It is not another word to fuzzy-expand.
+		$normalized = [];
+		foreach ($keywordsResult[0]['data'] ?? [] as $keyword) {
+			if (str_starts_with($keyword['normalized'], '=')) {
+				continue;
+			}
+			$normalized[] = $keyword['normalized'];
+		}
 
 		/** @var array<Variation> $words */
 		$words = [];
