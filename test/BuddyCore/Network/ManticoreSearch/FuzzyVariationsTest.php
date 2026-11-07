@@ -89,13 +89,14 @@ class FuzzyVariationsTest extends TestCase {
 					throw new RuntimeException("Unexpected Manticore request: $sql");
 				}
 
-				return Response::fromBody(json_encode([[
-					'total' => count($data),
+				$response = [
+					'total' => sizeof($data),
 					'error' => '',
 					'warning' => '',
 					'columns' => [],
 					'data' => $data,
-				]], JSON_THROW_ON_ERROR));
+				];
+				return Response::fromBody(json_encode([$response], JSON_THROW_ON_ERROR));
 			}
 		);
 
