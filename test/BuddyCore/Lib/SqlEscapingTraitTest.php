@@ -18,6 +18,7 @@ class SqlEscapingTraitTest extends TestCase {
 	public function testSqlEscapeSpecialCharacters(): void {
 		$reflection = new ReflectionClass($this->testClass);
 		$method = $reflection->getMethod('sqlEscape');
+		$method->setAccessible(true);
 
 		$result = $method->invoke($this->testClass, "line1\nline2\r\"quoted\"\\slash\0\x1a'");
 		$this->assertEquals('line1\\nline2\\r\\"quoted\\"\\\\slash\\0\\Z\\\'', $result);
@@ -26,6 +27,7 @@ class SqlEscapingTraitTest extends TestCase {
 	public function testQuoteWrapsEscapedString(): void {
 		$reflection = new ReflectionClass($this->testClass);
 		$method = $reflection->getMethod('quote');
+		$method->setAccessible(true);
 
 		$result = $method->invoke($this->testClass, "O'Reilly");
 		$this->assertEquals("'O\\'Reilly'", $result);
@@ -34,7 +36,9 @@ class SqlEscapingTraitTest extends TestCase {
 	public function testUnescapeSqlStringInvertsEscape(): void {
 		$reflection = new ReflectionClass($this->testClass);
 		$escape = $reflection->getMethod('escapeSqlString');
+		$escape->setAccessible(true);
 		$unescape = $reflection->getMethod('unescapeSqlString');
+		$unescape->setAccessible(true);
 
 		$original = "line1\nline2\r\"quoted\"\\slash\0\x1a'";
 		$escaped = $escape->invoke($this->testClass, $original);
