@@ -23,6 +23,7 @@ final class Settings {
 	public ?string $searchdKibanaVersionString = null;
 	/** @var ?Vector<string> $searchdListen */
 	public ?Vector $searchdListen = null;
+	public ?string $searchdNodeAddress = null;
 	public ?string $searchdLog = null;
 	public ?string $searchdQueryLog = null;
 	public ?string $searchdPidFile = null;
