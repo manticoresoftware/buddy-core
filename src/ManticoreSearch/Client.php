@@ -739,6 +739,7 @@ class Client {
 	 * @param bool $forceBigrams When set to true, passes "1 as force_bigrams" to all CALL SUGGEST requests
 	 * @param int $distance Maximum edit distance for suggestions
 	 * @param int $limit Maximum number of suggestions per word
+	 * @param bool $preserve When true, keeps original tokens with no/aside fuzzy matches
 	 *
 	 * @return array{0: array<Variation>, 1: Map<string, float>} Words and score map
 	 * @throws ManticoreSearchResponseError
@@ -750,7 +751,8 @@ class Client {
 		string $table,
 		bool $forceBigrams = false,
 		int $distance = 2,
-		int $limit = 3
+		int $limit = 3,
+		bool $preserve = false
 	): array {
 		// First, escape the given query
 		$query = addcslashes($query, '*%?\'');
@@ -794,7 +796,8 @@ class Client {
 				$distanceMap,
 				$docMap,
 				$processedTokens,
-				$forceBigrams
+				$forceBigrams,
+				$preserve
 			);
 
 			$i += max(1, $consumed);
@@ -829,6 +832,7 @@ class Client {
 	 * @param Map<string,int> $docMap Reference to document map to be populated
 	 * @param array<int,bool> $processedTokens Reference to processed tokens tracking
 	 * @param bool $forceBigrams When set to true, passes "1 as force_bigrams" to all CALL SUGGEST requests
+	 * @param bool $preserve When true, keeps original tokens with no/aside fuzzy matches
 	 *
 	 * @return int Number of tokens consumed (1 for individual, 2+ for merged)
 	 * @throws ManticoreSearchClientError
@@ -845,7 +849,8 @@ class Client {
 		Map &$distanceMap,
 		Map &$docMap,
 		array &$processedTokens,
-		bool $forceBigrams
+		bool $forceBigrams,
+		bool $preserve
 	): int {
 		$forceBigramsOption = $forceBigrams ? ', 1 as force_bigrams' : '';
 		$query = "CALL SUGGEST(
@@ -927,13 +932,22 @@ class Client {
 			$finalChoices = $choices;
 		}
 
-		// Special case for empty suggestions
+		// Keep or drop the original token according to preserve semantics:
+		// - preserve=1, no suggestions: keep the original word
+		// - preserve=1, fuzzy alternatives: keep original alongside alternatives
+		// - preserve=0, no suggestions: leave keywords empty so callers can drop it
 		if (!$finalChoices) {
-			// FIX: Preserve the original word when no suggestions found
-			// This prevents single-letter words from disappearing during combination building
-			$finalChoices = [$finalOriginal];
-			$distanceMap->put($finalOriginal, 999);
-			$docMap->put($finalOriginal, 0);
+			if ($preserve) {
+				$finalChoices = [$finalOriginal];
+				$distanceMap->put($finalOriginal, 999);
+				$docMap->put($finalOriginal, 0);
+			}
+		} elseif ($preserve && !in_array($finalOriginal, $finalChoices, true)) {
+			array_unshift($finalChoices, $finalOriginal);
+			if (!$distanceMap->hasKey($finalOriginal)) {
+				$distanceMap->put($finalOriginal, 999);
+				$docMap->put($finalOriginal, 0);
+			}
 		}
 
 		$words[] = [
