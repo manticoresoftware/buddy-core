@@ -816,6 +816,56 @@ class Client {
 		return [$words, $scoreMap];
 	}
 
+	/**
+	 * Picks final original/choices from either a successful merge or the individual suggestions,
+	 * and folds merged distance/doc scores into the shared maps when merge wins.
+	 *
+	 * @param array{
+	 *     original:string,
+	 *     choices:array<string>,
+	 *     distanceMap:Map<string,int>,
+	 *     docMap:array<string,int>
+	 * }|null $mergeResult Result from tryMergeWithNext, or null when merge was skipped/rejected
+	 * @param string $word Current word (used when not merging)
+	 * @param array<string> $choices Individual suggestions for the current word
+	 * @param Map<string,int> $distanceMap Shared suggestion → edit distance map
+	 * @param Map<string,int> $docMap Shared suggestion → docs map
+	 * @param array<int,bool> $processedTokens Tokens already consumed (marks i+1 on merge)
+	 * @param int $i Current word index in the normalized token list
+	 *
+	 * @return array{0: string, 1: array<string>} Final original token and its suggestion choices
+	 */
+	private function finalizeSuggestions(
+		?array $mergeResult,
+		string $word,
+		array $choices,
+		Map $distanceMap,
+		Map $docMap,
+		array &$processedTokens,
+		int $i
+	): array {
+		if ($mergeResult) {
+			$finalOriginal = $mergeResult['original'];
+			$finalChoices = $mergeResult['choices'];
+
+			// Add merged distance and doc mappings
+			/** @var Map<string,int> $mergeDistanceMap */
+			$mergeDistanceMap = $mergeResult['distanceMap'];
+			foreach ($mergeDistanceMap as $suggWord => $dist) {
+				$distanceMap->put($suggWord, $dist);
+			}
+			foreach ($mergeResult['docMap'] as $suggWord => $docs) {
+				$docMap->put($suggWord, $docs);
+			}
+
+			// Mark next token as processed
+			$processedTokens[$i + 1] = true;
+		} else {
+			$finalOriginal = $word;
+			$finalChoices = $choices;
+		}
+		return [$finalOriginal, $finalChoices];
+	}
 
 	/**
 	 * Processes suggestions for a word and adds them to the words, distanceMap and docMap arrays.
@@ -910,27 +960,15 @@ class Client {
 		);
 		$tokenCount = $mergeResult ? 2 : 1;
 
-		// Use merged result if it's better, otherwise use individual
-		if ($mergeResult) {
-			$finalOriginal = $mergeResult['original'];
-			$finalChoices = $mergeResult['choices'];
-
-			// Add merged distance and doc mappings
-			/** @var Map<string,int> $mergeDistanceMap */
-			$mergeDistanceMap = $mergeResult['distanceMap'];
-			foreach ($mergeDistanceMap as $suggWord => $dist) {
-				$distanceMap->put($suggWord, $dist);
-			}
-			foreach ($mergeResult['docMap'] as $suggWord => $docs) {
-				$docMap->put($suggWord, $docs);
-			}
-
-			// Mark next token as processed
-			$processedTokens[$i + 1] = true;
-		} else {
-			$finalOriginal = $word;
-			$finalChoices = $choices;
-		}
+		[$finalOriginal, $finalChoices] = $this->finalizeSuggestions(
+			$mergeResult,
+			$word,
+			$choices,
+			$distanceMap,
+			$docMap,
+			$processedTokens,
+			$i
+		);
 
 		// Keep or drop the original token according to preserve semantics:
 		// - preserve=1, no suggestions: keep the original word
