@@ -739,6 +739,7 @@ class Client {
 	 * @param bool $forceBigrams When set to true, passes "1 as force_bigrams" to all CALL SUGGEST requests
 	 * @param int $distance Maximum edit distance for suggestions
 	 * @param int $limit Maximum number of suggestions per word
+	 * @param bool $preserve When true, keeps original tokens with no/aside fuzzy matches
 	 *
 	 * @return array{0: array<Variation>, 1: Map<string, float>} Words and score map
 	 * @throws ManticoreSearchResponseError
@@ -750,7 +751,8 @@ class Client {
 		string $table,
 		bool $forceBigrams = false,
 		int $distance = 2,
-		int $limit = 3
+		int $limit = 3,
+		bool $preserve = false
 	): array {
 		// First, escape the given query
 		$query = addcslashes($query, '*%?\'');
@@ -802,7 +804,8 @@ class Client {
 				$distanceMap,
 				$docMap,
 				$processedTokens,
-				$forceBigrams
+				$forceBigrams,
+				$preserve
 			);
 
 			$i += max(1, $consumed);
@@ -821,6 +824,56 @@ class Client {
 		return [$words, $scoreMap];
 	}
 
+	/**
+	 * Picks final original/choices from either a successful merge or the individual suggestions,
+	 * and folds merged distance/doc scores into the shared maps when merge wins.
+	 *
+	 * @param array{
+	 *     original:string,
+	 *     choices:array<string>,
+	 *     distanceMap:Map<string,int>,
+	 *     docMap:array<string,int>
+	 * }|null $mergeResult Result from tryMergeWithNext, or null when merge was skipped/rejected
+	 * @param string $word Current word (used when not merging)
+	 * @param array<string> $choices Individual suggestions for the current word
+	 * @param Map<string,int> $distanceMap Shared suggestion → edit distance map
+	 * @param Map<string,int> $docMap Shared suggestion → docs map
+	 * @param array<int,bool> $processedTokens Tokens already consumed (marks i+1 on merge)
+	 * @param int $i Current word index in the normalized token list
+	 *
+	 * @return array{0: string, 1: array<string>} Final original token and its suggestion choices
+	 */
+	private function finalizeSuggestions(
+		?array $mergeResult,
+		string $word,
+		array $choices,
+		Map $distanceMap,
+		Map $docMap,
+		array &$processedTokens,
+		int $i
+	): array {
+		if ($mergeResult) {
+			$finalOriginal = $mergeResult['original'];
+			$finalChoices = $mergeResult['choices'];
+
+			// Add merged distance and doc mappings
+			/** @var Map<string,int> $mergeDistanceMap */
+			$mergeDistanceMap = $mergeResult['distanceMap'];
+			foreach ($mergeDistanceMap as $suggWord => $dist) {
+				$distanceMap->put($suggWord, $dist);
+			}
+			foreach ($mergeResult['docMap'] as $suggWord => $docs) {
+				$docMap->put($suggWord, $docs);
+			}
+
+			// Mark next token as processed
+			$processedTokens[$i + 1] = true;
+		} else {
+			$finalOriginal = $word;
+			$finalChoices = $choices;
+		}
+		return [$finalOriginal, $finalChoices];
+	}
 
 	/**
 	 * Processes suggestions for a word and adds them to the words, distanceMap and docMap arrays.
@@ -837,6 +890,7 @@ class Client {
 	 * @param Map<string,int> $docMap Reference to document map to be populated
 	 * @param array<int,bool> $processedTokens Reference to processed tokens tracking
 	 * @param bool $forceBigrams When set to true, passes "1 as force_bigrams" to all CALL SUGGEST requests
+	 * @param bool $preserve When true, keeps original tokens with no/aside fuzzy matches
 	 *
 	 * @return int Number of tokens consumed (1 for individual, 2+ for merged)
 	 * @throws ManticoreSearchClientError
@@ -853,7 +907,8 @@ class Client {
 		Map &$distanceMap,
 		Map &$docMap,
 		array &$processedTokens,
-		bool $forceBigrams
+		bool $forceBigrams,
+		bool $preserve
 	): int {
 		$forceBigramsOption = $forceBigrams ? ', 1 as force_bigrams' : '';
 		$query = "CALL SUGGEST(
@@ -913,35 +968,32 @@ class Client {
 		);
 		$tokenCount = $mergeResult ? 2 : 1;
 
-		// Use merged result if it's better, otherwise use individual
-		if ($mergeResult) {
-			$finalOriginal = $mergeResult['original'];
-			$finalChoices = $mergeResult['choices'];
+		[$finalOriginal, $finalChoices] = $this->finalizeSuggestions(
+			$mergeResult,
+			$word,
+			$choices,
+			$distanceMap,
+			$docMap,
+			$processedTokens,
+			$i
+		);
 
-			// Add merged distance and doc mappings
-			/** @var Map<string,int> $mergeDistanceMap */
-			$mergeDistanceMap = $mergeResult['distanceMap'];
-			foreach ($mergeDistanceMap as $suggWord => $dist) {
-				$distanceMap->put($suggWord, $dist);
-			}
-			foreach ($mergeResult['docMap'] as $suggWord => $docs) {
-				$docMap->put($suggWord, $docs);
-			}
-
-			// Mark next token as processed
-			$processedTokens[$i + 1] = true;
-		} else {
-			$finalOriginal = $word;
-			$finalChoices = $choices;
-		}
-
-		// Special case for empty suggestions
+		// Keep or drop the original token according to preserve semantics:
+		// - preserve=1, no suggestions: keep the original word
+		// - preserve=1, fuzzy alternatives: keep original alongside alternatives
+		// - preserve=0, no suggestions: leave keywords empty so callers can drop it
 		if (!$finalChoices) {
-			// FIX: Preserve the original word when no suggestions found
-			// This prevents single-letter words from disappearing during combination building
-			$finalChoices = [$finalOriginal];
-			$distanceMap->put($finalOriginal, 999);
-			$docMap->put($finalOriginal, 0);
+			if ($preserve) {
+				$finalChoices = [$finalOriginal];
+				$distanceMap->put($finalOriginal, 999);
+				$docMap->put($finalOriginal, 0);
+			}
+		} elseif ($preserve && !in_array($finalOriginal, $finalChoices, true)) {
+			array_unshift($finalChoices, $finalOriginal);
+			if (!$distanceMap->hasKey($finalOriginal)) {
+				$distanceMap->put($finalOriginal, 999);
+				$docMap->put($finalOriginal, 0);
+			}
 		}
 
 		$words[] = [
