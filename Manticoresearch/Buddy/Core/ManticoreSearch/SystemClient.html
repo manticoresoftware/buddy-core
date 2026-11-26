@@ -566,7 +566,7 @@ or validate and throw error if we have missing table in the list</p></p>        
                     array
                 </div>
                 <div class="col-md-8">
-                    <a href="#method_fetchFuzzyVariations">fetchFuzzyVariations</a>(string $query, string $table, bool $forceBigrams = false, int $distance = 2, int $limit = 3)
+                    <a href="#method_fetchFuzzyVariations">fetchFuzzyVariations</a>(string $query, string $table, bool $forceBigrams = false, int $distance = 2, int $limit = 3, bool $preserve = false)
         
                                             <p><p>Fetches fuzzy variations for a given query.</p></p>                </div>
                 <div class="col-md-2"><small>from&nbsp;<a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_fetchFuzzyVariations">
@@ -1756,9 +1756,9 @@ or validate and throw error if we have missing table in the list</p></p>
                     <div class="method-item">
                     <h3 id="method_fetchFuzzyVariations">
         <div class="location">in <a href="../../../../Manticoresearch/Buddy/Core/ManticoreSearch/Client.html#method_fetchFuzzyVariations">
-<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a> at line 748</div>
+<abbr title="Manticoresearch\Buddy\Core\ManticoreSearch\Client">Client</abbr></a> at line 749</div>
         <code>                    array
-    <strong>fetchFuzzyVariations</strong>(string $query, string $table, bool $forceBigrams = false, int $distance = 2, int $limit = 3)
+    <strong>fetchFuzzyVariations</strong>(string $query, string $table, bool $forceBigrams = false, int $distance = 2, int $limit = 3, bool $preserve = false)
         </code>
     </h3>
     <div class="details">    
@@ -1797,6 +1797,11 @@ or validate and throw error if we have missing table in the list</p></p>
                 <td>int</td>
                 <td>$limit</td>
                 <td><p>Maximum number of suggestions per word</p></td>
+            </tr>
+                    <tr>
+                <td>bool</td>
+                <td>$preserve</td>
+                <td><p>When true, keeps original tokens with no/aside fuzzy matches</p></td>
             </tr>
             </table>
 
